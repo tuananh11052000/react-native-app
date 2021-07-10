@@ -3,11 +3,13 @@ import React, { useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 
 import GiftComponent from '../components/gift.component';
+import SearchComponent from '../components/search.component'
 
 export default function Home(props) {
     const { navigation } = props;
     return (
         <View style={styles.container}>
+            <SearchComponent />
             <GiftComponent onPress={() => navigation.navigate('Detail')} />
         </View>
     );
@@ -15,8 +17,8 @@ export default function Home(props) {
 
 const styles = StyleSheet.create({
     container: {
-        marginLeft: 30,
-        marginRight: 30,
+        paddingLeft: 30,
+        paddingRight: 30,
         flex: 1,
         backgroundColor: '#fff'
     },

@@ -11,8 +11,6 @@ export default function Detail(props) {
 
 const styles = StyleSheet.create({
     container: {
-        marginLeft: 30,
-        marginRight: 30,
         flex: 1,
         backgroundColor: '#fff'
     },
