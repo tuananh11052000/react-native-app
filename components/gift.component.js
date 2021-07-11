@@ -1,12 +1,14 @@
 import React from 'react'
 import {
-    Image, Text, View, StyleSheet, TouchableOpacity
+    Image, Text, View, StyleSheet, TouchableOpacity, Dimensions
 } from 'react-native'
 
 import giftIcon2 from "../assets/gift2.png"
 import giftIcon1 from "../assets/gift1.png"
 import giftIcon3 from "../assets/gift3.png"
 import giftIcon4 from "../assets/gift4.png"
+
+const { width, height } = Dimensions.get('window')
 
 export default function GiftComponent(props) {
     return <View style={style.wrapCategory}>
@@ -47,7 +49,7 @@ const style = StyleSheet.create({
         alignItems: 'center',
         display: "flex",
         flexDirection: 'row',
-        justifyContent: 'space-between'
+        justifyContent: 'space-around'
     },
     title: {
         width: 70,

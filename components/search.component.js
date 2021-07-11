@@ -1,6 +1,6 @@
 import React from 'react'
 import {
-    Image, Text, View, StyleSheet, TextInput
+    Image, Text, View, StyleSheet, TextInput, ScrollView, ImageBackground
 } from 'react-native'
 
 import { MaterialCommunityIcons } from '@expo/vector-icons';
@@ -21,18 +21,17 @@ export default function SearchComponent(props) {
 
 const style = StyleSheet.create({
     wrapSearchBgr: {
-        flex: 1,
-        alignItems: 'center',
-        justifyContent: 'center'
+        flexDirection: 'column',
+        height: 270
     },
     wrapSeachBox: {
-        flex: 1,
-        alignItems: 'center',
         display: "flex",
         flexDirection: 'row',
         justifyContent: 'center',
-        position: 'relative',
-        top: 0
+        position: 'absolute',
+        bottom: 40,
+        left: 0,
+        right: 0
     },
     searchInput: {
         borderWidth: 1.0,
@@ -40,7 +39,8 @@ const style = StyleSheet.create({
         height: 50,
         borderBottomLeftRadius: 8,
         borderTopLeftRadius: 8,
-        paddingLeft: 10
+        paddingLeft: 10,
+        backgroundColor: 'white'
     },
     bellImage: {
         height: 50
@@ -54,9 +54,8 @@ const style = StyleSheet.create({
         paddingRight: 5,
         borderBottomRightRadius: 8
     }, bgr_style: {
-        height: 300,
+        height: 210,
         width: '100%',
-        resizeMode: 'contain',
-        flex: 1
+        resizeMode: 'contain'
     }
 })
