@@ -3,26 +3,36 @@ import {
     Image, Text, View, StyleSheet, TextInput
 } from 'react-native'
 
-import bellImage from '../assets/bell.png'
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import bgrImage from '../assets/background.jpg'
 
 
 export default function SearchComponent(props) {
-    return <View style={style.wrapSeachBox}>
-        <TextInput placeholder="Tìm kiếm" style={style.searchInput} />
-        <View style={style.wrapBell}>
-            <MaterialCommunityIcons name="bell-ring-outline" size={40} color="black" />
+    return <View style={style.wrapSearchBgr}>
+        <Image source={bgrImage} style={style.bgr_style} />
+        <View style={style.wrapSeachBox}>
+            <TextInput placeholder="Tìm kiếm" style={style.searchInput} />
+            <View style={style.wrapBell}>
+                <MaterialCommunityIcons name="bell-ring-outline" size={40} color="black" />
+            </View>
         </View>
     </View>
 }
 
 const style = StyleSheet.create({
+    wrapSearchBgr: {
+        flex: 1,
+        alignItems: 'center',
+        justifyContent: 'center'
+    },
     wrapSeachBox: {
         flex: 1,
         alignItems: 'center',
         display: "flex",
         flexDirection: 'row',
-        justifyContent: 'center'
+        justifyContent: 'center',
+        position: 'relative',
+        top: 0
     },
     searchInput: {
         borderWidth: 1.0,
@@ -43,5 +53,10 @@ const style = StyleSheet.create({
         paddingLeft: 5,
         paddingRight: 5,
         borderBottomRightRadius: 8
+    }, bgr_style: {
+        height: 300,
+        width: '100%',
+        resizeMode: 'contain',
+        flex: 1
     }
 })
