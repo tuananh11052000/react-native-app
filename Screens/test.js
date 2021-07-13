@@ -1,15 +1,15 @@
 import React, { useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { connect } from "react-redux";
-
-function Detail(props) {
-    function addNumber(){
-        var { dispatch } = props;
-        dispatch({ type: 'ADD', value: 1 });
-    }
+function addNumber(){
+    var { dispatch } = props;
+    dispatch({ type: 'ADD', value: 1 });
+}
+export default function Detail(props) {
+    console.log("_________________________________________")
     return (
         <View style={styles.container}>
-            <Text onPress={addNumber}>{props.num}</Text>
+            <Text onPress={addNumber}>hellloi</Text>
         </View>
     );
 }
@@ -25,4 +25,4 @@ const styles = StyleSheet.create({
 
 export default connect(function (state) {
     return { num: state.countNumber}
-})(Detail);
+})(num);

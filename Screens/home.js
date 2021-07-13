@@ -4,8 +4,7 @@ import { StyleSheet, Text, View, ScrollView } from 'react-native';
 
 import GiftComponent from '../components/gift.component';
 import SearchComponent from '../components/search.component'
-
-import backgroundIMG from '../assets/background.jpg'
+import TitleComponent from '../components/title.component'
 
 export default function Home(props) {
     const { navigation } = props;
@@ -14,6 +13,7 @@ export default function Home(props) {
             <ScrollView>
                 <SearchComponent />
                 <GiftComponent onPress={() => navigation.navigate('Detail')} style={styles.gift_component} />
+                <TitleComponent title="Tin đã đăng" />
             </ScrollView>
         </View>
     );
