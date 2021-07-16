@@ -21,7 +21,7 @@ export default function GiftComponent(props) {
         <TouchableOpacity activeOpacity={0.5}>
             <View style={style.category}>
                 <Image source={giftIcon1} style={style.giftIcon1} />
-                <Text style={style.title}>Tặng người nghèo</Text>
+                <Text style={style.title}>Tặng quỹ từ thiện</Text>
             </View>
         </TouchableOpacity>
         <TouchableOpacity activeOpacity={0.5}>
@@ -45,6 +45,7 @@ const style = StyleSheet.create({
         height: 40
     },
     wrapCategory: {
+        paddingBottom: 30,
         flex: 1,
         alignItems: 'center',
         display: "flex",

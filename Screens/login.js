@@ -1,0 +1,20 @@
+import { StatusBar } from 'expo-status-bar';
+import React, { useState } from 'react';
+import { StyleSheet, Text, View, ScrollView } from 'react-native';
+
+export default function Home(props) {
+    const { navigation } = props;
+    return (
+        <View style={styles.container}>
+            <ScrollView>
+                <SearchComponent />
+                <GiftComponent onPress={() => navigation.navigate('Detail')} style={styles.gift_component} />
+                <TitleComponent title="Tin mới nhất" />
+            </ScrollView>
+        </View>
+    );
+}
+
+const styles = StyleSheet.create({
+    
+});
