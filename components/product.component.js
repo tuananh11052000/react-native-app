@@ -71,12 +71,11 @@ function ProductComponent(props) {
     }
 
     currentTime = new Date()
-    console.log(props.newestPost[0])
     return <View style={style.constainer}>
         {
-            props.newestPost.map(item => {
+            props.newestPost.map((item, key) => {
                 return (
-                    <View style={style.wrapCategory}>
+                    <View id={key} style={style.wrapCategory}>
                         <Image style={style.tinyLogo} source={{
                             uri: item.urlImage[0],
                         }} />

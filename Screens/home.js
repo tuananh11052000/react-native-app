@@ -16,6 +16,7 @@ function Home(props) {
                 <SearchComponent />
                 <GiftComponent onPress={() => navigation.navigate('Detail')} style={styles.gift_component} />
                 <TitleComponent title="Tin mới nhất" />
+                <ProductComponent />
             </ScrollView>
         </View>
     );

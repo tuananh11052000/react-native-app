@@ -21,9 +21,9 @@ function Detail(props) {
     return (
         <View style={styles.container}>
             {
-                props.newestPost.map(item => {
+                props.newestPost.map((item, key) => {
                     return (
-                        <Text>{item.NameAuthor}</Text>
+                        <Text key={key}>{item.NameAuthor}</Text>
                     )
                 })
             }
