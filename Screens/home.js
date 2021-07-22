@@ -1,6 +1,5 @@
-import { StatusBar } from 'expo-status-bar';
-import React, { useState } from 'react';
-import { StyleSheet, Text, View, ScrollView } from 'react-native';
+import React from 'react';
+import { StyleSheet, View, ScrollView, StatusBar } from 'react-native';
 import { connect } from "react-redux";
 
 import GiftComponent from '../components/gift.component';
@@ -8,6 +7,7 @@ import SearchComponent from '../components/search.component'
 import TitleComponent from '../components/title.component'
 import ProductComponent from '../components/product.component'
 
+const heightStatusBar = StatusBar.currentHeight;
 function Home(props) {
     const { navigation } = props;
     return (
@@ -24,6 +24,7 @@ function Home(props) {
 
 const styles = StyleSheet.create({
     container: {
+        marginTop: heightStatusBar,
         flex: 1
     },
     child: {

@@ -50,6 +50,7 @@ function ProductComponent(props) {
                 method: 'get',
                 url: 'https://smai-app-api.herokuapp.com/post/getNewPost'
             })
+            console.log(temp.data.length)
             dispatch({ type: 'UPDATE', data: temp.data })
         }
         getData()
@@ -70,12 +71,12 @@ function ProductComponent(props) {
             return pr[0].Category
     }
 
-    currentTime = new Date()
+    const currentTime = new Date()
     return <View style={style.constainer}>
         {
             props.newestPost.map((item, key) => {
                 return (
-                    <View id={key} style={style.wrapCategory}>
+                    <View key={key} style={style.wrapCategory}>
                         <Image style={style.tinyLogo} source={{
                             uri: item.urlImage[0],
                         }} />

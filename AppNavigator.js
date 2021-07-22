@@ -1,28 +1,51 @@
 import * as React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
-import Home from './Screens/home'
-import Detail from './Screens/detail'
-import TabViewExample from './Screens/login'
+import { HomeStack, ProfileStack, CreatePostStack } from './CustomeNavigator';
 
-const Stack = createStackNavigator();
-
+const Tab = createBottomTabNavigator();
 function AppNavigator() {
     return (
         <NavigationContainer>
-            <Stack.Navigator>
-                <Stack.Screen name="Login" component={TabViewExample} 
-                    options={{headerStyle: {
-                        backgroundColor: '#f4511e',
-                      }}}
-                />
-                <Stack.Screen name="Home" component={Home}
+            <Tab.Navigator
+                initialRouteName="Feed"
+                tabBarOptions={{
+                    activeTintColor: '#e91e63',
+                }}
+            >
+                <Tab.Screen
+                    name="Feed"
+                    component={HomeStack}
                     options={{
-                        headerShown: false,
-                    }} />
-                <Stack.Screen name="Detail" component={Detail} />
-            </Stack.Navigator>
+                        tabBarLabel: 'Home',
+                        tabBarIcon: ({ color, size }) => (
+                            <MaterialCommunityIcons name="home" color={color} size={size} />
+                        ),
+                    }}
+                />
+                <Tab.Screen
+                    name="Notifications"
+                    component={CreatePostStack}
+                    options={{
+                        tabBarLabel: 'Updates',
+                        tabBarIcon: ({ color, size }) => (
+                            <MaterialCommunityIcons name="post" color={color} size={size} />
+                        ),
+                    }}
+                />
+                <Tab.Screen
+                    name="Profile"
+                    component={ProfileStack}
+                    options={{
+                        tabBarLabel: 'Profile',
+                        tabBarIcon: ({ color, size }) => (
+                            <MaterialCommunityIcons name="account" color={color} size={size} />
+                        ),
+                    }}
+                />
+            </Tab.Navigator>
         </NavigationContainer>
     );
 }
