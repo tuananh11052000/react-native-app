@@ -5,6 +5,7 @@ import Home from './Screens/home'
 import Detail from './Screens/detail'
 import Authentication from './Screens/login'
 import createPost from './Screens/createPost';
+import confirmAddress from './Screens/confirmAddress'
 
 const Stack = createStackNavigator();
 //Tao stack navigator cho Home
@@ -15,7 +16,10 @@ const HomeStack = () => {
                 options={{
                     headerShown: false,
                 }} />
-            <Stack.Screen name="Detail" component={Detail} />
+            <Stack.Screen name="Detail" component={confirmAddress}
+                options={{
+                    headerShown: false,
+                }} />
         </Stack.Navigator>
     )
 }
