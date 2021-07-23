@@ -2,17 +2,22 @@ import React, { useEffect } from 'react';
 import { ScrollView, StyleSheet, Text, View, StatusBar } from 'react-native';
 import { connect } from "react-redux";
 
+import config from '../config';
 import TopProfile from '../components/topProfile.component'
 import HeaderLoginPage from '../components/headerLoginPage';
 
 const heightStatusBar = StatusBar.currentHeight;
 
+
+
 function ProfileScreen(props) {
     return (
+     
         <View style={styles.container}>
             <ScrollView style={styles.scrollview}>
                 <HeaderLoginPage />
                 <TopProfile />
+                <Text style={styles.Text}>Quản lý</Text>
             </ScrollView>
         </View>
     );
@@ -29,7 +34,13 @@ const styles = StyleSheet.create({
     scrollview: {
         flex: 1,
         width: '100%'
+    },
+    Text:{
+       padding: 20,
+       fontSize: 20
+      
     }
+    
 });
 
 export default connect(function (state) {

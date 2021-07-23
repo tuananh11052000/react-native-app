@@ -10,7 +10,7 @@ function TopProfile(props) {
     const { dispatch } = props;
     return <View style={styles.wrapAll}>
         <MaterialIcons name="account-circle" size={96} color="gray" />
-        <Text>row2</Text>
+        <Text>Nguyễn Duy Phú</Text>
     </View>
 }
 
