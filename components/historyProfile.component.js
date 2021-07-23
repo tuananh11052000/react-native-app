@@ -10,18 +10,22 @@ import config from '../config';
 function HeaderLoginPage(props) {
     const { dispatch } = props;
     return <View style={styles.wrapAll}>
+         <MaterialIcons style={styles.History} name="history" size={30} ></MaterialIcons>
         <Text style={styles.Text}>Lịch sử xem</Text>
     </View>
 }
 const styles = StyleSheet.create({
     wrapAll: {
-        height: config.header,
         backgroundColor: '#fff',
         padding: 15,
-        justifyContent: 'space-between'
+        flexDirection: 'row',
+        width: '100%'
+    },
+    History:{
+        paddingLeft:10,
     },
     Text:{
-    
+        paddingLeft:10,
         fontSize: config.fontsize_2
     }
   

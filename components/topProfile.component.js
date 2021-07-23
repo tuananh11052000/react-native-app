@@ -26,7 +26,7 @@ function TopProfile(props) {
 const styles = StyleSheet.create({
     wrapAll: {
         height: 110,
-        backgroundColor: '#4E6E58',
+        backgroundColor: '#fff',
         padding: 7,
         flexDirection: 'row',
         width: '100%'

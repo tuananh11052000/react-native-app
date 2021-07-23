@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react';
-import { ScrollView, StyleSheet, Text, View, StatusBar } from 'react-native';
+import { ScrollView, StyleSheet, Text, View, StatusBar,Linking } from 'react-native';
 import { connect } from "react-redux";
-
 import config from '../config';
 import TopProfile from '../components/topProfile.component'
 import HeaderLoginPage from '../components/headerProfilePage.component';
@@ -13,12 +12,16 @@ function ProfileScreen(props) {
     return (
      
         <View style={styles.container}>
-            <ScrollView style={styles.scrollview}>
+            <View style={styles.scrollview}>
                 <HeaderLoginPage />
                 <TopProfile />
                 <Text style={styles.Text}>Quản lý</Text>
                 <HistoryProfileComponent></HistoryProfileComponent>
-            </ScrollView>
+            </View>
+            <View style={styles.phonenumber} >
+                    <Text style={{fontSize:config.fontsize_2}}>Trung tâm hỗ trợ: </Text>
+                    <Text style={{fontSize:config.fontsize_2, color:"#0061F2"}} onPress={()=>{Linking.openURL('tel:0938516899');}}>0938.51.68.99</Text>
+                </View>
         </View>
     );
 }
@@ -26,11 +29,10 @@ function ProfileScreen(props) {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: "gray",
         alignItems: 'center',
         justifyContent: 'center',
-        marginTop: config.heightStatusBar
-         
+        marginTop: config.heightStatusBar,
+        height:'100%'
     },
     scrollview: {
         flex: 1,
@@ -39,7 +41,17 @@ const styles = StyleSheet.create({
     Text:{
        padding: 15,
        fontSize: config.fontsize_2
-    }
+    },
+    phonenumber: {
+        width: '100%',   
+        position: 'absolute',
+        bottom: 0,
+        padding: 15,
+        marginBottom:10,
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+      
+    },
     
 });
 
