@@ -7,7 +7,7 @@ import { connect } from 'react-redux'
 function HeaderLoginPage(props) {
     const { dispatch } = props;
     return <View style={styles.wrapAll}>
-        <Text>row2</Text>
+        <Text>Tài khoản</Text>
     </View>
 }
 

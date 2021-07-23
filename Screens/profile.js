@@ -35,8 +35,7 @@ const styles = StyleSheet.create({
     },
     Text:{
        padding: 20,
-       fontSize: config.fontsize
-      
+       fontSize: config.fontsize_2
     }
     
 });
