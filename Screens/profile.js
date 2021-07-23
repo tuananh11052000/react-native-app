@@ -8,8 +8,6 @@ import HeaderLoginPage from '../components/headerLoginPage';
 
 const heightStatusBar = StatusBar.currentHeight;
 
-
-
 function ProfileScreen(props) {
     return (
      
@@ -37,7 +35,7 @@ const styles = StyleSheet.create({
     },
     Text:{
        padding: 20,
-       fontSize: 20
+       fontSize: config.fontsize
       
     }
     
