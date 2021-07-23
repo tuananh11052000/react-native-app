@@ -1,13 +1,16 @@
 import * as React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
+import { StatusBar } from 'react-native';
+import Constants from 'expo-constants'
 
 import Home from './Screens/home'
-import Detail from './Screens/detail'
+import ProfileScreen from './Screens/profile'
 import Authentication from './Screens/login'
 import createPost from './Screens/createPost';
 import confirmAddress from './Screens/confirmAddress'
 
 const Stack = createStackNavigator();
+const heightStatusBar = StatusBar.currentHeight;
 //Tao stack navigator cho Home
 const HomeStack = () => {
     return (
@@ -28,6 +31,10 @@ export { HomeStack }
 const ProfileStack = () => {
     return (
         <Stack.Navigator>
+            <Stack.Screen name="Tài khoản" component={ProfileScreen}
+                options={{
+                    headerShown: false,
+                }} />
             <Stack.Screen name="Authentication" component={Authentication}
                 options={{
                     headerShown: false,
