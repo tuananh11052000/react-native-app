@@ -4,12 +4,11 @@ import { connect } from "react-redux";
 
 import config from '../config';
 import TopProfile from '../components/topProfile.component'
-import HeaderLoginPage from '../components/headerLoginPage';
-import { getStatusBarHeight } from 'react-native-status-bar-height';
+import HeaderLoginPage from '../components/headerProfilePage.component';
+import HistoryProfileComponent from '../components/historyProfile.component';
 
-const heightStatusBar = StatusBar.currentHeight;
-console.log(getStatusBarHeight());
 
+//const heightStatusBar = StatusBar.currentHeight;
 function ProfileScreen(props) {
     return (
      
@@ -18,6 +17,7 @@ function ProfileScreen(props) {
                 <HeaderLoginPage />
                 <TopProfile />
                 <Text style={styles.Text}>Quản lý</Text>
+                <HistoryProfileComponent></HistoryProfileComponent>
             </ScrollView>
         </View>
     );
@@ -26,10 +26,10 @@ function ProfileScreen(props) {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#fff',
+        backgroundColor: "gray",
         alignItems: 'center',
         justifyContent: 'center',
-        marginTop: heightStatusBar
+        marginTop: config.heightStatusBar
          
     },
     scrollview: {
@@ -37,7 +37,7 @@ const styles = StyleSheet.create({
         width: '100%'
     },
     Text:{
-       padding: 20,
+       padding: 15,
        fontSize: config.fontsize_2
     }
     
