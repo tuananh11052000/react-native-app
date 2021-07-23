@@ -5,8 +5,10 @@ import { connect } from "react-redux";
 import config from '../config';
 import TopProfile from '../components/topProfile.component'
 import HeaderLoginPage from '../components/headerLoginPage';
+import { getStatusBarHeight } from 'react-native-status-bar-height';
 
 const heightStatusBar = StatusBar.currentHeight;
+console.log(getStatusBarHeight());
 
 function ProfileScreen(props) {
     return (
@@ -28,6 +30,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         marginTop: heightStatusBar
+         
     },
     scrollview: {
         flex: 1,
