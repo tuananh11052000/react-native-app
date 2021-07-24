@@ -1,196 +1,111 @@
-/*
-import React, { Component, useState } from 'react';
-import { ExpandableListView } from 'react-native-expandable-listview';
-
-const CONTENT = [
-  {
-    id: '42',
-    categoryName: 'Quần áo',
-    subCategory: [
-      {
-        id: '1',
-        name:
-          "Quần áo nam",
-      },
-      { id: '2', name: 'Quần áo nữ' },
-    ],
-  },
-  {
-    id: '95',
-    categoryName: 'Item 2',
-    subCategory: [{ id: '1', name: 'Sub Item 1' }],
-  },
-  {
-    id: '94',
-    categoryName: 'Item 3',
-    subCategory: [{ id: '1', name: 'Sub Item 1' }],
-  },
-  {
-    id: '93',
-    categoryName: 'Item 4',
-    subCategory: [{ id: '1', name: 'Sub Item 1' }],
-  },
-  {
-    id: '92',
-    categoryName: 'Item 5',
-    subCategory: [{ id: '1', name: 'Sub Item 1' }],
-  },
-  {
-    id: '96',
-    categoryName: 'Item 6',
-    subCategory: [{ id: '1', name: 'Sub Item 1' }],
-  },
-];
-
-function YourComponent() {
-  const [listDataSource, setListDataSource] = useState([])
-  function handleItemClick({ index }) {
-    console.log(index);
-  };
-
-  function handleInnerItemClick({ innerIndex, item, itemIndex }) {
-    console.log(innerIndex);
-  };
-
-
-  return (
-    <ExpandableListView
-      // ExpandableListViewStyles={{borderTopWidth:1}} // styles to expandable listview
-      // renderInnerItemSeparator={false} // true or false, render separator between inner items
-      // renderItemSeparator={false} // true or false, render separator between Items
-      // itemContainerStyle={{}} // add your styles to all item container of your list
-      // itemLabelStyle={{}} // add your styles to all item text of your list
-      // customChevron={{}} // your custom image to the indicator
-      // chevronColor="white" // color of the default indicator
-      // innerItemContainerStyle={{}} // add your styles to all inner item containers of your list
-      // itemLabelStyle={{}} // add your styles to all inner item text of your list
-      // itemImageIndicatorStyle={{}} // add your styles to the image indicator of your list
-      // animated={true} // sets all animations on/off, default on
-      // defaultLoaderStyles?: ViewStyle; // Set your styles to default loader (only for animated={true})
-      // customLoader?: JSX.Element; Pass your custom loader, while your content is measured and rendered (only for animated={true})
-      data={CONTENT} // required
-      onInnerItemClick={handleInnerItemClick}
-      onItemClick={handleItemClick}
-    />
-  );
-
-}
-
-export default YourComponent;
-*/
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, View, Button, TouchableOpacity } from 'react-native';
 import RNPickerDialog from 'rn-modal-picker';
 import { TextInput } from 'react-native-paper';
 import db from '../db.json';
 
+export default function confirmAddress(props) {
+  const selectedValue = (index, item) => {
+    // console.log(item)
+    // this.setState({ selectedText: item.name });
+  }
+  const [province, setProvince] = useState("");
+  const [district, setDistrict] = useState("");
+  const [commune, setCommune] = useState("");
+  const [addressDetail, setAddressDetail] = useState("");
 
+  const [data1, setData1] = useState(db.province);
+  const [data2, setData2] = useState(db.district);
+  const [data3, setData3] = useState(db.commune);
 
-export default class confirmAddress extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      data: db.province,
-      data1: db.district,
-      data2: db.commune,
-      placeHolderText: 'Please Select Country',
-      selectedText: '',
-      defaultValue: true,
-      select: '',
-      value: '',
-    };
+  const temp = () => {
+    return data2
   }
 
-  selectedValue(index, item) {
-    this.setState({ selectedText: item.name });
-  }
-
-  render() {
-    return (
-      <View style={Styles.border}>
-        <View style={Styles.containermain}>
-          <View style={Styles.top}>
-            <Text style={Styles.tittleText}>Xác nhận địa chỉ</Text>
-          </View>
-          <View>
-            <RNPickerDialog
-              data={this.state.data}
-              labelText={'Tỉnh/thành phố'}
-              showSearchBar={true}
-              showPickerTitle={true}
-              listTextStyle={Styles.listTextStyle}
-              pickerStyle={Styles.pickerStyle1}
-              selectedText={this.state.selectedText}
-              // placeHolderText={this.state.placeHolderText}
-              searchBarPlaceHolder={'Search.....'}
-              searchBarPlaceHolderColor={'#9d9d9d'}
-              selectedTextStyle={Styles.selectedTextStyle1}
-              placeHolderTextColor={'black'}
-              dropDownIconStyle={Styles.dropDownIconStyle1}
-              searchBarStyle={Styles.searchBarStyle}
-              //dropDownIcon={require('../assets/pin.png')}
-              selectedValue={(index, item) => this.selectedValue(index, item)}
-            />
-
-            <RNPickerDialog
-              data={this.state.data1}
-              labelText={'Quận/huyện'}
-              showSearchBar={true}
-              showPickerTitle={true}
-              listTextStyle={Styles.listTextStyle}
-              pickerStyle={Styles.pickerStyle1}
-              selectedText={this.state.selectedText}
-              // placeHolderText={this.state.placeHolderText}
-              searchBarPlaceHolder={'Search.....'}
-              searchBarPlaceHolderColor={'#9d9d9d'}
-              selectedTextStyle={Styles.selectedTextStyle1}
-              placeHolderTextColor={'black'}
-              dropDownIconStyle={Styles.dropDownIconStyle1}
-              searchBarStyle={Styles.searchBarStyle}
-              //dropDownIcon={require('../assets/pin.png')}
-              selectedValue={(index, item) => this.selectedValue(index, item)}
-            />
-            <RNPickerDialog
-              data={this.state.data2}
-              labelText={'Phường/xã/thị trấn'}
-              showSearchBar={true}
-              showPickerTitle={true}
-              listTextStyle={Styles.listTextStyle}
-              pickerStyle={Styles.pickerStyle1}
-              selectedText={this.state.selectedText}
-              // placeHolderText={this.state.placeHolderText}
-              searchBarPlaceHolder={'Search.....'}
-              searchBarPlaceHolderColor={'#9d9d9d'}
-              selectedTextStyle={Styles.selectedTextStyle1}
-              placeHolderTextColor={'black'}
-              dropDownIconStyle={Styles.dropDownIconStyle1}
-              searchBarStyle={Styles.searchBarStyle}
-              //dropDownIcon={require('../assets/pin.png')}
-              selectedValue={(index, item) => this.selectedValue(index, item)}
-            />
-            
-          </View>
-          <View style={Styles.inputAddress}>
-            <TextInput label="Địa chỉ" style={Styles.styleLabel}
-              mode={'flat'}
-              dense={'true'}
-              autoCapitalize='none'
-              theme={{
-                colors: {
-                  primary: 'gray',
-                },
-              }}
-            />
-          </View>
-          <TouchableOpacity
-            style={Styles.touchableButton}
-            underlayColor='#fff'>
-            <Text style={Styles.buttonConfirm}>Xác nhận</Text>
-          </TouchableOpacity>
+  return (
+    <View style={Styles.border}>
+      <View style={Styles.containermain}>
+        <View style={Styles.top}>
+          <Text style={Styles.tittleText}>Xác nhận địa chỉ</Text>
         </View>
+        <View>
+          <RNPickerDialog
+            data={temp()}
+            labelText={'Tỉnh/thành phố'}
+            showSearchBar={true}
+            showPickerTitle={true}
+            listTextStyle={Styles.listTextStyle}
+            pickerStyle={Styles.pickerStyle1}
+            selectedText={province.name}
+            // placeHolderText={this.state.placeHolderText}
+            searchBarPlaceHolder={'Search.....'}
+            searchBarPlaceHolderColor={'#9d9d9d'}
+            selectedTextStyle={Styles.selectedTextStyle1}
+            placeHolderTextColor={'black'}
+            dropDownIconStyle={Styles.dropDownIconStyle1}
+            searchBarStyle={Styles.searchBarStyle}
+            //dropDownIcon={require('../assets/pin.png')}
+            selectedValue={(index, item) => setData2(data3)}
+          />
+
+          <RNPickerDialog
+            data={data2}
+            labelText={'Quận/huyện'}
+            showSearchBar={true}
+            showPickerTitle={true}
+            listTextStyle={Styles.listTextStyle}
+            pickerStyle={Styles.pickerStyle1}
+            selectedText={district.name}
+            // placeHolderText={this.state.placeHolderText}
+            searchBarPlaceHolder={'Search.....'}
+            searchBarPlaceHolderColor={'#9d9d9d'}
+            selectedTextStyle={Styles.selectedTextStyle1}
+            placeHolderTextColor={'black'}
+            dropDownIconStyle={Styles.dropDownIconStyle1}
+            searchBarStyle={Styles.searchBarStyle}
+            //dropDownIcon={require('../assets/pin.png')}
+            selectedValue={(index, item) => setDistrict(item)}
+          />
+          <RNPickerDialog
+            data={data3}
+            labelText={'Phường/xã/thị trấn'}
+            showSearchBar={true}
+            showPickerTitle={true}
+            listTextStyle={Styles.listTextStyle}
+            pickerStyle={Styles.pickerStyle1}
+            // selectedText={this.state.selectedText}
+            // placeHolderText={this.state.placeHolderText}
+            searchBarPlaceHolder={'Search.....'}
+            searchBarPlaceHolderColor={'#9d9d9d'}
+            selectedTextStyle={Styles.selectedTextStyle1}
+            placeHolderTextColor={'black'}
+            dropDownIconStyle={Styles.dropDownIconStyle1}
+            searchBarStyle={Styles.searchBarStyle}
+            //dropDownIcon={require('../assets/pin.png')}
+            selectedValue={(index, item) => selectedValue(index, item)}
+          />
+
+        </View>
+        <View style={Styles.inputAddress}>
+          <TextInput label="Địa chỉ" style={Styles.styleLabel}
+            mode={'flat'}
+            dense={'true'}
+            autoCapitalize='none'
+            theme={{
+              colors: {
+                primary: 'gray',
+              },
+            }}
+          />
+        </View>
+        <TouchableOpacity
+          style={Styles.touchableButton}
+          underlayColor='#fff'>
+          <Text style={Styles.buttonConfirm}>Xác nhận</Text>
+        </TouchableOpacity>
       </View>
-    );
-  }
+    </View>
+  );
 }
 
 const Styles = StyleSheet.create({
@@ -201,7 +116,7 @@ const Styles = StyleSheet.create({
     fontSize: 20,
     backgroundColor: '#FFFFFF',
     borderBottomColor: 'gray',
-    overflow:'hidden',
+    overflow: 'hidden',
     fontFamily: "Cochin",
   },
   touchableButton: {
