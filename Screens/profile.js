@@ -43,14 +43,15 @@ const styles = StyleSheet.create({
        fontSize: config.fontsize_2
     },
     phonenumber: {
-        width: '100%',   
+        maxWidth: '95%',  
+        minWidth:'90%', 
         position: 'absolute',
         bottom: 0,
         padding: 15,
         marginBottom:10,
         flexDirection: 'row',
         justifyContent: 'space-between',
-      
+        alignSelf : 'center', 
     },
     
 });
