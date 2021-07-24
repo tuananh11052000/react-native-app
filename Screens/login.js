@@ -3,6 +3,8 @@ import { View, StyleSheet, Dimensions, StatusBar, Text } from 'react-native';
 import { TabView, SceneMap, TabBar, Tabs } from 'react-native-tab-view';
 import Login from '../components/login.component'
 import SignUp from '../components/signUp.component'
+import HeaderLoginPage from '../components/headerProfilePage.component';
+
 
 const heightStatusBar = StatusBar.currentHeight;//lay ra chieu cao cua thanh trang thai
 
@@ -33,25 +35,29 @@ export default function Authentication(props) {
   });
 
   return (
-    <TabView
-      navigationState={{ index, routes }}
-      renderTabBar={props => (
-        <TabBar
-          {...props}
-          renderLabel={({ route, color }) => (
-            <Text style={{ color: 'black', margin: 8 }}>
-              {route.title}
-            </Text>
-          )}
-          style={{ backgroundColor: 'white', tabBarInactiveTextColor: 'red' }}
-          underlineColor="#000"
-        />
-      )}
-      renderScene={renderScene}
-      onIndexChange={setIndex}
-      initialLayout={initialLayout}
-      style={styles.container}
-    />
+   <>
+      <HeaderLoginPage  message={'LoginPage'} />
+      <TabView
+        navigationState={{ index, routes }}
+        renderTabBar={props => (
+          <TabBar
+            {...props}
+            renderLabel={({ route, color }) => (
+              <Text style={{ color: 'black', margin: 8 }}>
+                {route.title}
+              </Text>
+            )}
+            style={{ backgroundColor: 'white', tabBarInactiveTextColor: 'red' }}
+            underlineColor="#000"
+          />
+        )}
+        renderScene={renderScene}
+        onIndexChange={setIndex}
+        initialLayout={initialLayout}
+        style={styles.container}
+      />
+    </>
+
   );
 }
 

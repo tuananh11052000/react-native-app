@@ -22,20 +22,21 @@ export default function SearchComponent(props) {
 const style = StyleSheet.create({
     wrapSearchBgr: {
         flexDirection: 'column',
-        height: 270
+        height: 250
     },
     wrapSeachBox: {
         display: "flex",
         flexDirection: 'row',
         justifyContent: 'center',
         position: 'absolute',
-        bottom: 40,
+        bottom: 20,
         left: 0,
         right: 0
     },
     searchInput: {
         borderWidth: 1.0,
-        width: 250,
+        minWidth: '70%',
+        maxWidth: '70%',
         height: 50,
         borderBottomLeftRadius: 8,
         borderTopLeftRadius: 8,
@@ -56,6 +57,6 @@ const style = StyleSheet.create({
     }, bgr_style: {
         height: 210,
         width: '100%',
-        resizeMode: 'contain'
+        
     }
 })

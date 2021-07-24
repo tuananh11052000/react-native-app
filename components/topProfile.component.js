@@ -1,26 +1,55 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import {
-    Text, View, StyleSheet, ScrollView
+    Text, View, StyleSheet, ScrollView, TouchableOpacity, Alert
 } from 'react-native'
+
 import { connect } from 'react-redux'
 import { FontAwesome } from '@expo/vector-icons';
 import { MaterialIcons } from '@expo/vector-icons';
 import config from '../config';
 //We will consider isLogin state and decide what will appear on the screen
 function TopProfile(props) {
+    const [isLogged, checkLogged] = useState('no')
     const { dispatch } = props;
-    return <View style={styles.wrapAll}>
-        <MaterialIcons name="account-circle" size={96} color="gray" />
-        <View>
-            <Text style={styles.text} >Nguyễn Duy Phú</Text>
-            <View style={styles.container}>
-                <MaterialIcons style={styles.icon_person} name="person-outline" size={30} color="gray"></MaterialIcons> 
-                <Text style={styles.text_person} >Cá nhân</Text>
+    const loginFunction = async () => {
+        try {
+            checkLogged("yes")
+        } catch (error) {
+            console.log(error)
+        }
+    }
+    if (isLogged == "no") {
+        return ( <View style={styles.wrapAll}>
+            <MaterialIcons name="account-circle" size={96} color="gray" />
+            <View style={styles.login}>
+                <TouchableOpacity //onPress={() => {loginFunction()}}
+                  onPress= {props.onPress}
+                >
+                    <View >
+                        <Text style={styles.btnLogin}>Đăng nhập/ Đăng ký</Text>
+                    </View>
+                </TouchableOpacity>
             </View>
-           
         </View>
+        )
+    }
+    else {
+        return (
+        <View style={styles.wrapAll}>
+            <MaterialIcons name="account-circle" size={96} color="gray" />
+            <View>
+                <Text style={styles.text} >Nguyễn Duy Phú</Text>
+                <View style={styles.container}>
+                    <MaterialIcons style={styles.icon_person} name="person-outline" size={30} color="gray"></MaterialIcons>
+                    <Text style={styles.text_person} >Cá nhân</Text>
+                </View>
 
-    </View>
+            </View>
+        </View> )
+    }
+    {/* */ }
+
+
 }
 
 const styles = StyleSheet.create({
@@ -29,6 +58,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#fff',
         padding: 7,
         flexDirection: 'row',
+        alignItems: 'flex-start',
         width: '100%'
     },
     wrap_avatar: {
@@ -37,7 +67,22 @@ const styles = StyleSheet.create({
         backgroundColor: 'red',
         borderRadius: 60,
         justifyContent: 'center',
-        alignItems: 'center'
+        alignItems: 'center',
+    },
+    login: {
+        minWidth: '60%',
+        maxWidth: '80%',
+        maxHeight: 'auto',
+        minHeight: '60%',
+        justifyContent: 'center',
+        backgroundColor: 'red',
+        alignSelf: 'center',
+        marginLeft: '5%'
+    },
+    btnLogin: {
+        color: "white",
+        textAlign: 'center',
+        fontSize: config.fontsize_2
     },
     text: {
         padding: 10,
@@ -47,13 +92,13 @@ const styles = StyleSheet.create({
         padding: 10,
         fontSize: config.fontsize_2
     },
-    icon_person:{
-        padding:10
+    icon_person: {
+        padding: 10
     },
     container: {
         flex: 1,
         flexDirection: 'row'
-     },
+    },
 
 })
 
