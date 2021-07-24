@@ -19,7 +19,7 @@ function AppNavigator() {
                     name="Feed"
                     component={HomeStack}
                     options={{
-                        tabBarLabel: 'Home',
+                        tabBarLabel: 'Trang chủ',
                         tabBarIcon: ({ color, size }) => (
                             <MaterialCommunityIcons name="home" color={color} size={size} />
                         ),
@@ -29,7 +29,7 @@ function AppNavigator() {
                     name="Notifications"
                     component={CreatePostStack}
                     options={{
-                        tabBarLabel: 'Updates',
+                        tabBarLabel: 'Tin đăng',
                         tabBarIcon: ({ color, size }) => (
                             <MaterialCommunityIcons name="post" color={color} size={size} />
                         ),
@@ -39,7 +39,7 @@ function AppNavigator() {
                     name="Profile"
                     component={ProfileStack}
                     options={{
-                        tabBarLabel: 'Profile',
+                        tabBarLabel: 'Cá nhân',
                         tabBarIcon: ({ color, size }) => (
                             <MaterialCommunityIcons name="account" color={color} size={size} />
                         ),

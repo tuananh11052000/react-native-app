@@ -2,8 +2,9 @@ import { StatusBar } from 'expo-status-bar';
 import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux'
 import * as SecureStore from 'expo-secure-store';
-import { StyleSheet, Text, View, TextInput, Button } from 'react-native';
+import { StyleSheet, Text, View, TextInput, Button, Image } from 'react-native';
 import axios from 'axios';
+import LogoSmai from "../assets/logo_smai.png"
 
 async function save(key, value) {
     await SecureStore.setItemAsync(key, value);
@@ -45,7 +46,7 @@ function Login(props) {
     }
 
     return <View style={styles.container}>
-            <Text style={styles.paragraph}>Đăng nhập</Text>
+            <Image source={LogoSmai}  style={styles.image_logo}/>
             <TextInput
                 style={styles.textInput}
                 onChangeText={text => onChangePhone(text)}
@@ -65,23 +66,21 @@ function Login(props) {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        justifyContent: 'center',
-        paddingTop: 10,
         backgroundColor: '#ecf0f1',
-        padding: 8,
-    },
-    paragraph: {
-        marginTop: 34,
-        margin: 24,
-        fontSize: 18,
-        fontWeight: 'bold',
-        textAlign: 'center',
+        paddingTop:'5%'
+     
     },
     textInput: {
         height: 35,
         borderColor: 'gray',
         borderWidth: 0.5,
         padding: 4,
+    },
+    image_logo:{
+        maxHeight:'40%',
+        minHeight:'30%',
+        resizeMode: 'contain',
+        alignSelf: 'center',
     }
 });
 
