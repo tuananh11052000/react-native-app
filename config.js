@@ -6,7 +6,7 @@ const fontsize_2 = 20
 const fontsize_3 = 15
 const fontsize_4 = 10
 const heightStatusBar = getStatusBarHeight()//Chiều cao status bar
-const header = 50
+const header = 55
 
 
 

@@ -9,12 +9,13 @@ import HistoryProfileComponent from '../components/historyProfile.component';
 
 //const heightStatusBar = StatusBar.currentHeight;
 function ProfileScreen(props) {
+    const { navigation } = props;
     return (
      
         <View style={styles.container}>
             <View style={styles.scrollview}>
-                <HeaderLoginPage />
-                <TopProfile />
+                <HeaderLoginPage message={'ProfilePage'} />
+                <TopProfile  onPress={() => navigation.navigate('Authentication')}  />
                 <Text style={styles.Text}>Quản lý</Text>
                 <HistoryProfileComponent></HistoryProfileComponent>
             </View>
@@ -31,7 +32,7 @@ const styles = StyleSheet.create({
         flex: 1,
         alignItems: 'center',
         justifyContent: 'center',
-        marginTop: config.heightStatusBar,
+       
         height:'100%'
     },
     scrollview: {

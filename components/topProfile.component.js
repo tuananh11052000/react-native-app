@@ -22,9 +22,9 @@ function TopProfile(props) {
         return ( <View style={styles.wrapAll}>
             <MaterialIcons name="account-circle" size={96} color="gray" />
             <View style={styles.login}>
-                <TouchableOpacity onPress={() => {
-                    loginFunction()
-                }}>
+                <TouchableOpacity //onPress={() => {loginFunction()}}
+                  onPress= {props.onPress}
+                >
                     <View >
                         <Text style={styles.btnLogin}>Đăng nhập/ Đăng ký</Text>
                     </View>
