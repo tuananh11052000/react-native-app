@@ -4,33 +4,63 @@ import RNPickerDialog from 'rn-modal-picker';
 import { TextInput } from 'react-native-paper';
 import db from '../db.json';
 
+
 export default function confirmAddress(props) {
-  const selectedValue = (index, item) => {
-    // console.log(item)
-    // this.setState({ selectedText: item.name });
-  }
   const [province, setProvince] = useState("");
   const [district, setDistrict] = useState("");
   const [commune, setCommune] = useState("");
   const [addressDetail, setAddressDetail] = useState("");
 
-  const [data1, setData1] = useState(db.province);
-  const [data2, setData2] = useState(db.district);
-  const [data3, setData3] = useState(db.commune);
+  const [data1, setData1] = useState([...db.province]);
+  const [data2, setData2] = useState([...db.district]);
+  const [data3, setData3] = useState([...db.commune]);
 
-  const temp = () => {
-    return data2
+  const choseProvince = (item) => {
+    setProvince(item)
+    if (item.idProvince != province.idProvince) {
+      setDistrict("");
+      setCommune("")
+    }
+    let getDistrict = [...db.district];
+    let count = data2.length
+    for (let i = 0; i < count; i++) {
+      data2.pop();
+    }
+    for (let i = 0; i < getDistrict.length; i++) {
+      if (getDistrict[i].idProvince == item.idProvince)
+        data2.push(getDistrict[i])
+    }
+    setData2(data2);
   }
+
+  const choseDistrict = (item) => {
+    setDistrict(item)
+    if (item.idDistrict != district.idDistrict) {
+      setCommune("")
+    }
+    let getCommune = [...db.commune];
+    let count = data3.length
+    for (let i = 0; i < count; i++) {
+      data3.pop();
+    }
+    for (let i = 0; i < getCommune.length; i++) {
+      if (getCommune[i].idDistrict == item.idDistrict)
+        data3.push(getCommune[i])
+    }
+    setData3(data3);
+  }
+
 
   return (
     <View style={Styles.border}>
       <View style={Styles.containermain}>
         <View style={Styles.top}>
           <Text style={Styles.tittleText}>Xác nhận địa chỉ</Text>
+          {/* <Text>{data1[0].name}</Text> */}
         </View>
         <View>
           <RNPickerDialog
-            data={temp()}
+            data={data1}
             labelText={'Tỉnh/thành phố'}
             showSearchBar={true}
             showPickerTitle={true}
@@ -45,7 +75,7 @@ export default function confirmAddress(props) {
             dropDownIconStyle={Styles.dropDownIconStyle1}
             searchBarStyle={Styles.searchBarStyle}
             //dropDownIcon={require('../assets/pin.png')}
-            selectedValue={(index, item) => setData2(data3)}
+            selectedValue={(index, item) => choseProvince(item)}
           />
 
           <RNPickerDialog
@@ -64,7 +94,7 @@ export default function confirmAddress(props) {
             dropDownIconStyle={Styles.dropDownIconStyle1}
             searchBarStyle={Styles.searchBarStyle}
             //dropDownIcon={require('../assets/pin.png')}
-            selectedValue={(index, item) => setDistrict(item)}
+            selectedValue={(index, item) => choseDistrict(item)}
           />
           <RNPickerDialog
             data={data3}
@@ -73,7 +103,7 @@ export default function confirmAddress(props) {
             showPickerTitle={true}
             listTextStyle={Styles.listTextStyle}
             pickerStyle={Styles.pickerStyle1}
-            // selectedText={this.state.selectedText}
+            selectedText={commune.name}
             // placeHolderText={this.state.placeHolderText}
             searchBarPlaceHolder={'Search.....'}
             searchBarPlaceHolderColor={'#9d9d9d'}
@@ -82,7 +112,7 @@ export default function confirmAddress(props) {
             dropDownIconStyle={Styles.dropDownIconStyle1}
             searchBarStyle={Styles.searchBarStyle}
             //dropDownIcon={require('../assets/pin.png')}
-            selectedValue={(index, item) => selectedValue(index, item)}
+            selectedValue={(index, item) => setCommune(item)}
           />
 
         </View>
@@ -267,3 +297,26 @@ const Styles = StyleSheet.create({
     textAlign: 'center',
   }
 });
+
+
+// import React, { useState } from 'react'
+// import { View, Text, StyleSheet, Button } from 'react-native'
+
+// export default function confirmAddress(props) {
+//   const [Test, setTest] = useState([1, 2, 3])
+
+//   return <View style={Styles.container}>
+//     <Button title="click" onPress={() => setTest([5, 6, 7])} />
+//     <Text >{Test[0]}</Text>
+//   </View>
+// }
+
+
+// const Styles = StyleSheet.create({
+//   container: {
+//     margin: 100
+//   },
+//   scene: {
+//     flex: 1,
+//   }
+// });
