@@ -45,43 +45,61 @@ function Login(props) {
         }
     }
 
-    return <View style={styles.container}>
+    return (
+    <>
+     <View style={styles.container}>
             <Image source={LogoSmai}  style={styles.image_logo}/>
+            <View>
             <TextInput
                 style={styles.textInput}
                 onChangeText={text => onChangePhone(text)}
+                placeholder="Số điện thoại"
+                keyboardType='numeric'
             />
+            </View>
             <TextInput
                 style={styles.textInput}
                 onChangeText={text => onChangePass(text)}
-            />
-            <Button
-                title="Đăng nhập"
-                onPress={()=>{
-                    loginFunction(PhoneNumber, Password)
-                    props.onPress_}}
-            />
+                placeholder = "Mật khẩu"
+                secureTextEntry={true}
+                />
+           <Button style={styles.btnLogin}
+           title="Đăng nhập"
+           onPress={()=>{
+               loginFunction(PhoneNumber, Password)
+               props.onPress_}}
+       />
         </View>
+         
+       </>
+    )
 }
 const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: '#ecf0f1',
-        paddingTop:'5%'
-     
+        paddingTop:'5%',
+        alignItems:'center'
+        
     },
     textInput: {
-        height: 35,
-        borderColor: 'gray',
-        borderWidth: 0.5,
-        padding: 4,
+        height: '10%',
+        maxWidth:'90%',
+        minWidth:'80%',
+        borderBottomWidth :1,
+        borderBottomColor:"#000",
+        fontSize:20
     },
     image_logo:{
         maxHeight:'40%',
         minHeight:'30%',
         resizeMode: 'contain',
         alignSelf: 'center',
-    }
+    },
+    btnLogin:{
+
+    },
+ 
 });
 
 
