@@ -37,6 +37,7 @@ export default function Authentication(props) {
   return (
    <>
       <HeaderLoginPage  message={'LoginPage'} />
+    
       <TabView
         navigationState={{ index, routes }}
         renderTabBar={props => (
@@ -56,15 +57,13 @@ export default function Authentication(props) {
         initialLayout={initialLayout}
         style={styles.container}
       />
+    
     </>
 
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    marginTop: heightStatusBar
-  },
   scene: {
     flex: 1,
   }
