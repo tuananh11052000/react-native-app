@@ -1,16 +1,41 @@
-import React, { useEffect } from 'react'
-import {
-    Image, Text, View, StyleSheet, TouchableOpacity, Dimensions
-} from 'react-native'
-import { connect } from "react-redux";
+import React, { useEffect, useState } from 'react'
+import { View, Text, StyleSheet, Image } from 'react-native'
+import { SearchBar } from 'react-native-elements';
 import axios from 'axios'
-
+import { FlatList } from 'react-native-gesture-handler';
 import { Feather } from '@expo/vector-icons';
 
-const { width, height } = Dimensions.get('window')
 
-function ProductComponent(props) {
-    var { dispatch } = props;
+export default function (props) {
+    const [allPost, setAllPost] = useState([])
+    const [resultSearch, setResult] = useState([])
+    const [keySearch, setKeySearch] = useState("")
+    useEffect(() => {
+        const getData = async () => {
+            let temp = await axios({
+                method: 'get',
+                url: 'https://smai-app-api.herokuapp.com/post/getFullPost'
+            })
+            setAllPost(temp.data)
+            // dispatch({ type: 'UPDATE', data: temp.data })
+        }
+        getData()
+    }, [])
+    const getResult = (value) => {
+        setKeySearch(value)
+        if (keySearch == "")
+            setResult(allPost)
+        else {
+            const data = allPost.filter((pr) => {
+                if (pr.NameAuthor.toLowerCase().indexOf(keySearch.toLowerCase()) != -1 || pr.title.toLowerCase().indexOf(keySearch.toLowerCase()) != -1)
+                    return true
+                else
+                    return false
+            })
+            setResult(data)
+        }
+    }
+    //""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
     const calculatingTime = (d1, d2) => {
         d1 = new Date(d1);
         const calHour = () => {
@@ -43,18 +68,6 @@ function ProductComponent(props) {
         else
             return `${calHour()} giờ trước`
     }
-
-    useEffect(() => {
-        const getData = async () => {
-            let temp = await axios({
-                method: 'get',
-                url: 'https://smai-app-api.herokuapp.com/post/getFullPost'
-            })
-            console.log(temp.data.length)
-            dispatch({ type: 'UPDATE', data: temp.data })
-        }
-        getData()
-    }, [])
     //Function handling title post
     const renderTitle = (item) => {
         item = item.charAt(0).toUpperCase() + item.slice(1,)
@@ -72,39 +85,45 @@ function ProductComponent(props) {
     }
 
     const currentTime = new Date()
-    return <View style={style.constainer}>
-        {
-            props.newestPost.map((item, key) => {
-                return (
-                    <View key={key} style={style.wrapCategory}>
-                        <Image style={style.tinyLogo} source={{
-                            uri: item.urlImage[0],
-                        }} />
-                        <View style={style.wrapInfoProduct}>
-                            <Text style={style.titlePost}>
-                                {
-                                    renderTitle(item.title)
-                                }
-                            </Text>
-                            <View style={style.wrapTypePrice}>
-                                <Text style={style.type}>{renderType(item.NameProduct)}</Text>
-                                <Text style={style.price}>Miễn phí</Text>
-                            </View>
-                            <View style={style.wrapTimeAddress}>
-                                <View style={style.wrapTime}>
-                                    <Feather name="clock" size={20} color="gray" />
-                                    <Text style={style.time}>{calculatingTime(item.createdAt, currentTime)}</Text>
-                                </View>
-                                <Text style={style.address}>{item.address.slice(0, 15) + "..."}</Text>
-                            </View>
-                        </View>
+    function renderItem(item) {
+        return <View style={style.wrapCategory}>
+            <Image style={style.tinyLogo} source={{
+                uri: item.urlImage[0],
+            }} />
+            <View style={style.wrapInfoProduct}>
+                <Text style={style.titlePost}>
+                    {
+                        renderTitle(item.title)
+                    }
+                </Text>
+                <View style={style.wrapTypePrice}>
+                    <Text style={style.type}>{renderType(item.NameProduct)}</Text>
+                    <Text style={style.price}>Miễn phí</Text>
+                </View>
+                <View style={style.wrapTimeAddress}>
+                    <View style={style.wrapTime}>
+                        <Feather name="clock" size={20} color="gray" />
+                        <Text style={style.time}>{calculatingTime(item.createdAt, currentTime)}</Text>
                     </View>
-                )
-            })
-        }
+                    <Text style={style.address}>{item.address.slice(0, 15) + "..."}</Text>
+                </View>
+            </View>
+        </View>
+    }
+    return <View>
+        <SearchBar
+            placeholder="Type Here..."
+            onChangeText={(value) => getResult(value)}
+            value={keySearch}
+            lightTheme="true"
+            color='black'
+        />
+        <FlatList
+            data={resultSearch}
+            renderItem={({ item }) => renderItem(item)}
+        />
     </View>
 }
-
 const style = StyleSheet.create({
     constainer: {
         backgroundColor: "#ADB5BD"
@@ -156,7 +175,3 @@ const style = StyleSheet.create({
         color: "gray"
     }
 })
-
-export default connect(function (state) {
-    return { num: state.countNumber, newestPost: state.newestPost }
-})(ProductComponent);

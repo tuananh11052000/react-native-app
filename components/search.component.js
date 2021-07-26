@@ -11,7 +11,7 @@ export default function SearchComponent(props) {
     return <View style={style.wrapSearchBgr}>
         <Image source={bgrImage} style={style.bgr_style} />
         <View style={style.wrapSeachBox}>
-            <TextInput placeholder="Tìm kiếm" style={style.searchInput} />
+            <TextInput placeholder="Tìm kiếm" style={style.searchInput} onTouchStart={() => props.onPress()} />
             <View style={style.wrapBell}>
                 <MaterialCommunityIcons name="bell-ring-outline" size={40} color="black" />
             </View>
@@ -57,6 +57,6 @@ const style = StyleSheet.create({
     }, bgr_style: {
         height: 210,
         width: '100%',
-        
+
     }
 })

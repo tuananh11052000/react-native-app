@@ -8,9 +8,9 @@ import ProfileScreen from './Screens/profile'
 import Authentication from './Screens/login'
 import createPost from './Screens/createPost';
 import confirmAddress from './Screens/confirmAddress'
+import Search from './Screens/seachScreen'
 
 const Stack = createStackNavigator();
-const heightStatusBar = StatusBar.currentHeight;
 //Tao stack navigator cho Home
 const HomeStack = () => {
     return (
@@ -19,10 +19,11 @@ const HomeStack = () => {
                 options={{
                     headerShown: false,
                 }} />
-            <Stack.Screen name="Detail" component={confirmAddress}
+            <Stack.Screen name="ConfirmAddress" component={confirmAddress}
                 options={{
                     headerShown: false,
                 }} />
+            <Stack.Screen name="Search" component={Search} />
         </Stack.Navigator>
     )
 }
@@ -55,3 +56,16 @@ const CreatePostStack = () => {
     )
 }
 export { CreatePostStack }
+
+const SearchStack = () => {
+    return (
+        <Stack.Navigator>
+            <Stack.Screen name="Home1" component={Home}
+                options={{
+                    headerShown: false,
+                }} />
+            <Stack.Screen name="Search" component={Search} />
+        </Stack.Navigator>
+    )
+}
+export { SearchStack }

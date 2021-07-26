@@ -13,8 +13,8 @@ function Home(props) {
     return (
         <View style={styles.container}>
             <ScrollView>
-                <SearchComponent />
-                <GiftComponent onPress={() => navigation.navigate('Detail')} style={styles.gift_component} />
+                <SearchComponent onPress={() => navigation.navigate('Search')} />
+                <GiftComponent onPress={() => navigation.navigate('ConfirmAddress')} style={styles.gift_component} />
                 <TitleComponent title="Tin mới nhất" />
                 <ProductComponent />
             </ScrollView>
