@@ -9,6 +9,7 @@ import ProductComponent from '../components/product.component'
 
 const heightStatusBar = StatusBar.currentHeight;
 function Home(props) {
+    // getValueFor();
     const { navigation } = props;
     return (
         <View style={styles.container}>
@@ -35,7 +36,8 @@ const styles = StyleSheet.create({
     },
     wrap_search_bgr: {
         flex: 1
-    }
+    },
+
 });
 
 export default connect(function (state) {

@@ -1,9 +1,9 @@
 import * as React from 'react';
 import { View, StyleSheet, Dimensions, StatusBar, Text } from 'react-native';
 import { TabView, SceneMap, TabBar, Tabs } from 'react-native-tab-view';
-import Login from '../components/login.component'
-import SignUp from '../components/signUp.component'
-import HeaderLoginPage from '../components/headerProfilePage.component';
+import Login from '../components/Authentication/login.component'
+import SignUp from '../components/Authentication/signUp.component'
+import HeaderLoginPage from '../components/Header/headerProfilePage.component';
 
 
 const heightStatusBar = StatusBar.currentHeight;//lay ra chieu cao cua thanh trang thai

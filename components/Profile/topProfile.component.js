@@ -6,24 +6,42 @@ import {
 import { connect } from 'react-redux'
 import { FontAwesome } from '@expo/vector-icons';
 import { MaterialIcons } from '@expo/vector-icons';
-import config from '../config';
-//We will consider isLogin state and decide what will appear on the screen
-function TopProfile(props) {
-    const [isLogged, checkLogged] = useState('no')
-    const { dispatch } = props;
-    const loginFunction = async () => {
-        try {
-            checkLogged("yes")
-        } catch (error) {
-            console.log(error)
-        }
+import config from '../../config';
+import * as SecureStore from 'expo-secure-store';
+import profile from '../../Screens/profile';
+
+//check token
+
+async function getToken (){
+    let result = await SecureStore.getItemAsync('token');
+    if (result) {
+        return await result;
+    } else {
+        return await 'Null'
     }
-    if (isLogged == "no") {
+}
+
+
+
+//We will consider isLogin state and decide what will appear on the screen
+export default function TopProfile(props) {
+    const [token,setToken] = useState('')//token
+    const { dispatch } = props;
+    useEffect(() => {
+        getToken().then(profile => {
+             setToken(profile)
+          }, (error) => {
+            console.log('An error has occur: ', error)
+          })
+    }, [])
+  
+    console.log(token)
+    if (token == 'Null') {
         return ( <View style={styles.wrapAll}>
             <MaterialIcons name="account-circle" size={96} color="gray" />
             <View style={styles.login}>
                 <TouchableOpacity //onPress={() => {loginFunction()}}
-                  onPress= {props.onPress}
+                 onPress= {props.onPress}
                 >
                     <View >
                         <Text style={styles.btnLogin}>Đăng nhập/ Đăng ký</Text>
@@ -102,6 +120,3 @@ const styles = StyleSheet.create({
 
 })
 
-export default connect(function (state) {
-    return { auth: state.auth }
-})(TopProfile);
