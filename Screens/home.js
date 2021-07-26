@@ -13,7 +13,7 @@ function Home(props) {
     return (
         <View style={styles.container}>
             <ScrollView>
-                <SearchComponent />
+                <SearchComponent/>
                 <GiftComponent onPress={() => navigation.navigate('Detail')} style={styles.gift_component} />
                 <TitleComponent title="Tin mới nhất" />
                 <ProductComponent />
@@ -35,7 +35,8 @@ const styles = StyleSheet.create({
     },
     wrap_search_bgr: {
         flex: 1
-    }
+    },
+  
 });
 
 export default connect(function (state) {

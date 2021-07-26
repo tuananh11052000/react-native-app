@@ -18,6 +18,7 @@ import axios from 'axios';
 import LogoSmai from "../assets/logo_smai.png"
 import { Checkbox } from 'react-native-paper';
 import { MaterialIcons } from '@expo/vector-icons';
+import config from '../config';
 
 async function save(key, value) {
     await SecureStore.setItemAsync(key, value);
@@ -110,7 +111,7 @@ function Login(props) {
 
                 {checkbox}
                 {/* <Text>Is CheckBox selected: {checked ? "👍" : "👎"}</Text> */}
-                <Text>Quên mật khẩu</Text>
+                <Text style={styles.forgotPassword}>Quên mật khẩu</Text>
             </View>
            
         </View>
@@ -181,6 +182,12 @@ const styles = StyleSheet.create({
     checkboxContainer: {
         flexDirection: "row",
         marginTop: '2%',
+    },
+    forgotPassword:{
+        alignSelf: 'center',
+        fontSize:config.fontsize_3,
+        marginTop:'10%',
+        color:'blue'
     },
 
     //btn
