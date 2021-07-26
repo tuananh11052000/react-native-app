@@ -6,10 +6,24 @@ import {
 import { connect } from 'react-redux'
 import { FontAwesome } from '@expo/vector-icons';
 import { MaterialIcons } from '@expo/vector-icons';
-import config from '../config';
+import config from '../../config';
+import * as SecureStore from 'expo-secure-store';
+
+//check token
+async function getValueFor() {
+    let result = await SecureStore.getItemAsync('token');
+    let result = await SecureStore.deleteItemAsync(key, options);
+
+    if (result) {
+        console.log(result)
+        return result;
+    } else {
+        return "null"
+    }
+}
 //We will consider isLogin state and decide what will appear on the screen
 function TopProfile(props) {
-    const [isLogged, checkLogged] = useState('no')
+    const [isLogged, checkLogged] = useState(getValueFor())
     const { dispatch } = props;
     const loginFunction = async () => {
         try {
@@ -18,12 +32,12 @@ function TopProfile(props) {
             console.log(error)
         }
     }
-    if (isLogged == "no") {
+    if (!isLogged) {
         return ( <View style={styles.wrapAll}>
             <MaterialIcons name="account-circle" size={96} color="gray" />
             <View style={styles.login}>
                 <TouchableOpacity //onPress={() => {loginFunction()}}
-                  onPress= {props.onPress}
+                 onPress= {props.onPress}
                 >
                     <View >
                         <Text style={styles.btnLogin}>Đăng nhập/ Đăng ký</Text>

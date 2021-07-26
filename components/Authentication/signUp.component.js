@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 import * as SecureStore from 'expo-secure-store';
 import { TouchableOpacity, StyleSheet, Text, View, TextInput, Button, Image, ScrollView } from 'react-native';
 import axios from 'axios';
-import LogoSmai from "../assets/logo_smai.png"
+import LogoSmai from "../../assets/logo_smai.png"
 import { MaterialIcons } from '@expo/vector-icons';
 
 async function save(key, value) {

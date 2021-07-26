@@ -9,13 +9,14 @@ import ProductComponent from '../components/product.component'
 
 const heightStatusBar = StatusBar.currentHeight;
 function Home(props) {
+    // getValueFor();
     const { navigation } = props;
     return (
         <View style={styles.container}>
             <ScrollView>
                 <SearchComponent/>
                 <GiftComponent onPress={() => navigation.navigate('Detail')} style={styles.gift_component} />
-                <TitleComponent title="Tin mới nhất" />
+                <TitleComponent title="Tin mới nhất"  />
                 <ProductComponent />
             </ScrollView>
         </View>

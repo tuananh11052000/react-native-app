@@ -15,25 +15,14 @@ import {
     TouchableOpacity
 } from 'react-native';
 import axios from 'axios';
-import LogoSmai from "../assets/logo_smai.png"
+import LogoSmai from "../../assets/logo_smai.png"
 import { Checkbox } from 'react-native-paper';
 import { MaterialIcons } from '@expo/vector-icons';
-import config from '../config';
+import config from '../../config';
 
 async function save(key, value) {
     await SecureStore.setItemAsync(key, value);
 }
-
-async function getValueFor(key) {
-    let result = await SecureStore.getItemAsync(key);
-    if (result) {
-        alert(result)
-        return result;
-    } else {
-        return "null"
-    }
-}
-console.log(Platform.OS)
 function Login(props) {
     const { dispatch, navigation, onPress } = props;
     const [PhoneNumber, onChangePhone] = useState('');
@@ -46,8 +35,9 @@ function Login(props) {
                 PhoneNumber: PhoneNumber,
                 Password: Password
             }).then(async (data) => {
+                
                 if (data.status == 200) {
-                    await save('token', data.data.accessToken)
+                    await save('token','bearer '+data.data.accessToken)
                     if (props.auth.token == "null") {
                         dispatch({ type: 'SIGN_IN', token: data.data.accessToken, PhoneNumber: PhoneNumber })
                         props.onPress_()

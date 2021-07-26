@@ -2,13 +2,13 @@ import React, { useEffect } from 'react';
 import { ScrollView, StyleSheet, Text, View, StatusBar,Linking } from 'react-native';
 import { connect } from "react-redux";
 import config from '../config';
-import TopProfile from '../components/topProfile.component'
-import HeaderLoginPage from '../components/headerProfilePage.component';
-import HistoryProfileComponent from '../components/historyProfile.component';
-
+import TopProfile from '../components/Profile/topProfile.component'
+import HeaderLoginPage from '../components/Header/headerProfilePage.component';
+import HistoryProfileComponent from '../components/Profile/historyProfile.component';
 
 //const heightStatusBar = StatusBar.currentHeight;
 function ProfileScreen(props) {
+    
     const { navigation } = props;
     return (
      
