@@ -6,6 +6,7 @@ import { color } from 'react-native-reanimated';
 import { MaterialIcons } from '@expo/vector-icons';
 import { connect } from 'react-redux'
 import config from '../../config';
+
 //We will consider isLogin state and decide what will appear on the screen
 function HeaderLoginPage(props) {
     const { dispatch } = props;

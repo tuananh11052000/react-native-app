@@ -8,31 +8,35 @@ import { FontAwesome } from '@expo/vector-icons';
 import { MaterialIcons } from '@expo/vector-icons';
 import config from '../../config';
 import * as SecureStore from 'expo-secure-store';
+import profile from '../../Screens/profile';
 
 //check token
-async function getValueFor() {
-    let result = await SecureStore.getItemAsync('token');
-    let result = await SecureStore.deleteItemAsync(key, options);
 
+async function getToken (){
+    let result = await SecureStore.getItemAsync('token');
     if (result) {
-        console.log(result)
-        return result;
+        return await result;
     } else {
-        return "null"
+        return await 'Null'
     }
 }
+
+
+
 //We will consider isLogin state and decide what will appear on the screen
-function TopProfile(props) {
-    const [isLogged, checkLogged] = useState(getValueFor())
+export default function TopProfile(props) {
+    const [token,setToken] = useState('')//token
     const { dispatch } = props;
-    const loginFunction = async () => {
-        try {
-            checkLogged("yes")
-        } catch (error) {
-            console.log(error)
-        }
-    }
-    if (!isLogged) {
+    useEffect(() => {
+        getToken().then(profile => {
+             setToken(profile)
+          }, (error) => {
+            console.log('An error has occur: ', error)
+          })
+    }, [])
+  
+    console.log(token)
+    if (token == 'Null') {
         return ( <View style={styles.wrapAll}>
             <MaterialIcons name="account-circle" size={96} color="gray" />
             <View style={styles.login}>
@@ -116,6 +120,3 @@ const styles = StyleSheet.create({
 
 })
 
-export default connect(function (state) {
-    return { auth: state.auth }
-})(TopProfile);
