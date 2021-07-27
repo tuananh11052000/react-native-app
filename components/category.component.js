@@ -1,4 +1,4 @@
-import React, { Component, useState } from 'react';
+import React, { Component, useState, useEffect } from 'react';
 import {
   Alert,
   LayoutAnimation,
@@ -18,15 +18,13 @@ import chevrondown from '../assets/down-chevron.png';
 function ExpandableListView(props) {
   const [layoutHeight, setLayoutHeight] = useState(0)
 
-  // https://reactjs.org/blog/2018/03/27/update-on-async-rendering.html
-  const UNSAFE_componentWillReceiveProps = (nextProps) => {
-    if (nextProps.item.expanded) {
-      setLayoutHeight(null)
+  useEffect(() => {
+    if (props.item.isExpanded) {
+      setLayoutHeight(null);
+    } else {
+      setLayoutHeight(0);
     }
-    else {
-      setLayoutHeight(0)
-    }
-  }
+  }, [props.item.isExpanded]);
   console.log(props.item.subCategory)
   const showSelectedCategory = (item) => {
     Alert.alert(item);
@@ -57,7 +55,7 @@ function ExpandableListView(props) {
 export default function CategoryComponent(props) {
 
   // create array to contain Expandable ListView items & create a State named as accordionData and store the array in this State
-  const array = [
+  const CONTENT = [
     {
       expanded: false,
       category: "Nhu yếu phẩm (thực phẩm, y tế)",
@@ -151,13 +149,15 @@ export default function CategoryComponent(props) {
 
 
   ];
-  const [accordionData, setAccordionData] = useState([...array])
-
+  const [accordionData, setAccordionData] = useState(CONTENT)
+ 
   // enable layout animation, toggle 'expanded' state for index and then update the layout
   const updateLayout = (index) => {
     LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
     const array = [...accordionData];
-    array[index]['expanded'] = !array[index]['expanded'];
+    array.map((value, placeindex) =>
+      placeindex === index ? (array[placeindex]['isExpanded'] = !array[placeindex]['isExpanded']) : (array[placeindex]['isExpanded'] = false),
+    );
     setAccordionData(array)
   }
   return (
