@@ -12,7 +12,7 @@ import Search from './Screens/seachScreen'
 
 const Stack = createStackNavigator();
 //Tao stack navigator cho Home
-const HomeStack = () => {
+const HomeStack = ({ navigation }) => {
     return (
         <Stack.Navigator>
             <Stack.Screen name="Home" component={Home}
@@ -22,8 +22,8 @@ const HomeStack = () => {
             <Stack.Screen name="ConfirmAddress" component={confirmAddress}
                 options={{
                     headerShown: false,
+                    tabBarVisible: false
                 }} />
-            <Stack.Screen name="Search" component={Search} />
         </Stack.Navigator>
     )
 }
