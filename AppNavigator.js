@@ -6,6 +6,9 @@ import { createStackNavigator } from '@react-navigation/stack';
 
 import { HomeStack, ProfileStack, CreatePostStack } from './CustomeNavigator';
 import Search from './Screens/seachScreen'
+import ConfirmAddress from './Screens/confirmAddress';
+import Category from './Screens/category';
+import Description from './Screens/description';
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -58,6 +61,15 @@ function AppNavigator() {
                     headerShown: false,
                 }} />
                 <Stack.Screen name="Search" component={Search} />
+                <Stack.Screen name="ConfirmAddress" component={ConfirmAddress} options={{
+                    headerShown: false,
+                }} />
+                <Stack.Screen name="Category" component={Category} options={{
+                    headerShown: false,
+                }} />
+                <Stack.Screen name="Description" component={Description} options={{
+                    headerShown: false,
+                }} />
             </Stack.Navigator>
         </NavigationContainer>
     );

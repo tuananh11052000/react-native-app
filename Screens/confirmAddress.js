@@ -6,6 +6,7 @@ import db from '../db.json';
 
 
 export default function confirmAddress(props) {
+  const { navigation } = props;
   const [province, setProvince] = useState("");
   const [district, setDistrict] = useState("");
   const [commune, setCommune] = useState("");
@@ -130,7 +131,8 @@ export default function confirmAddress(props) {
         </View>
         <TouchableOpacity
           style={Styles.touchableButton}
-          underlayColor='#fff'>
+          underlayColor='#fff'
+          onPress={() => navigation.navigate('Category')}>
           <Text style={Styles.buttonConfirm}>Xác nhận</Text>
         </TouchableOpacity>
       </View>

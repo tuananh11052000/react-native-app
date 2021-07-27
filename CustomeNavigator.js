@@ -19,11 +19,6 @@ const HomeStack = ({ navigation }) => {
                 options={{
                     headerShown: false,
                 }} />
-            <Stack.Screen name="ConfirmAddress" component={confirmAddress}
-                options={{
-                    headerShown: false,
-                    tabBarVisible: false
-                }} />
         </Stack.Navigator>
     )
 }
@@ -56,16 +51,3 @@ const CreatePostStack = () => {
     )
 }
 export { CreatePostStack }
-
-const SearchStack = () => {
-    return (
-        <Stack.Navigator>
-            <Stack.Screen name="Home1" component={Home}
-                options={{
-                    headerShown: false,
-                }} />
-            <Stack.Screen name="Search" component={Search} />
-        </Stack.Navigator>
-    )
-}
-export { SearchStack }

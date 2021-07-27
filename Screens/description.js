@@ -1,21 +1,23 @@
 import React, { Component } from 'react';
-import { Alert, 
-  LayoutAnimation, 
-  StyleSheet, 
-  View, 
-  Text, 
-  ScrollView, 
-  UIManager, 
-  TouchableOpacity, 
-  Platform, 
-  Image } from 'react-native';
+import {
+  Alert,
+  LayoutAnimation,
+  StyleSheet,
+  View,
+  Text,
+  ScrollView,
+  UIManager,
+  TouchableOpacity,
+  Platform,
+  Image
+} from 'react-native';
 import TitleDetail from '../components/titleDetail.components';
 import ButtonConfirm from '../components/buttonConfirm.components';
 
 
 
 
-export default class App extends Component {
+export default class Description extends Component {
   constructor() {
     super();
   }
@@ -24,9 +26,8 @@ export default class App extends Component {
   render() {
     return (
       <View style={styles.container}>
-          <TitleDetail></TitleDetail>
-          <ButtonConfirm/>
-
+        <TitleDetail></TitleDetail>
+        <ButtonConfirm />
       </View>
     );
   }
