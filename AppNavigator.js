@@ -9,6 +9,8 @@ import ConfirmAddress from './Screens/confirmAddress';
 import Category from './Screens/category';
 import Description from './Screens/description';
 import CustomeTabNav from './handleTabNav';
+import ConfirmInforScreen from './Screens/confirmInfor'
+import Completed from './Screens/completed';
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -30,6 +32,12 @@ function AppNavigator() {
                 }} />
                 <Stack.Screen name="Description" component={Description} options={{
                     headerShown: false,
+                }} />
+                <Stack.Screen name="ConfirmInforScreen" component={ConfirmInforScreen} options={{
+                    headerShown: false
+                }} />
+                <Stack.Screen name="Completed" component={Completed} options={{
+                    headerShown: false
                 }} />
             </Stack.Navigator>
         </NavigationContainer>

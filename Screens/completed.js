@@ -7,25 +7,22 @@ import {
 } from 'react-native';
 
 
-export default class App extends Component {
-    constructor(props) {
-        super(props);
-    };
+export default function Completed(props) {
 
-    render() {
-        return (
-            <View style={styles.container}>
-                <View style={styles.backgroundBox}>
-                    <View>
-                        <Text style={styles.textRequired}>Đã được yêu cầu thành công</Text>
-                    </View>
-                    <TouchableOpacity activeOpacity={0.6} style={styles.buttonComplete}>
-                        <Text style={styles.textComplete}>Xong</Text>
-                    </TouchableOpacity>
+    const { navigation } = props;
+
+    return (
+        <View style={styles.container}>
+            <View style={styles.backgroundBox}>
+                <View>
+                    <Text style={styles.textRequired}>Đã được yêu cầu thành công</Text>
                 </View>
+                <TouchableOpacity activeOpacity={0.6} style={styles.buttonComplete} onPress={() => navigation.popToTop()}>
+                    <Text style={styles.textComplete}>Xong</Text>
+                </TouchableOpacity>
             </View>
-        );
-    }
+        </View>
+    );
 }
 const styles = StyleSheet.create({
     container: {

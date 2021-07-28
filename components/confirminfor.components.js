@@ -5,10 +5,7 @@ import {
     Text,
     TextInput,
     ScrollView,
-    TouchableOpacity,
-    Platform,
-    FlatList,
-    Image
+    FlatList
 } from 'react-native';
 import { Card } from "react-native-elements";
 const data = [
@@ -85,7 +82,7 @@ export default class App extends Component {
                         <UselessTextInput
                             multiline
                             numberOfLines={4}
-                            
+
                         />
                     </View>
                 </View>
@@ -109,7 +106,7 @@ export default class App extends Component {
                             );
                         }}
                         keyExtractor={(item, index) => index.toString()}
-                        style={{marginBottom: 10,}}
+                        style={{ marginBottom: 10, }}
                     />
 
                 </View>
@@ -160,7 +157,7 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderRadius: 5,
         padding: 5,
-        
+
         marginTop: 10,
         marginBottom: 10,
     },

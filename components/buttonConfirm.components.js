@@ -7,11 +7,11 @@ import {
 } from 'react-native';
 
 
-const buttonConfirm = () => {
-    
+const buttonConfirm = (props) => {
+
     return (
         <View style={styles.container}>
-            <TouchableOpacity activeOpacity={0.6} style={styles.button}>
+            <TouchableOpacity activeOpacity={0.6} style={styles.button} onPress={props.onPress}>
                 <Text style={styles.buttonText}>Tiếp theo</Text>
             </TouchableOpacity>
         </View>
@@ -37,6 +37,6 @@ const styles = StyleSheet.create({
         fontSize: 20,
     }
 
-    
+
 });
 export default buttonConfirm;

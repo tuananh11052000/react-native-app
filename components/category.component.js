@@ -25,9 +25,8 @@ function ExpandableListView(props) {
       setLayoutHeight(0);
     }
   }, [props.item.isExpanded]);
-  console.log(props.item.subCategory)
   const showSelectedCategory = (item) => {
-    Alert.alert(item);
+    props.onPress()
   }
   return (
     <View style={styles.panelContainer}>
@@ -150,7 +149,7 @@ export default function CategoryComponent(props) {
 
   ];
   const [accordionData, setAccordionData] = useState(CONTENT)
- 
+
   // enable layout animation, toggle 'expanded' state for index and then update the layout
   const updateLayout = (index) => {
     LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
