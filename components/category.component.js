@@ -1,17 +1,15 @@
 import React, { Component, useState, useEffect } from 'react';
 import {
-  Alert,
   LayoutAnimation,
   StyleSheet,
   View,
   Text,
   ScrollView,
-  UIManager,
   TouchableOpacity,
   Platform,
-  Image,
-  Button
+  Image
 } from 'react-native';
+import { connect } from 'react-redux'
 import chevrondown from '../assets/down-chevron.png';
 
 
@@ -26,6 +24,8 @@ function ExpandableListView(props) {
     }
   }, [props.item.isExpanded]);
   const showSelectedCategory = (item) => {
+    const { dispatch } = props
+    dispatch({ type: "GET_NAME", NameProduct: item.name });
     props.onPress()
   }
   return (
@@ -39,7 +39,7 @@ function ExpandableListView(props) {
       <View style={{ height: layoutHeight, overflow: 'hidden' }}>
         {
           props.item.subCategory.map((item, key) => (
-            <TouchableOpacity key={key} style={styles.subCategoryText} onPress={() => showSelectedCategory(item.namne)}>
+            <TouchableOpacity key={key} style={styles.subCategoryText} onPress={() => showSelectedCategory(item)}>
               <Text> {item.name} </Text>
               {/* <View style={{ width: '100%', height: 1, backgroundColor: '#000' }} /> */}
             </TouchableOpacity>
@@ -51,7 +51,7 @@ function ExpandableListView(props) {
 }
 
 
-export default function CategoryComponent(props) {
+function CategoryComponent(props) {
 
   // create array to contain Expandable ListView items & create a State named as accordionData and store the array in this State
   const CONTENT = [
@@ -159,13 +159,14 @@ export default function CategoryComponent(props) {
     );
     setAccordionData(array)
   }
+  const { dispatch } = props
   return (
     <View style={styles.container}>
       <ScrollView contentContainerStyle={{ paddingHorizontal: 10, paddingVertical: 5 }}>
         {
           accordionData.map((item, key) =>
           (
-            <ExpandableListView key={item.category} onClickFunction={() => updateLayout(key)} item={item} onPress={props.onPress} />
+            <ExpandableListView key={item.category} onClickFunction={() => updateLayout(key)} item={item} onPress={props.onPress} dispatch={dispatch} />
           ))
         }
       </ScrollView>
@@ -212,3 +213,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#F5F5F5'
   }
 });
+export default connect(function (state) {
+  return { inforPost: state.infoPost }
+})(CategoryComponent);

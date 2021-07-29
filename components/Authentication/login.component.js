@@ -35,9 +35,9 @@ function Login(props) {
                 PhoneNumber: PhoneNumber,
                 Password: Password
             }).then(async (data) => {
-                
+                console.log(data.data.accessToken)
                 if (data.status == 200) {
-                    await save('token','bearer '+data.data.accessToken)
+                    await save('token', 'bearer ' + data.data.accessToken)
                     if (props.auth.token == "null") {
                         dispatch({ type: 'SIGN_IN', token: data.data.accessToken, PhoneNumber: PhoneNumber })
                         props.onPress_()
@@ -45,7 +45,7 @@ function Login(props) {
                 }
             })
         } catch (e) {
-            alert("Sai thong tin tai khoan mat khau")
+            alert(e)
         }
     }
     const onToggleSwitch = () => setChecked(!checked); //dùng cho ios
@@ -103,13 +103,13 @@ function Login(props) {
                 {/* <Text>Is CheckBox selected: {checked ? "👍" : "👎"}</Text> */}
                 <Text style={styles.forgotPassword}>Quên mật khẩu</Text>
             </View>
-           
+
         </View>
-        <View  style={styles.layoutBtnLogin}>
-            <TouchableOpacity  onPress={() => {
-                    loginFunction(PhoneNumber, Password)
-                    props.onPress_
-                }}>
+        <View style={styles.layoutBtnLogin}>
+            <TouchableOpacity onPress={() => {
+                loginFunction(PhoneNumber, Password)
+                props.onPress_
+            }}>
                 <View >
                     <Text style={styles.btnLogin}>Đăng nhập</Text>
                 </View>
@@ -122,12 +122,12 @@ function Login(props) {
 }
 const styles = StyleSheet.create({
     container: {
-     
+
         flex: 1,
         paddingTop: '5%',
         width: '100%',
         alignItems: 'center',
-       
+
 
     },
     child_container: {
@@ -173,11 +173,11 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         marginTop: '2%',
     },
-    forgotPassword:{
+    forgotPassword: {
         alignSelf: 'center',
-        fontSize:config.fontsize_3,
-        marginTop:'10%',
-        color:'blue'
+        fontSize: config.fontsize_3,
+        marginTop: '10%',
+        color: 'blue'
     },
 
     //btn
@@ -190,12 +190,12 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         alignSelf: 'center',
-        marginBottom:'10%'
+        marginBottom: '10%'
 
     },
     btnLogin: {
-       
-        color:"white"
+
+        color: "white"
 
     },
 });

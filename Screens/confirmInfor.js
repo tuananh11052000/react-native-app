@@ -5,13 +5,14 @@ import {
   Platform,
   StatusBar
 } from 'react-native';
+import { connect } from 'react-redux'
 
 import ButtonConfirm from '../components/buttonConfirm.components';
 import ConfirmInfor from '../components/confirminfor.components';
 
 const heightStatusBar = StatusBar.currentHeight;
 
-export default function ConfirmInforScreen(props) {
+function ConfirmInforScreen(props) {
   const { navigation } = props;
 
   return (
@@ -30,3 +31,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between'
   },
 });
+
+export default connect(function (state) {
+  return { inforPost: state.infoPost, num: state.countNumber, auth: state.auth }
+})(ConfirmInforScreen);

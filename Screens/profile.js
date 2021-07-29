@@ -1,4 +1,4 @@
-import React, { useEffect,useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { ScrollView, StyleSheet, Text, View, StatusBar, Linking } from 'react-native';
 import { connect } from "react-redux";
 import config from '../config';
@@ -8,18 +8,18 @@ import HistoryProfileComponent from '../components/Profile/historyProfile.compon
 
 //const heightStatusBar = StatusBar.currentHeight;
 function ProfileScreen(props) {
-  
+
     const { navigation } = props;
     return (
 
         <View style={styles.container}>
             <View style={styles.scrollview}>
-                <HeaderLoginPage message={'ProfilePage'} onPress={() => navigation.navigate('Home')}/>
+                <HeaderLoginPage message={'ProfilePage'} onPress={() => navigation.jumpTo('Feed')} />
                 <TopProfile onPress={() => navigation.navigate('Authentication')} />
                 <Text style={styles.Text}>Quản lý</Text>
                 <HistoryProfileComponent></HistoryProfileComponent>
             </View>
-          
+
             <View style={styles.phonenumber} >
                 <Text style={{ fontSize: config.fontsize_2 }}>Trung tâm hỗ trợ: </Text>
                 <Text style={{ fontSize: config.fontsize_2, color: "#0061F2" }} onPress={() => { Linking.openURL('tel:0938516899'); }}>0938.51.68.99</Text>
