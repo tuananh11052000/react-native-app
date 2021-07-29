@@ -9,7 +9,8 @@ import {
     Platform,
     Image
 } from 'react-native';
-import { AntDesign } from '@expo/vector-icons'; 
+import { connect } from 'react-redux'
+import { AntDesign } from '@expo/vector-icons';
 const UselessTextInput = (props) => {
     return (
         <TextInput
@@ -19,16 +20,18 @@ const UselessTextInput = (props) => {
         />
     );
 }
-const titleDetail = () => {
+const titleDetail = (props) => {
     const [number, onChangeNumber] = React.useState(null);
     const [value, onChangeText] = React.useState(null);
+
+    const { dispatch } = props;
     return (
         <View style={styles.container}>
             <View>
                 <Text>Tiêu đề*</Text>
                 <TextInput
                     style={styles.input}
-                    onChangeText={onChangeNumber}
+                    onChangeText={(text) => dispatch({ type: 'GET_TITLE', title: text })}
                     value={number}
                     placeholder="Lời nhắn"
                 />
@@ -40,17 +43,17 @@ const titleDetail = () => {
                     <UselessTextInput
                         multiline
                         numberOfLines={4}
-                        onChangeText={text => onChangeText(text)}
+                        onChangeText={(text) => dispatch({ type: 'GET_NOTE', note: text })}
                     />
                 </View>
             </View>
             <View>
                 <Text>Hình ảnh(tối đa 5 hình ảnh)</Text>
-               
+
                 <TouchableOpacity style={styles.borderUpload}>
                     <AntDesign name="clouduploado" size={70} color="#B1B1B1" />
                 </TouchableOpacity>
-            
+
             </View>
         </View>
     )
@@ -59,7 +62,7 @@ const titleDetail = () => {
 
 const styles = StyleSheet.create({
     container: {
-      
+
         justifyContent: 'center',
         marginRight: 20,
         marginLeft: 20,
@@ -85,7 +88,7 @@ const styles = StyleSheet.create({
         width: '25%',
         flexDirection: 'row',
         justifyContent: 'center',
-        borderRadius:10,
+        borderRadius: 10,
         borderColor: '#B1B1B1',
         borderWidth: 2,
         marginTop: 10,
@@ -93,4 +96,6 @@ const styles = StyleSheet.create({
         padding: 5,
     }
 });
-export default titleDetail;
+export default connect(function (state) {
+    return { inforPost: state.infoPost }
+})(titleDetail);

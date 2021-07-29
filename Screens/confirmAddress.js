@@ -3,9 +3,10 @@ import { StyleSheet, Text, View, Button, TouchableOpacity } from 'react-native';
 import RNPickerDialog from 'rn-modal-picker';
 import { TextInput } from 'react-native-paper';
 import db from '../db.json';
+import { connect } from 'react-redux'
 
-
-export default function confirmAddress(props) {
+function confirmAddress(props) {
+  //khai bao cac local state
   const { navigation } = props;
   const [province, setProvince] = useState("");
   const [district, setDistrict] = useState("");
@@ -15,7 +16,7 @@ export default function confirmAddress(props) {
   const [data1, setData1] = useState([...db.province]);
   const [data2, setData2] = useState([...db.district]);
   const [data3, setData3] = useState([...db.commune]);
-
+  //ham xu ly su kien chon tinh/tp
   const choseProvince = (item) => {
     setProvince(item)
     if (item.idProvince != province.idProvince) {
@@ -33,7 +34,7 @@ export default function confirmAddress(props) {
     }
     setData2(data2);
   }
-
+  //ham xu ly su kien chon quan huyen
   const choseDistrict = (item) => {
     setDistrict(item)
     if (item.idDistrict != district.idDistrict) {
@@ -50,8 +51,13 @@ export default function confirmAddress(props) {
     }
     setData3(data3);
   }
-
-
+  //Khai bao ham xu ly su kien click
+  const pressFunc = () => {
+    const { dispatch } = props;
+    const address = `${addressDetail}, ${commune.name}, ${district.name}, ${province.name}`
+    dispatch({ type: "CONFIRM_ADDRESS", address: address })
+    navigation.navigate('Category')
+  }
   return (
     <View style={Styles.border}>
       <View style={Styles.containermain}>
@@ -122,6 +128,7 @@ export default function confirmAddress(props) {
             mode={'flat'}
             dense={'true'}
             autoCapitalize='none'
+            onChangeText={text => { setAddressDetail(text) }}
             theme={{
               colors: {
                 primary: 'gray',
@@ -132,7 +139,7 @@ export default function confirmAddress(props) {
         <TouchableOpacity
           style={Styles.touchableButton}
           underlayColor='#fff'
-          onPress={() => navigation.navigate('Category')}>
+          onPress={() => pressFunc()}>
           <Text style={Styles.buttonConfirm}>Xác nhận</Text>
         </TouchableOpacity>
       </View>
@@ -299,26 +306,6 @@ const Styles = StyleSheet.create({
     textAlign: 'center',
   }
 });
-
-
-// import React, { useState } from 'react'
-// import { View, Text, StyleSheet, Button } from 'react-native'
-
-// export default function confirmAddress(props) {
-//   const [Test, setTest] = useState([1, 2, 3])
-
-//   return <View style={Styles.container}>
-//     <Button title="click" onPress={() => setTest([5, 6, 7])} />
-//     <Text >{Test[0]}</Text>
-//   </View>
-// }
-
-
-// const Styles = StyleSheet.create({
-//   container: {
-//     margin: 100
-//   },
-//   scene: {
-//     flex: 1,
-//   }
-// });
+export default connect(function (state) {
+  return { inforPost: state.infoPost, num: state.countNumber }
+})(confirmAddress);
