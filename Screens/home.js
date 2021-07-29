@@ -32,7 +32,6 @@ function Home(props) {
     return (
         <View style={styles.container}>
             <ScrollView>
-                <Button title="click" onPress={() => console.log(props.auth)} />
                 <SearchComponent onPress={() => navigation.navigate('Search')} />
                 <GiftComponent onPress={() => navigation.navigate('ConfirmAddress')} style={styles.gift_component} />
                 <TitleComponent title="Tin mới nhất" />

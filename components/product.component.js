@@ -50,7 +50,6 @@ function ProductComponent(props) {
                 method: 'get',
                 url: 'https://smai-app-api.herokuapp.com/post/getFullPost'
             })
-            console.log(temp.data.length)
             dispatch({ type: 'UPDATE', data: temp.data })
         }
         getData()

@@ -15,8 +15,6 @@ function HeaderLoginPage(props) {
     const { dispatch } = props
     const hideMenu = async () => {
         await SecureStore.deleteItemAsync('token')
-        // const token = await SecureStore.getItemAsync('token')
-        // console.log(token)
         dispatch({ type: "SIGN_OUT" })
         props.onPress()
     }
