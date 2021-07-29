@@ -8,7 +8,6 @@ import { FontAwesome } from '@expo/vector-icons';
 import { MaterialIcons } from '@expo/vector-icons';
 import config from '../../config';
 import * as SecureStore from 'expo-secure-store';
-import profile from '../../Screens/profile';
 
 //check token
 
