@@ -35,7 +35,6 @@ function SignUp(props) {
             PhoneNumber: PhoneNumber,
             Password: Password
         }).then(async (data) => {
-            console.log(data)
             if (data.status == 201) {
                 await save('token', data.data.accessToken)
                 if (props.auth.token == "null") {
