@@ -11,8 +11,9 @@ import Description from './Screens/description';
 import CustomeTabNav from './handleTabNav';
 import ConfirmInforScreen from './Screens/confirmInfor'
 import Completed from './Screens/completed';
+import Authentication from './Screens/login';
 import PostType from './Screens/newpostType';
-import WhoConfirm from './Screens/whoConfirm'
+import WhoConfirm from './Screens/whoConfirm';
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
