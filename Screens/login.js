@@ -12,7 +12,7 @@ export default function Authentication(props) {
   const { navigation } = props;
   const FirstRoute = () => (
     <View style={styles.scene}>
-      <Login onPress_={() => navigation.navigate('Home')} />
+      <Login onPress={() => navigation.navigate('Home')} />
     </View>
   );
 

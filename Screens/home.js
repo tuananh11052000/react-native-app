@@ -15,17 +15,15 @@ function Home(props) {
     useEffect(() => {
         const checkTokenLocal = async () => {
             let result = await SecureStore.getItemAsync('token');
+            let PhoneNumber = await SecureStore.getItemAsync('PhoneNumber')
             if (result) {
-                dispatch({ type: "UPDATE_AUTH", tokenAccess: result })
+                dispatch({ type: "SIGN_IN", token: result, PhoneNumber: PhoneNumber })
                 return await result
             } else {
                 return await null
             }
         }
-        checkTokenLocal().then(data => {
-            if (data != null)
-                dispatch({ type: "UPDATE_AUTH", tokenAccess: data })
-        });
+        checkTokenLocal()
     }, [])
     const { navigation } = props;
 

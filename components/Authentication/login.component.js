@@ -35,12 +35,12 @@ function Login(props) {
                 PhoneNumber: PhoneNumber,
                 Password: Password
             }).then(async (data) => {
+                console.log(data)
                 if (data.status == 200) {
                     await save('token', 'bearer ' + data.data.accessToken)
-                    if (props.auth.token == "null") {
-                        dispatch({ type: 'SIGN_IN', token: data.data.accessToken, PhoneNumber: PhoneNumber })
-                        props.onPress_()
-                    }
+                    await save('PhoneNumber', PhoneNumber)
+                    dispatch({ type: 'SIGN_IN', token: data.data.accessToken, PhoneNumber: PhoneNumber })
+                    props.onPress()
                 }
             })
         } catch (e) {
@@ -107,7 +107,6 @@ function Login(props) {
         <View style={styles.layoutBtnLogin}>
             <TouchableOpacity onPress={() => {
                 loginFunction(PhoneNumber, Password)
-                props.onPress_
             }}>
                 <View >
                     <Text style={styles.btnLogin}>Đăng nhập</Text>

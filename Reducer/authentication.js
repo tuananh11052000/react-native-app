@@ -1,23 +1,15 @@
-var auth = (state = { token: '', isSignout: true, PhoneNumber: "", isLogin: false }, action) => {
+var auth = (state = { token: '', PhoneNumber: "", isLogin: false }, action) => {
     switch (action.type) {
-        case 'UPDATE_AUTH'://cap nhat token neu no duoc luu tren thiet bi
+        case 'SIGN_IN'://luu thong tin dang nhap
             return {
                 ...state,
                 isLogin: true,
-                token: action.tokenAccess,
-                isSignout: false
-            }
-        case 'SIGN_IN':
-            return {
-                ...state,
-                isSignout: false,
                 token: action.token,
                 PhoneNumber: action.PhoneNumber
             };
-        case 'SIGN_OUT':
+        case 'SIGN_OUT'://dang xuat
             return {
                 ...state,
-                isSignout: true,
                 token: null,
                 isLogin: false,
                 PhoneNumber: ""

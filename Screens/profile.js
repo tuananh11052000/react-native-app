@@ -14,7 +14,7 @@ function ProfileScreen(props) {
         <View style={styles.container}>
             <View style={styles.scrollview}>
                 <HeaderLoginPage message={'ProfilePage'} onPress={() => navigation.jumpTo('Feed')} />
-                <TopProfile onPress={() => navigation.navigate('Authentication')} />
+                <TopProfile onPress={() => navigation.replace('Authentication')} />
                 <Text style={styles.Text}>Quản lý</Text>
                 <HistoryProfileComponent></HistoryProfileComponent>
             </View>
