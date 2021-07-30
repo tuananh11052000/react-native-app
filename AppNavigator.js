@@ -11,6 +11,9 @@ import Description from './Screens/description';
 import CustomeTabNav from './handleTabNav';
 import ConfirmInforScreen from './Screens/confirmInfor'
 import Completed from './Screens/completed';
+import CreatePost from './Screens/createPost'
+import PostType from './Screens/newpostType';
+import WhoConfirm from './Screens/whoConfirm'
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -37,6 +40,15 @@ function AppNavigator() {
                     headerShown: false
                 }} />
                 <Stack.Screen name="Completed" component={Completed} options={{
+                    headerShown: false
+                }} />
+                {/* <Stack.Screen name="CreatePost" component={CreatePost} options={{
+                    headerShown: false
+                }} /> */}
+                <Stack.Screen name="PostType" component={PostType} options={{
+                    headerShown: false
+                }} />
+                <Stack.Screen name="WhoConfirm" component={WhoConfirm} options={{
                     headerShown: false
                 }} />
             </Stack.Navigator>

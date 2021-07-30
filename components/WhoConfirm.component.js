@@ -5,7 +5,8 @@ export default function WhoConfirm (props) {
   const { who } = props;
   return (
     <TouchableOpacity
-      activeOpacity={0.3}>
+      activeOpacity={0.3}
+      onPress={props.onPress}>
       <View style={styles.container}>
         <Text style={styles.title}>{who.title}</Text>
       </View>
