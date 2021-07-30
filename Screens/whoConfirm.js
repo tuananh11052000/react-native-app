@@ -1,13 +1,12 @@
-import { StatusBar } from 'expo-status-bar';
 import React from 'react';
-import { FlatList, Image, StyleSheet, View, Text } from 'react-native';
+import { FlatList, Image, StyleSheet, View, Text, StatusBar } from 'react-native';
 
 import WhoConfirm from '../components/WhoConfirm.component';
 import PriorityImg from '../assets/priority_preview.png'
 
 const heightStatusBar = StatusBar.currentHeight;//get status bar height
 
-export default class Who extends React.Component {
+export default class whoConfirms extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -20,17 +19,19 @@ export default class Who extends React.Component {
   }
 
   render() {
+    const { navigation } = this.props;
     const { whoconfirm } = this.state;
     return (
       <View style={styles.container}>
         <FlatList
           data={whoconfirm}
-          renderItem={({ item }) => <WhoConfirm who={item} />}
+          renderItem={({ item }) => <WhoConfirm who={item}
+            onPress={() => navigation.navigate('ConfirmAddress')} />}
           keyExtractor={item => `${item.id}`}
           style={styles.flatList}
         />
         <View style={styles.row}>
-          <Image source={PriorityImg} style= {{width: 26, height:26}}/>
+          <Image source={PriorityImg} style={{ width: 26, height: 26 }} />
           <Text style={styles.textNote}> Lưu ý</Text>
         </View>
         <Text style={styles.textContent}>

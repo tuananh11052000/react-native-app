@@ -5,7 +5,8 @@ export default function NewPostType(props) {
   const { newpost } = props;
   return (
     <TouchableOpacity
-      activeOpacity={0.3}>
+      activeOpacity={0.3}
+      onPress={props.onPress}>
       <View style={styles.container}>
         <Text style={styles.title}>{newpost.title}</Text>
       </View>
