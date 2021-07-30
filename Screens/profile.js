@@ -8,7 +8,6 @@ import HistoryProfileComponent from '../components/Profile/historyProfile.compon
 
 //const heightStatusBar = StatusBar.currentHeight;
 function ProfileScreen(props) {
-
     const { navigation } = props;
     return (
 
@@ -59,5 +58,5 @@ const styles = StyleSheet.create({
 });
 
 export default connect(function (state) {
-    return { num: state.countNumber, newestPost: state.newestPost }
+    return { auth: state.auth }
 })(ProfileScreen);

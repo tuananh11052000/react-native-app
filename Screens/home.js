@@ -1,16 +1,34 @@
-import React from 'react';
-import { StyleSheet, View, ScrollView, StatusBar } from 'react-native';
+import React, { useEffect } from 'react';
+import { StyleSheet, View, ScrollView, StatusBar, Button } from 'react-native';
 import { connect } from "react-redux";
 
 import GiftComponent from '../components/gift.component';
 import SearchComponent from '../components/search.component'
 import TitleComponent from '../components/title.component'
 import ProductComponent from '../components/product.component'
+import * as SecureStore from 'expo-secure-store';
 
 const heightStatusBar = StatusBar.currentHeight;
 function Home(props) {
     // getValueFor();
+    const { dispatch } = props;
+    useEffect(() => {
+        const checkTokenLocal = async () => {
+            let result = await SecureStore.getItemAsync('token');
+            if (result) {
+                dispatch({ type: "UPDATE_AUTH", tokenAccess: result })
+                return await result
+            } else {
+                return await null
+            }
+        }
+        checkTokenLocal().then(data => {
+            if (data != null)
+                dispatch({ type: "UPDATE_AUTH", tokenAccess: data })
+        });
+    }, [])
     const { navigation } = props;
+
     return (
         <View style={styles.container}>
             <ScrollView>
@@ -41,5 +59,5 @@ const styles = StyleSheet.create({
 });
 
 export default connect(function (state) {
-    return { num: state.countNumber, newestPost: state.newestPost }
+    return { auth: state.auth }
 })(Home);

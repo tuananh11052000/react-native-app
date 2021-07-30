@@ -11,7 +11,7 @@ import * as SecureStore from 'expo-secure-store';
 
 //check token
 
-async function getToken (){
+async function getToken() {
     let result = await SecureStore.getItemAsync('token');
     if (result) {
         return await result;
@@ -20,27 +20,23 @@ async function getToken (){
     }
 }
 
-
-
 //We will consider isLogin state and decide what will appear on the screen
-export default function TopProfile(props) {
-    const [token,setToken] = useState('')//token
+function TopProfile(props) {
+    const [token, setToken] = useState('Null')//token
     const { dispatch } = props;
     useEffect(() => {
         getToken().then(profile => {
-             setToken(profile)
-          }, (error) => {
+            setToken(profile)
+        }, (error) => {
             console.log('An error has occur: ', error)
-          })
+        })
     }, [])
-  
-    console.log(token)
-    if (token == 'Null') {
-        return ( <View style={styles.wrapAll}>
+    if (props.auth.isLogin == false) {
+        return (<View style={styles.wrapAll}>
             <MaterialIcons name="account-circle" size={96} color="gray" />
             <View style={styles.login}>
                 <TouchableOpacity //onPress={() => {loginFunction()}}
-                 onPress= {props.onPress}
+                    onPress={props.onPress}
                 >
                     <View >
                         <Text style={styles.btnLogin}>Đăng nhập/ Đăng ký</Text>
@@ -52,17 +48,17 @@ export default function TopProfile(props) {
     }
     else {
         return (
-        <View style={styles.wrapAll}>
-            <MaterialIcons name="account-circle" size={96} color="gray" />
-            <View>
-                <Text style={styles.text} >Nguyễn Duy Phú</Text>
-                <View style={styles.container}>
-                    <MaterialIcons style={styles.icon_person} name="person-outline" size={30} color="gray"></MaterialIcons>
-                    <Text style={styles.text_person} >Cá nhân</Text>
-                </View>
+            <View style={styles.wrapAll}>
+                <MaterialIcons name="account-circle" size={96} color="gray" />
+                <View>
+                    <Text style={styles.text} >Nguyễn Duy Phú</Text>
+                    <View style={styles.container}>
+                        <MaterialIcons style={styles.icon_person} name="person-outline" size={30} color="gray"></MaterialIcons>
+                        <Text style={styles.text_person} >Cá nhân</Text>
+                    </View>
 
-            </View>
-        </View> )
+                </View>
+            </View>)
     }
     {/* */ }
 
@@ -119,3 +115,6 @@ const styles = StyleSheet.create({
 
 })
 
+export default connect(function (state) {
+    return { auth: state.auth }
+})(TopProfile);

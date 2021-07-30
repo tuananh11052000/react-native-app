@@ -12,11 +12,10 @@ import * as SecureStore from 'expo-secure-store';
 //We will consider isLogin state and decide what will appear on the screen
 function HeaderLoginPage(props) {
     const menu = useRef();
-
+    const { dispatch } = props
     const hideMenu = async () => {
-        // await SecureStore.deleteItemAsync('token')
-        // const token = await SecureStore.getItemAsync('token')
-        // console.log(token)
+        await SecureStore.deleteItemAsync('token')
+        dispatch({ type: "SIGN_OUT" })
         props.onPress()
     }
 

@@ -5,7 +5,6 @@ import { createStackNavigator } from '@react-navigation/stack';
 
 import Home from './Screens/home'
 import ProfileScreen from './Screens/profile'
-import Authentication from './Screens/login'
 import createPost from './Screens/createPost';
 
 const Stack = createStackNavigator();
@@ -26,10 +25,6 @@ const ProfileStack = () => {
     return (
         <Stack.Navigator>
             <Stack.Screen name="Tài khoản" component={ProfileScreen}
-                options={{
-                    headerShown: false,
-                }} />
-            <Stack.Screen name="Authentication" component={Authentication}
                 options={{
                     headerShown: false,
                 }} />
