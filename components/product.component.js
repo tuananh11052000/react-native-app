@@ -48,7 +48,7 @@ function ProductComponent(props) {
         const getData = async () => {
             let temp = await axios({
                 method: 'get',
-                url: 'https://smai-app-api.herokuapp.com/post/getFullPost'
+                url: 'https://smai-app-api.herokuapp.com/post/getNewPost'
             })
             dispatch({ type: 'UPDATE', data: temp.data })
         }
