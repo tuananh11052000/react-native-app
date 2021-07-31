@@ -14,7 +14,6 @@ import Completed from './Screens/completed';
 import Authentication from './Screens/login';
 import PostType from './Screens/newpostType';
 import WhoConfirm from './Screens/whoConfirm';
-import Authentication from './Screens/login'
 
 
 const Tab = createBottomTabNavigator();
