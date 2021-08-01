@@ -2,7 +2,8 @@ import * as React from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
-import { createStackNavigator } from "@react-navigation/stack";
+import { createStackNavigator,HeaderBackButton  } from "@react-navigation/stack";
+import { Button, View, Text, TextInput, Image, StyleSheet } from 'react-native';
 
 import Search from "./Screens/seachScreen";
 import ConfirmAddress from "./Screens/confirmAddress";
@@ -20,7 +21,8 @@ import config from "./config";
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
 
-function AppNavigator() {
+function AppNavigator(props) {
+  const { navigation } = props;
   return (
     <NavigationContainer>
       <Stack.Navigator>
@@ -85,11 +87,22 @@ function AppNavigator() {
         <Stack.Screen
           name="Authentication"
           component={Authentication}
-          options={{
-            headerShown: false,
-          }}
+          options={({ navigation }) => ({
+            headerLeft: () => (
+              <HeaderBackButton  onPress={() => navigation.navigate("Home")} >  
+              </HeaderBackButton>
+            ), 
+            title: 'Tài khoản',
+            headerShown: true,
+            headerStyle: {
+              backgroundColor: config.color_header_background,
+            },
+            headerTintColor: config.headerTintColor,
+            headerTitleStyle: {
+              fontWeight: 'bold',
+            },
+          })}
         />
-
         <Stack.Screen
           name="DetailPost"
           component={DetailPost}

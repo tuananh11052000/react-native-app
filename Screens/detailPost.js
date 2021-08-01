@@ -1,35 +1,56 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from "react";
 import {
-  View, StyleSheet, Text,
+  View,
+  StyleSheet,
+  Text,
   Image,
   ScrollView,
   Dimensions,
-  Linking
-} from 'react-native';
-import { FontAwesome } from '@expo/vector-icons';
-import { Entypo } from '@expo/vector-icons';
-import { Button } from 'galio-framework';
-import config from '../config';
-import axios from 'axios';
-const { width } = Dimensions.get('window');
+  Linking,
+} from "react-native";
+import { FontAwesome } from "@expo/vector-icons";
+import { Entypo } from "@expo/vector-icons";
+import { Button } from "galio-framework";
+import config from "../config";
+import axios from "axios";
+const { width } = Dimensions.get("window");
 const height = width * 0.6;
 export default function App(props) {
-  let data = props.route.params.data
-
+  let data = props.route.params.data;
   const [active, setActive] = useState(0);
+  const [phoneNumber, setPhoneNumber] = useState(0);//
   const change = ({ nativeEvent }) => {
-    const slide = Math.ceil(nativeEvent.contentOffset.x / nativeEvent.layoutMeasurement.width);
+    const slide = Math.ceil(
+      nativeEvent.contentOffset.x / nativeEvent.layoutMeasurement.width
+    );
     if (slide !== active) {
       setActive(slide);
     }
-  }
-     //Function handling title post
-  // const renderTypeAuthor = (item) => {
-  //     if (item == "tangcongdong")
-  //         return "Tặng cộng đồng"
-  //     else
-  //         return item
-  // }
+  };
+  useEffect(() => {
+    const getPhone = async (AuthorID) => {
+      try {
+        await axios({
+          method: "get",
+          url:
+            "https://smai-app-api.herokuapp.com/user/getPhonNumber?AuthorID=" +
+            AuthorID,
+        }).then(async (data) => {
+          setPhoneNumber(data.data.PhoneNumber);
+        });
+      } catch (e) {
+        alert(e);
+      }
+    };
+    getPhone(data.AuthorID);
+  }, []);
+ const dialCall = (number) => {
+    let phoneNumber = '';
+    console.log(number)
+    if (Platform.OS === 'android') { phoneNumber = `tel:${number}`; }
+    else {phoneNumber = `telprompt:${number}`; }
+    Linking.openURL(phoneNumber);
+ };
   return (
     <ScrollView style={styles.container}>
       <View>
@@ -38,24 +59,21 @@ export default function App(props) {
           horizontal
           onScroll={change}
           showsHorizontalScrollIndicator={false}
-          style={styles.container}>
-          {
-            data.urlImage.map((image, index) => (
-              <Image
-                key={index}
-                source={{ uri: image }}
-                style={styles.image}
-              />
-            ))
-          }
+          style={styles.container}
+        >
+          {data.urlImage.map((image, index) => (
+            <Image key={index} source={{ uri: image }} style={styles.image} />
+          ))}
         </ScrollView>
         <View style={styles.pagination}>
-          {
-            data.urlImage.map((i, k) => (
-              <Text key={k} style={k == active ? styles.pagingActiveText : styles.pagingText}>⬤</Text>
-            ))
-          }
-
+          {data.urlImage.map((i, k) => (
+            <Text
+              key={k}
+              style={k == active ? styles.pagingActiveText : styles.pagingText}
+            >
+              ⬤
+            </Text>
+          ))}
         </View>
       </View>
       <View style={styles.wrapText}>
@@ -69,7 +87,7 @@ export default function App(props) {
         <View>
           <Text style={styles.textAddress}>
             <Entypo name="location" size={24} color="black" /> {"  "}
-           {data.address}
+            {data.address}
           </Text>
         </View>
         <View style={styles.wrapInfor}>
@@ -80,14 +98,18 @@ export default function App(props) {
           </View>
         </View>
         <View>
-          <Text style={styles.textDescription}>{data.note}
-          </Text>
+          <Text style={styles.textDescription}>{data.note}</Text>
         </View>
-        <Button color={config.color_btn_1} size="large" onPress={() => { Linking.openURL('tel:0123213'); }}><Text style={styles.textCall}>Gọi điện</Text></Button>
+        <Button
+          color={config.color_btn_1}
+          size="large"
+          onPress={() =>dialCall(phoneNumber) }
+        >
+          <Text style={styles.textCall}>Gọi điện</Text>
+        </Button>
       </View>
     </ScrollView>
   );
-
 }
 
 const styles = StyleSheet.create({
@@ -103,50 +125,51 @@ const styles = StyleSheet.create({
   image: {
     width,
     height,
-    resizeMode: 'contain',
+    resizeMode: "contain",
   },
   pagination: {
-    flexDirection: 'row',
-    position: 'absolute',
+    flexDirection: "row",
+    position: "absolute",
     bottom: 0,
-    alignSelf: 'center'
+    alignSelf: "center",
   },
   pagingText: {
-    fontSize: (width / 30), color: '#888',
+    fontSize: width / 30,
+    color: "#888",
     margin: 3,
   },
   pagingActiveText: {
-    fontSize: (width / 30), color: '#fff',
+    fontSize: width / 30,
+    color: "#fff",
     margin: 3,
   },
   wrapText: {
     paddingLeft: 20,
     paddingRight: 20,
     paddingTop: 20,
-
   },
   textTitle: {
-    color: '#000',
+    color: "#000",
     fontSize: 25,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
   wrapCategory: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+    flexDirection: "row",
+    justifyContent: "space-between",
   },
   textCategory: {
     fontSize: 20,
   },
   textPrice: {
     fontSize: 20,
-    color: '#3DA20E',
+    color: "#3DA20E",
   },
   textAddress: {
-    color: '#A1A1A1',
+    color: "#A1A1A1",
     fontSize: 18,
   },
   wrapInfor: {
-    flexDirection: 'row',
+    flexDirection: "row",
     borderTopWidth: 1,
     marginBottom: 20,
     marginTop: 20,
@@ -162,16 +185,16 @@ const styles = StyleSheet.create({
   },
   textTypeUser: {
     fontSize: 20,
-    color: '#757575',
+    color: "#757575",
   },
   textDescription: {
     fontSize: 20,
-    color: '#000',
+    color: "#000",
     marginBottom: 20,
-  }, 
+  },
   textCall: {
     fontSize: 20,
-    color: '#FFF',
-    fontWeight: 'bold',
-  }
-})
+    color: "#FFF",
+    fontWeight: "bold",
+  },
+});

@@ -35,7 +35,6 @@ function Login(props) {
                 PhoneNumber: PhoneNumber,
                 Password: Password
             }).then(async (data) => {
-                console.log(data)
                 if (data.status == 200) {
                     await save('token', 'bearer ' + data.data.accessToken)
                     await save('PhoneNumber', PhoneNumber)
