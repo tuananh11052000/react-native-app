@@ -9,20 +9,12 @@ import {
 import { FontAwesome } from '@expo/vector-icons';
 import { Entypo } from '@expo/vector-icons';
 import { Button } from 'galio-framework';
-
-const images = [
-  'https://images.pexels.com/photos/4774231/pexels-photo-4774231.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940',
-  'https://images.pexels.com/photos/8698925/pexels-photo-8698925.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940',
-  'https://images.pexels.com/photos/6612080/pexels-photo-6612080.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940',
-  'https://images.pexels.com/photos/4898516/pexels-photo-4898516.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940',
-  'https://images.pexels.com/photos/4767571/pexels-photo-4767571.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940'
-]
+import config from '../config';
+import axios from 'axios';
 const { width } = Dimensions.get('window');
 const height = width * 0.6;
-
-
-
-export default function App() {
+export default function App(props) {
+  let data = props.route.params.data
 
   const [active, setActive] = useState(0);
   const change = ({ nativeEvent }) => {
@@ -31,7 +23,13 @@ export default function App() {
       setActive(slide);
     }
   }
-
+     //Function handling title post
+  // const renderTypeAuthor = (item) => {
+  //     if (item == "tangcongdong")
+  //         return "Tặng cộng đồng"
+  //     else
+  //         return item
+  // }
   return (
     <ScrollView style={styles.container}>
       <View>
@@ -42,7 +40,7 @@ export default function App() {
           showsHorizontalScrollIndicator={false}
           style={styles.container}>
           {
-            images.map((image, index) => (
+            data.urlImage.map((image, index) => (
               <Image
                 key={index}
                 source={{ uri: image }}
@@ -53,7 +51,7 @@ export default function App() {
         </ScrollView>
         <View style={styles.pagination}>
           {
-            images.map((i, k) => (
+            data.urlImage.map((i, k) => (
               <Text key={k} style={k == active ? styles.pagingActiveText : styles.pagingText}>⬤</Text>
             ))
           }
@@ -62,7 +60,7 @@ export default function App() {
       </View>
       <View style={styles.wrapText}>
         <View>
-          <Text style={styles.textTitle}>Có vài bộ đồ cũ cần cho</Text>
+          <Text style={styles.textTitle}>{data.title}</Text>
         </View>
         <View style={styles.wrapCategory}>
           <Text style={styles.textCategory}>Quần áo trẻ em</Text>
@@ -71,29 +69,21 @@ export default function App() {
         <View>
           <Text style={styles.textAddress}>
             <Entypo name="location" size={24} color="black" /> {"  "}
-            210/2 Hoàng diệu 2, Linh Chiểu, Thủ Đức, Tp Hồ Chí Minh
+           {data.address}
           </Text>
         </View>
         <View style={styles.wrapInfor}>
           <FontAwesome name="user-circle-o" size={70} color="#BDBDBD" />
           <View style={styles.wrapName}>
-            <Text style={styles.textName}>Ngân Văn Luyện</Text>
+            <Text style={styles.textName}>{data.NameAuthor}</Text>
             <Text style={styles.textTypeUser}>Cá nhân</Text>
           </View>
         </View>
         <View>
-          <Text style={styles.textDescription}>Lorem Ipsum is simply dummy text of the printing and typesetting industry.
-            Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,
-            when an unknown printer took a galley of type and scrambled it to make a type specimen book.
-            Lorem Ipsum is simply dummy text of the printing and typesetting industry.
-            Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,
-            when an unknown printer took a galley of type and scrambled it to make a type specimen book.
-            Lorem Ipsum is simply dummy text of the printing and typesetting industry.
-            Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,
-            when an unknown printer took a galley of type and scrambled it to make a type specimen book.
+          <Text style={styles.textDescription}>{data.note}
           </Text>
         </View>
-        <Button color="#E70910" size="large" onPress={() => { Linking.openURL('tel:0938516899'); }}><Text style={styles.textCall}>Gọi điện</Text></Button>
+        <Button color={config.color_btn_1} size="large" onPress={() => { Linking.openURL('tel:0123213'); }}><Text style={styles.textCall}>Gọi điện</Text></Button>
       </View>
     </ScrollView>
   );

@@ -6,6 +6,7 @@ import GiftComponent from '../components/gift.component';
 import SearchComponent from '../components/search.component'
 import TitleComponent from '../components/title.component'
 import ProductComponent from '../components/product.component'
+
 import * as SecureStore from 'expo-secure-store';
 
 const heightStatusBar = StatusBar.currentHeight;
@@ -33,7 +34,7 @@ function Home(props) {
                 <SearchComponent onPress={() => navigation.navigate('Search')} />
                 <GiftComponent onPress={() => navigation.navigate('ConfirmAddress')} style={styles.gift_component} />
                 <TitleComponent title="Tin mới nhất" />
-                <ProductComponent />
+                <ProductComponent navigation={navigation} /> 
             </ScrollView>
         </View>
     );
