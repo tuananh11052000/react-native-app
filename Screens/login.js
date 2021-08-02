@@ -36,7 +36,7 @@ export default function Authentication(props) {
 
   return (
     <>
-      <HeaderLoginPage message={'LoginPage'} />
+      {/* <HeaderLoginPage message={'LoginPage'} /> */}
 
       <TabView
         navigationState={{ index, routes }}

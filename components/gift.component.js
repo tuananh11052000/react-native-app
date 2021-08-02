@@ -15,25 +15,25 @@ export default function GiftComponent(props) {
         <TouchableOpacity activeOpacity={0.5} onPress={props.onPress}>
             <View style={style.category}>
                 <Image source={giftIcon2} style={style.giftIcon1} />
-                <Text style={style.title}>Tặng cộng đồng</Text>
+                <Text style={style.title}>Tặng cộng{'\n'}đồng</Text>
             </View>
         </TouchableOpacity>
         <TouchableOpacity activeOpacity={0.5}>
             <View style={style.category}>
                 <Image source={giftIcon1} style={style.giftIcon1} />
-                <Text style={style.title}>Tặng quỹ từ thiện</Text>
+                <Text style={style.title}>Tặng người{'\n'}nghèo</Text>
             </View>
         </TouchableOpacity>
         <TouchableOpacity activeOpacity={0.5}>
             <View style={style.category}>
                 <Image source={giftIcon3} style={style.giftIcon1} />
-                <Text style={style.title}>Tặng quỹ từ thiện</Text>
+                <Text style={style.title}>Tặng quỹ{'\n'}từ thiện</Text>
             </View>
         </TouchableOpacity>
         <TouchableOpacity activeOpacity={0.5}>
             <View style={style.category}>
                 <Image source={giftIcon4} style={style.giftIcon1} />
-                <Text style={style.title}>Quyên góp công ích</Text>
+                <Text style={style.title}>Quyên góp{'\n'}công ích</Text>
             </View>
         </TouchableOpacity>
     </View>
@@ -50,11 +50,12 @@ const style = StyleSheet.create({
         alignItems: 'center',
         display: "flex",
         flexDirection: 'row',
-        justifyContent: 'space-around'
+        justifyContent: 'space-around',
+        backgroundColor: '#FFFFFF',
     },
     title: {
-        width: 70,
-        textAlign: 'center'
+        textAlign: 'center',
+        fontSize: 15,
     },
     category: {
         alignItems: "center"

@@ -4,6 +4,7 @@ import {
 } from 'react-native'
 import { connect } from "react-redux";
 import axios from 'axios'
+import SearchComponent from '../components/search.component'
 
 import { Feather } from '@expo/vector-icons';
 
@@ -48,11 +49,13 @@ function ProductComponent(props) {
         const getData = async () => {
             let temp = await axios({
                 method: 'get',
-                url: 'https://smai-app-api.herokuapp.com/post/getFullPost'
+                url: 'https://smai-app-api.herokuapp.com/post/getNewPost'
             })
             dispatch({ type: 'UPDATE', data: temp.data })
+           
         }
         getData()
+      
     }, [])
     //Function handling title post
     const renderTitle = (item) => {
@@ -69,13 +72,17 @@ function ProductComponent(props) {
         else
             return pr[0].Category
     }
-
+    //sang trang detail
+    const _pressRow = (item) => {
+        props.navigation.navigate('DetailPost',{data:item}) //chuyển trang
+      }
     const currentTime = new Date()
     return <View style={style.constainer}>
         {
             props.newestPost.map((item, key) => {
                 return (
-                    <View key={key} style={style.wrapCategory}>
+                    <View key={key} style={style.wrapCategory} onStartShouldSetResponder={ ()=> _pressRow(item)}> 
+                    {/* //dùng onStartShouldSetResponder để click vào view */}
                         <Image style={style.tinyLogo} source={{
                             uri: item.urlImage[0],
                         }} />
