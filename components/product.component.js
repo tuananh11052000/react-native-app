@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import {
-    Image, Text, View, StyleSheet, TouchableOpacity, Dimensions
+    Image, Text, View, StyleSheet, TouchableOpacity, Dimensions,FlatList 
 } from 'react-native'
 import { connect } from "react-redux";
 import axios from 'axios'
@@ -79,14 +79,15 @@ function ProductComponent(props) {
     const currentTime = new Date()
     return <View style={style.constainer}>
         {
+            
             props.newestPost.map((item, key) => {
                 return (
-                    <View key={key} style={style.wrapCategory} onStartShouldSetResponder={ ()=> _pressRow(item)}> 
+                    <TouchableOpacity key={key} style={style.wrapCategory} onPress={()=> _pressRow(item)} > 
                     {/* //dùng onStartShouldSetResponder để click vào view */}
                         <Image style={style.tinyLogo} source={{
                             uri: item.urlImage[0],
                         }} />
-                        <View style={style.wrapInfoProduct}>
+                        <View style={style.wrapInfoProduct} >
                             <Text style={style.titlePost}>
                                 {
                                     renderTitle(item.title)
@@ -104,7 +105,7 @@ function ProductComponent(props) {
                                 <Text style={style.address}>{item.address.slice(0, 15) + "..."}</Text>
                             </View>
                         </View>
-                    </View>
+                    </TouchableOpacity>
                 )
             })
         }

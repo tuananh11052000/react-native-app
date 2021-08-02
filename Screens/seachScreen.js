@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { View, Text, StyleSheet, Image } from 'react-native'
+import { View, Text, StyleSheet, Image,TouchableOpacity } from 'react-native'
 import { SearchBar } from 'react-native-elements';
 import axios from 'axios'
 import { FlatList } from 'react-native-gesture-handler';
@@ -83,10 +83,13 @@ export default function (props) {
         else
             return pr[0].Category
     }
-
+  //sang trang detail
+  const _pressRow = (item) => {
+    props.navigation.navigate('DetailPost',{data:item}) //chuyển trang
+  }
     const currentTime = new Date()
     function renderItem(item) {
-        return <View style={style.wrapCategory}>
+        return <TouchableOpacity style={style.wrapCategory} onPress={()=> _pressRow(item)}>
             <Image style={style.tinyLogo} source={{
                 uri: item.urlImage[0],
             }} />
@@ -108,7 +111,7 @@ export default function (props) {
                     <Text style={style.address}>{item.address.slice(0, 15) + "..."}</Text>
                 </View>
             </View>
-        </View>
+        </TouchableOpacity>
     }
     return <View>
         <SearchBar

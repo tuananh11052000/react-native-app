@@ -18,7 +18,7 @@ const height = width * 0.6;
 export default function App(props) {
   let data = props.route.params.data;
   const [active, setActive] = useState(0);
-  const [phoneNumber, setPhoneNumber] = useState(0);//
+  const [phoneNumber, setPhoneNumber] = useState(0); //
   const change = ({ nativeEvent }) => {
     const slide = Math.ceil(
       nativeEvent.contentOffset.x / nativeEvent.layoutMeasurement.width
@@ -45,15 +45,22 @@ export default function App(props) {
     getPhone(data.AuthorID);
   }, []);
   const dialCall = (number) => {
-    let phoneNumber = '';
-    console.log(number)
-    if (Platform.OS === 'android') { phoneNumber = `tel:${number}`; }
-    else { phoneNumber = `telprompt:${number}`; }
-    Linking.openURL(phoneNumber);
+   
+      var number_temp = "0" + number;
+      let phoneNumber = "";
+      if (Platform.OS === "android") {
+        phoneNumber = `tel:${number_temp}`;
+      } else {
+        phoneNumber = `telprompt:${number_temp}`;
+      }
+      Linking.openURL(phoneNumber);
+    
   };
   return (
-    <ScrollView style={styles.container}
-    contentContainerStyle={styles.contentContainer}>
+    <ScrollView
+      style={styles.container}
+      contentContainerStyle={styles.contentContainer}
+    >
       <View>
         <View>
           <ScrollView
@@ -61,7 +68,8 @@ export default function App(props) {
             horizontal
             onScroll={change}
             showsHorizontalScrollIndicator={false}
-            style={styles.container}>
+            style={styles.container}
+          >
             {data.urlImage.map((image, index) => (
               <Image key={index} source={{ uri: image }} style={styles.image} />
             ))}
@@ -70,7 +78,9 @@ export default function App(props) {
             {data.urlImage.map((i, k) => (
               <Text
                 key={k}
-                style={k == active ? styles.pagingActiveText : styles.pagingText}
+                style={
+                  k == active ? styles.pagingActiveText : styles.pagingText
+                }
               >
                 ⬤
               </Text>
@@ -101,18 +111,17 @@ export default function App(props) {
           <View>
             <Text style={styles.textDescription}>{data.note}</Text>
           </View>
-
         </View>
       </View>
       <View style={styles.wrapButton}>
         <Button
           color={config.color_btn_1}
           size="large"
-          onPress={() => dialCall(phoneNumber)}>
+          onPress={() => dialCall(phoneNumber)}
+        >
           <Text style={styles.textCall}>Gọi điện</Text>
         </Button>
       </View>
-
     </ScrollView>
   );
 }
@@ -125,8 +134,8 @@ const styles = StyleSheet.create({
   },
   contentContainer: {
     flexGrow: 1,
-    justifyContent: 'space-between',
-    flexDirection: 'column'
+    justifyContent: "space-between",
+    flexDirection: "column",
   },
   scroll: {
     width,
@@ -205,8 +214,8 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   wrapButton: {
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
     marginBottom: 20,
   },
   textCall: {

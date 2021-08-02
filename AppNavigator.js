@@ -1,7 +1,7 @@
-import * as React from 'react';
-import { NavigationContainer } from '@react-navigation/native';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import * as React from "react";
+import { NavigationContainer } from "@react-navigation/native";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 
 import { createStackNavigator, HeaderBackButton } from "@react-navigation/stack";
 import { Button, View, Text, TextInput, Image, StyleSheet } from 'react-native';
@@ -33,10 +33,24 @@ function AppNavigator(props) {
           component={CustomeTabNav}
           options={{
             headerShown: false,
-            title: 'Trang chủ',
+            title: "Trang chủ",
           }}
         />
-        <Stack.Screen name="Search" component={Search} />
+        <Stack.Screen
+          name="Search"
+          component={Search}
+          options={({ navigation }) => ({
+            title: "Tìm kiểm",
+            headerShown: true,
+            headerStyle: {
+              backgroundColor: config.color_header_background,
+            },
+            headerTintColor: config.headerTintColor,
+            headerTitleStyle: {
+              fontWeight: "bold",
+            },
+          })}
+        />
         <Stack.Screen
           name="ConfirmAddress"
           component={ConfirmAddress}
@@ -92,7 +106,7 @@ function AppNavigator(props) {
             },
             headerTintColor: config.headerTintColor,
             headerTitleStyle: {
-              fontWeight: 'bold',
+              fontWeight: "bold",
             },
           })}
         />
@@ -100,13 +114,13 @@ function AppNavigator(props) {
           name="DetailPost"
           component={DetailPost}
           options={{
-            title: 'Chi tiết bài đăng',
+            title: "Chi tiết bài đăng",
             headerStyle: {
               backgroundColor: config.color_header_background,
             },
             headerTintColor: config.headerTintColor,
             headerTitleStyle: {
-              fontWeight: 'bold',
+              fontWeight: "bold",
             },
           }}
         />
