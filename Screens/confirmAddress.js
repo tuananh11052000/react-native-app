@@ -307,5 +307,5 @@ const Styles = StyleSheet.create({
   }
 });
 export default connect(function (state) {
-  return { inforPost: state.infoPost, num: state.countNumber }
+  return { inforPost: state.infoPost }
 })(confirmAddress);

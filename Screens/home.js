@@ -8,6 +8,7 @@ import TitleComponent from '../components/title.component'
 import ProductComponent from '../components/product.component'
 import NewsedBox from '../components/newsedBox.components';
 import * as SecureStore from 'expo-secure-store';
+import axios from 'axios'
 
 const heightStatusBar = StatusBar.currentHeight;
 function Home(props) {
@@ -36,7 +37,7 @@ function Home(props) {
                 <TitleComponent title="Tin đã đăng" />
                 <NewsedBox title="Tặng cộng đồng" />
                 <TitleComponent title="Tin mới nhất" />
-                <ProductComponent navigation={navigation} /> 
+                <ProductComponent navigation={navigation} />
             </ScrollView>
         </View>
     );

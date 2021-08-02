@@ -1,4 +1,4 @@
-var infoPost = (state = { TypeAuthor: "", NameAuthor: "", address: "", title: "", node: "", accountID: "", NameProduct: "", image: "" }, action) => {
+var infoPost = (state = { TypeAuthor: "", NameAuthor: "", address: "", title: "", note: "", accountID: "", NameProduct: "", image: [] }, action) => {
     switch (action.type) {
         case 'CONFIRM_ADDRESS':
             return {
@@ -19,6 +19,11 @@ var infoPost = (state = { TypeAuthor: "", NameAuthor: "", address: "", title: ""
             return {
                 ...state,
                 note: action.note
+            }
+        case 'GET_IMG':
+            return {
+                ...state,
+                image: action.image
             }
         default:
             return state

@@ -6,6 +6,7 @@ import {
   StatusBar
 } from 'react-native';
 import { connect } from 'react-redux'
+import axios from 'axios'
 
 import ButtonConfirm from '../components/buttonConfirm.components';
 import ConfirmInfor from '../components/confirminfor.components';
@@ -14,7 +15,18 @@ const heightStatusBar = StatusBar.currentHeight;
 
 function ConfirmInforScreen(props) {
   const { navigation } = props;
+  // console.log(props.auth.token)
+  // console.log(props.infoPost)
+  // axios({
+  //   method: "POST",
+  //   url: 'https://smai-app-api.herokuapp.com/post/CreatePost',
+  //   data: {},
+  //   header: {
+  //     'Authorization': props.auth.token,
+  //     'Content-Type': 'multipart/form-data'
+  //   },
 
+  // })
   return (
     <View style={styles.container}>
       <ConfirmInfor></ConfirmInfor>
@@ -33,5 +45,5 @@ const styles = StyleSheet.create({
 });
 
 export default connect(function (state) {
-  return { inforPost: state.infoPost, num: state.countNumber, auth: state.auth }
+  return { infoPost: state.infoPost, auth: state.auth }
 })(ConfirmInforScreen);

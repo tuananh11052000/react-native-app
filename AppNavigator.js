@@ -3,7 +3,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
-import { createStackNavigator,HeaderBackButton  } from "@react-navigation/stack";
+import { createStackNavigator, HeaderBackButton } from "@react-navigation/stack";
 import { Button, View, Text, TextInput, Image, StyleSheet } from 'react-native';
 
 import Search from "./Screens/seachScreen";
@@ -17,6 +17,7 @@ import Authentication from "./Screens/login";
 import PostType from "./Screens/newpostType";
 import WhoConfirm from "./Screens/whoConfirm";
 import DetailPost from "./Screens/detailPost";
+import PickerImage from './Screens/pickerImage';
 import config from "./config";
 
 const Tab = createBottomTabNavigator();
@@ -39,23 +40,14 @@ function AppNavigator(props) {
         <Stack.Screen
           name="ConfirmAddress"
           component={ConfirmAddress}
-          options={{
-            headerShown: false,
-          }}
         />
         <Stack.Screen
           name="Category"
           component={Category}
-          options={{
-            headerShown: false,
-          }}
         />
         <Stack.Screen
           name="Description"
           component={Description}
-          options={{
-            headerShown: false,
-          }}
         />
         <Stack.Screen
           name="ConfirmInforScreen"
@@ -90,9 +82,9 @@ function AppNavigator(props) {
           component={Authentication}
           options={({ navigation }) => ({
             headerLeft: () => (
-              <HeaderBackButton  onPress={() => navigation.navigate("Home")} >  
+              <HeaderBackButton onPress={() => navigation.navigate("Home")} >
               </HeaderBackButton>
-            ), 
+            ),
             title: 'Tài khoản',
             headerShown: true,
             headerStyle: {
@@ -116,6 +108,13 @@ function AppNavigator(props) {
             headerTitleStyle: {
               fontWeight: 'bold',
             },
+          }}
+        />
+        <Stack.Screen
+          name="PickImage"
+          component={PickerImage}
+          options={{
+            headerShown: false,
           }}
         />
       </Stack.Navigator>

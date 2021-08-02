@@ -14,7 +14,7 @@ export default function Description(props) {
   const { navigation } = props;
   return (
     <View style={styles.container}>
-      <TitleDetail></TitleDetail>
+      <TitleDetail onPress={() => navigation.navigate('PickImage')}></TitleDetail>
       <ButtonConfirm onPress={() => navigation.navigate('ConfirmInforScreen')} />
     </View>
   );
@@ -23,7 +23,6 @@ export default function Description(props) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    marginTop: heightStatusBar,
     paddingTop: (Platform.OS === 'ios') ? 20 : 20,
     justifyContent: 'space-between'
   },
