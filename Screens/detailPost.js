@@ -44,70 +44,75 @@ export default function App(props) {
     };
     getPhone(data.AuthorID);
   }, []);
- const dialCall = (number) => {
+  const dialCall = (number) => {
     let phoneNumber = '';
     console.log(number)
     if (Platform.OS === 'android') { phoneNumber = `tel:${number}`; }
-    else {phoneNumber = `telprompt:${number}`; }
+    else { phoneNumber = `telprompt:${number}`; }
     Linking.openURL(phoneNumber);
- };
+  };
   return (
-    <ScrollView style={styles.container}>
+    <ScrollView style={styles.container}
+    contentContainerStyle={styles.contentContainer}>
       <View>
-        <ScrollView
-          pagingEnabled
-          horizontal
-          onScroll={change}
-          showsHorizontalScrollIndicator={false}
-          style={styles.container}
-        >
-          {data.urlImage.map((image, index) => (
-            <Image key={index} source={{ uri: image }} style={styles.image} />
-          ))}
-        </ScrollView>
-        <View style={styles.pagination}>
-          {data.urlImage.map((i, k) => (
-            <Text
-              key={k}
-              style={k == active ? styles.pagingActiveText : styles.pagingText}
-            >
-              ⬤
-            </Text>
-          ))}
-        </View>
-      </View>
-      <View style={styles.wrapText}>
         <View>
-          <Text style={styles.textTitle}>{data.title}</Text>
-        </View>
-        <View style={styles.wrapCategory}>
-          <Text style={styles.textCategory}>Quần áo trẻ em</Text>
-          <Text style={styles.textPrice}>Miễn phí</Text>
-        </View>
-        <View>
-          <Text style={styles.textAddress}>
-            <Entypo name="location" size={24} color="black" /> {"  "}
-            {data.address}
-          </Text>
-        </View>
-        <View style={styles.wrapInfor}>
-          <FontAwesome name="user-circle-o" size={70} color="#BDBDBD" />
-          <View style={styles.wrapName}>
-            <Text style={styles.textName}>{data.NameAuthor}</Text>
-            <Text style={styles.textTypeUser}>Cá nhân</Text>
+          <ScrollView
+            pagingEnabled
+            horizontal
+            onScroll={change}
+            showsHorizontalScrollIndicator={false}
+            style={styles.container}>
+            {data.urlImage.map((image, index) => (
+              <Image key={index} source={{ uri: image }} style={styles.image} />
+            ))}
+          </ScrollView>
+          <View style={styles.pagination}>
+            {data.urlImage.map((i, k) => (
+              <Text
+                key={k}
+                style={k == active ? styles.pagingActiveText : styles.pagingText}
+              >
+                ⬤
+              </Text>
+            ))}
           </View>
         </View>
-        <View>
-          <Text style={styles.textDescription}>{data.note}</Text>
+        <View style={styles.wrapText}>
+          <View>
+            <Text style={styles.textTitle}>{data.title}</Text>
+          </View>
+          <View style={styles.wrapCategory}>
+            <Text style={styles.textCategory}>Quần áo trẻ em</Text>
+            <Text style={styles.textPrice}>Miễn phí</Text>
+          </View>
+          <View>
+            <Text style={styles.textAddress}>
+              <Entypo name="location" size={24} color="black" /> {"  "}
+              {data.address}
+            </Text>
+          </View>
+          <View style={styles.wrapInfor}>
+            <FontAwesome name="user-circle-o" size={70} color="#BDBDBD" />
+            <View style={styles.wrapName}>
+              <Text style={styles.textName}>{data.NameAuthor}</Text>
+              <Text style={styles.textTypeUser}>Cá nhân</Text>
+            </View>
+          </View>
+          <View>
+            <Text style={styles.textDescription}>{data.note}</Text>
+          </View>
+
         </View>
+      </View>
+      <View style={styles.wrapButton}>
         <Button
           color={config.color_btn_1}
           size="large"
-          onPress={() =>dialCall(phoneNumber) }
-        >
+          onPress={() => dialCall(phoneNumber)}>
           <Text style={styles.textCall}>Gọi điện</Text>
         </Button>
       </View>
+
     </ScrollView>
   );
 }
@@ -117,6 +122,11 @@ const styles = StyleSheet.create({
     marginTop: 10,
     width,
     height,
+  },
+  contentContainer: {
+    flexGrow: 1,
+    justifyContent: 'space-between',
+    flexDirection: 'column'
   },
   scroll: {
     width,
@@ -152,10 +162,12 @@ const styles = StyleSheet.create({
     color: "#000",
     fontSize: 25,
     fontWeight: "bold",
+    marginBottom: 10,
   },
   wrapCategory: {
     flexDirection: "row",
     justifyContent: "space-between",
+    marginBottom: 10,
   },
   textCategory: {
     fontSize: 20,
@@ -190,6 +202,11 @@ const styles = StyleSheet.create({
   textDescription: {
     fontSize: 20,
     color: "#000",
+    marginBottom: 20,
+  },
+  wrapButton: {
+    justifyContent: 'center',
+    alignItems: 'center',
     marginBottom: 20,
   },
   textCall: {
