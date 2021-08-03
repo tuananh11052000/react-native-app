@@ -1,28 +1,65 @@
-import React, { useState } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
-import { connect } from "react-redux";
-function addNumber(){
-    var { dispatch } = props;
-    dispatch({ type: 'ADD', value: 1 });
-}
-export default function Detail(props) {
-    console.log("_________________________________________")
+import React from 'react';
+import { View, Image, Button, Platform } from 'react-native';
+import { launchImageLibrary } from 'react-native-image-picker';
+
+const SERVER_URL = 'http://localhost:3000';
+
+const createFormData = (photo, body = {}) => {
+    const data = new FormData();
+
+    data.append('photo', {
+        name: photo.fileName,
+        type: photo.type,
+        uri: Platform.OS === 'ios' ? photo.uri.replace('file://', '') : photo.uri,
+    });
+
+    Object.keys(body).forEach((key) => {
+        data.append(key, body[key]);
+    });
+
+    return data;
+};
+
+const Test = () => {
+    const [photo, setPhoto] = React.useState(null);
+
+    const handleChoosePhoto = () => {
+        launchImageLibrary({ noData: true }, (response) => {
+            // console.log(response);
+            if (response) {
+                setPhoto(response);
+            }
+        });
+    };
+
+    const handleUploadPhoto = () => {
+        fetch(`${SERVER_URL}/api/upload`, {
+            method: 'POST',
+            body: createFormData(photo, { userId: '123' }),
+        })
+            .then((response) => response.json())
+            .then((response) => {
+                console.log('response', response);
+            })
+            .catch((error) => {
+                console.log('error', error);
+            });
+    };
+
     return (
-        <View style={styles.container}>
-            <Text onPress={addNumber}>hellloi</Text>
+        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+            {photo && (
+                <>
+                    <Image
+                        source={{ uri: photo.uri }}
+                        style={{ width: 300, height: 300 }}
+                    />
+                    <Button title="Upload Photo" onPress={handleUploadPhoto} />
+                </>
+            )}
+            <Button title="Choose Photo" onPress={handleChoosePhoto} />
         </View>
     );
-}
+};
 
-const styles = StyleSheet.create({
-    container: {
-      flex: 1,
-      backgroundColor: '#fff',
-      alignItems: 'center',
-      justifyContent: 'center',
-    },
-  });
-
-export default connect(function (state) {
-    return { num: state.countNumber}
-})(num);
+export default Test;

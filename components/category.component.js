@@ -15,7 +15,6 @@ import chevrondown from '../assets/down-chevron.png';
 
 function ExpandableListView(props) {
   const [layoutHeight, setLayoutHeight] = useState(0)
-
   useEffect(() => {
     if (props.item.isExpanded) {
       setLayoutHeight(null);
@@ -23,9 +22,9 @@ function ExpandableListView(props) {
       setLayoutHeight(0);
     }
   }, [props.item.isExpanded]);
-  const showSelectedCategory = (item) => {
+  const showSelectedCategory = (item, category) => {
     const { dispatch } = props
-    dispatch({ type: "GET_NAME", NameProduct: item.name });
+    dispatch({ type: "GET_NAME", NameProduct: [{ category: category, NameProduct: item.name }] });
     props.onPress()
   }
   return (
@@ -39,7 +38,7 @@ function ExpandableListView(props) {
       <View style={{ height: layoutHeight, overflow: 'hidden' }}>
         {
           props.item.subCategory.map((item, key) => (
-            <TouchableOpacity key={key} style={styles.subCategoryText} onPress={() => showSelectedCategory(item)}>
+            <TouchableOpacity key={key} style={styles.subCategoryText} onPress={() => showSelectedCategory(item, props.item.category)}>
               <Text> {item.name} </Text>
               {/* <View style={{ width: '100%', height: 1, backgroundColor: '#000' }} /> */}
             </TouchableOpacity>

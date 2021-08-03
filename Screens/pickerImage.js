@@ -15,6 +15,7 @@ const ForceInset = {
 function PickerImage(props) {
     const { dispatch, navigation } = props
     const onSuccess = (data) => {
+        console.log(data)
         dispatch({ type: 'GET_IMG', image: data })
         Alert.alert('Done', data.length + 'Images selected')
         navigation.pop();

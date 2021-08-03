@@ -12,7 +12,6 @@ import axios from 'axios'
 
 const heightStatusBar = StatusBar.currentHeight;
 function Home(props) {
-    // getValueFor();
     const { dispatch } = props;
     useEffect(() => {
         const checkTokenLocal = async () => {
@@ -28,7 +27,7 @@ function Home(props) {
         checkTokenLocal()
     }, [])
     const { navigation } = props;
-
+    //ConfirmAddress
     return (
         <View style={styles.container}>
             <ScrollView>
@@ -61,5 +60,5 @@ const styles = StyleSheet.create({
 });
 
 export default connect(function (state) {
-    return { auth: state.auth }
+    return { auth: state.auth, infoPost: state.infoPost }
 })(Home);
