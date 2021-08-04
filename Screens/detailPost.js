@@ -13,12 +13,15 @@ import { Entypo } from "@expo/vector-icons";
 import { Button } from "galio-framework";
 import config from "../config";
 import axios from "axios";
+import * as SecureStore from "expo-secure-store";
+
 const { width } = Dimensions.get("window");
 const height = width * 0.6;
 export default function App(props) {
-  let data = props.route.params.data;
+  let data = props.route.params.data; // data from list
+
   const [active, setActive] = useState(0);
-  const [phoneNumber, setPhoneNumber] = useState(0); //
+  const [phoneNumber, setPhoneNumber] = useState(" "); //useState using for phonenumber
   const change = ({ nativeEvent }) => {
     const slide = Math.ceil(
       nativeEvent.contentOffset.x / nativeEvent.layoutMeasurement.width
@@ -27,6 +30,34 @@ export default function App(props) {
       setActive(slide);
     }
   };
+  //update history
+  useEffect(() => {
+    const checkTokenLocal = async () => {
+      let token = await SecureStore.getItemAsync("token");
+
+      if (token) {
+        axios
+          .put(
+            "https://smai-app-api.herokuapp.com/user/updateHistory",
+            { IdPost: [data._id] },
+            {
+              headers: {
+                Authorization: token,
+              },
+            }
+          )
+          .then((response) => {})
+          .catch((error) => {
+            alert(error);
+          });
+      } else {
+        return await null;
+      }
+    };
+    checkTokenLocal();
+  }, []);
+
+  //get phone number author post
   useEffect(() => {
     const getPhone = async (AuthorID) => {
       try {
@@ -44,17 +75,31 @@ export default function App(props) {
     };
     getPhone(data.AuthorID);
   }, []);
+
+  //render btn
+  let button;
+  if (phoneNumber != " ") {
+    button = (
+      <Button
+        color={config.color_btn_1}
+        size="large"
+        onPress={() => dialCall(phoneNumber)}
+      >
+        <Text style={styles.textCall}>Gọi điện</Text>
+      </Button>
+    );
+  }
+  //url phonenumber
   const dialCall = (number) => {
-   
-      var number_temp = "0" + number;
-      let phoneNumber = "";
-      if (Platform.OS === "android") {
-        phoneNumber = `tel:${number_temp}`;
-      } else {
-        phoneNumber = `telprompt:${number_temp}`;
-      }
-      Linking.openURL(phoneNumber);
-    
+    var number_temp = "0" + number;
+    let phoneNumber = "";
+    if (Platform.OS === "android") {
+      phoneNumber = `tel:${number_temp}`;
+    } else {
+      phoneNumber = `telprompt:${number_temp}`;
+    }
+
+    Linking.openURL(phoneNumber);
   };
   return (
     <ScrollView
@@ -92,7 +137,9 @@ export default function App(props) {
             <Text style={styles.textTitle}>{data.title}</Text>
           </View>
           <View style={styles.wrapCategory}>
-            <Text style={styles.textCategory}>Quần áo trẻ em</Text>
+            <Text style={styles.textCategory}>
+              {data.NameProduct[0].NameProduct}
+            </Text>
             <Text style={styles.textPrice}>Miễn phí</Text>
           </View>
           <View>
@@ -113,15 +160,7 @@ export default function App(props) {
           </View>
         </View>
       </View>
-      <View style={styles.wrapButton}>
-        <Button
-          color={config.color_btn_1}
-          size="large"
-          onPress={() => dialCall(phoneNumber)}
-        >
-          <Text style={styles.textCall}>Gọi điện</Text>
-        </Button>
-      </View>
+      <View style={styles.wrapButton}>{button}</View>
     </ScrollView>
   );
 }

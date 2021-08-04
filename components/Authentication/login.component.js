@@ -29,11 +29,10 @@ function Login(props) {
     const [showPass, showPassWord] = useState(true)
     const loginFunction = async (PhoneNumber, Password) => {
         try {
-            await axios.post('http://192.168.1.109:5000/account/login', {
+            await axios.post('https://smai-app-api.herokuapp.com/account/login', {
                 PhoneNumber: PhoneNumber,
                 Password: Password
             }).then(async (data) => {
-                console.log(data.data)
                 if (data.status == 200) {
                     await save('token', 'bearer ' + data.data.accessToken)
                     await save('PhoneNumber', PhoneNumber)

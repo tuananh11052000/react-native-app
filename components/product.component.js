@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect,useState } from 'react'
 import {
     Image, Text, View, StyleSheet, TouchableOpacity, Dimensions,FlatList 
 } from 'react-native'
@@ -44,7 +44,8 @@ function ProductComponent(props) {
         else
             return `${calHour()} giờ trước`
     }
-
+    //get post
+    
     useEffect(() => {
         const getData = async () => {
             let temp = await axios({
@@ -57,6 +58,7 @@ function ProductComponent(props) {
         getData()
       
     }, [])
+    
     //Function handling title post
     const renderTitle = (item) => {
         item = item.charAt(0).toUpperCase() + item.slice(1,)
@@ -72,8 +74,10 @@ function ProductComponent(props) {
         else
             return pr[0].Category
     }
-    //sang trang detail
+  
+   
     const _pressRow = (item) => {
+     
         props.navigation.navigate('DetailPost',{data:item}) //chuyển trang
       }
     const currentTime = new Date()
@@ -82,7 +86,7 @@ function ProductComponent(props) {
             
             props.newestPost.map((item, key) => {
                 return (
-                    <TouchableOpacity key={key} style={style.wrapCategory} activeOpacity={0.8} onPress={()=> _pressRow(item)} > 
+                    <TouchableOpacity key={key} style={style.wrapCategory} activeOpacity={0.8} onPress={()=> _pressRow(item,item.AuthorID)} > 
                     {/* //dùng onStartShouldSetResponder để click vào view */}
                         <Image style={style.tinyLogo} source={{
                             uri: item.urlImage[0],
