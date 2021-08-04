@@ -30,7 +30,7 @@ export default function CreatePosts(props) {
         style={styles.btnCreate}
       >
         <Image source={AddImg} style={{ width: 20, height: 20 }} />
-        <Text style={styles.btnText}>&ensp;Đăng tin</Text>
+        <Text style={styles.btnText}>&ensp; Đăng tin</Text>
       </TouchableOpacity>
       {/* </View> */}
     </View>
@@ -48,6 +48,8 @@ const styles = StyleSheet.create({
   },
   wrapPiker: {
     borderWidth: 1,
+    borderRadius: 4,
+    borderColor: 'gray',
     width: '60%',
   },
   pickerStyle: {
@@ -57,12 +59,11 @@ const styles = StyleSheet.create({
   // wrapBtn: {
   // },
   btnCreate: {
-   
     alignItems: 'center',
     flexDirection: 'row',
     backgroundColor: '#018786',
-    height: 40,
-    paddingHorizontal: 20,
+    height: 41,
+    paddingHorizontal: 18,
     borderRadius: 4,
     shadowColor: '#000',
     shadowOpacity: 0.3,

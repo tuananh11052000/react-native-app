@@ -1,6 +1,6 @@
 import React, { useEffect,useState } from 'react'
 import {
-    Image, Text, View, StyleSheet, TouchableOpacity, Dimensions,FlatList 
+    Image, Text, View, StyleSheet, TouchableOpacity, Dimensions, FlatList
 } from 'react-native'
 import { connect } from "react-redux";
 import axios from 'axios'
@@ -53,10 +53,10 @@ function ProductComponent(props) {
                 url: 'https://smai-app-api.herokuapp.com/post/getNewPost'
             })
             dispatch({ type: 'UPDATE', data: temp.data })
-           
+
         }
         getData()
-      
+
     }, [])
     
     //Function handling title post
@@ -77,17 +77,27 @@ function ProductComponent(props) {
   
    
     const _pressRow = (item) => {
+<<<<<<< HEAD
      
         props.navigation.navigate('DetailPost',{data:item}) //chuyển trang
       }
+=======
+        props.navigation.navigate('DetailPost', { data: item }) //chuyển trang
+    }
+>>>>>>> 6689bc766076356bed0d42ba5ebb5d1f5b2aefe8
     const currentTime = new Date()
     return <View style={style.constainer}>
         {
-            
+
             props.newestPost.map((item, key) => {
                 return (
+<<<<<<< HEAD
                     <TouchableOpacity key={key} style={style.wrapCategory} activeOpacity={0.8} onPress={()=> _pressRow(item,item.AuthorID)} > 
                     {/* //dùng onStartShouldSetResponder để click vào view */}
+=======
+                    <TouchableOpacity key={key} style={style.wrapCategory} activeOpacity={0.8} onPress={() => _pressRow(item)} >
+                        {/* //dùng onStartShouldSetResponder để click vào view */}
+>>>>>>> 6689bc766076356bed0d42ba5ebb5d1f5b2aefe8
                         <Image style={style.tinyLogo} source={{
                             uri: item.urlImage[0],
                         }} />
@@ -148,6 +158,8 @@ const style = StyleSheet.create({
         fontWeight: "900"
     },
     wrapTime: {
+        display: "flex",
+        alignItems: "center",
         flexDirection: 'row',
     },
     time: {
