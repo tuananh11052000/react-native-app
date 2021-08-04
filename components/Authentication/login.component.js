@@ -6,8 +6,6 @@ import {
     StyleSheet,
     Text,
     View,
-    TextInput,
-    Button,
     Image,
     ScrollView,
     Platform,
@@ -16,10 +14,10 @@ import {
 } from 'react-native';
 import axios from 'axios';
 import LogoSmai from "../../assets/logo_smai.png"
-import { Checkbox } from 'react-native-paper';
+import { Checkbox, TextInput, } from 'react-native-paper';
 import { MaterialIcons } from '@expo/vector-icons';
 import config from '../../config';
-
+import { Button } from "galio-framework";
 async function save(key, value) {
     await SecureStore.setItemAsync(key, value);
 }
@@ -73,92 +71,96 @@ function Login(props) {
 
 
     }
-    return <>
-
-        <View style={styles.container}>
+    return <View style={styles.container}>
+        <View style={styles.childContainer}>
             <Image source={LogoSmai} style={styles.image_logo} />
-            <View style={styles.child_container}>
-                <View style={styles.username}>
-                    <TextInput
-                        style={styles.textInput}
-                        onChangeText={text => onChangePhone(text)}
-                        placeholder="Số điện thoại"
-                        keyboardType='numeric'
-                    />
-                </View>
-                <View style={styles.password}>
-                    <TextInput
-                        style={styles.textInput}
-                        onChangeText={text => onChangePass(text)}
-                        placeholder="Mật khẩu"
-                        secureTextEntry={showPass}
-                    />
-                    <MaterialIcons name="visibility" size={26} color="gray" onPress={() => {
+            <View style={styles.username}>
+                <TextInput
+                    style={styles.textInput}
+                    onChangeText={text => onChangePhone(text)}
+                    label="Số điện thoại"
+                    keyboardType='numeric'
+                    theme={{
+                        colors: {
+                            primary: 'gray',
+                        },
+                    }}
+                />
+            </View>
+            <View style={styles.password}>
+                <TextInput
+                    style={styles.textInput}
+                    onChangeText={text => onChangePass(text)}
+                    label="Mật khẩu"
+                    secureTextEntry={showPass}
+                    theme={{
+                        colors: {
+                            primary: 'gray',
+                        },
+                    }}
+                    right={<TextInput.Icon name="eye" onPress={() => {
                         showPassWord(!showPass);
-                    }} />
-                </View>
-
-                {checkbox}
-                {/* <Text>Is CheckBox selected: {checked ? "👍" : "👎"}</Text> */}
-                <Text style={styles.forgotPassword}>Quên mật khẩu</Text>
+                    }} />}
+                />
             </View>
 
+            {checkbox}
+            {/* <Text>Is CheckBox selected: {checked ? "👍" : "👎"}</Text> */}
+            <Text style={styles.forgotPassword}>Quên mật khẩu</Text>
         </View>
         <View style={styles.layoutBtnLogin}>
-            <TouchableOpacity onPress={() => {
+            <Button onPress={() => {
                 loginFunction(PhoneNumber, Password)
-            }}>
-                <View >
-                    <Text style={styles.btnLogin}>Đăng nhập</Text>
-                </View>
+            }}
+            color={config.color_btn_1}
+            size="large">
+                <Text style={styles.btnLogin}>Đăng nhập</Text>
 
-            </TouchableOpacity>
-
+            </Button>
         </View>
-    </>
+    </View>
+
+
 
 }
 const styles = StyleSheet.create({
     container: {
-
         flex: 1,
         paddingTop: '5%',
         width: '100%',
         alignItems: 'center',
-
-
+        backgroundColor: '#FFF',
+        justifyContent: 'space-between',
     },
-    child_container: {
-        height: '100%',
-        maxWidth: '96%',
-        marginTop: '3%'
+    childContainer: {
+        alignItems: 'center',
+        backgroundColor: '#FFF',
     },
     textInput: {
         fontSize: 20,
-        width: '94%'
-
+        width: '95%',
+        backgroundColor: '#FFF',
     },
     image_logo: {
         maxHeight: '40%',
-        minHeight: '30%',
+        minHeight: '40%',
         resizeMode: 'contain',
-
+        marginBottom: '5%',
     },
     username: {
         height: '10%',
         maxWidth: '90%',
         minWidth: '80%',
-        borderBottomWidth: 0.5,
-        borderBottomColor: "#000",
         justifyContent: 'space-between',
+        alignItems: 'center',
+        flexDirection: 'row',
+        marginBottom: '5%',
 
     },
     password: {
         height: '14%',
         maxWidth: '90%',
         minWidth: '80%',
-        borderBottomWidth: 0.5,
-        borderBottomColor: "#000",
         justifyContent: 'space-between',
         alignItems: 'center',
         flexDirection: 'row',
@@ -174,7 +176,7 @@ const styles = StyleSheet.create({
     forgotPassword: {
         alignSelf: 'center',
         fontSize: config.fontsize_3,
-        marginTop: '10%',
+        marginTop: '5%',
         color: 'blue'
     },
 
@@ -184,15 +186,13 @@ const styles = StyleSheet.create({
         minHeight: '8%',
         maxWidth: '80%',
         minWidth: '70%',
-        backgroundColor: 'red',
         justifyContent: 'center',
         alignItems: 'center',
         alignSelf: 'center',
-        marginBottom: '10%'
-
+        marginBottom: '5%',
     },
     btnLogin: {
-
+        fontSize: 20,
         color: "white"
 
     },

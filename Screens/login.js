@@ -4,7 +4,7 @@ import { TabView, SceneMap, TabBar, Tabs } from 'react-native-tab-view';
 import Login from '../components/Authentication/login.component'
 import SignUp from '../components/Authentication/signUp.component'
 import HeaderLoginPage from '../components/Header/headerProfilePage.component';
-
+import config from '../config';
 
 const heightStatusBar = StatusBar.currentHeight;//lay ra chieu cao cua thanh trang thai
 
@@ -50,6 +50,8 @@ export default function Authentication(props) {
             )}
             style={{ backgroundColor: 'white', tabBarInactiveTextColor: 'red' }}
             underlineColor="#000"
+            indicatorStyle={{height: 2, backgroundColor: config.color_btn_1}}
+
           />
         )}
         renderScene={renderScene}

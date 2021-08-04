@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, Text, View, Button, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import RNPickerDialog from 'rn-modal-picker';
 import { TextInput } from 'react-native-paper';
 import db from '../db.json';
-import { connect } from 'react-redux'
+import { connect } from 'react-redux';
+import { Button } from "galio-framework";
 
 function confirmAddress(props) {
   //khai bao cac local state
@@ -128,6 +129,7 @@ function confirmAddress(props) {
             mode={'flat'}
             dense={'true'}
             autoCapitalize='none'
+            multiline
             onChangeText={text => { setAddressDetail(text) }}
             theme={{
               colors: {
@@ -136,12 +138,11 @@ function confirmAddress(props) {
             }}
           />
         </View>
-        <TouchableOpacity
+        <Button
           style={Styles.touchableButton}
-          underlayColor='#fff'
           onPress={() => pressFunc()}>
           <Text style={Styles.buttonConfirm}>Xác nhận</Text>
-        </TouchableOpacity>
+        </Button>
       </View>
     </View>
   );
@@ -159,7 +160,7 @@ const Styles = StyleSheet.create({
     fontFamily: "Cochin",
   },
   touchableButton: {
-    width: '80%',
+    width: '90%',
     marginRight: 40,
     marginLeft: 40,
     marginTop: 10,
@@ -169,8 +170,6 @@ const Styles = StyleSheet.create({
     paddingBottom: 10,
     backgroundColor: '#E53935',
     borderRadius: 10,
-    borderWidth: 1,
-    borderColor: '#fff'
   },
   buttonConfirm: {
     color: '#fff',
@@ -199,6 +198,7 @@ const Styles = StyleSheet.create({
     borderTopRightRadius: 20,
     borderBottomLeftRadius: 20,
     borderBottomRightRadius: 20,
+    backgroundColor: '#FFF'
   },
   container: {
     flex: 1,

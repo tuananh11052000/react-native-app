@@ -2,11 +2,13 @@ import { StatusBar } from 'expo-status-bar';
 import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux'
 import * as SecureStore from 'expo-secure-store';
-import { TouchableOpacity, StyleSheet, Text, View, TextInput, Button, Image, ScrollView } from 'react-native';
+import { TouchableOpacity, StyleSheet, Text, View, Image, ScrollView } from 'react-native';
 import axios from 'axios';
 import LogoSmai from "../../assets/logo_smai.png"
 import { MaterialIcons } from '@expo/vector-icons';
-
+import { Button } from "galio-framework";
+import config from '../../config';
+import { TextInput, } from 'react-native-paper';
 async function save(key, value) {
     await SecureStore.setItemAsync(key, value);
 }
@@ -45,108 +47,125 @@ function SignUp(props) {
         }).catch(e => alert("Tài khoản đã tồn tại"))
     }
 
-    return <>
-        <ScrollView>
-            <View style={styles.container}>
-                <Image source={LogoSmai} style={styles.image_logo} />
-                <View style={styles.child_container}>
-                    <View style={styles.username}>
-                        <TextInput
-                            style={styles.textInput}
-                            onChangeText={text => onChangeName(text)}
-                            placeholder="Họ tên"
-                        />
-                    </View>
-                    <View style={styles.phonenumber}>
-                        <TextInput
-                            style={styles.textInput}
-                            onChangeText={text => onChangePhone(text)}
-                            placeholder="Số điện thoại"
-                            keyboardType='numeric'
-                        />
-                    </View>
-                    <View style={styles.password}>
-                        <TextInput
-                            style={styles.textInput}
-                            onChangeText={text => onChangePass(text)}
-                            placeholder="Mật khẩu"
-                            secureTextEntry={showPass}
-                        />
-                        <MaterialIcons name="visibility" size={26} color="gray" onPress={() => {
-                            showPassWord(!showPass);
-                        }} />
-                    </View>
-                    <View style={styles.password}>
-                        <TextInput
-                            style={styles.textInput}
-                            onChangeText={text => onChangePass(text)}
-                            placeholder="Nhập lại mật khẩu"
-                            secureTextEntry={showPass2}
-                        />
-                        <MaterialIcons name="visibility" size={26} color="gray" onPress={() => {
-                            showPassWord2(!showPass2);
-                        }} />
-                    </View>
-                </View>
+    return <ScrollView contentContainerStyle={styles.container}>
+        <View style={styles.child_container}>
+            <View style={styles.username}>
+                <TextInput
+                    style={styles.textInput}
+                    onChangeText={text => onChangeName(text)}
+                    label="Họ tên"
+                    theme={{
+                        colors: {
+                            primary: 'gray',
+                        },
+                    }}
+                />
             </View>
-        </ScrollView>
+            <View style={styles.phonenumber}>
+                <TextInput
+                    style={styles.textInput}
+                    onChangeText={text => onChangePhone(text)}
+                    label="Số điện thoại"
+                    keyboardType='numeric'
+                    theme={{
+                        colors: {
+                            primary: 'gray',
+                        },
+                    }}
+                />
+            </View>
+            <View style={styles.password}>
+                <TextInput
+                    style={styles.textInput}
+                    onChangeText={text => onChangePass(text)}
+                    label="Mật khẩu"
+                    secureTextEntry={showPass}
+                    theme={{
+                        colors: {
+                            primary: 'gray',
+                        },
+                    }}
+                    right={<TextInput.Icon name="eye" onPress={() => {
+                        showPassWord(!showPass);
+                    }} />}
+                />
+            </View>
+            <View style={styles.password}>
+                <TextInput
+                    style={styles.textInput}
+                    onChangeText={text => onChangePass(text)}
+                    label="Nhập lại mật khẩu"
+                    secureTextEntry={showPass2}
+                    theme={{
+                        colors: {
+                            primary: 'gray',
+                        },
+                    }}
+                    right={<TextInput.Icon name="eye" onPress={() => {
+                        showPassWord2(!showPass2);
+                    }} />}
+                />
+            </View>
+        </View>
         <View style={styles.layoutBtnLogin}>
-            <TouchableOpacity onPress={() => {
+            <Button onPress={() => {
                 loginFunction(UserName, PhoneNumber, Password)
-            }}>
-                <View >
-                    <Text style={styles.btnLogin}>Đăng ký</Text>
-                </View>
-
-            </TouchableOpacity>
+            }}
+                color={config.color_btn_1}
+                size="large">
+                <Text style={styles.btnLogin}>Đăng ký</Text>
+            </Button>
 
         </View>
-    </>
+    </ScrollView>
+
 
 }
 const styles = StyleSheet.create({
     container: {
         flex: 1,
         paddingTop: '5%',
-        alignItems: 'center'
+        alignItems: 'center',
+        backgroundColor: '#FFF',
+        justifyContent: 'space-between',
     },
     child_container: {
-        height: '100%',
-        maxWidth: '97%',
-        marginTop: '3%'
+        alignItems: 'center',
+        backgroundColor: '#FFF',
+        justifyContent: 'space-around',
     },
 
     username: {
-        height: '10%',
+        height: '14%',
+        maxWidth: '90%',
         minWidth: '80%',
-        borderBottomWidth: 0.5,
-        borderBottomColor: "#000",
         justifyContent: 'space-between',
-
+        alignItems: 'center',
+        flexDirection: 'row',
+        marginBottom: '5%',
     },
     phonenumber: {
         height: '14%',
         maxWidth: '90%',
         minWidth: '80%',
-        borderBottomWidth: 0.5,
-        borderBottomColor: "#000",
         justifyContent: 'space-between',
         alignItems: 'center',
         flexDirection: 'row',
+        marginBottom: '5%',
     },
     password: {
         height: '14%',
         maxWidth: '90%',
         minWidth: '80%',
-        borderBottomWidth: 0.5,
-        borderBottomColor: "#000",
         justifyContent: 'space-between',
         alignItems: 'center',
         flexDirection: 'row',
+        marginBottom: '5%',
     },
     textInput: {
         fontSize: 20,
-        width: '95%'
+        width: '95%',
+        backgroundColor: '#FFF',
     },
     image_logo: {
         maxHeight: '30%',
@@ -160,16 +179,15 @@ const styles = StyleSheet.create({
         minHeight: '8%',
         maxWidth: '80%',
         minWidth: '70%',
-        backgroundColor: 'red',
         justifyContent: 'center',
         alignItems: 'center',
         alignSelf: 'center',
-        marginBottom: '10%'
+        marginBottom: '5%'
 
     },
     btnLogin: {
-        color: "white"
-
+        color: "white",
+        fontSize: 20,
     },
 });
 

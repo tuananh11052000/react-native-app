@@ -8,7 +8,7 @@ import { FontAwesome } from '@expo/vector-icons';
 import { MaterialIcons } from '@expo/vector-icons';
 import config from '../../config';
 import * as SecureStore from 'expo-secure-store';
-
+import { Button } from 'react-native-elements';
 //check token
 
 async function getToken() {
@@ -33,15 +33,15 @@ function TopProfile(props) {
     }, [])
     if (props.auth.isLogin == false) {
         return (<View style={styles.wrapAll}>
-            <MaterialIcons name="account-circle" size={96} color="gray" />
+            <MaterialIcons name="account-circle" size={96} color="#BDBDBD" />
             <View style={styles.login}>
-                <TouchableOpacity //onPress={() => {loginFunction()}}
+                <Button
                     onPress={props.onPress}
-                >
-                    <View >
-                        <Text style={styles.btnLogin}>Đăng nhập/ Đăng ký</Text>
-                    </View>
-                </TouchableOpacity>
+                    title="Đăng nhập/Đăng ký"
+                    buttonStyle={styles.buttonLogIn}
+                    titleStyle={styles.titleStyle}
+                    type="outline" />
+
             </View>
         </View>
         )
@@ -53,7 +53,7 @@ function TopProfile(props) {
                 <View>
                     <Text style={styles.text} >Nguyễn Duy Phú</Text>
                     <View style={styles.container}>
-                        <MaterialIcons style={styles.icon_person} name="person-outline" size={30} color="gray"></MaterialIcons>
+                        <MaterialIcons style={styles.icon_person} name="person-outline" size={30} color="#BDBDBD"></MaterialIcons>
                         <Text style={styles.text_person} >Cá nhân</Text>
                     </View>
 
@@ -84,18 +84,12 @@ const styles = StyleSheet.create({
     },
     login: {
         minWidth: '60%',
-        maxWidth: '80%',
+        maxWidth: '60%',
         maxHeight: 'auto',
         minHeight: '60%',
         justifyContent: 'center',
-        backgroundColor: 'red',
         alignSelf: 'center',
         marginLeft: '5%'
-    },
-    btnLogin: {
-        color: "white",
-        textAlign: 'center',
-        fontSize: config.fontsize_2
     },
     text: {
         padding: 10,
@@ -112,6 +106,13 @@ const styles = StyleSheet.create({
         flex: 1,
         flexDirection: 'row'
     },
+    buttonLogIn: {
+        borderColor: config.color_btn_1,
+    },
+    titleStyle: {
+        color: config.color_btn_1,
+        fontSize: 20
+    }
 
 })
 

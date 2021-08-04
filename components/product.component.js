@@ -82,7 +82,7 @@ function ProductComponent(props) {
             
             props.newestPost.map((item, key) => {
                 return (
-                    <TouchableOpacity key={key} style={style.wrapCategory} onPress={()=> _pressRow(item)} > 
+                    <TouchableOpacity key={key} style={style.wrapCategory} activeOpacity={0.8} onPress={()=> _pressRow(item)} > 
                     {/* //dùng onStartShouldSetResponder để click vào view */}
                         <Image style={style.tinyLogo} source={{
                             uri: item.urlImage[0],
@@ -114,7 +114,7 @@ function ProductComponent(props) {
 
 const style = StyleSheet.create({
     constainer: {
-        backgroundColor: "#ADB5BD"
+        backgroundColor: "#DDD"
     },
     wrapCategory: {
         padding: 15,
@@ -147,20 +147,21 @@ const style = StyleSheet.create({
         flexDirection: 'row',
     },
     time: {
-        fontSize: 16,
+        fontSize: 20,
         marginLeft: 7,
         color: "gray"
     },
     price: {
         color: "green",
-        fontSize: 17
+        fontSize: 20
     },
     type: {
-        fontSize: 17,
+        fontSize: 20,
         color: "gray"
     },
     address: {
-        color: "gray"
+        color: "gray",
+        fontSize: 20,
     }
 })
 

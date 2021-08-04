@@ -10,19 +10,19 @@ export default function CreatePosts(props) {
 
   return (
     <View style={styles.wrapContent}>
-      {/* <View style={styles.wrapPiker}> */}
+      <View style={styles.wrapPiker}>
       <Picker
         selectedValue={selectedValue}
         onValueChange={(itemValue, itemIndex) => setSelectedValue(itemValue)}
         mode={'dropdown'}
-        style={{ height: 40, width: '60%' }}
+        style={{ height: 40,}}
       // style={styles.pikerStyle}
       >
         <Picker.Item label="Tất cả tin đăng" value="1" />
         <Picker.Item label="Tin tặng cộng đồng" value="2" />
         <Picker.Item label="Tin xin đồ" value="3" />
       </Picker>
-      {/* </View> */}
+      </View>
       {/* <View style={styles.wrapBtn}> */}
       <TouchableOpacity
         activeOpacity={0.5}
@@ -46,10 +46,10 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     marginBottom: 10,
   },
-  // wrapPiker: {
-  //   borderWidth: 1,
-  //   borderRadius: 10
-  // },
+  wrapPiker: {
+    borderWidth: 1,
+    width: '60%',
+  },
   pickerStyle: {
     height: 40,
     // width: '100%',
@@ -57,6 +57,7 @@ const styles = StyleSheet.create({
   // wrapBtn: {
   // },
   btnCreate: {
+   
     alignItems: 'center',
     flexDirection: 'row',
     backgroundColor: '#018786',
@@ -67,6 +68,8 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.3,
     shadowRadius: 10,
     shadowOffset: { width: 0, height: 0 },
+    width: '38%',
+    justifyContent: 'space-around',
   },
   btnText: {
     fontWeight: '600',
