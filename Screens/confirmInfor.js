@@ -27,9 +27,10 @@ const photo = {
 };
 const createFormData = (photo) => {
   const data = new FormData();
-  data.append('file', {
+  data.append('productImage', {
     name: photo.filename,
-    uri: photo.uri
+    uri: photo.uri,
+    type: "image/jpg"
   });
 
   return data;
@@ -60,14 +61,30 @@ function ConfirmInforScreen(props) {
   //   }
   // }
   let url = 'http://192.168.1.109:5000/post/UpdatePost';
-  let xhr = new XMLHttpRequest();
-  xhr.open('POST', url);
-  let formdata = new FormData();
-  // image from CameraRoll.getPhotos(
-  formdata.append("data", "lalal")
-  formdata.append("files", {});
-  xhr.send(formdata)
-
+  const formData = createFormData(photo)
+  console.log(formData)
+  const temp = new FormData();
+  temp.append('test', "testttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttt")
+  const submitInfoPost = async () => {
+    try {
+      await axios({
+        method: 'POST',
+        url: 'http://192.168.1.109:5000/post/UpdatePost',
+        data: { temp },
+        headers: {
+          "idpost": "60e9cdad59830c00223acd9d",
+          "accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9",
+          "Content-Type": 'multipart/form-data; boundary=----WebKitFormBoundaryZG2q9qc0mxF0HhPL',
+          "Authorization": `bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2NvdW50SUQiOiI2MGU5Y2M5ZjJkMzlkYzJkMTBkOGM2OWQiLCJpYXQiOjE2Mjc5MjMzNzB9.8VukL4etrnPJezZYXTCkAum3zDuf2t_4ERP6RKNhJFk`,
+        }
+      }).then(data => {
+        data.idpost
+      })
+        .catch(e => console.log(e))
+    } catch (e) {
+      alert(e)
+    }
+  }
   const { navigation } = props;
   return (
     <View style={styles.container}>
