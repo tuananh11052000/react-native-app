@@ -19,6 +19,7 @@ import WhoConfirm from "./Screens/whoConfirm";
 import DetailPost from "./Screens/detailPost";
 import PickerImage from './Screens/pickerImage';
 import config from "./config";
+import CreatePost from "./Screens/createPost";
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -40,7 +41,7 @@ function AppNavigator(props) {
           name="Search"
           component={Search}
           options={({ navigation }) => ({
-            title: "Tìm kiểm",
+            title: "Tìm kiếm",
             headerShown: true,
             headerStyle: {
               backgroundColor: config.color_header_background,
@@ -87,9 +88,17 @@ function AppNavigator(props) {
         <Stack.Screen
           name="WhoConfirm"
           component={WhoConfirm}
-          options={{
-            headerShown: false,
-          }}
+          options={({ navigation }) => ({
+            title: "Bạn là ai",
+            headerShown: true,
+            headerStyle: {
+              backgroundColor: config.color_header_background,
+            },
+            headerTintColor: config.headerTintColor,
+            headerTitleStyle: {
+              // fontWeight: "bold",
+            },
+          })}
         />
         <Stack.Screen
           name="Authentication"

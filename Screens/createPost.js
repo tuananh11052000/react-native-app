@@ -7,7 +7,7 @@ import CreatePosts from '../components/createPost.component';
 import MyProductComponent from '../components/myproduct.component'
 import ProductComponent from '../components/product.component'
 
-const heightStatusBar = StatusBar.currentHeight;//lay ra chieu cao cua thanh trang thai
+// const heightStatusBar = StatusBar.currentHeight;//lay ra chieu cao cua thanh trang thai
 
 function CreatePost(props) {
   const { navigation } = props;
@@ -27,7 +27,7 @@ function CreatePost(props) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    marginTop: heightStatusBar,
+    // marginTop: heightStatusBar,
     backgroundColor: '#f2f2f2',
   },
 });

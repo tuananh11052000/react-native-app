@@ -6,7 +6,13 @@ import { connect } from "react-redux";
 import axios from 'axios'
 
 import { Feather } from '@expo/vector-icons';
-import { Picker } from '@react-native-picker/picker';
+import {
+  MenuContext,
+  Menu,
+  MenuOptions,
+  MenuOption,
+  MenuTrigger,
+} from 'react-native-popup-menu';
 
 const { width, height } = Dimensions.get('window')
 
@@ -36,20 +42,20 @@ function MyProductComponent(props) {
       return d2.getFullYear() - d1.getFullYear();
     }
     if (calYear() != 0)
-      return `${calYear()} năm trước`
+      return `${calYear()}năm trước `
     else if (calMonth() != 0)
-      return `${calMonth()} tháng trước`
+      return `${calMonth()}tháng trước `
     else if (calDay() != 0)
-      return `${calDay()} ngày trước`
+      return `${calDay()}ngày trước `
     else
-      return `${calHour()} giờ trước`
+      return `${calHour()}giờ trước `
   }
 
   useEffect(() => {
     const getData = async () => {
       let temp = await axios({
         method: 'get',
-        url: 'https://smai-app-api.herokuapp.com/post/getNewPost'
+        url: 'https://smai-app-api.herokuapp.com/post/myPost'
       })
       dispatch({ type: 'UPDATE', data: temp.data })
 
@@ -60,8 +66,8 @@ function MyProductComponent(props) {
   //Function handling title post
   const renderTitle = (item) => {
     item = item.charAt(0).toUpperCase() + item.slice(1,)
-    if (item.length > 28)
-      return item.slice(0, 28) + "..."
+    if (item.length > 20)
+      return item.slice(0, 20) + "..."
     else
       return item
   }
@@ -89,27 +95,44 @@ function MyProductComponent(props) {
                 uri: item.urlImage[0],
               }} />
               <View style={style.wrapInfoProduct} >
-                <View style={style.wrapTitle}>
-                  <Text style={style.titlePost}>
-                    {
-                      renderTitle(item.title)
-                    }
-                  </Text>
-                  
-                  <Feather name="more-vertical" size={20} color="gray" />
-                </View>
+                <MenuContext style={{}}>
 
-                <View style={style.wrapTypePrice}>
-                  <Text style={style.type}>{renderType(item.NameProduct)}</Text>
-                  <Text style={style.price}>Miễn phí</Text>
-                </View>
-                <View style={style.wrapTimeAddress}>
-                  <View style={style.wrapTime}>
-                    <Feather name="clock" size={20} color="gray" style={{ width: 20, height: 20, }}/>
-                    <Text style={style.time}>{calculatingTime(item.createdAt, currentTime)}</Text>
+                  <View style={style.wrapTitle}>
+                    <Text style={style.titlePost}>
+                      {
+                        renderTitle(item.title)
+                      }
+                    </Text>
+                    < View style={style.wrapMore}>
+                      {/* <MenuContext style={{}}> */}
+                      <View style={{ alignItems: "flex-end" }}>
+                        <Menu>
+                          <MenuTrigger>
+                            <Feather name="more-vertical" size={20} color="gray" />
+                          </MenuTrigger>
+                          <MenuOptions customStyles={optionsStyles} onSelect={false}>
+                            <MenuOption value="Edit" text="Chỉnh sửa" />
+                            <MenuOption value="Delete" text="Xóa" />
+                          </MenuOptions>
+                        </Menu>
+                      </View>
+                      {/* </MenuContext> */}
+                    </View>
                   </View>
-                  <Text style={style.address}>{item.address.slice(0, 15) + "..."}</Text>
-                </View>
+
+                  <View style={style.wrapTypePrice}>
+                    <Text style={style.type}>{renderType(item.NameProduct)}</Text>
+                    <Text style={style.price}>Miễn phí</Text>
+                  </View>
+                  <View style={style.wrapTimeAddress}>
+                    <View style={style.wrapTime}>
+                      <Feather name="clock" size={20} color="gray" style={{ width: 20, height: 20, }} />
+                      <Text style={style.time}>{calculatingTime(item.createdAt, currentTime)}</Text>
+                    </View>
+                    <Text style={style.address}>{item.address.slice(0, 15) + "..."}</Text>
+                  </View>
+                </MenuContext>
+
               </View>
             </View>
             <View style={style.wrapBot} >
@@ -158,6 +181,11 @@ const style = StyleSheet.create({
     alignItems: "center",
     flexDirection: 'row',
     justifyContent: 'space-between'
+  }, wrapMore: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "stretch",
+
   }, wrapInfoProduct: {
     flex: 1,
     marginLeft: 10,
@@ -214,6 +242,28 @@ const style = StyleSheet.create({
     color: "black"
   }
 })
+
+const optionsStyles = {
+  optionsContainer: {
+    backgroundColor: '#f2f2f2',
+    width: "50%",
+  },
+  optionsWrapper: {
+    backgroundColor: '#f2f2f2',
+  },
+  optionWrapper: {
+    backgroundColor: 'white',
+    margin: 2,
+  },
+  optionTouchable: {
+    underlayColor: 'gold',
+    activeOpacity: 70,
+  },
+  optionText: {
+    color: 'black',
+    fontSize: 16
+  },
+};
 
 export default connect(function (state) {
   return { num: state.countNumber, newestPost: state.newestPost }

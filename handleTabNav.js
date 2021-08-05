@@ -6,6 +6,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import Home from './Screens/home'
 import ProfileScreen from './Screens/profile'
 import createPost from './Screens/createPost';
+import config from "./config";
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -35,9 +36,16 @@ const ProfileStack = () => {
 const CreatePostStack = () => {
     return (
         <Stack.Navigator>
-            <Stack.Screen name="Đăng tin" component={createPost}
+            <Stack.Screen name="Tin đăng" component={createPost}
                 options={{
-                    headerShown: false,
+                    headerShown: true,
+                    headerStyle: {
+                        backgroundColor: config.color_header_background,
+                    },
+                    headerTintColor: config.headerTintColor,
+                    headerTitleStyle: {
+                        // fontWeight: "bold",
+                    },
                 }} />
         </Stack.Navigator>
     )

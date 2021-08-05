@@ -20,7 +20,7 @@ export default function CreatePosts(props) {
       >
         <Picker.Item label="Tất cả tin đăng" value="1" />
         <Picker.Item label="Tin tặng cộng đồng" value="2" />
-        <Picker.Item label="Tin xin đồ" value="3" />
+        <Picker.Item label="Tin cần xin đồ" value="3" />
       </Picker>
       </View>
       {/* <View style={styles.wrapBtn}> */}
