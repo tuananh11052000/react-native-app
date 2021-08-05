@@ -16,7 +16,7 @@ function ProfileScreen(props) {
                 <HeaderLoginPage message={'ProfilePage'} onPress={() => navigation.jumpTo('Feed')} />
                 <TopProfile onPress={() => navigation.replace('Authentication')} />
                 <Text style={styles.Text}>Quản lý</Text>
-                <HistoryProfileComponent></HistoryProfileComponent>
+                <HistoryProfileComponent navigation={navigation}></HistoryProfileComponent>
             </View>
 
             <View style={styles.phonenumber} >
