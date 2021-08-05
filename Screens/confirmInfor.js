@@ -7,15 +7,35 @@ import {
 } from 'react-native';
 import { connect } from 'react-redux'
 import axios from 'axios'
+import FormData from 'form-data'
 
 import ButtonConfirm from '../components/buttonConfirm.components';
 import ConfirmInfor from '../components/confirminfor.components';
 
 const heightStatusBar = StatusBar.currentHeight;
+const photo = {
+  "albumId": "-1313584517",
+  "creationTime": 1627833124565,
+  "duration": 0,
+  "filename": "Screenshot_20210801-225204_Facebook.jpg",
+  "height": 2400,
+  "id": "3215",
+  "mediaType": "photo",
+  "modificationTime": 1627833124000,
+  "uri": "file:///storage/emulated/0/DCIM/Screenshots/Screenshot_20210801-225204_Facebook.jpg",
+  "width": 1080,
+};
+const createFormData = (photo) => {
+  const data = new FormData();
+  data.append('file', {
+    name: photo.filename,
+    uri: photo.uri
+  });
 
+  return data;
+};
 function ConfirmInforScreen(props) {
   //ham thuc hien khi nhan vao button xac thuc
-  data = props.infoPost;
   // const submitInfoPost = async () => {
   //   try {
   //     await axios({
@@ -39,35 +59,19 @@ function ConfirmInforScreen(props) {
   //     alert(e)
   //   }
   // }
-  const submitInfoPost = async () => {
-    try {
-      let formData = new FormData();
-      formData.append("productImage", 'ASDASD')
-      // await axios({
-      //   method: 'POST',
-      //   url: 'http://192.168.1.109:5000/post/UpdatePost',
-      //   data: { formData },
-      //   headers: {
-      //     'Content-Type': ' multipart/form-data',
-      //     'idpost': '61097f4873f40300223169bf',
-      //   }
-      // }).then(data => {
-      //   console.log(data)
-      // })
-      //   .catch(e => console.log(e))
-      const data = new FormData();
-      data.append('action', 'ADD');
-      data.append('param', 0);
-      data.append('secondParam', 0);
-      data.append('productImage', props.infoPost.image[0])
-      console.log(data)
-      // data.append('file', new Blob(['test payload'], { type: 'text/csv' }));
+  let url = 'http://192.168.1.109:5000/post/UpdatePost';
+  let xhr = new XMLHttpRequest();
+  xhr.open('POST', url);
+  let formdata = new FormData();
+  // image from CameraRoll.getPhotos(
+  formdata.append("data", "lalal")
+  formdata.append("files", {
+    uri: 'file:///storage/emulated/0/DCIM/Screenshots/Screenshot_20210801-225204_Facebook.jpg',
+    name: 'Screenshot_20210801-225204_Facebook.jpg'
+  });
+  console.log(formdata)
+  xhr.send(formdata)
 
-      // axios.post('http://192.168.1.109:5000/post/UpdatePost', data).then((data) => console.log(data)).catch(e => console.log(e));
-    } catch (e) {
-      alert(e)
-    }
-  }
   const { navigation } = props;
   return (
     <View style={styles.container}>
