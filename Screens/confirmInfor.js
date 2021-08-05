@@ -65,11 +65,7 @@ function ConfirmInforScreen(props) {
   let formdata = new FormData();
   // image from CameraRoll.getPhotos(
   formdata.append("data", "lalal")
-  formdata.append("files", {
-    uri: 'file:///storage/emulated/0/DCIM/Screenshots/Screenshot_20210801-225204_Facebook.jpg',
-    name: 'Screenshot_20210801-225204_Facebook.jpg'
-  });
-  console.log(formdata)
+  formdata.append("files", {});
   xhr.send(formdata)
 
   const { navigation } = props;
