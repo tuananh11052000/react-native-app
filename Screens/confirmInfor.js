@@ -12,7 +12,7 @@ import ButtonConfirm from '../components/buttonConfirm.components';
 import ConfirmInfor from '../components/confirminfor.components';
 
 const heightStatusBar = StatusBar.currentHeight;
-const photo = {
+const photo = [{
   "albumId": "-1313584517",
   "creationTime": 1627833124565,
   "duration": 0,
@@ -23,7 +23,7 @@ const photo = {
   "modificationTime": 1627833124000,
   "uri": "file:///storage/emulated/0/DCIM/Screenshots/Screenshot_20210801-225204_Facebook.jpg",
   "width": 1080,
-};
+}];
 const createFormData = (photo) => {
   const data = new FormData();
   data.append('productImage', photo);
@@ -60,14 +60,14 @@ function ConfirmInforScreen(props) {
   // }
   // const formData = createFormData(props.infoPost.image)
   const data = new FormData();
-  data.append('productImage', props.infoPost.image);
+  data.append('productImage', photo);
   console.log("---------")
   console.log(data)
   const submitInfoPost = async () => {
     try {
       await axios({
         method: 'POST',
-        url: 'http://192.168.1.7:5000/post/UpdatePost',
+        url: 'http://192.168.1.7:5000/post/upload',
         data,
         headers: {
           "idpost": "60e9cdad59830c00223acd9d",
