@@ -31,8 +31,8 @@ const createFormData = (photo) => {
   return data;
 };
 function ConfirmInforScreen(props) {
-  
-  
+
+
 
   //ham thuc hien khi nhan vao button xac thuc
   // const submitInfoPost = async () => {
@@ -76,7 +76,7 @@ function ConfirmInforScreen(props) {
           "Authorization": `bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2NvdW50SUQiOiI2MGU5Y2M5ZjJkMzlkYzJkMTBkOGM2OWQiLCJpYXQiOjE2Mjc5MjMzNzB9.8VukL4etrnPJezZYXTCkAum3zDuf2t_4ERP6RKNhJFk`,
         }
       }).then(data => {
-         data.idpost
+        data.idpost
       })
         .catch(e => console.log(e))
     } catch (e) {
