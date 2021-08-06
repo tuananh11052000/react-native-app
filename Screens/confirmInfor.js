@@ -7,7 +7,6 @@ import {
 } from 'react-native';
 import { connect } from 'react-redux'
 import axios from 'axios'
-import FormData from 'form-data'
 
 import ButtonConfirm from '../components/buttonConfirm.components';
 import ConfirmInfor from '../components/confirminfor.components';
@@ -27,15 +26,14 @@ const photo = {
 };
 const createFormData = (photo) => {
   const data = new FormData();
-  data.append('productImage', {
-    name: photo.filename,
-    uri: photo.uri,
-    type: "image/jpg"
-  });
-
+  data.append('productImage', photo);
+  console.log(data.get('productImage'));
   return data;
 };
 function ConfirmInforScreen(props) {
+  
+  
+
   //ham thuc hien khi nhan vao button xac thuc
   // const submitInfoPost = async () => {
   //   try {
@@ -60,25 +58,25 @@ function ConfirmInforScreen(props) {
   //     alert(e)
   //   }
   // }
-  let url = 'http://192.168.1.109:5000/post/UpdatePost';
-  const formData = createFormData(photo)
-  console.log(formData)
-  const temp = new FormData();
-  temp.append('test', "testttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttt")
+  // const formData = createFormData(props.infoPost.image)
+  const data = new FormData();
+  data.append('productImage', props.infoPost.image);
+  console.log("---------")
+  console.log(data)
   const submitInfoPost = async () => {
     try {
       await axios({
         method: 'POST',
-        url: 'http://192.168.1.109:5000/post/UpdatePost',
-        data: { temp },
+        url: 'http://192.168.1.7:5000/post/UpdatePost',
+        data,
         headers: {
           "idpost": "60e9cdad59830c00223acd9d",
           "accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9",
-          "Content-Type": 'multipart/form-data; boundary=----WebKitFormBoundaryZG2q9qc0mxF0HhPL',
+          "Content-Type": 'multipart/form-data',
           "Authorization": `bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2NvdW50SUQiOiI2MGU5Y2M5ZjJkMzlkYzJkMTBkOGM2OWQiLCJpYXQiOjE2Mjc5MjMzNzB9.8VukL4etrnPJezZYXTCkAum3zDuf2t_4ERP6RKNhJFk`,
         }
       }).then(data => {
-        data.idpost
+         data.idpost
       })
         .catch(e => console.log(e))
     } catch (e) {

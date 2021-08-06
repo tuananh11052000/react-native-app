@@ -24,6 +24,7 @@ import PickerImage from "./Screens/pickerImage";
 import config from "./config";
 import CreatePost from "./Screens/createPost";
 import HistoryPage from "./Screens/historyPage";
+
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
 
@@ -61,9 +62,17 @@ function AppNavigator(props) {
         <Stack.Screen
           name="ConfirmInforScreen"
           component={ConfirmInforScreen}
-          options={{
-            headerShown: false,
-          }}
+          options={({ navigation }) => ({
+            title: "Confirm ",
+            headerShown: true,
+            headerStyle: {
+              backgroundColor: config.color_header_background,
+            },
+            headerTintColor: config.headerTintColor,
+            headerTitleStyle: {
+              fontWeight: "bold",
+            },
+          })}
         />
         <Stack.Screen
           name="Completed"
@@ -148,6 +157,7 @@ function AppNavigator(props) {
             },
           })}
         />
+       
         <Stack.Screen
           name="PickImage"
           component={PickerImage}
