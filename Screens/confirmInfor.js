@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import {
   StyleSheet,
   View,
-  Platform,
   StatusBar
 } from 'react-native';
 import { connect } from 'react-redux'
@@ -12,77 +11,85 @@ import ButtonConfirm from '../components/buttonConfirm.components';
 import ConfirmInfor from '../components/confirminfor.components';
 
 const heightStatusBar = StatusBar.currentHeight;
-const photo = [{
-  "albumId": "-1313584517",
-  "creationTime": 1627833124565,
-  "duration": 0,
-  "filename": "Screenshot_20210801-225204_Facebook.jpg",
-  "height": 2400,
-  "id": "3215",
-  "mediaType": "photo",
-  "modificationTime": 1627833124000,
-  "uri": "file:///storage/emulated/0/DCIM/Screenshots/Screenshot_20210801-225204_Facebook.jpg",
-  "width": 1080,
-}];
-const createFormData = (photo) => {
-  const data = new FormData();
-  data.append('productImage', photo);
-  console.log(data.get('productImage'));
-  return data;
-};
 function ConfirmInforScreen(props) {
-
-
-
-  //ham thuc hien khi nhan vao button xac thuc
-  // const submitInfoPost = async () => {
-  //   try {
-  //     await axios({
-  //       method: 'POST',
-  //       url: 'https://smai-app-api.herokuapp.com/post/CreatePost',
-  //       data: {
-  //         title: data.title,
-  //         NameProduct: data.NameProduct,
-  //         TypeAuthor: 'tangcongdong',
-  //         address: data.address,
-  //         note: data.note
-  //       },
-  //       headers: {
-  //         "Authorization": `bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2NvdW50SUQiOiI2MGU5Y2M5ZjJkMzlkYzJkMTBkOGM2OWQiLCJpYXQiOjE2Mjc5MjMzNzB9.8VukL4etrnPJezZYXTCkAum3zDuf2t_4ERP6RKNhJFk`,
-  //       }
-  //     }).then(data => {
-  //       data.idpost
-  //     })
-  //     .catch(e => console.log(e))
-  //   } catch (e) {
-  //     alert(e)
-  //   }
-  // }
-  // const formData = createFormData(props.infoPost.image)
-  const data = new FormData();
-  data.append('productImage', photo);
-  console.log("---------")
-  console.log(data)
+  console.log(props.infoPost)
+  const image = props.infoPost.image;
   const submitInfoPost = async () => {
-    try {
-      await axios({
-        method: 'POST',
-        url: 'http://192.168.1.7:5000/post/upload',
-        data,
-        headers: {
-          "idpost": "60e9cdad59830c00223acd9d",
-          "accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9",
-          "Content-Type": 'multipart/form-data',
-          "Authorization": `bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2NvdW50SUQiOiI2MGU5Y2M5ZjJkMzlkYzJkMTBkOGM2OWQiLCJpYXQiOjE2Mjc5MjMzNzB9.8VukL4etrnPJezZYXTCkAum3zDuf2t_4ERP6RKNhJFk`,
-        }
-      }).then(data => {
-        data.idpost
-      })
-        .catch(e => console.log(e))
-    } catch (e) {
-      alert(e)
+    //api upload infor json
+    const data = props.infoPost;
+    let data_ = {
+      title: data.title,
+      note: data.note,
+      address: data.address,
+      NameProduct: data.NameProduct
     }
+    axios({
+      url: 'https://smai-app-api.herokuapp.com/post/CreatePost',
+      method: 'post',
+      data: {
+        title: data.title,
+        note: data.note,
+        address: data.address,
+        NameProduct: data.NameProduct
+      },
+      headers: {
+        Accept: "application/json",
+        Authorization: 'bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2NvdW50SUQiOiI2MGU5Y2M5ZjJkMzlkYzJkMTBkOGM2OWQiLCJpYXQiOjE2Mjc5OTkwNzh9.XxzvJigOW0GGSotGY69Xs-GxuEZ8DFxfRd5WzetDvgc'
+      }
+    }).then(res => {
+      let apiUrl = "https://smai-app-api.herokuapp.com/post/UpdatePost";
+      let formData = new FormData();
+      for (let i = 0; i < image.length; i++) {
+        let uri = image[i].uri;
+        let uriArray = uri.split(".");
+        let fileType = uriArray[uriArray.length - 1];
+        formData.append("productImage", {
+          uri: uri,
+          name: `photo.${fileType}`,
+          type: `image/${fileType}`,
+        });
+      }
+      let options = {
+        method: "POST",
+        body: formData,
+        mode: 'cors',
+        headers: {
+          "idpost": res.data.idpost,
+          Accept: "application/json",
+          "Content-Type": "multipart/form-data",
+          Authorization: 'bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2NvdW50SUQiOiI2MGU5Y2M5ZjJkMzlkYzJkMTBkOGM2OWQiLCJpYXQiOjE2Mjc5OTkwNzh9.XxzvJigOW0GGSotGY69Xs-GxuEZ8DFxfRd5WzetDvgc'
+        },
+      };
+      fetch(apiUrl, options)
+    }).catch(err => console.log(err))
+
+
+    //api upload image
+    // let apiUrl = "http://192.168.1.109:5000/post/upload";
+    // let formData = new FormData();
+    // for (let i = 0; i < image.length; i++) {
+    //   let uri = image[i].uri;
+    //   let uriArray = uri.split(".");
+    //   let fileType = uriArray[uriArray.length - 1];
+    //   formData.append("productImage", {
+    //     uri: uri,
+    //     name: `photo.${fileType}`,
+    //     type: `image/${fileType}`,
+    //   });
+    // }
+    // let options = {
+    //   method: "POST",
+    //   body: formData,
+    //   mode: 'cors',
+    //   headers: {
+    //     Accept: "application/json",
+    //     "Content-Type": "multipart/form-data",
+    //     Authorization: 'bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2NvdW50SUQiOiI2MGU5Y2M5ZjJkMzlkYzJkMTBkOGM2OWQiLCJpYXQiOjE2Mjc5OTkwNzh9.XxzvJigOW0GGSotGY69Xs-GxuEZ8DFxfRd5WzetDvgc'
+    //   },
+    // };
+    // fetch(apiUrl, options)
   }
+
   const { navigation } = props;
   return (
     <View style={styles.container}>
