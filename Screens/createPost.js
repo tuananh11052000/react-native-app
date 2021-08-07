@@ -32,9 +32,9 @@ const styles = StyleSheet.create({
   },
 });
 
-export default connect(function (state) {
-  return { num: state.countNumber, newestPost: state.newestPost }
-})(CreatePost);
 // export default connect(function (state) {
-//   return { auth: state.auth, infoPost: state.infoPost }
+//   return { num: state.countNumber, newestPost: state.newestPost }
 // })(CreatePost);
+export default connect(function (state) {
+  return { auth: state.auth, infoPost: state.infoPost }
+})(CreatePost);

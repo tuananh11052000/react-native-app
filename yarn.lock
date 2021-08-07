@@ -3722,6 +3722,11 @@
     "path-browserify" "^1.0.0"
     "url-parse" "^1.4.4"
 
+"expo-clipboard@^1.1.0":
+  "integrity" "sha512-4A+X/OMZiK8ubXvfuNJ8L9iDLmrkwO9rdHIgU3ywhBQ3NlD2nqEVcN4ZHdD7cn4/WkmP/bu/LWeTdvVuyufO8Q=="
+  "resolved" "https://registry.npmjs.org/expo-clipboard/-/expo-clipboard-1.1.0.tgz"
+  "version" "1.1.0"
+
 "expo-constants@~11.0.1":
   "integrity" "sha512-yolJSfsNAVmuNDc+NNxBzUKbZRXPM35edoMpv8xdmRBMpOWkRmTdpBIFAYAKCtrGruw2tkIQhnLmCD2aDycvTg=="
   "resolved" "https://registry.npmjs.org/expo-constants/-/expo-constants-11.0.1.tgz"
