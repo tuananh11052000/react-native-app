@@ -58,7 +58,7 @@ function MyProductComponent(props) {
         },
         url: "https://smai-app-api.herokuapp.com/post/getPostByAccountId",
       });
-      dispatch({ type: "UPDATE", data: temp.data });
+      dispatch({ type: "UP", data: temp.data });
       // console.log(temp);
     };
     getData();
@@ -105,11 +105,11 @@ function MyProductComponent(props) {
     };
     const renderAuthor = (item) => {
       if (item == "tangcongdong") return "Tặng cộng đồng";
-      else return "Cần xin đồ";
+      else return "Cần xin đồ"
     };
     const renderConfirm = (item) => {
       if (item) return "Đang hiển thị";
-      else return "Chờ xác thực";
+      else return "Chờ xác thực"
     };
     //sang trang detail
     const _pressRow = (item) => {
@@ -189,13 +189,9 @@ function MyProductComponent(props) {
                   </MenuContext>
                 </View>
               </View>
-              <View style={style.wrapBot}>
-                <Text style={style.textCate}>
-                  {renderAuthor(item.TypeAuthor)}
-                </Text>
-                <Text style={style.textStatus}>
-                  {renderConfirm(item.confirm)}
-                </Text>
+              <View style={style.wrapBot}> 
+                <Text style={style.textCate}>{renderAuthor(item.TypeAuthor)}</Text>
+                <Text style={style.textStatus}>{renderConfirm(item.confirm)}</Text>
               </View>
             </TouchableOpacity>
           );

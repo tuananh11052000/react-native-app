@@ -1,6 +1,6 @@
 var myPost = (state = [], action) => {
  switch (action.type) {
-     case 'UPDATE':
+     case 'UP':
          {
              return [...action.data];
          }
