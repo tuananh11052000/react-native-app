@@ -37,10 +37,6 @@ function MyProductComponent(props) {
   const [token, setToken] = useState("Null"); //token
   // console.log(token);
   const { dispatch } = props;
-  const [allPost, setAllPost] = useState([]);
-  const [resultSearch, setResult] = useState([]);
-  const [keySearch, setKeySearch] = useState("");
-
   useEffect(() => {
     getToken().then(
       (profile) => {
@@ -109,11 +105,11 @@ function MyProductComponent(props) {
     };
     const renderAuthor = (item) => {
       if (item == "tangcongdong") return "Tặng cộng đồng";
-      else return "Cần xin đồ"
+      else return "Cần xin đồ";
     };
     const renderConfirm = (item) => {
       if (item) return "Đang hiển thị";
-      else return "Chờ xác thực"
+      else return "Chờ xác thực";
     };
     //sang trang detail
     const _pressRow = (item) => {
@@ -193,9 +189,13 @@ function MyProductComponent(props) {
                   </MenuContext>
                 </View>
               </View>
-              <View style={style.wrapBot}> 
-                <Text style={style.textCate}>{renderAuthor(item.TypeAuthor)}</Text>
-                <Text style={style.textStatus}>{renderConfirm(item.confirm)}</Text>
+              <View style={style.wrapBot}>
+                <Text style={style.textCate}>
+                  {renderAuthor(item.TypeAuthor)}
+                </Text>
+                <Text style={style.textStatus}>
+                  {renderConfirm(item.confirm)}
+                </Text>
               </View>
             </TouchableOpacity>
           );
