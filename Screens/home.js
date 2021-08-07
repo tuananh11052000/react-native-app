@@ -16,6 +16,7 @@ function Home(props) {
     useEffect(() => {
         const checkTokenLocal = async () => {
             let result = await SecureStore.getItemAsync('token');
+            console.log(result)
             let PhoneNumber = await SecureStore.getItemAsync('PhoneNumber')
             if (result) {
                 dispatch({ type: "SIGN_IN", token: result, PhoneNumber: PhoneNumber })
