@@ -56,14 +56,56 @@ function AppNavigator(props) {
             },
           })}
         />
-        <Stack.Screen name="ConfirmAddress" component={ConfirmAddress} />
-        <Stack.Screen name="Category" component={Category} />
-        <Stack.Screen name="Description" component={Description} />
+        <Stack.Screen
+          name="ConfirmAddress"
+          component={ConfirmAddress}
+          options={({ navigation }) => ({
+            title: "Xác nhận địa chỉ ",
+            headerShown: true,
+            headerStyle: {
+              backgroundColor: config.color_header_background,
+            },
+            headerTintColor: config.headerTintColor,
+            headerTitleStyle: {
+              fontWeight: "bold",
+            },
+          })}
+        />
+        <Stack.Screen
+          name="Category"
+          component={Category}
+          options={({ navigation }) => ({
+            title: "Danh mục ",
+            headerShown: true,
+            headerStyle: {
+              backgroundColor: config.color_header_background,
+            },
+            headerTintColor: config.headerTintColor,
+            headerTitleStyle: {
+              fontWeight: "bold",
+            },
+          })}
+        />
+        <Stack.Screen 
+        name="Description" 
+        component={Description}
+        options={({ navigation }) => ({
+          title: "Thông tin",
+          headerShown: true,
+          headerStyle: {
+            backgroundColor: config.color_header_background,
+          },
+          headerTintColor: config.headerTintColor,
+          headerTitleStyle: {
+            fontWeight: "bold",
+          },
+        })}
+      />
         <Stack.Screen
           name="ConfirmInforScreen"
           component={ConfirmInforScreen}
           options={({ navigation }) => ({
-            title: "Confirm ",
+            title: "Xác nhận ",
             headerShown: true,
             headerStyle: {
               backgroundColor: config.color_header_background,
@@ -157,7 +199,7 @@ function AppNavigator(props) {
             },
           })}
         />
-       
+
         <Stack.Screen
           name="PickImage"
           component={PickerImage}
