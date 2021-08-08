@@ -7,7 +7,7 @@ import {
   createStackNavigator,
   HeaderBackButton,
 } from "@react-navigation/stack";
-import { Button, View, Text, TextInput, Image, StyleSheet } from "react-native";
+import { Button } from "react-native";
 
 import Search from "./Screens/seachScreen";
 import ConfirmAddress from "./Screens/confirmAddress";
@@ -84,23 +84,53 @@ function AppNavigator(props) {
             headerTitleStyle: {
               fontWeight: "bold",
             },
+            headerRight: () => (
+              <Button
+                title="Hủy"
+                color="#fff"
+                onPress={() => navigation.navigate("Home")}
+              ></Button>
+            ),
+            headerBackTitle: "some label",
+
+            headerLeft: () => (
+              <HeaderBackButton
+                onPress={() => navigation.navigate("ConfirmAddress")}
+                tintColor={"white"}
+                label="Quay lại" //back
+              />
+            ),
           })}
         />
-        <Stack.Screen 
-        name="Description" 
-        component={Description}
-        options={({ navigation }) => ({
-          title: "Thông tin",
-          headerShown: true,
-          headerStyle: {
-            backgroundColor: config.color_header_background,
-          },
-          headerTintColor: config.headerTintColor,
-          headerTitleStyle: {
-            fontWeight: "bold",
-          },
-        })}
-      />
+        <Stack.Screen
+          name="Description"
+          component={Description}
+          options={({ navigation }) => ({
+            title: "Thông tin",
+            headerShown: true,
+            headerStyle: {
+              backgroundColor: config.color_header_background,
+            },
+            headerTintColor: config.headerTintColor,
+            headerTitleStyle: {
+              fontWeight: "bold",
+            },
+            headerRight: () => (
+              <Button
+                title="Hủy"
+                color="#fff"
+                onPress={() => navigation.navigate("Home")}
+              ></Button>
+            ),
+            headerLeft: () => (
+              <HeaderBackButton
+                onPress={() => navigation.navigate("ConfirmAddress")}
+                tintColor={"white"}
+                label="Quay lại" //back
+              />
+            ),
+          })}
+        />
         <Stack.Screen
           name="ConfirmInforScreen"
           component={ConfirmInforScreen}
@@ -114,6 +144,13 @@ function AppNavigator(props) {
             headerTitleStyle: {
               fontWeight: "bold",
             },
+            headerRight: () => (
+              <Button
+                title="Hủy"
+                color="#fff"
+                onPress={() => navigation.navigate("Home")}
+              ></Button>
+            ),
           })}
         />
         <Stack.Screen
@@ -152,7 +189,9 @@ function AppNavigator(props) {
             headerLeft: () => (
               <HeaderBackButton
                 onPress={() => navigation.navigate("Home")}
-              ></HeaderBackButton>
+                tintColor={"white"}
+                label="Trang chủ" //back
+              />
             ),
             title: "Tài khoản",
             headerShown: true,
@@ -186,7 +225,9 @@ function AppNavigator(props) {
             headerLeft: () => (
               <HeaderBackButton
                 onPress={() => navigation.navigate("Home")}
-              ></HeaderBackButton>
+                tintColor={"white"}
+                label="Quay lại" //back
+              />
             ),
             title: "Lịch sử xem",
             headerShown: true,
