@@ -38,6 +38,7 @@ const CreatePostStack = () => {
         <Stack.Navigator>
             <Stack.Screen name="Tin đăng" component={createPost}
                 options={{
+                    headerLeft: null,
                     headerShown: true,
                     headerStyle: {
                         backgroundColor: config.color_header_background,
