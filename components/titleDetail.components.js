@@ -83,6 +83,7 @@ const styles = StyleSheet.create({
         marginTop: 10,
         marginBottom: 10,
         borderColor: '#B1B1B1',
+        backgroundColor: 'white'
     },
     inputDescription: {
         borderColor: '#B1B1B1',
@@ -91,6 +92,7 @@ const styles = StyleSheet.create({
         padding: 5,
         marginTop: 10,
         marginBottom: 10,
+        backgroundColor: 'white'
     },
     borderUpload: {
         width: 100,

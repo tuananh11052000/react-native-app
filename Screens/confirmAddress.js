@@ -54,10 +54,14 @@ function confirmAddress(props) {
   }
   //Khai bao ham xu ly su kien click
   const pressFunc = () => {
-    const { dispatch } = props;
-    const address = `${addressDetail}, ${commune.name}, ${district.name}, ${province.name}`
-    dispatch({ type: "CONFIRM_ADDRESS", address: address })
-    navigation.navigate('Category')
+    if (province == "" || district == "" || commune == "")
+      alert("Vui lòng nhập đầy đủ địa chỉ")
+    else {
+      const { dispatch } = props;
+      const address = `${addressDetail}, ${commune.name}, ${district.name}, ${province.name}`
+      dispatch({ type: "CONFIRM_ADDRESS", address: address })
+      navigation.navigate('Category')
+    }
   }
   return (
     <View style={Styles.border}>

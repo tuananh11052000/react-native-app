@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { StyleSheet, View, ScrollView, StatusBar, Button } from 'react-native';
+import { StyleSheet, View, ScrollView, StatusBar, SafeAreaView } from 'react-native';
 import { connect } from "react-redux";
 
 import GiftComponent from '../components/gift.component';
@@ -27,13 +27,19 @@ function Home(props) {
         }
         checkTokenLocal()
     }, [])
+    const actionOnPress = () => {
+        if (props.auth.isLogin == true)
+            navigation.navigate('ConfirmAddress')
+        else
+            navigation.replace('Authentication')
+    }
     const { navigation } = props;
     //ConfirmAddress
     return (
         <View style={styles.container}>
             <ScrollView>
                 <SearchComponent onPress={() => navigation.navigate('Search')} />
-                <GiftComponent onPress={() => navigation.navigate('ConfirmAddress')} style={styles.gift_component} />
+                <GiftComponent onPress={() => actionOnPress()} style={styles.gift_component} />
                 <TitleComponent title="Tin đã đăng" />
                 <NewsedBox title="Tặng cộng đồng" />
                 <TitleComponent title="Tin mới nhất" />

@@ -1,6 +1,6 @@
-import React, { useEffect,useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import {
-    Image, Text, View, StyleSheet, TouchableOpacity, Dimensions, FlatList
+    Image, Text, View, StyleSheet, TouchableOpacity, Dimensions, FlatList, SafeAreaView
 } from 'react-native'
 import { connect } from "react-redux";
 import axios from 'axios'
@@ -45,7 +45,7 @@ function ProductComponent(props) {
             return `${calHour()} giờ trước`
     }
     //get post
-    
+
     useEffect(() => {
         const getData = async () => {
             let temp = await axios({
@@ -53,12 +53,10 @@ function ProductComponent(props) {
                 url: 'https://smai-app-api.herokuapp.com/post/getNewPost'
             })
             dispatch({ type: 'UPDATE', data: temp.data })
-
         }
         getData()
-
     }, [])
-    
+
     //Function handling title post
     const renderTitle = (item) => {
         item = item.charAt(0).toUpperCase() + item.slice(1,)
@@ -74,48 +72,48 @@ function ProductComponent(props) {
         else
             return pr[0].Category
     }
-  
-   
+
+
     const _pressRow = (item) => {
 
         props.navigation.navigate('DetailPost', { data: item }) //chuyển trang
     }
 
     const currentTime = new Date()
+
+    const renderItem = ({ item }) => (
+        <TouchableOpacity style={style.wrapCategory} activeOpacity={0.8} onPress={() => _pressRow(item)} >
+            {/* //dùng onStartShouldSetResponder để click vào view */}
+
+            <Image style={style.tinyLogo} source={{
+                uri: item.urlImage[0],
+            }} />
+            <View style={style.wrapInfoProduct} >
+                <Text style={style.titlePost}>
+                    {
+                        renderTitle(item.title)
+                    }
+                </Text>
+                <View style={style.wrapTypePrice}>
+                    <Text style={style.type}>{renderType(item.NameProduct)}</Text>
+                    <Text style={style.price}>Miễn phí</Text>
+                </View>
+                <View style={style.wrapTimeAddress}>
+                    <View style={style.wrapTime}>
+                        <Feather name="clock" size={20} color="gray" />
+                        <Text style={style.time}>{calculatingTime(item.createdAt, currentTime)}</Text>
+                    </View>
+                    <Text style={style.address}>{item.address.slice(0, 15) + "..."}</Text>
+                </View>
+            </View>
+        </TouchableOpacity>
+    );
     return <View style={style.constainer}>
-        {
-
-            props.newestPost.map((item, key) => {
-                return (
-
-                    <TouchableOpacity key={key} style={style.wrapCategory} activeOpacity={0.8} onPress={() => _pressRow(item)} >
-                        {/* //dùng onStartShouldSetResponder để click vào view */}
-
-                        <Image style={style.tinyLogo} source={{
-                            uri: item.urlImage[0],
-                        }} />
-                        <View style={style.wrapInfoProduct} >
-                            <Text style={style.titlePost}>
-                                {
-                                    renderTitle(item.title)
-                                }
-                            </Text>
-                            <View style={style.wrapTypePrice}>
-                                <Text style={style.type}>{renderType(item.NameProduct)}</Text>
-                                <Text style={style.price}>Miễn phí</Text>
-                            </View>
-                            <View style={style.wrapTimeAddress}>
-                                <View style={style.wrapTime}>
-                                    <Feather name="clock" size={20} color="gray" />
-                                    <Text style={style.time}>{calculatingTime(item.createdAt, currentTime)}</Text>
-                                </View>
-                                <Text style={style.address}>{item.address.slice(0, 15) + "..."}</Text>
-                            </View>
-                        </View>
-                    </TouchableOpacity>
-                )
-            })
-        }
+        <FlatList
+            data={props.newestPost}
+            renderItem={renderItem}
+            keyExtractor={item => item.id}
+        />
     </View>
 }
 

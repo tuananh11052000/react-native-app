@@ -12,17 +12,10 @@ import ConfirmInfor from '../components/confirminfor.components';
 
 const heightStatusBar = StatusBar.currentHeight;
 function ConfirmInforScreen(props) {
-  console.log(props.infoPost)
   const image = props.infoPost.image;
   const submitInfoPost = async () => {
     //api upload infor json
     const data = props.infoPost;
-    let data_ = {
-      title: data.title,
-      note: data.note,
-      address: data.address,
-      NameProduct: data.NameProduct
-    }
     axios({
       url: 'https://smai-app-api.herokuapp.com/post/CreatePost',
       method: 'post',
@@ -30,13 +23,15 @@ function ConfirmInforScreen(props) {
         title: data.title,
         note: data.note,
         address: data.address,
+        TypeAuthor: 'tangcongdong',
         NameProduct: data.NameProduct
       },
       headers: {
         Accept: "application/json",
-        Authorization: 'bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2NvdW50SUQiOiI2MGU5Y2M5ZjJkMzlkYzJkMTBkOGM2OWQiLCJpYXQiOjE2Mjc5OTkwNzh9.XxzvJigOW0GGSotGY69Xs-GxuEZ8DFxfRd5WzetDvgc'
+        Authorization: props.auth.token
       }
     }).then(res => {
+      //sau khi upload json xong thi tien hanh upload hinh anh su dung idpost duoc tra ve
       let apiUrl = "https://smai-app-api.herokuapp.com/post/UpdatePost";
       let formData = new FormData();
       for (let i = 0; i < image.length; i++) {
@@ -60,37 +55,9 @@ function ConfirmInforScreen(props) {
           Authorization: 'bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2NvdW50SUQiOiI2MGU5Y2M5ZjJkMzlkYzJkMTBkOGM2OWQiLCJpYXQiOjE2Mjc5OTkwNzh9.XxzvJigOW0GGSotGY69Xs-GxuEZ8DFxfRd5WzetDvgc'
         },
       };
-      fetch(apiUrl, options)
+      fetch(apiUrl, options).then(alert("ok"))
     }).catch(err => console.log(err))
-
-
-    //api upload image
-    // let apiUrl = "http://192.168.1.109:5000/post/upload";
-    // let formData = new FormData();
-    // for (let i = 0; i < image.length; i++) {
-    //   let uri = image[i].uri;
-    //   let uriArray = uri.split(".");
-    //   let fileType = uriArray[uriArray.length - 1];
-    //   formData.append("productImage", {
-    //     uri: uri,
-    //     name: `photo.${fileType}`,
-    //     type: `image/${fileType}`,
-    //   });
-    // }
-    // let options = {
-    //   method: "POST",
-    //   body: formData,
-    //   mode: 'cors',
-    //   headers: {
-    //     Accept: "application/json",
-    //     "Content-Type": "multipart/form-data",
-    //     Authorization: 'bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2NvdW50SUQiOiI2MGU5Y2M5ZjJkMzlkYzJkMTBkOGM2OWQiLCJpYXQiOjE2Mjc5OTkwNzh9.XxzvJigOW0GGSotGY69Xs-GxuEZ8DFxfRd5WzetDvgc'
-    //   },
-    // };
-    // fetch(apiUrl, options)
   }
-
-  const { navigation } = props;
   return (
     <View style={styles.container}>
       <ConfirmInfor></ConfirmInfor>

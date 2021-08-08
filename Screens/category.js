@@ -14,7 +14,6 @@ export default function Category(props) {
 
 const style = StyleSheet.create({
     container: {
-        flex: 1,
-        marginTop: heightStatusBar
+        flex: 1
     }
 })
