@@ -7,7 +7,7 @@ import {
   createStackNavigator,
   HeaderBackButton,
 } from "@react-navigation/stack";
-import { Button } from "react-native";
+import { Button, Text, TouchableOpacity, StyleSheet } from "react-native";
 
 import Search from "./Screens/seachScreen";
 import ConfirmAddress from "./Screens/confirmAddress";
@@ -85,11 +85,9 @@ function AppNavigator(props) {
               fontWeight: "bold",
             },
             headerRight: () => (
-              <Button
-                title="Hủy"
-                color="#fff"
-                onPress={() => navigation.navigate("Home")}
-              ></Button>
+              <TouchableOpacity style={styles.wrapTextCancel} onPress={() => navigation.navigate("Home")}>
+                <Text style={styles.textCancel}>Hủy</Text>
+              </TouchableOpacity>
             ),
             headerBackTitle: "some label",
 
@@ -116,11 +114,9 @@ function AppNavigator(props) {
               fontWeight: "bold",
             },
             headerRight: () => (
-              <Button
-                title="Hủy"
-                color="#fff"
-                onPress={() => navigation.navigate("Home")}
-              ></Button>
+              <TouchableOpacity style={styles.wrapTextCancel} onPress={() => navigation.navigate("Home")}>
+                <Text style={styles.textCancel}>Hủy</Text>
+              </TouchableOpacity>
             ),
             headerLeft: () => (
               <HeaderBackButton
@@ -145,11 +141,9 @@ function AppNavigator(props) {
               fontWeight: "bold",
             },
             headerRight: () => (
-              <Button
-                title="Hủy"
-                color="#fff"
-                onPress={() => navigation.navigate("Home")}
-              ></Button>
+              <TouchableOpacity style={styles.wrapTextCancel} onPress={() => navigation.navigate("Home")}>
+                <Text style={styles.textCancel}>Hủy</Text>
+              </TouchableOpacity>
             ),
           })}
         />
@@ -253,3 +247,13 @@ function AppNavigator(props) {
   );
 }
 export default AppNavigator;
+const styles = StyleSheet.create({
+  wrapTextCancel: {
+    marginRight: 10,
+  },
+  textCancel: {
+    color: '#FFF',
+    fontSize: 18,
+    marginRight: 10,
+  }
+})
