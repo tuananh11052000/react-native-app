@@ -13,6 +13,7 @@ import ConfirmInfor from '../components/confirminfor.components';
 const heightStatusBar = StatusBar.currentHeight;
 function ConfirmInforScreen(props) {
   const image = props.infoPost.image;
+  console.log(image);
   const submitInfoPost = async () => {
     //api upload infor json
     const data = props.infoPost;
@@ -60,7 +61,7 @@ function ConfirmInforScreen(props) {
   }
   return (
     <View style={styles.container}>
-      <ConfirmInfor></ConfirmInfor>
+      <ConfirmInfor dataImage={image}></ConfirmInfor>
       <ButtonConfirm onPress={() => submitInfoPost()} />
     </View>
   );
@@ -70,7 +71,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     // paddingTop: (Platform.OS === 'ios') ? 20 : 20,
-    marginTop: heightStatusBar,
     justifyContent: 'space-between'
   },
 });

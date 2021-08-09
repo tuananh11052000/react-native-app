@@ -39,7 +39,7 @@ function ExpandableListView(props) {
         {
           props.item.subCategory.map((item, key) => (
             <TouchableOpacity key={key} style={styles.subCategoryText} onPress={() => showSelectedCategory(item, props.item.category)}>
-              <Text> {item.name} </Text>
+              <Text style={{fontSize: 20}}> {item.name} </Text>
               {/* <View style={{ width: '100%', height: 1, backgroundColor: '#000' }} /> */}
             </TouchableOpacity>
           ))
@@ -58,18 +58,18 @@ function CategoryComponent(props) {
       expanded: false,
       category: "Nhu yếu phẩm (thực phẩm, y tế)",
       subCategory: [
-        { id: 1, name: 'Thực phẩm tươi sống ( thịt, rau, củ quả,..)' },
-        { id: 2, name: 'Thực phẩm đóng gói ( bánh, mắm, dầu ăn, mỳ ..' },
-        { id: 3, name: 'Lương thực ( gạo, ngô, khoai sắn,…' },
-        { id: 4, name: 'Đồ cá nhân ( bột giặt, dầu gội, kem đánh răng…' },
-        { id: 5, name: 'Yếu phẩm y tế (khẩu trang, nước diệt khuẩn,…' },
+        { id: 1, name: 'Thực phẩm tươi sống ( thịt, rau, củ quả,…)' },
+        { id: 2, name: 'Thực phẩm đóng gói ( bánh, mắm, dầu ăn, mỳ,…)' },
+        { id: 3, name: 'Lương thực ( gạo, ngô, khoai sắn,…)' },
+        { id: 4, name: 'Đồ cá nhân ( bột giặt, dầu gội, kem đánh răng,…)' },
+        { id: 5, name: 'Yếu phẩm y tế (khẩu trang, nước diệt khuẩn,…)' },
         { id: 6, name: 'Đồ tổng hợp' }]
     },
     {
       expanded: false,
       category: "Đồ may mặc",
       subCategory: [
-        { id: 7, name: 'Đệm, chăn, màn,...' },
+        { id: 7, name: 'Đệm, chăn, màn,…' },
         { id: 8, name: 'Đồ bé sơ sinh nam' },
         { id: 9, name: 'Đồ bé sơ sinh nữ' },
         { id: 10, name: 'Đồ trẻ em nam' },
@@ -120,8 +120,8 @@ function CategoryComponent(props) {
       expanded: false,
       category: "Điện tử",
       subCategory: [
-        { id: 42, name: 'Tivi, loa, đài,...' },
-        { id: 43, name: 'Điện thoại, laptop, máy tính,...' },
+        { id: 42, name: 'Tivi, loa, đài,…' },
+        { id: 43, name: 'Điện thoại, laptop, máy tính,…' },
         { id: 44, name: 'Đồ tổng hợp' },
       ]
     },
@@ -131,7 +131,7 @@ function CategoryComponent(props) {
       subCategory: [
         { id: 45, name: 'Nội thất ( bàn ghế, giường, tủ, kệ,…)' },
         { id: 46, name: 'Ngoại thất ( cây cảnh, ghế đá,…)' },
-        { id: 47, name: 'Vật tư xây dựng ( gạch, đá, xi măng, sắt,..)' },
+        { id: 47, name: 'Vật tư xây dựng ( gạch, đá, xi măng, sắt,…)' },
         { id: 48, name: 'Đồ tổng hợp' },
       ]
     },
@@ -161,7 +161,7 @@ function CategoryComponent(props) {
   const { dispatch } = props
   return (
     <View style={styles.container}>
-      <ScrollView contentContainerStyle={{ paddingHorizontal: 10, paddingVertical: 5 }}>
+      <ScrollView contentContainerStyle={{  }}>
         {
           accordionData.map((item, key) =>
           (
@@ -201,11 +201,11 @@ const styles = StyleSheet.create({
     padding: 10
   },
   categoryView: {
-    marginVertical: 2,
+    marginBottom: 2,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    backgroundColor: '#DDDDDD'
+    backgroundColor: '#DDD'
   },
   Btn: {
     padding: 10,
