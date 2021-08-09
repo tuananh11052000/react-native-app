@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, Alert } from 'react-native';
 import RNPickerDialog from 'rn-modal-picker';
 import { TextInput } from 'react-native-paper';
 import db from '../db.json';
@@ -55,7 +55,13 @@ function confirmAddress(props) {
   //Khai bao ham xu ly su kien click
   const pressFunc = () => {
     if (province == "" || district == "" || commune == "")
-      alert("Vui lòng nhập đầy đủ địa chỉ")
+      Alert.alert(
+        "Thông báo",
+        "Vui lòng nhập đầy đủ địa chỉ",
+        [
+          { text: "OK"}
+        ]
+      );
     else {
       const { dispatch } = props;
       const address = `${addressDetail}, ${commune.name}, ${district.name}, ${province.name}`

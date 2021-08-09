@@ -17,6 +17,7 @@ const UselessTextInput = (props) => {
             placeholder="Mô tả hoặc ghi chú"
             {...props} // Inherit any props passed to it; e.g., multiline, numberOfLines below
             editable
+            style={{textAlignVertical: "top", paddingLeft: 10, paddingTop: 10}}
         />
     );
 }

@@ -20,8 +20,8 @@ export default function historyPage(props) {
 }
 const styles = StyleSheet.create({
     container: {
-        marginTop: heightStatusBar,
-        flex: 1
+        flex: 1,
+        backgroundColor: '#FFF'
     },
     child: {
 

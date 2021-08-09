@@ -15,6 +15,7 @@ function ConfirmInforScreen(props) {
   const [isDisplay, setIsDisplay] = useState(true)
   //khai bao bien luu thong tin anh
   const image = props.infoPost.image;
+  console.log(image);
   const submitInfoPost = async () => {
     //api upload infor json
     const data = props.infoPost;
@@ -62,7 +63,7 @@ function ConfirmInforScreen(props) {
   }
   return (
     <View style={styles.container}>
-      <ConfirmInfor></ConfirmInfor>
+      <ConfirmInfor dataImage={image}></ConfirmInfor>
       <ButtonConfirm onPress={() => submitInfoPost()} />
     </View>
   );

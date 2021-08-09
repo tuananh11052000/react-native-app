@@ -1825,10 +1825,10 @@
   "resolved" "https://registry.npmjs.org/@react-native-community/masked-view/-/masked-view-0.1.10.tgz"
   "version" "0.1.10"
 
-"@react-native-picker/picker@^1.16.4":
-  "integrity" "sha512-V/8XNlTU3QJ/mdY+mCQnuCCZJfIOpgfSnfFDinftWDi66mGuf6tRd+sfCOeKqjug38sdJm9CeNry/66W0EYodw=="
-  "resolved" "https://registry.npmjs.org/@react-native-picker/picker/-/picker-1.16.4.tgz"
-  "version" "1.16.4"
+"@react-native-picker/picker@^1.16.5":
+  "integrity" "sha512-IYfMXdUsfQe4RBLJPZq6GoPkr2otOTZqej/gU93x+oIjrR+UCcCb0fsqmXHT8qX29E+0cEQZd/4bWnzbICHNrg=="
+  "resolved" "https://registry.npmjs.org/@react-native-picker/picker/-/picker-1.16.5.tgz"
+  "version" "1.16.5"
 
 "@react-navigation/bottom-tabs@^5.11.11":
   "integrity" "sha512-hThj6Vfw+ITzAVj5TgLEoxkVEcBD+gYeieWOe6FryBRgokgKNCzFQzqArJ5UCmNMxklNH0rstJfcdyHflLuPtw=="
