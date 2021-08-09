@@ -1,12 +1,25 @@
 import React from 'react'
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native'
+import { connect } from 'react-redux'
 
-export default function WhoConfirm (props) {
+function WhoConfirm(props) {
   const { who } = props;
+  const { dispatch } = props
+  //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+  //gan typeauthor cho post
+  const dispatch_func = async (who) => {
+    await dispatch({ type: 'SET_TYPE_AUTHOR', TypeAuthor: who.title })
+  }
+  const funcPress = () => {
+    dispatch_func(who.title).then((res) => {
+      console.log(props.infoPost)
+      props.onPress()
+    })
+  }
   return (
     <TouchableOpacity
       activeOpacity={0.3}
-      onPress={props.onPress}>
+      onPress={() => funcPress()}>
       <View style={styles.container}>
         <Text style={styles.title}>{who.title}</Text>
       </View>
@@ -30,3 +43,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
   }
 })
+
+export default connect(function (state) {
+  return { infoPost: state.infoPost, auth: state.auth }
+})(WhoConfirm);

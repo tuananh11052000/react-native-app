@@ -1,5 +1,5 @@
 var infoPost = (state = {
-    TypeAuthor: "", address: "", title: "", note: "", NameProduct: "", image: []
+    TypeAuthor: "tangcongdong", address: "", title: "", note: "", NameProduct: "", image: []
 }, action) => {
     switch (action.type) {
         case 'CONFIRM_ADDRESS':
@@ -27,12 +27,18 @@ var infoPost = (state = {
                 ...state,
                 image: action.image
             }
+        case 'SET_TYPE_AUTHOR':
+            return {
+                ...state,
+                TypeAuthor: action.TypeAuthor
+            }
         case 'RESET':
             return {
                 ...state,
                 image: [],
                 title: "",
-                note: ""
+                note: "",
+                TypeAuthor: ""
             }
         default:
             return state

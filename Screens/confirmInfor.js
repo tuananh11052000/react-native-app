@@ -29,7 +29,7 @@ function ConfirmInforScreen(props) {
         title: data.title,
         note: data.note,
         address: data.address,
-        TypeAuthor: 'tangcongdong',
+        TypeAuthor: data.TypeAuthor,
         NameProduct: data.NameProduct
       },
       headers: {

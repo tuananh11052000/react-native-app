@@ -11,6 +11,7 @@ import Spinner from 'react-native-loading-spinner-overlay';
 function confirmAddress(props) {
   //khai bao cac local state
   const { navigation } = props;
+  const [isChage, setChange] = useState(false)
   const [isloading, setIsLoading] = useState(true)
   const [province, setProvince] = useState("");
   const [district, setDistrict] = useState("");
@@ -41,8 +42,8 @@ function confirmAddress(props) {
         let province_ = { name: result.province, idProvince: result.idProvince }
         let district_ = { name: result.district, idProvince: result.idDistrict, idDistrict: result.idDistrict }
         let commune_ = { name: result.commune, idDistrict: result.idDistrict, idCoummune: result.idCommune }
-        choseProvince(province_)
-        choseDistrict(district_)
+        choseProvince(province_, false)
+        choseDistrict(district_, false)
         setCommune(commune_)
         setIsLoading(false)
       }
@@ -53,7 +54,9 @@ function confirmAddress(props) {
   const [data2, setData2] = useState([...db.district]);
   const [data3, setData3] = useState([...db.commune]);
   //ham xu ly su kien chon tinh/tp
-  const choseProvince = (item) => {
+  const choseProvince = (item, change) => {
+    if (change == true)
+      setChange(true)
     setProvince(item)
     if (item.idProvince != province.idProvince) {
       setDistrict("");
@@ -71,7 +74,9 @@ function confirmAddress(props) {
     setData2(data2);
   }
   //ham xu ly su kien chon quan huyen
-  const choseDistrict = (item) => {
+  const choseDistrict = (item, change) => {
+    if (change == true)
+      setChange(true)
     setDistrict(item)
     if (item.idDistrict != district.idDistrict) {
       setCommune("")
@@ -87,6 +92,10 @@ function confirmAddress(props) {
     }
     setData3(data3);
   }
+  const choseCommune = (item) => {
+    setChange(true)
+    setCommune(item)
+  }
   //Khai bao ham xu ly su kien click
   const pressFunc = () => {
     if (province == "" || district == "" || commune == "")
@@ -98,45 +107,36 @@ function confirmAddress(props) {
         ]
       );
     else {
-      async function save(key, value) {
-        console.log(typeof value)
-        await SecureStore.setItemAsync(key, value);
-      }
-      save('idProvince', province.idProvince).then(() => {
-        save('province', province.name).then(res => {
-          save('idDistrict', district.idDistrict).then(res => {
-            save('district', district.name).then(res => {
-              save('idCommune', commune.idCoummune).then(res => {
-                save('commune', commune.name).then(res => {
-                  const { dispatch } = props;
-                  const address = `${addressDetail}, ${commune.name}, ${district.name}, ${province.name}`
-                  dispatch({ type: "CONFIRM_ADDRESS", address: address })
-                  navigation.navigate('Category')
+      if (isChage == true) {
+        //neu chuong trinh chay vao day tuc la thong tin dia chi da duoc thay doi
+        //can phai luu thon tin moi vao local store
+        async function save(key, value) {
+          await SecureStore.setItemAsync(key, value);
+        }
+        save('idProvince', province.idProvince).then(() => {
+          save('province', province.name).then(res => {
+            save('idDistrict', district.idDistrict).then(res => {
+              save('district', district.name).then(res => {
+                save('idCommune', commune.idCoummune).then(res => {
+                  save('commune', commune.name).then(res => {
+                    const { dispatch } = props;
+                    const address = `${addressDetail}, ${commune.name}, ${district.name}, ${province.name}`
+                    dispatch({ type: "CONFIRM_ADDRESS", address: address })
+                    navigation.navigate('Category')
+                  })
                 })
               })
             })
           })
         })
-      })
-      // save('province', province.name)
-      // save('idDistrict', district.idDistrict)
-      // save('district', district.name)
-      // save('idCommune', commune.idCommune)
-      // save('commune', commune.name)
-      // const { dispatch } = props;
-      // const address = `${addressDetail}, ${commune.name}, ${district.name}, ${province.name}`
-      // dispatch({ type: "CONFIRM_ADDRESS", address: address })
-      // navigation.navigate('Category')
-      // save('province', province.name).then(() => {
-      //   save('district', district.name).then(() => {
-      //     save('commune', commune.name).then(() => {
-      //       const { dispatch } = props;
-      //       const address = `${addressDetail}, ${commune.name}, ${district.name}, ${province.name}`
-      //       dispatch({ type: "CONFIRM_ADDRESS", address: address })
-      //       navigation.navigate('Category')
-      //     })
-      //   })
-      // })
+      }
+      else {
+        //neu ctrinh chay vao day tuc la khong co thay doi ve dia chi
+        const { dispatch } = props;
+        const address = `${addressDetail}, ${commune.name}, ${district.name}, ${province.name}`
+        dispatch({ type: "CONFIRM_ADDRESS", address: address })
+        navigation.navigate('Category')
+      }
     }
   }
   //ca ham xu ly neu da tung nhap thong tin  dia chi vao
@@ -207,7 +207,7 @@ function confirmAddress(props) {
             dropDownIconStyle={Styles.dropDownIconStyle1}
             searchBarStyle={Styles.searchBarStyle}
             //dropDownIcon={require('../assets/pin.png')}
-            selectedValue={(index, item) => setCommune(item)}
+            selectedValue={(index, item) => choseCommune(item)}
           />
 
         </View>
