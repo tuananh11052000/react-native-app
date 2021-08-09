@@ -8,6 +8,7 @@ import {
   FlatList,
   Image,
 } from "react-native";
+import { connect } from 'react-redux'
 import { Card } from "react-native-elements";
 const dataa = [
   {
@@ -39,29 +40,32 @@ const dataa = [
 const UselessTextInput = (props) => {
   return (
     <TextInput
-      placeholder="Mô tả hoặc ghi chú"
+      placeholder={props.note}
       editable={false} selectTextOnFocus={false}
       {...props} // Inherit any props passed to it; e.g., multiline, numberOfLines below
       style={styles.textInputDescription}
-      
+
     />
   );
 };
 
-export default function App(props) {
+function App(props) {
   const [data, setdata] = useState(dataa);
-
+  const address = props.infoPost.address.split(",")
+  console.log(address)
   const renderItem = ({ item }) => (
-      <Image
-        style={{padding: 0,
-            width: 160,
-            height: 160,
-            marginRight: 5,
-            resizeMode: "contain",}}
-        source={{
-          uri: item.uri,
-        }}
-      />
+    <Image
+      style={{
+        padding: 0,
+        width: 160,
+        height: 160,
+        marginRight: 5,
+        resizeMode: "contain",
+      }}
+      source={{
+        uri: item.uri,
+      }}
+    />
   );
 
   return (
@@ -71,7 +75,7 @@ export default function App(props) {
       </View>
       <View style={styles.container}>
         <Text style={styles.childTitle}>Bạn là ai*</Text>
-        <Text style={styles.textContent}>Người nghèo/ hoàn cảnh khó khăn</Text>
+        <Text style={styles.textContent}>{props.infoPost.TypeAuthor}</Text>
       </View>
       <View style={styles.container}>
         <Text style={styles.childTitle}>Danh mục*</Text>
@@ -82,12 +86,12 @@ export default function App(props) {
       </View>
       <View style={styles.container}>
         <Text style={styles.childTitle}>Tiêu đề*</Text>
-        <TextInput style={styles.input} placeholder="Lời nhắn" />
+        <TextInput style={styles.input} placeholder={props.infoPost.title} />
       </View>
       <View style={styles.container}>
         <Text style={styles.childTitle}>Ghi chú thêm(nếu có)</Text>
         <View style={styles.inputDescription}>
-          <UselessTextInput multiline numberOfLines={4} />
+          <UselessTextInput multiline numberOfLines={4} note={props.infoPost.note} />
         </View>
       </View>
       <View style={styles.container}>
@@ -107,19 +111,19 @@ export default function App(props) {
       <View style={styles.container}>
         <View>
           <Text style={styles.childTitle}>Tỉnh/thành phố*</Text>
-          <Text style={styles.textContent}>Thành phố Hồ Chí Minh</Text>
+          <Text style={styles.textContent}>{address[3]}</Text>
         </View>
         <View>
           <Text style={styles.childTitle}>Quận/huyện</Text>
-          <Text style={styles.textContent}>Quận 1</Text>
+          <Text style={styles.textContent}>{address[2]}</Text>
         </View>
         <View>
           <Text style={styles.childTitle}>Phường/xã*</Text>
-          <Text style={styles.textContent}>Phường Đa kao</Text>
+          <Text style={styles.textContent}>{address[1]}</Text>
         </View>
         <View>
           <Text style={styles.childTitle}>Số nhà/ấp/thôn</Text>
-          <Text style={styles.textContent}>89 Điện Biên Phủ</Text>
+          <Text style={styles.textContent}>{address[0]}</Text>
         </View>
       </View>
     </ScrollView>
@@ -190,3 +194,6 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
 });
+export default connect(function (state) {
+  return { infoPost: state.infoPost }
+})(App);
