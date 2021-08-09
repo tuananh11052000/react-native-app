@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { useState } from 'react';
 import {
   StyleSheet,
   View,
@@ -10,8 +10,10 @@ import axios from 'axios'
 import ButtonConfirm from '../components/buttonConfirm.components';
 import ConfirmInfor from '../components/confirminfor.components';
 
-const heightStatusBar = StatusBar.currentHeight;
 function ConfirmInforScreen(props) {
+  //khai bao state hien thi man hinh cho
+  const [isDisplay, setIsDisplay] = useState(true)
+  //khai bao bien luu thong tin anh
   const image = props.infoPost.image;
   const submitInfoPost = async () => {
     //api upload infor json
@@ -70,9 +72,13 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     // paddingTop: (Platform.OS === 'ios') ? 20 : 20,
-    marginTop: heightStatusBar,
     justifyContent: 'space-between'
   },
+  waiting: {
+    position: "relative",
+    backgroundColor: 'grey',
+    opacity: 0.2
+  }
 });
 
 export default connect(function (state) {
