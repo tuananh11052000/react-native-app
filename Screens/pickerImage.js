@@ -16,7 +16,7 @@ function PickerImage(props) {
   const { dispatch, navigation } = props
   const onSuccess = (data) => {
     dispatch({ type: 'GET_IMG', image: data })
-    Alert.alert('Done', data.length + 'Images selected')
+    Alert.alert(`Bạn đã chọn ${data.length} ảnh.`)
     navigation.pop();
   };
   const widgetErrors = useMemo(

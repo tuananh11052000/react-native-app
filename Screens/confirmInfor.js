@@ -6,18 +6,21 @@ import {
 } from 'react-native';
 import { connect } from 'react-redux'
 import axios from 'axios'
+import Spinner from 'react-native-loading-spinner-overlay';
 
 import ButtonConfirm from '../components/buttonConfirm.components';
 import ConfirmInfor from '../components/confirminfor.components';
 
 function ConfirmInforScreen(props) {
+  const { navigation } = props;
+  const { dispatch } = props;
   //khai bao state hien thi man hinh cho
-  const [isDisplay, setIsDisplay] = useState(true)
+  const [isDisplay, setIsDisplay] = useState(false)
   //khai bao bien luu thong tin anh
   const image = props.infoPost.image;
-  console.log(image);
   const submitInfoPost = async () => {
     //api upload infor json
+    setIsDisplay(true)
     const data = props.infoPost;
     axios({
       url: 'https://smai-app-api.herokuapp.com/post/CreatePost',
@@ -58,11 +61,20 @@ function ConfirmInforScreen(props) {
           Authorization: 'bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2NvdW50SUQiOiI2MGU5Y2M5ZjJkMzlkYzJkMTBkOGM2OWQiLCJpYXQiOjE2Mjc5OTkwNzh9.XxzvJigOW0GGSotGY69Xs-GxuEZ8DFxfRd5WzetDvgc'
         },
       };
-      fetch(apiUrl, options).then(alert("ok"))
+      fetch(apiUrl, options).then((res) => {
+        setIsDisplay(false);
+        dispatch({ type: 'RESET' })
+        navigation.navigate('Completed')
+      })
     }).catch(err => console.log(err))
   }
   return (
     <View style={styles.container}>
+      <Spinner
+        visible={isDisplay}
+        textContent={'Loading...'}
+        textStyle={styles.spinnerTextStyle}
+      />
       <ConfirmInfor dataImage={image}></ConfirmInfor>
       <ButtonConfirm onPress={() => submitInfoPost()} />
     </View>
@@ -79,7 +91,10 @@ const styles = StyleSheet.create({
     position: "relative",
     backgroundColor: 'grey',
     opacity: 0.2
-  }
+  },
+  spinnerTextStyle: {
+    color: '#FFF'
+  },
 });
 
 export default connect(function (state) {

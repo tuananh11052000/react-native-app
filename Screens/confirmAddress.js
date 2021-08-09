@@ -5,15 +5,50 @@ import { TextInput } from 'react-native-paper';
 import db from '../db.json';
 import { connect } from 'react-redux';
 import { Button } from "galio-framework";
+import * as SecureStore from 'expo-secure-store';
+import Spinner from 'react-native-loading-spinner-overlay';
 
 function confirmAddress(props) {
   //khai bao cac local state
   const { navigation } = props;
+  const [isloading, setIsLoading] = useState(true)
   const [province, setProvince] = useState("");
   const [district, setDistrict] = useState("");
   const [commune, setCommune] = useState("");
   const [addressDetail, setAddressDetail] = useState("");
-
+  //lay ra dia chi
+  useEffect(() => {
+    //lay ra dia chi da duoc luu truoc do
+    const getAddress = async () => {
+      let province = await SecureStore.getItemAsync('province');
+      let district = await SecureStore.getItemAsync('district');
+      let commune = await SecureStore.getItemAsync('commune');
+      let idProvince = await SecureStore.getItemAsync('idProvince');
+      let idDistrict = await SecureStore.getItemAsync('idDistrict');
+      let idCommune = await SecureStore.getItemAsync('idCommune');
+      return {
+        province: province,
+        district: district,
+        commune: commune,
+        idDistrict: idDistrict,
+        idCommune: idCommune,
+        idProvince: idProvince
+      }
+    }
+    //lay ra dia chi va gan chung vao cac o input
+    getAddress().then(result => {
+      if (result) {
+        let province_ = { name: result.province, idProvince: result.idProvince }
+        let district_ = { name: result.district, idProvince: result.idDistrict, idDistrict: result.idDistrict }
+        let commune_ = { name: result.commune, idDistrict: result.idDistrict, idCoummune: result.idCommune }
+        choseProvince(province_)
+        choseDistrict(district_)
+        setCommune(commune_)
+        setIsLoading(false)
+      }
+    })
+  }, [])
+  //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
   const [data1, setData1] = useState([...db.province]);
   const [data2, setData2] = useState([...db.district]);
   const [data3, setData3] = useState([...db.commune]);
@@ -59,18 +94,60 @@ function confirmAddress(props) {
         "Thông báo",
         "Vui lòng nhập đầy đủ địa chỉ",
         [
-          { text: "OK"}
+          { text: "OK" }
         ]
       );
     else {
-      const { dispatch } = props;
-      const address = `${addressDetail}, ${commune.name}, ${district.name}, ${province.name}`
-      dispatch({ type: "CONFIRM_ADDRESS", address: address })
-      navigation.navigate('Category')
+      async function save(key, value) {
+        console.log(typeof value)
+        await SecureStore.setItemAsync(key, value);
+      }
+      save('idProvince', province.idProvince).then(() => {
+        save('province', province.name).then(res => {
+          save('idDistrict', district.idDistrict).then(res => {
+            save('district', district.name).then(res => {
+              save('idCommune', commune.idCoummune).then(res => {
+                save('commune', commune.name).then(res => {
+                  const { dispatch } = props;
+                  const address = `${addressDetail}, ${commune.name}, ${district.name}, ${province.name}`
+                  dispatch({ type: "CONFIRM_ADDRESS", address: address })
+                  navigation.navigate('Category')
+                })
+              })
+            })
+          })
+        })
+      })
+      // save('province', province.name)
+      // save('idDistrict', district.idDistrict)
+      // save('district', district.name)
+      // save('idCommune', commune.idCommune)
+      // save('commune', commune.name)
+      // const { dispatch } = props;
+      // const address = `${addressDetail}, ${commune.name}, ${district.name}, ${province.name}`
+      // dispatch({ type: "CONFIRM_ADDRESS", address: address })
+      // navigation.navigate('Category')
+      // save('province', province.name).then(() => {
+      //   save('district', district.name).then(() => {
+      //     save('commune', commune.name).then(() => {
+      //       const { dispatch } = props;
+      //       const address = `${addressDetail}, ${commune.name}, ${district.name}, ${province.name}`
+      //       dispatch({ type: "CONFIRM_ADDRESS", address: address })
+      //       navigation.navigate('Category')
+      //     })
+      //   })
+      // })
     }
   }
+  //ca ham xu ly neu da tung nhap thong tin  dia chi vao
+
   return (
     <View style={Styles.border}>
+      <Spinner
+        visible={isloading}
+        textContent={'Loading...'}
+        textStyle={Styles.spinnerTextStyle}
+      />
       <View style={Styles.containermain}>
         <View style={Styles.top}>
           <Text style={Styles.tittleText}>Xác nhận địa chỉ</Text>
@@ -314,7 +391,10 @@ const Styles = StyleSheet.create({
     fontSize: 25,
     fontWeight: 'bold',
     textAlign: 'center',
-  }
+  },
+  spinnerTextStyle: {
+    color: '#FFF'
+  },
 });
 export default connect(function (state) {
   return { inforPost: state.infoPost }
