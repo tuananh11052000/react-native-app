@@ -11,7 +11,7 @@ import {
 } from 'react-native';
 import { connect } from 'react-redux'
 import chevrondown from '../assets/down-chevron.png';
-
+import { Entypo } from '@expo/vector-icons';
 
 function ExpandableListView(props) {
   const [layoutHeight, setLayoutHeight] = useState(0)
@@ -30,16 +30,17 @@ function ExpandableListView(props) {
   return (
     <View style={styles.panelContainer}>
       <TouchableOpacity activeOpacity={0.8} onPress={props.onClickFunction} style={styles.categoryView}>
-        <Text style={styles.categoryText}>{props.item.category} </Text>
-        <Image
-          source={chevrondown}
-          style={styles.iconStyle} />
+        <Text style={styles.categoryText}>{props.item.category}</Text>
+        {/* <Image source={chevrondown} style={styles.iconStyle} /> */}
+        <View style={styles.iconStyle}>
+          <Entypo name="chevron-down" size={24} color="#757575" />
+        </View>
       </TouchableOpacity>
       <View style={{ height: layoutHeight, overflow: 'hidden' }}>
         {
           props.item.subCategory.map((item, key) => (
             <TouchableOpacity key={key} style={styles.subCategoryText} onPress={() => showSelectedCategory(item, props.item.category)}>
-              <Text style={{fontSize: 20}}> {item.name} </Text>
+              <Text style={{fontSize: 18}}> {item.name} </Text>
               {/* <View style={{ width: '100%', height: 1, backgroundColor: '#000' }} /> */}
             </TouchableOpacity>
           ))
@@ -178,11 +179,9 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     paddingTop: (Platform.OS === 'ios') ? 20 : 0,
-    backgroundColor: '#F5F5F5',
+    backgroundColor: '#FFF',
   },
   iconStyle: {
-    width: 15,
-    height: 30,
     justifyContent: 'flex-end',
     alignItems: 'center',
     marginRight: 20,
@@ -191,21 +190,25 @@ const styles = StyleSheet.create({
   subCategoryText: {
     fontSize: 18,
     color: '#000',
-    padding: 10
+    paddingTop: '2%',
+    paddingBottom: '2%',
+    paddingLeft: '5%',
   },
   categoryText: {
     textAlign: 'left',
     color: '#000000',
     fontSize: 21,
     fontWeight: 'bold',
-    padding: 10
+    paddingTop: '2%',
+    paddingBottom: '2%',
+    paddingLeft: '5%',
   },
   categoryView: {
     marginBottom: 2,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    backgroundColor: '#DDD'
+    backgroundColor: '#F5F5F5'
   },
   Btn: {
     padding: 10,

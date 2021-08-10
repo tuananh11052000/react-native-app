@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { StyleSheet, View, ScrollView, StatusBar, SafeAreaView } from 'react-native';
+import { StyleSheet, View, ScrollView, StatusBar, SafeAreaView, LogBox   } from 'react-native';
 import { connect } from "react-redux";
 
 import GiftComponent from '../components/gift.component';
@@ -14,6 +14,7 @@ const heightStatusBar = StatusBar.currentHeight;
 function Home(props) {
     const { dispatch } = props;
     useEffect(() => {
+        LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
         const checkTokenLocal = async () => {
             let result = await SecureStore.getItemAsync('token');
             console.log(result)
@@ -41,7 +42,7 @@ function Home(props) {
                 <SearchComponent onPress={() => navigation.navigate('Search')} />
                 <GiftComponent onPress={() => actionOnPress()} style={styles.gift_component} />
                 <TitleComponent title="Tin đã đăng" />
-                <NewsedBox title="Tặng cộng đồng" />
+                <NewsedBox title="Tặng cộng đồng" onPress={() => navigation.navigate('PostDonation')}/>
                 <TitleComponent title="Tin mới nhất" />
                 <ProductComponent navigation={navigation} />
             </ScrollView>

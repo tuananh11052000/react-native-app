@@ -86,7 +86,7 @@ function App(props) {
       </View>
       <View style={styles.container}>
         <Text style={styles.childTitle}>Tiêu đề*</Text>
-        <TextInput style={styles.input} placeholder={props.infoPost.title} />
+        <TextInput style={styles.input} value={props.infoPost.title} />
       </View>
       <View style={styles.container}>
         <Text style={styles.childTitle}>Ghi chú thêm(nếu có)</Text>
@@ -143,6 +143,7 @@ const styles = StyleSheet.create({
     padding: 5,
     marginTop: 10,
     marginBottom: 10,
+    color: '#000',
     borderColor: "#B1B1B1",
   },
   inputDescription: {

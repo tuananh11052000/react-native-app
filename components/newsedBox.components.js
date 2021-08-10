@@ -6,7 +6,7 @@ import books from '../assets/bookstore.png'
 
 export default function NewsedBox(props) {
     return <View style={style.wrapTitle}>
-        <TouchableOpacity activeOpacity={0.5} onPress={props.onPress}>
+        <TouchableOpacity activeOpacity={0.5} onPress={() => props.onPress()}>
             <View style={style.category}>
                 <Image source={books} style={style.bookImage} />
                 <Text style={style.title}>{props.title}</Text>
