@@ -329,14 +329,12 @@ const styles = StyleSheet.create({
     color: "#FFF",
     fontSize: 18,
     marginRight: 10,
-<<<<<<< HEAD
+
   },
 });
-=======
-  }
-})
+
 
 export default connect(function (state) {
   return { infoPost: state.infoPost }
 })(AppNavigator);
->>>>>>> 214476afdeb0091980eb7a13130f9b3abb84bd41
+

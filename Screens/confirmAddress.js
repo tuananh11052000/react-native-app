@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, Alert } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, Alert, LogBox } from 'react-native';
 import RNPickerDialog from 'rn-modal-picker';
 import { TextInput } from 'react-native-paper';
 import db from '../db.json';
@@ -19,6 +19,8 @@ function confirmAddress(props) {
   const [addressDetail, setAddressDetail] = useState("");
   //lay ra dia chi
   useEffect(() => {
+    // ẩn warning
+    LogBox.ignoreLogs(['FloatingLabel: `ref` is not a prop. Trying to access it will result in `undefined` being returned']);
     //lay ra dia chi da duoc luu truoc do
     const getAddress = async () => {
       let province = await SecureStore.getItemAsync('province');

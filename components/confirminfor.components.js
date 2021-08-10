@@ -9,34 +9,7 @@ import {
   Image,
 } from "react-native";
 import { connect } from 'react-redux'
-import { Card } from "react-native-elements";
-const dataa = [
-  {
-    imageUrl:
-      "https://images.pexels.com/photos/8959553/pexels-photo-8959553.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
-    title: "something",
-  },
-  {
-    imageUrl:
-      "https://images.pexels.com/photos/8906445/pexels-photo-8906445.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
-    title: "something two",
-  },
-  {
-    imageUrl:
-      "https://images.pexels.com/photos/6562811/pexels-photo-6562811.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
-    title: "something three",
-  },
-  {
-    imageUrl:
-      "https://images.pexels.com/photos/6731324/pexels-photo-6731324.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
-    title: "something four",
-  },
-  {
-    imageUrl:
-      "https://images.pexels.com/photos/4207788/pexels-photo-4207788.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
-    title: "something five",
-  },
-];
+import { Entypo } from '@expo/vector-icons';
 const UselessTextInput = (props) => {
   return (
     <TextInput
@@ -50,7 +23,6 @@ const UselessTextInput = (props) => {
 };
 
 function App(props) {
-  const [data, setdata] = useState(dataa);
   const address = props.infoPost.address.split(",")
   console.log(address)
   const renderItem = ({ item }) => (
@@ -67,7 +39,15 @@ function App(props) {
       }}
     />
   );
-
+  const renderEmptyItem = () => (
+    <>
+      <Entypo   name="plus" size={110} color="#CCCCCC" />
+      <Entypo   name="plus" size={110} color="#CCCCCC" />
+      <Entypo   name="plus" size={110} color="#CCCCCC" />
+      <Entypo   name="plus" size={110} color="#CCCCCC" />
+      <Entypo   name="plus" size={110} color="#CCCCCC" />
+    </>
+  );
   return (
     <ScrollView>
       <View style={styles.backgroundTitle}>
@@ -103,6 +83,7 @@ function App(props) {
           renderItem={renderItem}
           keyExtractor={(item, index) => index.toString()}
           style={{ marginBottom: 10 }}
+          ListEmptyComponent={renderEmptyItem}
         />
       </View>
       <View style={styles.backgroundTitle}>

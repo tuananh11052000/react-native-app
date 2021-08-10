@@ -14,6 +14,7 @@ const heightStatusBar = StatusBar.currentHeight;
 function Home(props) {
     const { dispatch } = props;
     useEffect(() => {
+        // ẩn warning
         LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
         const checkTokenLocal = async () => {
             let result = await SecureStore.getItemAsync('token');
