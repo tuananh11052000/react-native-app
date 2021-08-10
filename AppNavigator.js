@@ -7,7 +7,7 @@ import {
   createStackNavigator,
   HeaderBackButton,
 } from "@react-navigation/stack";
-import { Button, Text, TouchableOpacity, StyleSheet } from "react-native";
+import { Button, Text, TouchableOpacity, StyleSheet, Alert } from "react-native";
 
 import Search from "./Screens/seachScreen";
 import ConfirmAddress from "./Screens/confirmAddress";
@@ -24,6 +24,7 @@ import PickerImage from "./Screens/pickerImage";
 import config from "./config";
 import CreatePost from "./Screens/createPost";
 import HistoryPage from "./Screens/historyPage";
+import PostDonation from "./Screens/donationComunity";
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -85,7 +86,23 @@ function AppNavigator(props) {
               fontWeight: "bold",
             },
             headerRight: () => (
-              <TouchableOpacity style={styles.wrapTextCancel} onPress={() => navigation.navigate("Home")}>
+              <TouchableOpacity
+                style={styles.wrapTextCancel}
+                onPress={() => {
+                  Alert.alert(
+                    "Thông báo",
+                    "Bạn có chắc muốn hủy!",
+                    [
+                      {
+                        text: "Không",
+                        style: "cancel"
+                      },
+                      { text: "Có",style: "cancel", onPress: () => navigation.navigate("Home") }
+                    ]
+                  );
+                  
+                }}
+              >
                 <Text style={styles.textCancel}>Hủy</Text>
               </TouchableOpacity>
             ),
@@ -104,7 +121,7 @@ function AppNavigator(props) {
           name="Description"
           component={Description}
           options={({ navigation }) => ({
-            title: "Thông tin",
+            title: "Mô tả",
             headerShown: true,
             headerStyle: {
               backgroundColor: config.color_header_background,
@@ -114,7 +131,23 @@ function AppNavigator(props) {
               fontWeight: "bold",
             },
             headerRight: () => (
-              <TouchableOpacity style={styles.wrapTextCancel} onPress={() => navigation.navigate("Home")}>
+              <TouchableOpacity
+                style={styles.wrapTextCancel}
+                onPress={() => {
+                  Alert.alert(
+                    "Thông báo",
+                    "Bạn có chắc muốn hủy!",
+                    [
+                      {
+                        text: "Không",
+                        style: "cancel"
+                      },
+                      { text: "Có",style: "cancel", onPress: () => navigation.navigate("Home") }
+                    ]
+                  );
+                  
+                }}
+              >
                 <Text style={styles.textCancel}>Hủy</Text>
               </TouchableOpacity>
             ),
@@ -131,7 +164,7 @@ function AppNavigator(props) {
           name="ConfirmInforScreen"
           component={ConfirmInforScreen}
           options={({ navigation }) => ({
-            title: "Xác nhận ",
+            title: "Xác nhận thông tin",
             headerShown: true,
             headerStyle: {
               backgroundColor: config.color_header_background,
@@ -141,7 +174,23 @@ function AppNavigator(props) {
               fontWeight: "bold",
             },
             headerRight: () => (
-              <TouchableOpacity style={styles.wrapTextCancel} onPress={() => navigation.navigate("Home")}>
+              <TouchableOpacity
+                style={styles.wrapTextCancel}
+                onPress={() => {
+                  Alert.alert(
+                    "Thông báo",
+                    "Bạn có chắc muốn hủy!",
+                    [
+                      {
+                        text: "Không",
+                        style: "cancel"
+                      },
+                      { text: "Có",style: "cancel", onPress: () => navigation.navigate("Home") }
+                    ]
+                  );
+                  
+                }}
+              >
                 <Text style={styles.textCancel}>Hủy</Text>
               </TouchableOpacity>
             ),
@@ -242,6 +291,28 @@ function AppNavigator(props) {
             headerShown: false,
           }}
         />
+        <Stack.Screen
+          name="PostDonation"
+          component={PostDonation}
+          options={({ navigation }) => ({
+            headerLeft: () => (
+              <HeaderBackButton
+                onPress={() => navigation.navigate("Home")}
+                tintColor={"white"}
+                label="Quay lại" //back
+              />
+            ),
+            title: "Tin tặng cộng đồng",
+            headerShown: true,
+            headerStyle: {
+              backgroundColor: config.color_header_background,
+            },
+            headerTintColor: config.headerTintColor,
+            headerTitleStyle: {
+              fontWeight: "bold",
+            },
+          })}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );
@@ -252,8 +323,8 @@ const styles = StyleSheet.create({
     marginRight: 10,
   },
   textCancel: {
-    color: '#FFF',
+    color: "#FFF",
     fontSize: 18,
     marginRight: 10,
-  }
-})
+  },
+});

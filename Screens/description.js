@@ -3,6 +3,7 @@ import {
   StyleSheet,
   View,
   Platform,
+  Alert
 } from 'react-native';
 import { connect } from 'react-redux'
 
@@ -12,8 +13,15 @@ import ButtonConfirm from '../components/buttonConfirm.components';
 function Description(props) {
   //ham onpress kiem tra xem da nhap title hay chua
   const onPressFunc = () => {
-    if (props.infoPost.title == '')
-      alert("Vui lòng nhập tiêu đề")
+    if (props.infoPost.title.trim() == '') {
+      Alert.alert(
+        "Thông báo",
+        "Vui lòng nhập tiêu đề!",
+        [
+          { text: "OK"}
+        ]
+      );
+    }
     else
       navigation.navigate('ConfirmInforScreen')
   }
@@ -31,7 +39,8 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingTop: (Platform.OS === 'ios') ? 20 : 20,
-    justifyContent: 'space-between'
+    justifyContent: 'space-between',
+    backgroundColor: '#FFF',
   },
 });
 

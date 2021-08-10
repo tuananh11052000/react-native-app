@@ -9,7 +9,7 @@ import {
   FlatList,
   SafeAreaView,
   ActivityIndicator,
-  RefreshControl
+  RefreshControl, 
 } from "react-native";
 import { connect } from "react-redux";
 import axios from "axios";
@@ -132,7 +132,7 @@ function ProductComponent(props) {
         <FlatList
           data={props.newestPost}
           renderItem={renderItem}
-          keyExtractor={(item) => item.id}
+          keyExtractor={(item) => item._id}
           ItemSeparatorComponent={ItemSeparatorView}
         />
       )}

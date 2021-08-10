@@ -27,7 +27,7 @@ function HeaderLoginPage(props) {
                 <Text style={styles.Text}>Tài khoản</Text>
             </View>
             <View >
-                <Menu style={styles.Settings} ref={menu} button={<Text onPress={showMenu}> <MaterialIcons name="settings" size={30} ></MaterialIcons></Text>}>
+                <Menu style={styles.Settings} ref={menu} button={<Text onPress={showMenu}> <MaterialIcons name="settings" size={30} color="#FFF" ></MaterialIcons></Text>}>
                     <MenuItem onPress={() => { hideMenu() }}>Đăng xuất</MenuItem>
                     {/* <MenuItem onPress={hideMenu}>Menu item 2</MenuItem>
                     <MenuItem onPress={hideMenu} disabled>
@@ -53,7 +53,7 @@ const styles = StyleSheet.create({
     wrapAll: {
         marginTop: config.heightStatusBar,
         height: config.header,
-        backgroundColor: 'red',
+        backgroundColor: config.color_header_background,
         alignItems: 'center',
         paddingLeft: '3%',
         paddingRight: '3%',
