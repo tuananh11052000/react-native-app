@@ -72,7 +72,7 @@ function ConfirmInforScreen(props) {
     <View style={styles.container}>
       <Spinner
         visible={isDisplay}
-        textContent={'Loading...'}
+        textContent={'Đăng xử lý yêu cầu...'}
         textStyle={styles.spinnerTextStyle}
       />
       <ConfirmInfor dataImage={image}></ConfirmInfor>
