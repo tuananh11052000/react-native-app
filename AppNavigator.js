@@ -2,6 +2,7 @@ import * as React from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
+import { connect } from 'react-redux'
 
 import {
   createStackNavigator,
@@ -29,7 +30,7 @@ const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
 
 function AppNavigator(props) {
-  const { navigation } = props;
+  const { navigation, dispatch } = props;
   return (
     <NavigationContainer>
       <Stack.Navigator>
@@ -120,7 +121,10 @@ function AppNavigator(props) {
             ),
             headerLeft: () => (
               <HeaderBackButton
-                onPress={() => navigation.navigate("ConfirmAddress")}
+                onPress={() => {
+                  dispatch({ type: 'RESET_SCREEN_INFORMATION' })
+                  navigation.navigate("ConfirmAddress");
+                }}
                 tintColor={"white"}
                 label="Quay lại" //back
               />
@@ -246,7 +250,6 @@ function AppNavigator(props) {
     </NavigationContainer>
   );
 }
-export default AppNavigator;
 const styles = StyleSheet.create({
   wrapTextCancel: {
     marginRight: 10,
@@ -257,3 +260,7 @@ const styles = StyleSheet.create({
     marginRight: 10,
   }
 })
+
+export default connect(function (state) {
+  return { infoPost: state.infoPost }
+})(AppNavigator);
