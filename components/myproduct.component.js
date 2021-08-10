@@ -155,8 +155,7 @@ function MyProductComponent(props) {
                               customStyles={optionsStyles}
                               onSelect={false}
                             >
-                              <MenuOption value="Edit" text="Chỉnh sửa" />
-                              <MenuOption value="Delete" text="Xóa" />
+                              <MenuOption value="Delete" text="Xóa tin" />
                             </MenuOptions>
                           </Menu>
                         </View>
@@ -302,14 +301,17 @@ const style = StyleSheet.create({
 const optionsStyles = {
   optionsContainer: {
     backgroundColor: "#f2f2f2",
-    width: "50%",
+    width: "70%",
+    borderRadius: 5
   },
   optionsWrapper: {
     backgroundColor: "#f2f2f2",
+    borderRadius: 5
   },
   optionWrapper: {
     backgroundColor: "white",
-    margin: 2,
+    marginBottom: 2,
+    borderRadius: 5
   },
   optionTouchable: {
     underlayColor: "gold",
@@ -318,6 +320,7 @@ const optionsStyles = {
   optionText: {
     color: "black",
     fontSize: 16,
+    padding: 6,
   },
 };
 
