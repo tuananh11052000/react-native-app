@@ -40,6 +40,13 @@ var infoPost = (state = {
                 note: "",
                 TypeAuthor: ""
             }
+        case 'RESET_SCREEN_INFORMATION':
+            return {
+                ...state,
+                image: [],
+                title: '',
+                note: ''
+            }
         default:
             return state
     }
