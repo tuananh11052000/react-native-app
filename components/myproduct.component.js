@@ -295,6 +295,7 @@ const style = StyleSheet.create({
   textFalse: {
     color: "gray",
     textAlign: "center",
+    // backgroundColor: "white",
   },
 });
 
