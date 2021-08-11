@@ -8,10 +8,11 @@ function WhoConfirm(props) {
   //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
   //gan typeauthor cho post
   const dispatch_func = async (who) => {
+    console.log(who.title)
     await dispatch({ type: 'SET_TYPE_AUTHOR', TypeAuthor: who.title })
   }
-  const funcPress = () => {
-    dispatch_func(who.title).then((res) => {
+  const funcPress = (who) => {
+    dispatch_func(who).then((res) => {
       console.log(props.infoPost)
       props.onPress()
     })
@@ -19,7 +20,7 @@ function WhoConfirm(props) {
   return (
     <TouchableOpacity
       activeOpacity={0.3}
-      onPress={() => funcPress()}>
+      onPress={() => funcPress(who)}>
       <View style={styles.container}>
         <Text style={styles.title}>{who.title}</Text>
       </View>
