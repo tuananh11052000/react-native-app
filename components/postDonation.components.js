@@ -139,7 +139,7 @@ export default function App(props) {
         key={index}
         style={styles.wrapCategory}
         activeOpacity={0.8}
-      
+        onPress={() => _pressRow(item)}
       >
         {/* //dùng onStartShouldSetResponder để click vào view */}
         <Image

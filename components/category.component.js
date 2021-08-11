@@ -14,7 +14,7 @@ import chevrondown from '../assets/down-chevron.png';
 import { Entypo } from '@expo/vector-icons';
 
 function ExpandableListView(props) {
-  const [layoutHeight, setLayoutHeight] = useState(0)
+  const [layoutHeight, setLayoutHeight] = useState(0);
   useEffect(() => {
     if (props.item.isExpanded) {
       setLayoutHeight(null);
@@ -148,8 +148,9 @@ function CategoryComponent(props) {
 
 
   ];
-  const [accordionData, setAccordionData] = useState(CONTENT)
-
+  const [accordionData, setAccordionData] = useState(CONTENT);
+  let data = props.route.params.data;
+  console.log(data);
   // enable layout animation, toggle 'expanded' state for index and then update the layout
   const updateLayout = (index) => {
     LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);

@@ -9,6 +9,7 @@ import * as SecureStore from 'expo-secure-store';
 import Spinner from 'react-native-loading-spinner-overlay';
 
 function confirmAddress(props) {
+  let data = props.route.params.data;
   //khai bao cac local state
   const { navigation } = props;
   const [isChage, setChange] = useState(false)
@@ -124,7 +125,7 @@ function confirmAddress(props) {
                     const { dispatch } = props;
                     const address = `${addressDetail}, ${commune.name}, ${district.name}, ${province.name}`
                     dispatch({ type: "CONFIRM_ADDRESS", address: address })
-                    navigation.navigate('Category')
+                    navigation.navigate('Category', {data: data})
                   })
                 })
               })

@@ -12,7 +12,7 @@ const { width, height } = Dimensions.get('window')
 
 export default function GiftComponent(props) {
     return <View style={style.wrapCategory}>
-        <TouchableOpacity activeOpacity={0.5} onPress={props.onPress}>
+        <TouchableOpacity activeOpacity={0.5} onPress={props.onPressTCD}>
             <View style={style.category}>
                 <Image source={giftIcon2} style={style.giftIcon1} />
                 <Text style={style.title}>Tặng cộng{'\n'}đồng</Text>

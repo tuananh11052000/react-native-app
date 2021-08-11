@@ -31,7 +31,13 @@ function Home(props) {
     }, [])
     const actionOnPress = () => {
         if (props.auth.isLogin == true)
-            navigation.navigate('ConfirmAddress')
+            navigation.navigate('ConfirmAddress', {data: 'NOTTCD'})
+        else
+            navigation.replace('Authentication')
+    }
+    const actionOnPressTCD = () => {
+        if (props.auth.isLogin == true)
+            navigation.navigate('ConfirmAddress', {data: 'TCD'})
         else
             navigation.replace('Authentication')
     }
@@ -41,7 +47,9 @@ function Home(props) {
         <View style={styles.container}>
             <ScrollView>
                 <SearchComponent onPress={() => navigation.navigate('Search')} />
-                <GiftComponent onPress={() => actionOnPress()} style={styles.gift_component} />
+                <GiftComponent onPress={() => actionOnPress()} 
+                onPressTCD={() => actionOnPressTCD()} 
+                style={styles.gift_component} />
                 <TitleComponent title="Tin đã đăng" />
                 <NewsedBox title="Tặng cộng đồng" onPress={() => navigation.navigate('PostDonation')}/>
                 <TitleComponent title="Tin mới nhất" />
