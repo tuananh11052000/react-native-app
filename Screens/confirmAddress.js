@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, Alert, LogBox } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, Alert, LogBox,Keyboard,TouchableWithoutFeedback } from 'react-native';
 import RNPickerDialog from 'rn-modal-picker';
 import { TextInput } from 'react-native-paper';
 import db from '../db.json';
@@ -144,6 +144,7 @@ function confirmAddress(props) {
   //ca ham xu ly neu da tung nhap thong tin  dia chi vao
 
   return (
+    <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
     <View style={Styles.border}>
       <Spinner
         visible={isloading}
@@ -234,6 +235,7 @@ function confirmAddress(props) {
         </Button>
       </View>
     </View>
+    </TouchableWithoutFeedback>
   );
 }
 

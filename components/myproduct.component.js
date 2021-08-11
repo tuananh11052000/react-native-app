@@ -14,6 +14,7 @@ import axios from "axios";
 
 import { Feather } from "@expo/vector-icons";
 import {
+  MenuProvider,
   MenuContext,
   Menu,
   MenuOptions,
@@ -57,7 +58,7 @@ function MyProductComponent(props) {
           Authorization: `${token}`,
         },
         url: "https://smai-app-api.herokuapp.com/post/getPostByAccountId",
-      });
+      })
       dispatch({ type: "UP", data: temp.data });
       // console.log(temp);
     };
@@ -135,7 +136,7 @@ function MyProductComponent(props) {
                   }}
                 />
                 <View style={style.wrapInfoProduct}>
-                  <MenuContext style={{}}>
+                  <MenuProvider style={{}}>
                     <View style={style.wrapTitle}>
                       <Text style={style.titlePost}>
                         {renderTitle(item.title)}
@@ -186,7 +187,7 @@ function MyProductComponent(props) {
                         {item.address.slice(0, 15) + "..."}
                       </Text>
                     </View>
-                  </MenuContext>
+                  </MenuProvider>
                 </View>
               </View>
               <View style={style.wrapBot}> 

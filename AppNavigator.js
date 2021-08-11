@@ -210,9 +210,17 @@ function AppNavigator(props) {
         <Stack.Screen
           name="PostType"
           component={PostType}
-          options={{
-            headerShown: false,
-          }}
+          options={({ navigation }) => ({
+            title: "Loại tin",
+            headerShown: true,
+            headerStyle: {
+              backgroundColor: config.color_header_background,
+            },
+            headerTintColor: config.headerTintColor,
+            headerTitleStyle: {
+              // fontWeight: "bold",
+            },
+          })}
         />
         <Stack.Screen
           name="WhoConfirm"
