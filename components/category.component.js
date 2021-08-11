@@ -149,8 +149,7 @@ function CategoryComponent(props) {
 
   ];
   const [accordionData, setAccordionData] = useState(CONTENT);
-  let data = props.route.params.data;
-  console.log(data);
+
   // enable layout animation, toggle 'expanded' state for index and then update the layout
   const updateLayout = (index) => {
     LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
