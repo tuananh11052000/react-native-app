@@ -40,6 +40,7 @@ export default function CreatePosts(props) {
           // zIndex: {10}
           // style={{ height: 41,}}
           style={{
+            
             borderTopLeftRadius: 5,
             borderTopRightRadius: 5,
             borderBottomLeftRadius: 5,

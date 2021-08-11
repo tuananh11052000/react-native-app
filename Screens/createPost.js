@@ -13,12 +13,16 @@ function CreatePost(props) {
 
   return (
     <View style={styles.container}>
-      <CreatePosts onPress={() => navigation.navigate("PostType")} />
-
-      <ScrollView nestedScrollEnabled={true}>
-        {/* <CreatePosts onPress={() => navigation.navigate("PostType")} /> */}
-        <MyProductComponent navigation={navigation} />
-      </ScrollView>
+      <View  style={{ zIndex: 1 }}>
+        <CreatePosts
+          onPress={() => navigation.navigate("PostType")}
+        />
+      </View>
+      <View style={{ zIndex: 0 }}>
+        <ScrollView style={{ zIndex: 100 }} nestedScrollEnabled={true}>
+          <MyProductComponent navigation={navigation} />
+        </ScrollView>
+      </View>
     </View>
   );
 }
