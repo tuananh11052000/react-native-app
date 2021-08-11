@@ -86,7 +86,7 @@ function ProductComponent(props) {
      
     <TouchableOpacity
       style={style.wrapCategory}
-      activeOpacity={0.8}
+      activeOpacity={0.4}
       onPress={() => _pressRow(item)}
     >
       {/* //dùng onStartShouldSetResponder để click vào view */}

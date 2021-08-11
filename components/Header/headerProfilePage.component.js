@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import {
-    Text, View, StyleSheet, ScrollView
+    Text, View, StyleSheet, ScrollView, SafeAreaView
 } from 'react-native'
 import { color } from 'react-native-reanimated';
 import { MaterialIcons } from '@expo/vector-icons';
@@ -22,7 +22,9 @@ function HeaderLoginPage(props) {
 
     const showMenu = () => menu.current.show();
     if (props.message == 'ProfilePage') {
-        return <View style={styles.wrapAll}>
+        return <>
+        <View style={{height: config.heightStatusBar, width: '100%', backgroundColor: config.color_header_background}}></View>
+        <View style={styles.wrapAll}>
             <View>
                 <Text style={styles.Text}>Tài khoản</Text>
             </View>
@@ -39,6 +41,7 @@ function HeaderLoginPage(props) {
 
             </View>
         </View>
+        </>
     }
     else {
         return <View style={styles.wrapAll}>
@@ -51,7 +54,7 @@ function HeaderLoginPage(props) {
 }
 const styles = StyleSheet.create({
     wrapAll: {
-        marginTop: config.heightStatusBar,
+        // marginTop: config.heightStatusBar,
         height: config.header,
         backgroundColor: config.color_header_background,
         alignItems: 'center',
@@ -63,14 +66,14 @@ const styles = StyleSheet.create({
     },
 
     Settings: {
-        padding: 8,
         color: "#fff",
-        fontSize: config.fontsize_1,
+        fontSize: config.fontsize_3,
     },
     Text: {
         padding: 8,
         fontSize: config.fontsize_2,
-        color: "#fff"
+        color: "#fff",
+        fontWeight: 'bold',
     },
     icon_settings: {
 

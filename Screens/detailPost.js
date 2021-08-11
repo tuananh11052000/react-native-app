@@ -170,6 +170,7 @@ const styles = StyleSheet.create({
     marginTop: 10,
     width,
     height,
+    backgroundColor: '#FFF',
   },
   contentContainer: {
     flexGrow: 1,

@@ -56,7 +56,10 @@ export default function CustomeTabNav() {
     return (<Tab.Navigator
         initialRouteName="Feed"
         tabBarOptions={{
-            activeTintColor: '#e91e63',
+            activeTintColor: config.color_header_background,
+            labelStyle: {
+                fontSize: 15,
+            },
         }}
     >
         <Tab.Screen
