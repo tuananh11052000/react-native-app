@@ -6,7 +6,7 @@ import axios from 'axios';
 
 import NewPostType from '../components/newpostType.component';
 
-const heightStatusBar = StatusBar.currentHeight;//get status bar height
+// const heightStatusBar = StatusBar.currentHeight;//get status bar height
 
 export default class PostType extends React.Component {
   constructor(props) {
@@ -42,7 +42,7 @@ export default class PostType extends React.Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    marginTop: heightStatusBar,
+    // marginTop: heightStatusBar,
     backgroundColor: '#f2f2f2',
     justifyContent: 'center',
   },

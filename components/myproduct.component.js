@@ -207,7 +207,7 @@ const style = StyleSheet.create({
   },
   wrapCategory: {
     padding: 15,
-    marginBottom: 10,
+    marginTop: 10,
     flex: 1,
     display: "flex",
     backgroundColor: "white",

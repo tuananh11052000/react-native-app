@@ -73,7 +73,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     paddingHorizontal: 15,
     paddingVertical: 10,
-    marginBottom: 10,
+    // marginBottom: 10,
   },
   wrapPiker: {
     // borderWidth: 1,
