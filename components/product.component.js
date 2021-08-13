@@ -53,17 +53,17 @@ function ProductComponent(props) {
   };
   //get post
 
-  useEffect(() => {
-    const getData = async () => {
-      let temp = await axios({
-        method: "get",
-        url: "https://smai-app-api.herokuapp.com/post/getNewPost",
-      }).finally(() =>setloading(false));
-      dispatch({ type: "UPDATE", data: temp.data });
-    };
-    getData();
-  }, []);
-
+  // useEffect(() => {
+  //   const getData = async () => {
+  //     let temp = await axios({
+  //       method: "get",
+  //       url: "https://smai-app-api.herokuapp.com/post/getNewPost",
+  //     }).finally(() =>setloading(false));
+  //     dispatch({ type: "UPDATE", data: temp.data });
+  //   };
+  //   getData();
+  // }, []);
+  console.log("m có được không" + props.listData);
   //Function handling title post
   const renderTitle = (item) => {
     item = item.charAt(0).toUpperCase() + item.slice(1);
@@ -122,15 +122,14 @@ function ProductComponent(props) {
     )
   }
   return (
-    <View style={style.constainer}>
+    <View style={style.containerr}>
       {loading ? (
           <View style={{flexDirection: 'row', justifyContent: 'center', height: '100%',}}>
                 <ActivityIndicator color="#BDBDBD" size="small" />
           </View>
-       
       ) : (
         <FlatList
-          data={props.newestPost}
+          data={props.listData}
           renderItem={renderItem}
           keyExtractor={(item) => item._id}
           ItemSeparatorComponent={ItemSeparatorView}
@@ -141,7 +140,7 @@ function ProductComponent(props) {
 }
 
 const style = StyleSheet.create({
-  constainer: {
+  containerr: {
     backgroundColor: "#FFF",
   },
   wrapCategory: {
