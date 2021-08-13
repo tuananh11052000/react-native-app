@@ -15,7 +15,7 @@ import {
 } from "react-native";
 import { Entypo, EvilIcons, FontAwesome } from "@expo/vector-icons";
 import { Picker } from "@react-native-picker/picker";
-import db from "./db.json";
+import db from "../db.json";
 import axios from 'axios'
 const { width } = Dimensions.get("window");
 const height = width * 0.6;

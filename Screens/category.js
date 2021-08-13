@@ -5,10 +5,17 @@ import { connect } from 'react-redux'
 import CategoryComponent from '../components/category.component'
 
 const heightStatusBar = StatusBar.currentHeight;
-export default function Category(props) {
+function Category(props) {
     const { navigation } = props;
+    const pressFunc = () => {
+        if (props.controlThreadTCD == 'tangcongdong') {
+            navigation.push('Description');
+        } else {
+            navigation.push('GiveFor');
+        }
+    }
     return <View style={style.container}>
-        <CategoryComponent onPress={() => navigation.push('Description')} />
+        <CategoryComponent onPress={() => pressFunc()} />
     </View>
 }
 
@@ -17,3 +24,9 @@ const style = StyleSheet.create({
         flex: 1
     }
 })
+export default connect(function (state) {
+    return {
+      controlThreadTCD: state.controlThreadTCD,
+    };
+  })(Category);
+  

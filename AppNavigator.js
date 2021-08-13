@@ -27,6 +27,7 @@ import CreatePost from "./Screens/createPost";
 import HistoryPage from "./Screens/historyPage";
 import PostDonation from "./Screens/donationComunity";
 import VerifyOtps from "./Screens/verifyOtp";
+import GiveFor from "./Screens/giveFor";
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -338,6 +339,28 @@ function AppNavigator(props) {
             headerTintColor: config.headerTintColor,
             headerTitleStyle: {
               // fontWeight: "bold",
+            },
+          })}
+        />
+        <Stack.Screen
+          name="GiveFor"
+          component={GiveFor}
+          options={({ navigation }) => ({
+            headerLeft: () => (
+              <HeaderBackButton
+                onPress={() => navigation.navigate("Home")}
+                tintColor={"white"}
+                label="Quay lại" //back
+              />
+            ),
+            title: "Gửi tặng đến",
+            headerShown: true,
+            headerStyle: {
+              backgroundColor: config.color_header_background,
+            },
+            headerTintColor: config.headerTintColor,
+            headerTitleStyle: {
+              fontWeight: "bold",
             },
           })}
         />

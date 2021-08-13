@@ -55,9 +55,18 @@ function Home(props) {
     checkTokenLocal();
     getData();
   }, []);
-  const actionOnPress = () => {
-    if (props.auth.isLogin == true)
-      navigation.navigate("ConfirmAddress", { data: "NOTTCD" });
+  const actionOnPressTCD = () => {
+    if (props.auth.isLogin == true) {
+      dispatch({ type: "setThreadTCD" });
+      navigation.navigate("ConfirmAddress",);
+    }
+    else navigation.replace("Authentication");
+  };
+  const actionOnPressGiveGroup = () => {
+    if (props.auth.isLogin == true) {
+      dispatch({ type: "setThreadGiveGroup" });
+      navigation.navigate("ConfirmAddress",);
+    }
     else navigation.replace("Authentication");
   };
   const { navigation } = props;
@@ -168,7 +177,7 @@ function Home(props) {
         }>
         <SearchComponent onPress={() => navigation.navigate("Search")} />
         <GiftComponent
-          onPress={() => actionOnPress()}
+          onPressTCD={() => actionOnPressTCD()} onPressGiveGroup={() => actionOnPressGiveGroup()}
           style={styles.gift_component}
         />
         <TitleComponent title="Tin đã đăng" />
