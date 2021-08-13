@@ -28,7 +28,6 @@ import HistoryPage from "./Screens/historyPage";
 import PostDonation from "./Screens/donationComunity";
 import VerifyOtps from "./Screens/verifyOtp";
 import GiveFor from "./Screens/giveFor";
-
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
 
@@ -332,7 +331,7 @@ function AppNavigator(props) {
           component={VerifyOtps}
           options={({ navigation }) => ({
             title: "Xác nhận OTP",
-            headerShown: false,
+            headerShown: true,
             headerStyle: {
               backgroundColor: config.color_header_background,
             },

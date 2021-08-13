@@ -18,7 +18,10 @@ export default function Authentication(props) {
 
   const SecondRoute = () => (
     <View style={styles.scene}>
-      <SignUp onPress_={() => navigation.navigate('Home')} />
+      <SignUp
+        onPress_={() => navigation.navigate("Home")}
+        navigation={navigation}
+      />
     </View>
   );
 

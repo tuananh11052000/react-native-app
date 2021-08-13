@@ -6,6 +6,7 @@ import VerifyOtp from '../components/verifyOpt.component'
 const heightStatusBar = StatusBar.currentHeight;//lay ra chieu cao cua thanh trang thai
 
 export default function VerifyOtps() {
+
   return (
     <View style={styles.container}>
       <VerifyOtp />

@@ -31,21 +31,21 @@ function SignUp(props) {
     const [showPass, showPassWord] = useState(true)
     const [showPass2, showPassWord2] = useState(true)
 
-    const loginFunction = async (UserName, PhoneNumber, Password) => {
-        await axios.post('https://smai-app-api.herokuapp.com/account/register', {
-            UserName: UserName,
-            PhoneNumber: PhoneNumber,
-            Password: Password
-        }).then(async (data) => {
-            if (data.status == 201) {
-                await save('token', data.data.accessToken)
-                if (props.auth.token == "null") {
-                    dispatch({ type: 'SIGN_IN', token: data.data.accessToken, PhoneNumber: PhoneNumber })
-                    props.onPress_()
-                }
-            }
-        }).catch(e => alert("Tài khoản đã tồn tại"))
-    }
+    // const loginFunction = async (UserName, PhoneNumber, Password) => {
+    //     await axios.post('https://smai-app-api.herokuapp.com/account/register', {
+    //         UserName: UserName,
+    //         PhoneNumber: PhoneNumber,
+    //         Password: Password
+    //     }).then(async (data) => {
+    //         if (data.status == 201) {
+    //             await save('token', data.data.accessToken)
+    //             if (props.auth.token == "null") {
+    //                 dispatch({ type: 'SIGN_IN', token: data.data.accessToken, PhoneNumber: PhoneNumber })
+    //                 props.onPress_()
+    //             }
+    //         }
+    //     }).catch(e => alert("Tài khoản đã tồn tại"))
+    // }
 
     return <ScrollView contentContainerStyle={styles.container}>
         <View style={styles.child_container}>
@@ -109,7 +109,8 @@ function SignUp(props) {
         </View>
         <View style={styles.layoutBtnLogin}>
             <Button onPress={() => {
-                loginFunction(UserName, PhoneNumber, Password)
+                // loginFunction(UserName, PhoneNumber, Password)
+                   props.navigation.navigate("VerifyOtps");
             }}
                 color={config.color_btn_1}
                 size="large">
