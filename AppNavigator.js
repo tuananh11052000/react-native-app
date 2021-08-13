@@ -281,7 +281,7 @@ function AppNavigator(props) {
           options={({ navigation }) => ({
             headerLeft: () => (
               <HeaderBackButton
-                onPress={() => navigation.navigate("Home")}
+                onPress={() => navigation.navigate("Category")}
                 tintColor={"white"}
                 label="Quay lại" //back
               />
