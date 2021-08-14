@@ -25,6 +25,7 @@ function ExpandableListView(props) {
   const showSelectedCategory = (item, category) => {
     const { dispatch } = props
     dispatch({ type: "GET_NAME", NameProduct: [{ category: category, NameProduct: item.name }] });
+    
     props.onPress()
   }
   return (
@@ -216,5 +217,5 @@ const styles = StyleSheet.create({
   }
 });
 export default connect(function (state) {
-  return { inforPost: state.infoPost }
+  return { infoPost: state.infoPost }
 })(CategoryComponent);

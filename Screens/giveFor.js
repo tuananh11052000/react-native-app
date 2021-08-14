@@ -16,33 +16,49 @@ import {
 import { Entypo, EvilIcons, FontAwesome } from "@expo/vector-icons";
 import { Picker } from "@react-native-picker/picker";
 import db from "../db.json";
-import axios from 'axios'
+import axios from 'axios';
+import { connect } from 'react-redux'
 const { width } = Dimensions.get("window");
 const height = width * 0.6;
 
-export default function App() {
+ function App(props) {
   const [data, setData] = useState([]);
   const [isLoading, setisLoading] = useState(true);
-  const [typeAuthor, settypeAuthor] = useState("canhan");
+  const [typeAuthor, settypeAuthor] = useState(props.controlThreadGiveFor);
   const [query, setQuery] = useState("");
   const [datafilter, setDataFilter] = useState([]);
   const [dataAddressFilter, setdataAddressFilter] = useState([]);
   const [selectedValue, setSelectedValue] = useState("1");
   const [listAddress, setListAddress] = useState(db.province);
+  
+
   useEffect(() => {
     getListPhotos();
     return () => {};
   }, []);
-
+  console.log(props.controlThreadGiveFor)
   // call api
   //https://smai-back-end.herokuapp.com/post/getPostByTypeAuthor?typeauthor=%7BLoaij
-  getListPhotos = () => {
+  const getListPhotos = () => {
     const apiURL = `https://smai-app-api.herokuapp.com/post/getPostByTypeAuthor?typeauthor=${typeAuthor}`;
     axios.get(apiURL)
       .then((resjson) => {
-        setData(resjson.data);
-        setDataFilter(resjson.data);
-        setdataAddressFilter(resjson.data);
+        let responData = resjson.data
+        let realData = [];
+        for (let i=0; i<responData.length;i++) {
+          let nameProduct = responData[i].NameProduct;
+          for (let j=0; j<nameProduct.length;j++) {
+            if (nameProduct[j].NameProduct == props.infoPost.NameProduct[0].NameProduct && nameProduct[j].Category == props.infoPost.NameProduct[0].category) {
+              realData.push(responData[i]);
+            }
+          }
+        }
+        // console.log(realData)
+        setData(realData);
+        setDataFilter(realData);
+        setdataAddressFilter(realData);
+        const { dispatch } = props;
+        dispatch({ type: 'RESET' })
       })
       .catch((error) => {
         console.log("Error: ", error);
@@ -91,10 +107,13 @@ export default function App() {
       return <Picker.Item label={x.name} key={i} value={x.name} />;
     });
   };
+  const _pressRow = (item) => {
+    props.navigation.navigate("DetailPost", { data: item }); //chuyển trang
+  };
   // render item product
-  renderItem = ({ item, index }) => {
+  const renderItem = ({ item, index }) => {
     return (
-      <TouchableOpacity style={styles.wrapProduct} activeOpacity={0.8}>
+      <TouchableOpacity style={styles.wrapProduct} activeOpacity={0.8} onPress={() => _pressRow(item)}>
         <View style={styles.wrapBorder}>
           <FontAwesome name="user-circle-o" size={70} color="#BDBDBD" />
           <View style={styles.wrapInfor}>
@@ -164,7 +183,6 @@ export default function App() {
 const styles = StyleSheet.create({
   containter: {
     flex: 1,
-    paddingTop: 20,
     backgroundColor: "#DDD",
   },
   containterLoading: {
@@ -244,3 +262,6 @@ const styles = StyleSheet.create({
     maxWidth: "90%",
   },
 });
+export default connect(function (state) {
+  return { infoPost: state.infoPost, controlThreadGiveFor: state.controlThreadGiveFor }
+})(App);

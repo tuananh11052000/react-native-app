@@ -55,6 +55,7 @@ function Home(props) {
     checkTokenLocal();
     getData();
   }, []);
+  // onPress tặng cộng đồng
   const actionOnPressTCD = () => {
     if (props.auth.isLogin == true) {
       dispatch({ type: "setThreadTCD" });
@@ -62,9 +63,29 @@ function Home(props) {
     }
     else navigation.replace("Authentication");
   };
-  const actionOnPressGiveGroup = () => {
+  // onPress tặng người nghèo
+  const actionOnPressGiveCaNhan = () => {
     if (props.auth.isLogin == true) {
       dispatch({ type: "setThreadGiveGroup" });
+      dispatch({ type: "giveForCaNhan" });
+      navigation.navigate("ConfirmAddress",);
+    }
+    else navigation.replace("Authentication");
+  };
+  // onpress tặng quỹ từ thiện
+  const actionOnPressGiveQuy = () => {
+    if (props.auth.isLogin == true) {
+      dispatch({ type: "setThreadGiveGroup" });
+      dispatch({ type: "giveForQuy" });
+      navigation.navigate("ConfirmAddress",);
+    }
+    else navigation.replace("Authentication");
+  };
+  // onpress quyên góp công ích
+  const actionOnPressGiveCongIch = () => {
+    if (props.auth.isLogin == true) {
+      dispatch({ type: "setThreadGiveGroup" });
+      dispatch({ type: "giveForCongIch" });
       navigation.navigate("ConfirmAddress",);
     }
     else navigation.replace("Authentication");
@@ -177,7 +198,10 @@ function Home(props) {
         }>
         <SearchComponent onPress={() => navigation.navigate("Search")} />
         <GiftComponent
-          onPressTCD={() => actionOnPressTCD()} onPressGiveGroup={() => actionOnPressGiveGroup()}
+          onPressTCD={() => actionOnPressTCD()} 
+          onPressGiveCaNhan={() => actionOnPressGiveCaNhan()}
+          onPressGiveQuy={() => actionOnPressGiveQuy()}
+          onPressGiveCongIch={() => actionOnPressGiveCongIch()}
           style={styles.gift_component}
         />
         <TitleComponent title="Tin đã đăng" />
@@ -283,5 +307,6 @@ export default connect(function (state) {
     auth: state.auth,
     infoPost: state.infoPost,
     newestPost: state.newestPost,
+    controlThreadGiveFor: state.controlThreadGiveFor,
   };
 })(Home);

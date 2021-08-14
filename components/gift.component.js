@@ -18,19 +18,19 @@ export default function GiftComponent(props) {
                 <Text style={style.title}>Tặng cộng{'\n'}đồng</Text>
             </View>
         </TouchableOpacity>
-        <TouchableOpacity activeOpacity={0.5} onPress={props.onPressGiveGroup}>
+        <TouchableOpacity activeOpacity={0.5} onPress={props.onPressGiveCaNhan}>
             <View style={style.category}>
                 <Image source={giftIcon1} style={style.giftIcon1} />
                 <Text style={style.title}>Tặng người{'\n'}nghèo</Text>
             </View>
         </TouchableOpacity>
-        <TouchableOpacity activeOpacity={0.5} onPress={props.onPressGiveGroup}>
+        <TouchableOpacity activeOpacity={0.5} onPress={props.onPressGiveQuy}>
             <View style={style.category}>
                 <Image source={giftIcon3} style={style.giftIcon1} />
                 <Text style={style.title}>Tặng quỹ{'\n'}từ thiện</Text>
             </View>
         </TouchableOpacity>
-        <TouchableOpacity activeOpacity={0.5} onPress={props.onPressGiveGroup}>
+        <TouchableOpacity activeOpacity={0.5} onPress={props.onPressGiveCongIch}>
             <View style={style.category}>
                 <Image source={giftIcon4} style={style.giftIcon1} />
                 <Text style={style.title}>Quyên góp{'\n'}công ích</Text>
