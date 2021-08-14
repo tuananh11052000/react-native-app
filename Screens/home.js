@@ -59,6 +59,7 @@ function Home(props) {
   const actionOnPressTCD = () => {
     if (props.auth.isLogin == true) {
       dispatch({ type: "setThreadTCD" });
+      dispatch({type:"SET_TYPE_AUTHOR", TypeAuthor:"tangcongdong"})
       navigation.navigate("ConfirmAddress",);
     }
     else navigation.replace("Authentication");
