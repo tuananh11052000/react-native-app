@@ -53,17 +53,16 @@ function ProductComponent(props) {
   };
   //get post
 
-  // useEffect(() => {
-  //   const getData = async () => {
-  //     let temp = await axios({
-  //       method: "get",
-  //       url: "https://smai-app-api.herokuapp.com/post/getNewPost",
-  //     }).finally(() =>setloading(false));
-  //     dispatch({ type: "UPDATE", data: temp.data });
-  //   };
-  //   getData();
-  // }, []);
-  console.log("m có được không" + props.listData);
+  useEffect(() => {
+    const getData = async () => {
+      let temp = await axios({
+        method: "get",
+        url: "https://smai-app-api.herokuapp.com/post/getNewPost",
+      }).finally(() =>setloading(false));
+      dispatch({ type: "UPDATE", data: temp.data });
+    };
+    getData();
+  }, []);
   //Function handling title post
   const renderTitle = (item) => {
     item = item.charAt(0).toUpperCase() + item.slice(1);
@@ -129,7 +128,7 @@ function ProductComponent(props) {
           </View>
       ) : (
         <FlatList
-          data={props.listData}
+          data={props.newestPost}
           renderItem={renderItem}
           keyExtractor={(item) => item._id}
           ItemSeparatorComponent={ItemSeparatorView}
