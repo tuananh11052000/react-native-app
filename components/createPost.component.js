@@ -6,8 +6,8 @@ import DropDownPicker from "react-native-dropdown-picker";
 import AddImg from "../assets/add.png";
 
 export default function CreatePosts(props) {
-  // const { navigation } = props;
-  // const [selectedValue, setSelectedValue] = useState("1");
+  const { navigation } = props;
+  const [selectedValue, setSelectedValue] = useState("1");
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState(null);
   const [items, setItems] = useState([
@@ -15,21 +15,66 @@ export default function CreatePosts(props) {
     { label: "Tin tặng cộng đồng", value: "2" },
     { label: "Tin cần xin đồ", value: "3" },
   ]);
-  return (
-    <View style={styles.wrapContent}>
-      <View style={styles.wrapPiker}>
-        {/* <Picker
+  let checkbox;
+  if (Platform.OS === "ios") {
+    //switch for ios
+    checkbox = (
+      <DropDownPicker
+        open={open}
+        value={value}
+        items={items}
+        setOpen={setOpen}
+        setValue={setValue}
+        setItems={setItems}
+        placeholder="Tất cả tin đăng"
+        // zIndex: {10}
+        // style={{ height: 41,}}
+        style={{
+          borderTopLeftRadius: 5,
+          borderTopRightRadius: 5,
+          borderBottomLeftRadius: 5,
+          borderBottomRightRadius: 5,
+          height: 41,
+          borderColor: "gray",
+        }}
+        dropDownContainerStyle={{
+          backgroundColor: "white",
+          borderColor: "gray",
+        }}
+      />
+    );
+  } else {
+    //check box
+    checkbox = (
+      <Picker
         selectedValue={selectedValue}
         onValueChange={(itemValue, itemIndex) => setSelectedValue(itemValue)}
-        mode={'dropdown'}
-        style={{ height: 40,}}
-      // style={styles.pikerStyle}
+        mode={"dropdown"}
+        style={{ height: 40 }}
+        // style={styles.pikerStyle}
       >
         <Picker.Item label="Tất cả tin đăng" value="1" />
         <Picker.Item label="Tin tặng cộng đồng" value="2" />
         <Picker.Item label="Tin cần xin đồ" value="3" />
-      </Picker> */}
-        <DropDownPicker
+      </Picker>
+    );
+  }
+  return (
+    <View style={styles.wrapContent}>
+      <View style={styles.wrapPikerA}>
+        {checkbox}
+        {/* <Picker
+          selectedValue={selectedValue}
+          onValueChange={(itemValue, itemIndex) => setSelectedValue(itemValue)}
+          mode={"dropdown"}
+          style={{ height: 40 }}
+          // style={styles.pikerStyle}
+        >
+          <Picker.Item label="Tất cả tin đăng" value="1" />
+          <Picker.Item label="Tin tặng cộng đồng" value="2" />
+          <Picker.Item label="Tin cần xin đồ" value="3" />
+        </Picker> */}
+        {/* <DropDownPicker
           open={open}
           value={value}
           items={items}
@@ -52,7 +97,7 @@ export default function CreatePosts(props) {
             backgroundColor: "white",
             borderColor: "gray",
           }}
-        />
+        /> */}
       </View>
       <TouchableOpacity
         activeOpacity={0.5}
@@ -74,6 +119,13 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15,
     paddingVertical: 10,
     // marginBottom: 10,
+  },
+  wrapPikerA: {
+    borderWidth: 1,
+    // flexDirection: "row",
+    borderRadius: 4,
+    borderColor: "gray",
+    width: "60%",
   },
   wrapPiker: {
     // borderWidth: 1,
