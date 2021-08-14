@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { View, Text, Image, StyleSheet, TouchableOpacity } from "react-native";
 
-import OTPInputView from "@twotalltotems/react-native-otp-input";
+// import OTPInputView from "@twotalltotems/react-native-otp-input";
 import logoSmai from "../assets/logo_smai.png";
 
 export default function VerifyOtp(props) {
@@ -9,12 +9,12 @@ export default function VerifyOtp(props) {
     <View style={styles.wrapContent}>
       <Image source={logoSmai} style={styles.styleImg} />
       <Text style={styles.styleText}>Nhập mã OTP</Text>
-      <OTPInputView
+      {/* <OTPInputView
         handleChange={(code) => console.log(code)}
         numberOfInputs={6}
         style={styles.optStyle}
         inputStyles={styles.optInput}
-      />
+      /> */}
       <TouchableOpacity
         activeOpacity={0.6}
         style={styles.button}
