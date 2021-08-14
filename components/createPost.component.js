@@ -15,10 +15,10 @@ export default function CreatePosts(props) {
     { label: "Tin tặng cộng đồng", value: "2" },
     { label: "Tin cần xin đồ", value: "3" },
   ]);
-  let checkbox;
+  let dropdown;
   if (Platform.OS === "ios") {
     //switch for ios
-    checkbox = (
+    dropdown = (
       <DropDownPicker
         open={open}
         value={value}
@@ -45,7 +45,7 @@ export default function CreatePosts(props) {
     );
   } else {
     //check box
-    checkbox = (
+    dropdown = (
       <Picker
         selectedValue={selectedValue}
         onValueChange={(itemValue, itemIndex) => setSelectedValue(itemValue)}
@@ -62,7 +62,7 @@ export default function CreatePosts(props) {
   return (
     <View style={styles.wrapContent}>
       <View style={styles.wrapPikerA}>
-        {checkbox}
+        {dropdown}
         {/* <Picker
           selectedValue={selectedValue}
           onValueChange={(itemValue, itemIndex) => setSelectedValue(itemValue)}
