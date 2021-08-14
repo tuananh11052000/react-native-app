@@ -17,7 +17,7 @@ export default function Completed(props) {
                 <View>
                     <Text style={styles.textRequired}>Đã được yêu cầu thành công</Text>
                 </View>
-                <TouchableOpacity activeOpacity={0.6} style={styles.buttonComplete} onPress={() => navigation.popToTop()}>
+                <TouchableOpacity activeOpacity={0.6} style={styles.buttonComplete} onPress={() => navigation.navigate('Home')}>
                     <Text style={styles.textComplete}>Xong</Text>
                 </TouchableOpacity>
             </View>
