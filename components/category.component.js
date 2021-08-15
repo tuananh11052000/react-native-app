@@ -42,7 +42,6 @@ function ExpandableListView(props) {
           props.item.subCategory.map((item, key) => (
             <TouchableOpacity key={key} style={styles.subCategoryText} onPress={() => showSelectedCategory(item, props.item.category)}>
               <Text style={{fontSize: 18}}> {item.name} </Text>
-              {/* <View style={{ width: '100%', height: 1, backgroundColor: '#000' }} /> */}
             </TouchableOpacity>
           ))
         }
@@ -211,10 +210,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: '#F5F5F5'
   },
-  Btn: {
-    padding: 10,
-    backgroundColor: '#F5F5F5'
-  }
+
 });
 export default connect(function (state) {
   return { infoPost: state.infoPost }

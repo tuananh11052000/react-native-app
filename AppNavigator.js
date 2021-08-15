@@ -29,6 +29,7 @@ import PostDonation from "./Screens/donationComunity";
 import VerifyOtps from "./Screens/verifyOtp";
 import GiveFor from "./Screens/giveFor";
 import ForgotPasswords from "./Screens/forgotPassword";
+import FilterDonationComunity from "./Screens/FilterDonationComunity";
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
 
@@ -287,6 +288,29 @@ function AppNavigator(props) {
               />
             ),
             title: "Lịch sử xem",
+            headerShown: true,
+            headerStyle: {
+              backgroundColor: config.color_header_background,
+            },
+            headerTintColor: config.headerTintColor,
+            headerTitleStyle: {
+              fontWeight: "bold",
+            },
+          })}
+        />
+
+        <Stack.Screen
+          name="FilterDonationComunity"
+          component={FilterDonationComunity}
+          options={({ navigation }) => ({
+            headerLeft: () => (
+              <HeaderBackButton
+                onPress={() => navigation.navigate("PostDonation")}
+                tintColor={"white"}
+                label="Quay lại" //back
+              />
+            ),
+            title: "Danh mục",
             headerShown: true,
             headerStyle: {
               backgroundColor: config.color_header_background,

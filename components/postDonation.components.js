@@ -13,7 +13,8 @@ import {
   Dimensions,
   TextInput,
 } from "react-native";
-import { Entypo, EvilIcons, FontAwesome, AntDesign  } from "@expo/vector-icons";
+import { connect } from "react-redux";
+import { Entypo, EvilIcons, FontAwesome, AntDesign } from "@expo/vector-icons";
 import { Picker } from "@react-native-picker/picker";
 import db from "../db.json";
 import axios from "axios";
@@ -21,15 +22,14 @@ import { Feather } from "@expo/vector-icons";
 const { width } = Dimensions.get("window");
 const height = width * 0.6;
 
-export default function App(props) {
+function App(props) {
   const [data, setData] = useState([]);
   const [isLoading, setisLoading] = useState(true);
   const [typeAuthor, settypeAuthor] = useState("tangcongdong");
-  const [query, setQuery] = useState("");
-  const [datafilter, setDataFilter] = useState([]);
   const [dataAddressFilter, setdataAddressFilter] = useState([]);
   const [selectedValue, setSelectedValue] = useState("1");
   const [listAddress, setListAddress] = useState(db.province);
+  const [dataCategoryFilter, setdataCategoryFilter] = useState([]);
   useEffect(() => {
     getListPhotos();
     return () => {};
@@ -43,8 +43,8 @@ export default function App(props) {
       .get(apiURL)
       .then((resjson) => {
         setData(resjson.data);
-        setDataFilter(resjson.data);
         setdataAddressFilter(resjson.data);
+        setdataCategoryFilter(resjson.data);
       })
       .catch((error) => {
         console.log("Error: ", error);
@@ -80,21 +80,7 @@ export default function App(props) {
     else if (calDay() != 0) return `${calDay()} ngày trước`;
     else return `${calHour()} giờ trước`;
   };
-  const handleSearch = (text) => {
-    setQuery(text);
-    if (text == "") setData(datafilter);
-    else {
-      const data = datafilter.filter((pr) => {
-        if (
-          pr.NameAuthor.toLowerCase().indexOf(text.toLowerCase()) != -1 ||
-          pr.title.toLowerCase().indexOf(text.toLowerCase()) != -1
-        )
-          return true;
-        else return false;
-      });
-      setData(data);
-    }
-  };
+
   //Function handling title post
   const renderTitle = (item) => {
     item = item.charAt(0).toUpperCase() + item.slice(1);
@@ -111,6 +97,37 @@ export default function App(props) {
   const _pressRow = (item) => {
     navigation.navigate("DetailPost", { data: item }); //chuyển trang
   };
+  //chuyển trang filter
+  const pressFilter = () => {
+    navigation.navigate("FilterDonationComunity");
+  };
+  // function lọc các danh mục đã chọn
+  const categoryFilter = props.dataCategory.NameProduct;
+  let listAfterFilter = [];
+  const filterCategory = () => {
+    const listData = dataCategoryFilter;
+    for (let i = 0; i < categoryFilter.length; i++) {
+      for (let j = 0; j < listData.length; j++) {
+        let namepro = listData[j].NameProduct;
+        console.log("Đây là name product***************************\n");
+        console.log(namepro[0].Category);
+        console.log(namepro[0].NameProduct);
+        console.log(categoryFilter[i].category);
+        console.log(categoryFilter[i].name);
+        console.log("**************************************\n");
+        if (categoryFilter[i].category == namepro[0].Category) {
+          if (categoryFilter[i].name == namepro[0].NameProduct) {
+            listAfterFilter.push(listData[j]);
+          }
+        }
+      }
+    }
+    console.log("Sau khi lọc")
+    // console.log(listAfterFilter)
+  };
+  // filterCategory();
+
+
   // handle picker address
   const handleFilter = (city) => {
     console.log(city);
@@ -126,6 +143,7 @@ export default function App(props) {
       setData(dataAddress);
     }
   };
+  //  render spinner city
   const countryList = () => {
     return listAddress.map((x, i) => {
       return <Picker.Item label={x.name} key={i} value={x.name} />;
@@ -177,9 +195,18 @@ export default function App(props) {
       ) : (
         <>
           <View style={styles.searchFilterContainer}>
-            <TouchableOpacity style={styles.wrapFilterButton}  activeOpacity={0.5} >
-              <Text style={{fontSize: 20, }}>Tất cả</Text>
-              <AntDesign name="appstore-o" size={24} color="#909090" style={{position: 'absolute', right: '5%'}}/>
+            <TouchableOpacity
+              style={styles.wrapFilterButton}
+              activeOpacity={0.5}
+              onPress={() => pressFilter()}
+            >
+              <Text style={{ fontSize: 20 }}>Tất cả</Text>
+              <AntDesign
+                name="appstore-o"
+                size={24}
+                color="#909090"
+                style={{ position: "absolute", right: "5%" }}
+              />
             </TouchableOpacity>
             <View style={{ width: "40%" }}>
               <Picker
@@ -234,9 +261,9 @@ const styles = StyleSheet.create({
     paddingLeft: "1%",
     borderWidth: 2,
     borderColor: "#EEEEEE",
-    justifyContent: 'space-around',
+    justifyContent: "space-around",
     alignItems: "center",
-    marginLeft: '3%'
+    marginLeft: "3%",
   },
   searchText: {
     backgroundColor: "#fff",
@@ -298,3 +325,8 @@ const styles = StyleSheet.create({
     fontSize: 20,
   },
 });
+export default connect(function (state) {
+  return {
+    dataCategory: state.dataCategory,
+  };
+})(App);
