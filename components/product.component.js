@@ -64,16 +64,18 @@ function ProductComponent(props) {
       setData(temp.data)
     };
     const getDataHistory = async()=>{
-      let temp = await axios({
-        methoid:'GET',
+      await axios({
+        method:'get',
         url:"https://smai-app-api.herokuapp.com/user/getHistoryPost",
         headers:{
           Authorization: 'bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2NvdW50SUQiOiI2MGU5Y2M5ZjJkMzlkYzJkMTBkOGM2OWQiLCJpYXQiOjE2Mjc5OTkwNzh9.XxzvJigOW0GGSotGY69Xs-GxuEZ8DFxfRd5WzetDvgc'
         }
-      }).finally(() =>setloading(false));
-      console.log("begin")
-      console.log(temp.data.length)
-      setData(temp.data)
+      }).then((data) =>{
+        setloading(false)
+        console.log(data.data.length)
+        console.log(data.data)
+        setData(data.data)
+      });
     }
     if(props.type=="history")
     {
@@ -82,7 +84,6 @@ function ProductComponent(props) {
     else
       getDataHome();
   }, [props.data_]);
-  console.log(dataRender.length)
   //Function handling title post
   const renderTitle = (item) => {
     item = item.charAt(0).toUpperCase() + item.slice(1);
