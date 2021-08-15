@@ -1,20 +1,42 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useState } from "react";
 import {
-  ScrollView,
   StyleSheet,
-  Text,
   View,
-  StatusBar,
-  Linking,
+  Text
 } from "react-native";
 import ProductComponent from '../components/product.component'
-const heightStatusBar = StatusBar.currentHeight;
+import axios from 'axios'
 
 export default function historyPage(props) {
-    const { navigation } = props;
+  const [data, getData] = useState({})
+  useEffect(()=>{
+    const getDataFunc = async()=>{
+      await axios({
+        methoid:'GET',
+        url:"https://smai-app-api.herokuapp.com/user/getHistoryPost",
+        headers:{
+          Authorization: 'bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2NvdW50SUQiOiI2MGU5Y2M5ZjJkMzlkYzJkMTBkOGM2OWQiLCJpYXQiOjE2Mjc5OTkwNzh9.XxzvJigOW0GGSotGY69Xs-GxuEZ8DFxfRd5WzetDvgc'
+        }
+      }).then(res=>{
+        getData({...data, data:res.data})
+      })
+    }
+    getDataFunc()
+  },[])
+  const { navigation } = props;
+  const renderItem = ()=>{
+    if(!data)
+      return <ProductComponent navigation={navigation}/>
+    else
+    {
+      return <ProductComponent navigation={navigation} data_={data.data} type="history"/>
+    }
+  }
+
   return (
     <View style={styles.container}>
-      <ProductComponent navigation={navigation}/>
+      <Text>{data.length}</Text>
+      {renderItem()}
     </View>
   );
 }

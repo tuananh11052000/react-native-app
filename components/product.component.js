@@ -22,7 +22,9 @@ const { width, height } = Dimensions.get("window");
 function ProductComponent(props) {
   var { dispatch } = props;
   const [loading, setloading] = useState(true);
-  const [refreshing, setrefreshing] = useState(true);
+
+  const [dataRender, setData] = useState([])
+
   const calculatingTime = (d1, d2) => {
     d1 = new Date(d1);
     const calHour = () => {
@@ -54,15 +56,33 @@ function ProductComponent(props) {
   //get post
 
   useEffect(() => {
-    const getData = async () => {
+    const getDataHome = async () => {
       let temp = await axios({
         method: "get",
         url: "https://smai-app-api.herokuapp.com/post/getNewPost",
       }).finally(() =>setloading(false));
-      dispatch({ type: "UPDATE", data: temp.data });
+      setData(temp.data)
     };
-    getData();
-  }, []);
+    const getDataHistory = async()=>{
+      let temp = await axios({
+        methoid:'GET',
+        url:"https://smai-app-api.herokuapp.com/user/getHistoryPost",
+        headers:{
+          Authorization: 'bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2NvdW50SUQiOiI2MGU5Y2M5ZjJkMzlkYzJkMTBkOGM2OWQiLCJpYXQiOjE2Mjc5OTkwNzh9.XxzvJigOW0GGSotGY69Xs-GxuEZ8DFxfRd5WzetDvgc'
+        }
+      }).finally(() =>setloading(false));
+      console.log("begin")
+      console.log(temp.data.length)
+      setData(temp.data)
+    }
+    if(props.type=="history")
+    {
+      getDataHistory()
+    }
+    else
+      getDataHome();
+  }, [props.data_]);
+  console.log(dataRender.length)
   //Function handling title post
   const renderTitle = (item) => {
     item = item.charAt(0).toUpperCase() + item.slice(1);
@@ -128,7 +148,7 @@ function ProductComponent(props) {
           </View>
       ) : (
         <FlatList
-          data={props.newestPost}
+          data={dataRender}
           renderItem={renderItem}
           keyExtractor={(item) => item._id}
           ItemSeparatorComponent={ItemSeparatorView}
@@ -198,5 +218,5 @@ const style = StyleSheet.create({
 });
 
 export default connect(function (state) {
-  return { num: state.countNumber, newestPost: state.newestPost };
+  return { newestPost: state.newestPost };
 })(ProductComponent);
