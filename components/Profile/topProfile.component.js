@@ -10,47 +10,87 @@ import { MaterialIcons } from '@expo/vector-icons';
 import config from '../../config';
 import * as SecureStore from 'expo-secure-store';
 import { Button } from 'react-native-elements';
+import * as ImagePicker from 'expo-image-picker';
 //check token
-
-async function getToken() {
-    let result = await SecureStore.getItemAsync('token');
-    if (result) {
-        return await result;
-    } else {
-        return await 'Null'
-    }
-}
 
 //We will consider isLogin state and decide what will appear on the screen
 function TopProfile(props) {
-    const [token, setToken] = useState('Null')//token
     const [avatar, getAvatar] = useState('');
     const [FullName, getName] = useState('');
+    const [avtUpload, setAvatar] = useState('');
     const { dispatch } = props;
+    let openImagePickerAsync = async () => {
+        let token = await SecureStore.getItemAsync('token');
+        let permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
+
+        if (permissionResult.granted === false) {
+            alert("Permission to access camera roll is required!");
+            return;
+        }
+        let pickerResult = await ImagePicker.launchImageLibraryAsync();
+        setAvatar(pickerResult.uri);
+        let apiUrl = "https://smai-app-api.herokuapp.com/user/profileUser";
+        let formData = new FormData();
+        let uri = pickerResult.uri;
+        let uriArray = uri.split(".");
+        let fileType = uriArray[uriArray.length - 1];
+        formData.append("imageUser", {
+            uri: uri,
+            name: `photo.${fileType}`,
+            type: `image/${fileType}`,
+        });
+        let options = {
+            method: "POST",
+            body: formData,
+            mode: 'cors',
+            headers: {
+                Accept: "application/json",
+                "Content-Type": "multipart/form-data",
+                Authorization: token
+            },
+        };
+        fetch(apiUrl, options).then(data => console.log(data))
+        console.log(token)
+    }
     useEffect(() => {
-        const getAvtFunc = async()=>{
-            if(props.auth.isLogin==true)
-            {
+        const getAvtFunc = async () => {
+            if (props.auth.isLogin == true) {
                 let avatar_ = await SecureStore.getItemAsync('avatar');
                 let Name = await SecureStore.getItemAsync('FullName');
                 getAvatar(avatar_)
                 getName(Name);
-            } 
+            }
         }
         getAvtFunc();
     }, [])
-    const renderAvatar = ()=>{
-        if(avatar)
-            return<Avatar
-            containerStyle={{marginTop:15}}
-            rounded
-            size="large"
-            source={{
-                uri:avatar,
-            }}
-            />
+    console.log(avatar)
+    const renderAvatar = () => {
+        if (avatar)
+            return <Avatar
+                size={90}
+                rounded
+                source={{ uri: avatar }}
+                containerStyle={styles.avatarContainer}
+                onPress={() => {
+                    openImagePickerAsync();
+                }}>
+                <Avatar.Accessory
+                    size={30}
+                />
+            </Avatar>
         else
-            return <MaterialIcons name="account-circle" size={96} color="#BDBDBD" />
+            return <Avatar
+                size={90}
+                rounded
+                source={{ uri: "https://www.alliancerehabmed.com/wp-content/uploads/icon-avatar-default.png" }}
+                containerStyle={styles.avatarContainer}
+                onPress={() => {
+                    openImagePickerAsync();
+                }}>
+                <Avatar.Accessory
+                    size={30}
+                />
+            </Avatar>
     }
     if (props.auth.isLogin == false) {
         return (<View style={styles.wrapAll}>
@@ -62,7 +102,6 @@ function TopProfile(props) {
                     buttonStyle={styles.buttonLogIn}
                     titleStyle={styles.titleStyle}
                     type="outline" />
-
             </View>
         </View>
         )
@@ -134,8 +173,8 @@ const styles = StyleSheet.create({
         color: config.color_btn_1,
         fontSize: 20
     },
-    avatar:{
-        marginTop:'20px'
+    avatar: {
+        marginTop: '20px'
     }
 
 })

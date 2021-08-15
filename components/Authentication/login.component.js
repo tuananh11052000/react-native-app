@@ -37,14 +37,14 @@ function Login(props) {
                     await save('token', 'bearer ' + data.data.accessToken)
                     await save('PhoneNumber', PhoneNumber)
                     await axios({
-                        method:'get',
-                        url:"https://smai-app-api.herokuapp.com/user/getInForUserByTokenId",
-                        headers:{
-                            Authorization:'bearer ' + data.data.accessToken
+                        method: 'get',
+                        url: "https://smai-app-api.herokuapp.com/user/getInForUserByTokenId",
+                        headers: {
+                            Authorization: 'bearer ' + data.data.accessToken
                         }
-                    }).then((data)=>{
-                        save('avatar', data.data.urlImage);
-                        save('FullName',data.data.FullName)
+                    }).then((data) => {
+                        save('avatar', data.data.urlIamge);
+                        save('FullName', data.data.FullName)
                     })
                     dispatch({ type: 'SIGN_IN', token: data.data.accessToken, PhoneNumber: PhoneNumber })
                     props.onPress()
@@ -117,15 +117,15 @@ function Login(props) {
             {/* <Text>Is CheckBox selected: {checked ? "👍" : "👎"}</Text> */}
             <Text style={styles.forgotPassword} onPress={() => {
                 // loginFunction(UserName, PhoneNumber, Password)
-                   props.navigation.navigate("ForgotPasswords");
+                props.navigation.navigate("ForgotPasswords");
             }}>Quên mật khẩu</Text>
         </View>
         <View style={styles.layoutBtnLogin}>
             <Button onPress={() => {
                 loginFunction(PhoneNumber, Password)
             }}
-            color={config.color_btn_1}
-            size="large">
+                color={config.color_btn_1}
+                size="large">
                 <Text style={styles.btnLogin}>Đăng nhập</Text>
 
             </Button>

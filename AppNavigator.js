@@ -1,7 +1,6 @@
 import * as React from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import { connect } from 'react-redux'
 
 import {
@@ -100,10 +99,10 @@ function AppNavigator(props) {
                         text: "Không",
                         style: "cancel"
                       },
-                      { text: "Có",style: "cancel", onPress: () => navigation.navigate("Home") }
+                      { text: "Có", style: "cancel", onPress: () => navigation.navigate("Home") }
                     ]
                   );
-                  
+
                 }}
               >
                 <Text style={styles.textCancel}>Hủy</Text>
@@ -145,10 +144,10 @@ function AppNavigator(props) {
                         text: "Không",
                         style: "cancel"
                       },
-                      { text: "Có",style: "cancel", onPress: () => navigation.navigate("Home") }
+                      { text: "Có", style: "cancel", onPress: () => navigation.navigate("Home") }
                     ]
                   );
-                  
+
                 }}
               >
                 <Text style={styles.textCancel}>Hủy</Text>
@@ -191,10 +190,10 @@ function AppNavigator(props) {
                         text: "Không",
                         style: "cancel"
                       },
-                      { text: "Có",style: "cancel", onPress: () => navigation.navigate("Home") }
+                      { text: "Có", style: "cancel", onPress: () => navigation.navigate("Home") }
                     ]
                   );
-                  
+
                 }}
               >
                 <Text style={styles.textCancel}>Hủy</Text>
