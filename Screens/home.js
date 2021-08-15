@@ -12,7 +12,7 @@ import {
   ActivityIndicator,
   TouchableOpacity,
   Dimensions,
-  RefreshControl
+  RefreshControl,
 } from "react-native";
 import { connect } from "react-redux";
 import { Feather } from "@expo/vector-icons";
@@ -34,7 +34,7 @@ function Home(props) {
     let temp = await axios({
       method: "get",
       url: "https://smai-app-api.herokuapp.com/post/getNewPost",
-    }).finally(() =>setrefreshing(false));
+    }).finally(() => setrefreshing(false));
     setlistData(temp.data);
     dispatch({ type: "UPDATE", data: temp.data });
   };
@@ -59,37 +59,33 @@ function Home(props) {
   const actionOnPressTCD = () => {
     if (props.auth.isLogin == true) {
       dispatch({ type: "setThreadTCD" });
-      dispatch({type:"SET_TYPE_AUTHOR", TypeAuthor:"tangcongdong"})
-      navigation.navigate("ConfirmAddress",);
-    }
-    else navigation.replace("Authentication");
+      dispatch({ type: "SET_TYPE_AUTHOR", TypeAuthor: "tangcongdong" });
+      navigation.navigate("ConfirmAddress");
+    } else navigation.replace("Authentication");
   };
   // onPress tặng người nghèo
   const actionOnPressGiveCaNhan = () => {
     if (props.auth.isLogin == true) {
       dispatch({ type: "setThreadGiveGroup" });
       dispatch({ type: "giveForCaNhan" });
-      navigation.navigate("ConfirmAddress",);
-    }
-    else navigation.replace("Authentication");
+      navigation.navigate("ConfirmAddress");
+    } else navigation.replace("Authentication");
   };
   // onpress tặng quỹ từ thiện
   const actionOnPressGiveQuy = () => {
     if (props.auth.isLogin == true) {
       dispatch({ type: "setThreadGiveGroup" });
       dispatch({ type: "giveForQuy" });
-      navigation.navigate("ConfirmAddress",);
-    }
-    else navigation.replace("Authentication");
+      navigation.navigate("ConfirmAddress");
+    } else navigation.replace("Authentication");
   };
   // onpress quyên góp công ích
   const actionOnPressGiveCongIch = () => {
     if (props.auth.isLogin == true) {
       dispatch({ type: "setThreadGiveGroup" });
       dispatch({ type: "giveForCongIch" });
-      navigation.navigate("ConfirmAddress",);
-    }
-    else navigation.replace("Authentication");
+      navigation.navigate("ConfirmAddress");
+    } else navigation.replace("Authentication");
   };
   const { navigation } = props;
   //ConfirmAddress
@@ -183,23 +179,21 @@ function Home(props) {
     );
   };
   const onRefresh = () => {
-      setlistData([]);
-      getData();
-
-  }
+    setlistData([]);
+    getData();
+  };
   ////////////////////////////////////////////////////
 
   return (
     <View style={styles.container}>
-      <ScrollView refreshControl={
-          <RefreshControl
-            refreshing={refreshing}
-            onRefresh={onRefresh}
-          />
-        }>
+      <ScrollView
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
+      >
         <SearchComponent onPress={() => navigation.navigate("Search")} />
         <GiftComponent
-          onPressTCD={() => actionOnPressTCD()} 
+          onPressTCD={() => actionOnPressTCD()}
           onPressGiveCaNhan={() => actionOnPressGiveCaNhan()}
           onPressGiveQuy={() => actionOnPressGiveQuy()}
           onPressGiveCongIch={() => actionOnPressGiveCongIch()}
@@ -213,16 +207,16 @@ function Home(props) {
         <TitleComponent title="Tin mới nhất" />
         {/* <ProductComponent navigation={navigation} listData={listData}/> */}
         <View style={styles.containerr}>
-            {
-                refreshing ? <ActivityIndicator/> : 
-                <FlatList
-                    data={listData}
-                    renderItem={renderItem}
-                    keyExtractor={(item) => item._id}
-                    ItemSeparatorComponent={ItemSeparatorView}
-              />
-            }
-          
+          {refreshing ? (
+            <ActivityIndicator />
+          ) : (
+            <FlatList
+              data={listData}
+              renderItem={renderItem}
+              keyExtractor={(item) => item._id}
+              ItemSeparatorComponent={ItemSeparatorView}
+            />
+          )}
         </View>
       </ScrollView>
     </View>
