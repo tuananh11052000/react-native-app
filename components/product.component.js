@@ -12,6 +12,7 @@ import {
   RefreshControl, 
 } from "react-native";
 import { connect } from "react-redux";
+import * as SecureStore from "expo-secure-store";
 import axios from "axios";
 import SearchComponent from "../components/search.component";
 
@@ -20,7 +21,7 @@ import { Feather } from "@expo/vector-icons";
 const { width, height } = Dimensions.get("window");
 
 function ProductComponent(props) {
-  var { dispatch } = props;
+  var { dispatch } = props; 
   const [loading, setloading] = useState(true);
 
   const [dataRender, setData] = useState([])
@@ -64,16 +65,15 @@ function ProductComponent(props) {
       setData(temp.data)
     };
     const getDataHistory = async()=>{
+      let result = await SecureStore.getItemAsync("token");
       await axios({
         method:'get',
         url:"https://smai-app-api.herokuapp.com/user/getHistoryPost",
         headers:{
-          Authorization: 'bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2NvdW50SUQiOiI2MGU5Y2M5ZjJkMzlkYzJkMTBkOGM2OWQiLCJpYXQiOjE2Mjc5OTkwNzh9.XxzvJigOW0GGSotGY69Xs-GxuEZ8DFxfRd5WzetDvgc'
+          Authorization: result
         }
       }).then((data) =>{
         setloading(false)
-        console.log(data.data.length)
-        console.log(data.data)
         setData(data.data)
       });
     }
@@ -200,7 +200,7 @@ const style = StyleSheet.create({
     flexDirection: "row",
   },
   time: {
-    fontSize: 20,
+    fontSize: 15,
     marginLeft: 7,
     color: "gray",
   },
@@ -214,7 +214,7 @@ const style = StyleSheet.create({
   },
   address: {
     color: "gray",
-    fontSize: 20,
+    fontSize: 15,
   },
 });
 

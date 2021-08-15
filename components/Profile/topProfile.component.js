@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import {
-    Text, View, StyleSheet, ScrollView, TouchableOpacity, Alert
+    Text, View, StyleSheet, ScrollView, TouchableOpacity, Alert, Image
 } from 'react-native'
+import { Avatar } from 'react-native-elements';
 
 import { connect } from 'react-redux'
 import { FontAwesome } from '@expo/vector-icons';
@@ -23,14 +24,34 @@ async function getToken() {
 //We will consider isLogin state and decide what will appear on the screen
 function TopProfile(props) {
     const [token, setToken] = useState('Null')//token
+    const [avatar, getAvatar] = useState('');
+    const [FullName, getName] = useState('');
     const { dispatch } = props;
     useEffect(() => {
-        getToken().then(profile => {
-            setToken(profile)
-        }, (error) => {
-            console.log('An error has occur: ', error)
-        })
+        const getAvtFunc = async()=>{
+            if(props.auth.isLogin==true)
+            {
+                let avatar_ = await SecureStore.getItemAsync('avatar');
+                let Name = await SecureStore.getItemAsync('FullName');
+                getAvatar(avatar_)
+                getName(Name);
+            } 
+        }
+        getAvtFunc();
     }, [])
+    const renderAvatar = ()=>{
+        if(avatar)
+            return<Avatar
+            containerStyle={{marginTop:15}}
+            rounded
+            size="large"
+            source={{
+                uri:avatar,
+            }}
+            />
+        else
+            return <MaterialIcons name="account-circle" size={96} color="#BDBDBD" />
+    }
     if (props.auth.isLogin == false) {
         return (<View style={styles.wrapAll}>
             <MaterialIcons name="account-circle" size={96} color="#BDBDBD" />
@@ -49,9 +70,9 @@ function TopProfile(props) {
     else {
         return (
             <View style={styles.wrapAll}>
-                <MaterialIcons name="account-circle" size={96} color="gray" />
+                {renderAvatar()}
                 <View>
-                    <Text style={styles.text} >Nguyễn Duy Phú</Text>
+                    <Text style={styles.text} >{FullName}</Text>
                     <View style={styles.container}>
                         <MaterialIcons style={styles.icon_person} name="person-outline" size={30} color="#BDBDBD"></MaterialIcons>
                         <Text style={styles.text_person} >Cá nhân</Text>
@@ -112,6 +133,9 @@ const styles = StyleSheet.create({
     titleStyle: {
         color: config.color_btn_1,
         fontSize: 20
+    },
+    avatar:{
+        marginTop:'20px'
     }
 
 })
