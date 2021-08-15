@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import OtpBox from "./otpBox.component"
 import {
   StyleSheet,
   Text,
@@ -10,6 +11,7 @@ import { Checkbox, TextInput } from "react-native-paper";
 const heightStatusBar = StatusBar.currentHeight; //lay ra chieu cao cua thanh trang thai
 
 export default function ForgotPassword(props) {
+  const [PhoneNumber, onChangePhone] = useState('');
   return (
     <View style={styles.wrapContent}>
       {/* <Text style={styles.styleText}>Nhập số điện thoại:</Text> */}
@@ -34,6 +36,7 @@ export default function ForgotPassword(props) {
         <Text style={styles.btnText}>Xác nhận số điện thoại</Text>
       </TouchableOpacity>
       <Text style={styles.styleText}>Nhập mã OTP</Text>
+      <OtpBox />
       <TouchableOpacity
         activeOpacity={0.6}
         style={styles.button}
@@ -66,7 +69,7 @@ const styles = StyleSheet.create({
     // width: "90%",
     marginBottom: "15%",
     paddingVertical: 8,
-    paddingHorizontal: "20%",
+    paddingHorizontal: "14%",
     backgroundColor: "#EBEBEB",
     borderRadius: 5,
   },
@@ -76,10 +79,9 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   button: {
-    // width: "90%",
-    marginBottom: 20,
+    marginTop: 35,
     paddingVertical: 5,
-    paddingHorizontal: "38%",
+    paddingHorizontal: "32%",
     backgroundColor: "#E53935",
     borderRadius: 5,
   },
