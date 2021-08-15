@@ -37,10 +37,9 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   button: {
-    // width: "90%",
-    marginBottom: 20,
+    marginTop: 40,
     paddingVertical: 5,
-    paddingHorizontal: 100,
+    paddingHorizontal: "30%",
     backgroundColor: "#E53935",
     borderRadius: 5,
   },

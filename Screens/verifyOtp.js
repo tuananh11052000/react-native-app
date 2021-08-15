@@ -20,6 +20,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     alignItems: 'center',
     // marginTop: heightStatusBar,
-    paddingTop: heightStatusBar*3,
+    paddingTop: heightStatusBar*2,
   },
 });
