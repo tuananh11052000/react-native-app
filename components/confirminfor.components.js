@@ -48,6 +48,12 @@ function App(props) {
       <Entypo   name="plus" size={110} color="#CCCCCC" />
     </>
   );
+  const getTypeAuthor = ()=>{
+    if(props.infoPost.TypeAuthor == 'tangcongdong')
+      return "Tặng cộng đồng"
+    else
+      return props.infoPost.TypeAuthor
+  }
   return (
     <ScrollView>
       <View style={styles.backgroundTitle}>
@@ -55,7 +61,7 @@ function App(props) {
       </View>
       <View style={styles.container}>
         <Text style={styles.childTitle}>Bạn là ai*</Text>
-        <Text style={styles.textContent}>{props.infoPost.TypeAuthor}</Text>
+        <Text style={styles.textContent}>{getTypeAuthor()}</Text>
       </View>
       <View style={styles.container}>
         <Text style={styles.childTitle}>Danh mục*</Text>
