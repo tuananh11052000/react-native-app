@@ -11,6 +11,7 @@ import { Button } from "galio-framework";
 import config from "../../config";
 import { TextInput } from "react-native-paper";
 import { useForm, Controller } from "react-hook-form";
+import axios from "axios";
 
 // async function save(key, value) {
 //     await SecureStore.setItemAsync(key, value);
@@ -85,7 +86,29 @@ function SignUp(props) {
     formState: { errors },
     getValues,
   } = useForm();
-const onSubmit = (data) => console.log(data.password);
+const onSubmit = async (data) => {
+    //Check xem sddt đã tồn tại hay chưa 
+    if(data.phonenumber){
+        console.log(data.phonenumber)
+        await axios
+          .post("https://smai-app-api.herokuapp.com/account/getPhone", {
+            PhoneNumber: data.phonenumber,
+          })
+          .then((res) => {
+            if (res.data === "Oke") {
+              console.log(res.data);
+              props.navigation.navigate("VerifyOtps"); //chuyển trang
+            }
+            else {
+                alert("Số điện thoại đã tồn tại")
+            }
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+    }
+  
+};
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
