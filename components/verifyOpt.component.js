@@ -7,40 +7,40 @@ import { View, Text, Image, StyleSheet, TouchableOpacity } from "react-native";
 //   import OtpInputs from "react-native-otp-inputs";
 // }
 
-import OTPInputView from "@twotalltotems/react-native-otp-input";
-import OtpInputs from "react-native-otp-inputs";
+// import OTPInputView from "@twotalltotems/react-native-otp-input";
+// import OtpInputs from "react-native-otp-inputs";
 
 import logoSmai from "../assets/logo_smai.png";
 
 export default function VerifyOtp(props) {
   let optInput;
-  if (Platform.OS === "ios") {
-    //switch for ios
-    optInput = (
-      <OTPInputView
-        handleChange={(code) => console.log(code)}
-        numberOfInputs={6}
-        style={styles.optStyle}
-        inputStyles={styles.optInput}
-      />
-    );
-  } else {
-    //check box
-    optInput = (
-      <OtpInputs
-        handleChange={(code) => console.log(code)}
-        numberOfInputs={6}
-        style={styles.optStyle}
-        inputStyles={styles.optInput}
-      />
-    );
-  }
+  // if (Platform.OS === "ios") {
+  //   //switch for ios
+  //   optInput = (
+  //     <OTPInputView
+  //       handleChange={(code) => console.log(code)}
+  //       numberOfInputs={6}
+  //       style={styles.optStyle}
+  //       inputStyles={styles.optInput}
+  //     />
+  //   );
+  // } else {
+  //   //check box
+  //   optInput = (
+  //     <OtpInputs
+  //       handleChange={(code) => console.log(code)}
+  //       numberOfInputs={6}
+  //       style={styles.optStyle}
+  //       inputStyles={styles.optInput}
+  //     />
+  //   );
+  
 
   return (
     <View style={styles.wrapContent}>
       <Image source={logoSmai} style={styles.styleImg} />
       <Text style={styles.styleText}>Nhập mã OTP</Text>
-      {optInput}
+      {/* {optInput} */}
       {/* <OTPInputView
         handleChange={(code) => console.log(code)}
         numberOfInputs={6}
