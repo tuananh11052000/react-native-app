@@ -12,6 +12,7 @@ import {
   RefreshControl, 
 } from "react-native";
 import { connect } from "react-redux";
+import * as SecureStore from "expo-secure-store";
 import axios from "axios";
 import SearchComponent from "../components/search.component";
 
@@ -20,9 +21,11 @@ import { Feather } from "@expo/vector-icons";
 const { width, height } = Dimensions.get("window");
 
 function ProductComponent(props) {
-  var { dispatch } = props;
+  var { dispatch } = props; 
   const [loading, setloading] = useState(true);
-  const [refreshing, setrefreshing] = useState(true);
+
+  const [dataRender, setData] = useState([])
+
   const calculatingTime = (d1, d2) => {
     d1 = new Date(d1);
     const calHour = () => {
@@ -54,15 +57,33 @@ function ProductComponent(props) {
   //get post
 
   useEffect(() => {
-    const getData = async () => {
+    const getDataHome = async () => {
       let temp = await axios({
         method: "get",
         url: "https://smai-app-api.herokuapp.com/post/getNewPost",
       }).finally(() =>setloading(false));
-      dispatch({ type: "UPDATE", data: temp.data });
+      setData(temp.data)
     };
-    getData();
-  }, []);
+    const getDataHistory = async()=>{
+      let result = await SecureStore.getItemAsync("token");
+      await axios({
+        method:'get',
+        url:"https://smai-app-api.herokuapp.com/user/getHistoryPost",
+        headers:{
+          Authorization: result
+        }
+      }).then((data) =>{
+        setloading(false)
+        setData(data.data)
+      });
+    }
+    if(props.type=="history")
+    {
+      getDataHistory()
+    }
+    else
+      getDataHome();
+  }, [props.data_]);
   //Function handling title post
   const renderTitle = (item) => {
     item = item.charAt(0).toUpperCase() + item.slice(1);
@@ -128,7 +149,7 @@ function ProductComponent(props) {
           </View>
       ) : (
         <FlatList
-          data={props.newestPost}
+          data={dataRender}
           renderItem={renderItem}
           keyExtractor={(item) => item._id}
           ItemSeparatorComponent={ItemSeparatorView}
@@ -179,7 +200,7 @@ const style = StyleSheet.create({
     flexDirection: "row",
   },
   time: {
-    fontSize: 20,
+    fontSize: 15,
     marginLeft: 7,
     color: "gray",
   },
@@ -193,10 +214,10 @@ const style = StyleSheet.create({
   },
   address: {
     color: "gray",
-    fontSize: 20,
+    fontSize: 15,
   },
 });
 
 export default connect(function (state) {
-  return { num: state.countNumber, newestPost: state.newestPost };
+  return { newestPost: state.newestPost };
 })(ProductComponent);

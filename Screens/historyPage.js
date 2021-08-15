@@ -1,20 +1,18 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useState } from "react";
 import {
-  ScrollView,
   StyleSheet,
-  Text,
   View,
-  StatusBar,
-  Linking,
+  Text
 } from "react-native";
 import ProductComponent from '../components/product.component'
-const heightStatusBar = StatusBar.currentHeight;
+import axios from 'axios'
 
 export default function historyPage(props) {
-    const { navigation } = props;
+  const { navigation } = props;
+
   return (
     <View style={styles.container}>
-      <ProductComponent navigation={navigation}/>
+      <ProductComponent navigation={navigation}  type="history"/>
     </View>
   );
 }

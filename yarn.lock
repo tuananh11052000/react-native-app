@@ -1700,7 +1700,7 @@
   "resolved" "https://registry.npmjs.org/@react-native-aria/utils/-/utils-0.2.7.tgz"
   "version" "0.2.7"
 
-"@react-native-clipboard/clipboard@*", "@react-native-clipboard/clipboard@^1.8.4":
+"@react-native-clipboard/clipboard@^1.8.4":
   "integrity" "sha512-poFq3RvXzkbXcqoQNssbZ+aNbCRzBFAWkR9QL7u9xNMgsyWZtk7d16JQoaBo8D2E+kKi+/9JOiVQzA5w+9N67w=="
   "resolved" "https://registry.npmjs.org/@react-native-clipboard/clipboard/-/clipboard-1.8.4.tgz"
   "version" "1.8.4"
@@ -6446,10 +6446,12 @@
   "resolved" "https://registry.npmjs.org/react-native-material-menu/-/react-native-material-menu-1.2.0.tgz"
   "version" "1.2.0"
 
-"react-native-otp-inputs@^7.0.3":
-  "integrity" "sha512-s+Bfcct2xpNSOqO9EiGjDh0RzwjDuiNW+nH41BzUz3ahL2iHo073RutHtb4wrvHX9r8f9aJNsfI9HtVCS80slA=="
-  "resolved" "https://registry.npmjs.org/react-native-otp-inputs/-/react-native-otp-inputs-7.0.3.tgz"
-  "version" "7.0.3"
+"react-native-otp-textinput@^0.0.8":
+  "integrity" "sha512-jBYawUTa6qo7tUaHNZTYdNPGztSYjaPMX5iSOSiSQPy3+VQ+LqtLy5QschldFPJuh0pNDKqIB0d3K0kAEuC5Kg=="
+  "resolved" "https://registry.npmjs.org/react-native-otp-textinput/-/react-native-otp-textinput-0.0.8.tgz"
+  "version" "0.0.8"
+  dependencies:
+    "prop-types" "^15.6.2"
 
 "react-native-pager-view@*", "react-native-pager-view@^5.2.1":
   "integrity" "sha512-6aqsVr6Z4MjYP57lMwNEurlOPah0Lw34L6x+/nI6SxY+wyqZI+uaEB7sWS5EIcgQ9cGKMo925LnVWd6Xilu33A=="
