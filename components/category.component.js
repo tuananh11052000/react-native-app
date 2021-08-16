@@ -57,14 +57,14 @@ function CategoryComponent(props) {
   const CONTENT = [
     {
       expanded: false,
-      category: "Nhu yếu phẩm (thực phẩm, y tế)",
+      category: "Thực phẩm và đồ y tế",
       subCategory: [
-        { id: 1, name: 'Thực phẩm tươi sống ( thịt, rau, củ quả,…)' },
-        { id: 2, name: 'Thực phẩm đóng gói ( bánh, mắm, dầu ăn, mỳ,…)' },
-        { id: 3, name: 'Lương thực ( gạo, ngô, khoai sắn,…)' },
-        { id: 4, name: 'Đồ cá nhân ( bột giặt, dầu gội, kem đánh răng,…)' },
-        { id: 5, name: 'Yếu phẩm y tế (khẩu trang, nước diệt khuẩn,…)' },
-        { id: 6, name: 'Đồ tổng hợp' }]
+        { id: 1, name: 'Thịt, cá, trứng, sữa,…' },
+        { id: 2, name: 'Rau, củ, quả,…' },
+        { id: 3, name: 'Gạo, mỳ tôm, bánh kẹo,…' },
+        { id: 4, name: 'Đồ cá nhân (dầu gội, bột giặt,…' },
+        { id: 5, name: 'Khẩu trang, nước diệt khuẩn,…' },
+        { id: 6, name: 'Đồ khác' }]
     },
     {
       expanded: false,
@@ -130,9 +130,9 @@ function CategoryComponent(props) {
       expanded: false,
       category: "Nội ngoại thất, vật tư xây dựng",
       subCategory: [
-        { id: 45, name: 'Nội thất ( bàn ghế, giường, tủ, kệ,…)' },
-        { id: 46, name: 'Ngoại thất ( cây cảnh, ghế đá,…)' },
-        { id: 47, name: 'Vật tư xây dựng ( gạch, đá, xi măng, sắt,…)' },
+        { id: 45, name: 'Bàn ghế, giường, tủ, kệ,…' },
+        { id: 46, name: 'Cây cảnh, ghế đá,…' },
+        { id: 47, name: 'Vật tư ( gạch, đá, xi măng,…)' },
         { id: 48, name: 'Đồ tổng hợp' },
       ]
     },
@@ -190,8 +190,8 @@ const styles = StyleSheet.create({
   subCategoryText: {
     fontSize: 18,
     color: '#000',
-    paddingTop: '2%',
-    paddingBottom: '2%',
+    paddingTop: '3%',
+    paddingBottom: '3%',
     paddingLeft: '5%',
   },
   categoryText: {
