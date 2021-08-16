@@ -1,14 +1,18 @@
 import React, { useState } from "react";
 import { View, Text, Image, StyleSheet, TouchableOpacity } from "react-native";
-import OtpBox from "./otpBox.component";
 import logoSmai from "../assets/logo_smai.png";
 import { connect } from "react-redux";
 import OTPTextView from "react-native-otp-textinput";
 import * as firebase from "firebase";
+import axios from "axios";
+import * as SecureStore from "expo-secure-store";
+
+async function save(key, value) {
+  await SecureStore.setItemAsync(key, value);
+}
 function VerifyOtp(props) {
   const [otpInput, setotpInput] = useState("");
   const [inputText, setinputText] = useState("");
-  console.log(props.register);
   const confirmCode = () => {
     if (otpInput.length != 6) {
       alert("Nhập đầy đủ 6 số");
@@ -21,11 +25,32 @@ function VerifyOtp(props) {
         .auth()
         .signInWithCredential(credential)
         .then((result) => {
-          console.log(result);
+           axios
+            .post("https://smai-app-api.herokuapp.com/account/register", {
+              UserName: props.register.username,
+              PhoneNumber: props.register.phonenumber,
+              Password: props.register.password,
+            })
+            .then(async(data) => {
+              if (data.status == 201) {
+                await save("token", data.data.accessToken);
+                await save("FullName", props.register.username);
+                console.log(props.auth.token);
+                if (props.auth.token == "null") {
+                console.log("1234");
+                await dispatch({
+                   type: "SIGN_IN",
+                   token: data.data.accessToken,
+                   PhoneNumber: PhoneNumber,
+                 });
+                }
+                await props.navigation.navigate("Home");
+              }
+            })
         })
         .catch((error) => {
           console.error("The Promise is rejected!", error);
-        });;
+        });
     }
   };
   return (
@@ -114,5 +139,5 @@ const styles = StyleSheet.create({
   },
 });
 export default connect(function (state) {
-  return { register: state.register };
+  return {auth: state.auth, register: state.register };
 })(VerifyOtp);

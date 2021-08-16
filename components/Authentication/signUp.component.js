@@ -23,6 +23,19 @@ try {
 } catch (err) {
   // ignore app already initialized error in snack
 }
+// async function save(key, value) {
+//     await SecureStore.setItemAsync(key, value);
+// }
+
+// async function getValueFor(key) {
+//     let result = await SecureStore.getItemAsync(key);
+//     if (result) {
+//         alert(result)
+//         return result;
+//     } else {
+//         return "null"
+//     }
+// }
 
 function SignUp(props) {
   //   const { dispatch, navigation, onPress } = props;
@@ -68,6 +81,16 @@ function SignUp(props) {
   const [showPass2, showPassWord2] = useState(true);
   const [verificationId, setVerificationId] = useState(null);
   const recaptchaVerifier = useRef(null);
+  const firebaseConfig = firebase.apps.length
+    ? firebase.app().options
+    : undefined;
+  const [message, showMessage] = React.useState(
+    !firebaseConfig || Platform.OS === "web"
+      ? {
+          text: "To get started, provide a valid firebase config in App.js and open this snack on an iOS or Android device.",
+        }
+      : undefined
+  );
   const { dispatch, navigation, onPress } = props;
   const {
     control,
@@ -89,16 +112,17 @@ function SignUp(props) {
             phoneProvider
               .verifyPhoneNumber(strphone, recaptchaVerifier.current)
               .then(setVerificationId)
-              .catch((error) => {
-                console.error("The Promise is rejected!", error);
+            if (verificationId != null)
+            {
+              dispatch({
+                type: "REGISTER_OTP",
+                username: data.username,
+                phonenumber: data.phonenumber,
+                password: data.password,
+                verificationId: verificationId,
+              
               });
-            dispatch({
-              type: "REGISTER_OTP",
-              username: data.username,
-              phonenumber: data.phonenumber,
-              password: data.password,
-              verificationId: verificationId,
-            });
+            }
             props.navigation.navigate("VerifyOtps"); //chuyển trang
           } else {
             alert("Số điện thoại đã tồn tại");

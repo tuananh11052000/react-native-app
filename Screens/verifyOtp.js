@@ -15,9 +15,10 @@ import VerifyOtp from "../components/verifyOpt.component";
 const heightStatusBar = StatusBar.currentHeight; //lay ra chieu cao cua thanh trang thai
 
 function VerifyOtps(props) {
+  const { navigation } = props;
   return (
     <View style={styles.container}>
-      <VerifyOtp />
+      <VerifyOtp navigation={navigation} />
     </View>
   );
 }
