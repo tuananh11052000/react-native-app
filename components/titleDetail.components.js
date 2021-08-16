@@ -14,10 +14,10 @@ import { AntDesign } from '@expo/vector-icons';
 const UselessTextInput = (props) => {
     return (
         <TextInput
-            placeholder="Mô tả hoặc ghi chú"
+            placeholder="Viết mô tả..."
             {...props} // Inherit any props passed to it; e.g., multiline, numberOfLines below
             editable
-            style={{textAlignVertical: "top", paddingLeft: 10, paddingTop: 10}}
+            style={{textAlignVertical: "top", paddingLeft: 5, fontSize: 20, paddingTop: 10, paddingBottom: 10}}
         />
     );
 }
@@ -28,7 +28,7 @@ const titleDetail = (props) => {
     const renderIMG = () => {
         if (props.infoPost.image) {
             return (props.infoPost.image.map((img) => {
-                return (<Image source={{ uri: img.uri }} style={styles.imgUpload} />)
+                return (<Image source={{ uri: img.uri }} key={img.uri} style={styles.imgUpload} />)
             }))
         }
     }
@@ -42,7 +42,7 @@ const titleDetail = (props) => {
                         style={styles.input}
                         onChangeText={(text) => dispatch({ type: 'GET_TITLE', title: text })}
                         value={number}
-                        placeholder="Lời nhắn"
+                        placeholder="Viết tiêu đề hoặc lời nhắn"
                     />
                 </View>
                 <View>
@@ -51,7 +51,7 @@ const titleDetail = (props) => {
                         style={styles.inputDescription}>
                         <UselessTextInput
                             multiline
-                            numberOfLines={4}
+                            
                             onChangeText={(text) => dispatch({ type: 'GET_NOTE', note: text })}
                         />
                     </View>
@@ -75,16 +75,19 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         marginRight: 20,
         marginLeft: 20,
-        backgroundColor: '#FFF'
+        backgroundColor: '#F5F5F5'
     },
     input: {
         height: 40,
         borderWidth: 1,
         borderRadius: 5,
-        padding: 5,
+        paddingTop: 8,
+        paddingLeft: 10,
+        paddingBottom: 8,
         marginTop: 10,
         marginBottom: 10,
         borderColor: '#B1B1B1',
+        fontSize: 20,
         backgroundColor: 'white'
     },
     inputDescription: {
@@ -107,6 +110,7 @@ const styles = StyleSheet.create({
         marginTop: 10,
         marginBottom: 10,
         padding: 5,
+        backgroundColor: '#FFF'
     },
     imgUpload: {
         height: 100,

@@ -1,24 +1,23 @@
 import React, { useEffect, useState } from 'react'
 import {
-    Text, View, StyleSheet, ScrollView, TouchableOpacity, Alert, Image
+    Text, View, StyleSheet, ActivityIndicator
 } from 'react-native'
 import { Avatar } from 'react-native-elements';
 
 import { connect } from 'react-redux'
-import { FontAwesome } from '@expo/vector-icons';
 import { MaterialIcons } from '@expo/vector-icons';
 import config from '../../config';
 import * as SecureStore from 'expo-secure-store';
 import { Button } from 'react-native-elements';
 import * as ImagePicker from 'expo-image-picker';
+import axios from 'axios'
 //check token
 
 //We will consider isLogin state and decide what will appear on the screen
 function TopProfile(props) {
-    const [avatar, getAvatar] = useState('');
+    const [avatar, getAvatar] = useState({ data: "" });
     const [FullName, getName] = useState('');
-    const [avtUpload, setAvatar] = useState('');
-    const { dispatch } = props;
+    const [isDisplay, setDisplay] = useState(false)
     let openImagePickerAsync = async () => {
         let token = await SecureStore.getItemAsync('token');
         let permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
@@ -28,69 +27,103 @@ function TopProfile(props) {
             return;
         }
         let pickerResult = await ImagePicker.launchImageLibraryAsync();
-        setAvatar(pickerResult.uri);
-        let apiUrl = "https://smai-app-api.herokuapp.com/user/profileUser";
-        let formData = new FormData();
-        let uri = pickerResult.uri;
-        let uriArray = uri.split(".");
-        let fileType = uriArray[uriArray.length - 1];
-        formData.append("imageUser", {
-            uri: uri,
-            name: `photo.${fileType}`,
-            type: `image/${fileType}`,
-        });
-        let options = {
-            method: "POST",
-            body: formData,
-            mode: 'cors',
-            headers: {
-                Accept: "application/json",
-                "Content-Type": "multipart/form-data",
-                Authorization: token
-            },
-        };
-        fetch(apiUrl, options).then(data => console.log(data))
-        console.log(token)
+        if (pickerResult.cancelled == true)
+            setDisplay(false)
+        else {
+            setDisplay(true)
+            let apiUrl = "https://smai-app-api.herokuapp.com/user/profileUser";
+            let formData = new FormData();
+            let uri = pickerResult.uri;
+            let uriArray = uri.split(".");
+            let fileType = uriArray[uriArray.length - 1];
+            formData.append("imageUser", {
+                uri: uri,
+                name: `photo.${fileType}`,
+                type: `image/${fileType}`,
+            });
+            let options = {
+                method: "POST",
+                body: formData,
+                mode: 'cors',
+                headers: {
+                    Accept: "application/json",
+                    "Content-Type": "multipart/form-data",
+                    Authorization: token
+                },
+            };
+            fetch(apiUrl, options).then(async (data) => {
+                await axios({
+                    method: 'get',
+                    url: "https://smai-app-api.herokuapp.com/user/getInForUserByTokenId",
+                    headers: {
+                        Authorization: token
+                    }
+                }).then(async (data) => {
+                    await SecureStore.setItemAsync('avatar', data.data.urlIamge).then((data_) => {
+                        getAvatar({ ...avatar, data: data.data.urlIamge })
+                        setDisplay(false)
+                    });
+                })
+            })
+        }
     }
     useEffect(() => {
         const getAvtFunc = async () => {
             if (props.auth.isLogin == true) {
                 let avatar_ = await SecureStore.getItemAsync('avatar');
                 let Name = await SecureStore.getItemAsync('FullName');
-                getAvatar(avatar_)
+                getAvatar({ ...avatar, data: avatar_ })
                 getName(Name);
             }
         }
         getAvtFunc();
     }, [])
-    console.log(avatar)
+
+    const renderOnloading = () => {
+        if (isDisplay == true) {
+            return <View style={styles.overlay_}>
+                <ActivityIndicator size="small" color="white" />
+            </View>
+        }
+    }
+
     const renderAvatar = () => {
         if (avatar)
-            return <Avatar
-                size={90}
-                rounded
-                source={{ uri: avatar }}
-                containerStyle={styles.avatarContainer}
-                onPress={() => {
-                    openImagePickerAsync();
-                }}>
+            return <View>
+                <Avatar
+                    size={90}
+                    rounded
+                    source={{ uri: avatar.data }}
+                    containerStyle={styles.avatarContainer}
+                >
+                </Avatar>
+                {renderOnloading()}
                 <Avatar.Accessory
                     size={30}
+                    position='relative'
+                    onPress={() => {
+                        openImagePickerAsync();
+                    }}
                 />
-            </Avatar>
+            </View>
         else
-            return <Avatar
-                size={90}
-                rounded
-                source={{ uri: "https://www.alliancerehabmed.com/wp-content/uploads/icon-avatar-default.png" }}
-                containerStyle={styles.avatarContainer}
-                onPress={() => {
-                    openImagePickerAsync();
-                }}>
+            return <View>
+                <Avatar
+                    size={90}
+                    rounded
+                    source={{ uri: "https://www.alliancerehabmed.com/wp-content/uploads/icon-avatar-default.png" }}
+                    containerStyle={styles.avatarContainer}
+                >
+                </Avatar>
+                {renderOnloading()}
                 <Avatar.Accessory
                     size={30}
+                    position='relative'
+                    onPress={() => {
+                        openImagePickerAsync();
+                    }}
                 />
-            </Avatar>
+            </View>
     }
     if (props.auth.isLogin == false) {
         return (<View style={styles.wrapAll}>
@@ -175,6 +208,17 @@ const styles = StyleSheet.create({
     },
     avatar: {
         marginTop: '20px'
+    },
+    overlay_: {
+        position: 'absolute',
+        justifyContent: 'center',
+        top: 0,
+        bottom: 0,
+        left: 0,
+        right: 0,
+        backgroundColor: 'black',
+        opacity: 0.3,
+        borderRadius: 47
     }
 
 })

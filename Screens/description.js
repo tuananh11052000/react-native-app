@@ -40,7 +40,7 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingTop: (Platform.OS === 'ios') ? 20 : 20,
     justifyContent: 'space-between',
-    backgroundColor: '#FFF',
+    backgroundColor: '#F5F5F5',
   },
 });
 
