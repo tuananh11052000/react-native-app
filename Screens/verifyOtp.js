@@ -1,12 +1,20 @@
-import React from 'react';
-import { StyleSheet, Text, View, StatusBar } from 'react-native';
+import React from "react";
+import {
+  StyleSheet,
+  Text,
+  View,
+  StatusBar,
+  TextInput,
+  TouchableOpacity,
+  Button,
+} from "react-native";
+import { connect } from "react-redux";
 
-import VerifyOtp from '../components/verifyOpt.component'
+import VerifyOtp from "../components/verifyOpt.component";
 
-const heightStatusBar = StatusBar.currentHeight;//lay ra chieu cao cua thanh trang thai
+const heightStatusBar = StatusBar.currentHeight; //lay ra chieu cao cua thanh trang thai
 
-export default function VerifyOtps() {
-
+function VerifyOtps(props) {
   return (
     <View style={styles.container}>
       <VerifyOtp />
@@ -17,9 +25,12 @@ export default function VerifyOtps() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
+    backgroundColor: "#fff",
+    alignItems: "center",
     // marginTop: heightStatusBar,
-    paddingTop: heightStatusBar*2,
+    paddingTop: heightStatusBar * 2,
   },
 });
+export default connect(function (state) {
+  return { register: state.register };
+})(VerifyOtps);

@@ -7,6 +7,7 @@ import myPost from "./myPost";
 import controlThreadTCD from "./redirectScreen";
 import controlThreadGiveFor from "./redirectGiveFor";
 import dataCategory from "./dataCategory";
+import register from "./register"
 import { combineReducers } from "redux";
 
 var reducer = combineReducers({
@@ -19,6 +20,7 @@ var reducer = combineReducers({
   controlThreadTCD,
   controlThreadGiveFor,
   dataCategory,
+  register,
 });
 
 export default reducer;

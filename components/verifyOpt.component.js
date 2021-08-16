@@ -1,69 +1,49 @@
 import React, { useState } from "react";
 import { View, Text, Image, StyleSheet, TouchableOpacity } from "react-native";
-
-// if (Platform.OS === "ios") {
-//   import OTPInputView from "@twotalltotems/react-native-otp-input";
-// } else {
-//   import OtpInputs from "react-native-otp-inputs";
-// }
-
-// import OTPInputView from "@twotalltotems/react-native-otp-input";
-// import OtpInputs from "react-native-otp-inputs";
-
-
-// export default function VerifyOtp(props) {
-//   let optInput;
-  // if (Platform.OS === "ios") {
-  //   //switch for ios
-  //   optInput = (
-  //     <OTPInputView
-  //       handleChange={(code) => console.log(code)}
-  //       numberOfInputs={6}
-  //       style={styles.optStyle}
-  //       inputStyles={styles.optInput}
-  //     />
-  //   );
-  // } else {
-  //   //check box
-  //   optInput = (
-  //     <OtpInputs
-  //       handleChange={(code) => console.log(code)}
-  //       numberOfInputs={6}
-  //       style={styles.optStyle}
-  //       inputStyles={styles.optInput}
-  //     />
-  //   );
-  
-import OtpBox from "./otpBox.component"
+import OtpBox from "./otpBox.component";
 import logoSmai from "../assets/logo_smai.png";
-
-export default function VerifyOtp(props) {
-
+import { connect } from "react-redux";
+import OTPTextView from "react-native-otp-textinput";
+import * as firebase from "firebase";
+function VerifyOtp(props) {
+  const [otpInput, setotpInput] = useState("");
+  const [inputText, setinputText] = useState("");
+  console.log(props.register);
+  const confirmCode = () => {
+    if (otpInput.length != 6) {
+      alert("Nhập đầy đủ 6 số");
+    } else {
+      const credential = firebase.auth.PhoneAuthProvider.credential(
+        props.register.verificationId,
+        otpInput
+      );
+      firebase
+        .auth()
+        .signInWithCredential(credential)
+        .then((result) => {
+          console.log(result);
+        })
+        .catch((error) => {
+          console.error("The Promise is rejected!", error);
+        });;
+    }
+  };
   return (
     <View style={styles.wrapContent}>
       <Image source={logoSmai} style={styles.styleImg} />
       <Text style={styles.styleText}>Nhập mã OTP</Text>
-
-      {/* {optInput} */}
-      {/* <OTPInputView
-        handleChange={(code) => console.log(code)}
-        numberOfInputs={6}
-        style={styles.optStyle}
-        inputStyles={styles.optInput}
-      /> */}
-      {/* <OtpInputs
-        handleChange={(code) => console.log(code)}
-        numberOfInputs={6}
-        style={styles.optStyle}
-        inputStyles={styles.optInput}
-      /> */}
-
-      <OtpBox />
-
+      <View style={styles.container}>
+        <OTPTextView
+          handleTextChange={(e) => setotpInput(e)}
+          containerStyle={styles.textInputContainer}
+          textInputStyle={styles.roundedTextInput}
+          inputCount={6}
+        />
+      </View>
       <TouchableOpacity
         activeOpacity={0.6}
         style={styles.button}
-        onPress={props.onPress}
+        onPress={confirmCode}
       >
         <Text style={styles.buttonText}>Gửi</Text>
       </TouchableOpacity>
@@ -112,4 +92,27 @@ const styles = StyleSheet.create({
     fontSize: 16,
     textAlign: "center",
   },
+  container: {
+    // flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    // backgroundColor: "#F5FCFF",
+    padding: 5,
+    // flexDirection: "column",
+    // justifyContent: "center",
+    // alignItems: "center",
+  },
+  textInputContainer: {
+    marginBottom: 20,
+  },
+  roundedTextInput: {
+    borderRadius: 5,
+    borderWidth: 1,
+    width: "10%",
+    height: "100%",
+    fontSize: 18,
+  },
 });
+export default connect(function (state) {
+  return { register: state.register };
+})(VerifyOtp);

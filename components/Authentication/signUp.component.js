@@ -1,31 +1,28 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { connect } from "react-redux";
 import * as SecureStore from "expo-secure-store";
-import {
-  StyleSheet,
-  Text,
-  View,
-  ScrollView,
-} from "react-native";
+import { StyleSheet, Text, View, ScrollView } from "react-native";
 import { Button } from "galio-framework";
 import config from "../../config";
 import { TextInput } from "react-native-paper";
 import { useForm, Controller } from "react-hook-form";
 import axios from "axios";
+import * as firebase from "firebase";
+import { FirebaseRecaptchaVerifierModal } from "expo-firebase-recaptcha";
 
-// async function save(key, value) {
-//     await SecureStore.setItemAsync(key, value);
-// }
-
-// async function getValueFor(key) {
-//     let result = await SecureStore.getItemAsync(key);
-//     if (result) {
-//         alert(result)
-//         return result;
-//     } else {
-//         return "null"
-//     }
-// }
+try {
+  firebase.initializeApp({
+    apiKey: "AIzaSyDJ89qLqhx9tv-r7DVKV5mtgAtm8SJGNMY",
+    authDomain: "smai-react-navtive.firebaseapp.com",
+    projectId: "smai-react-navtive",
+    storageBucket: "smai-react-navtive.appspot.com",
+    messagingSenderId: "512665456682",
+    appId: "1:512665456682:web:c3fdddeca7b4b0abd27353",
+    measurementId: "G-2KFPXH5YFL",
+  });
+} catch (err) {
+  // ignore app already initialized error in snack
+}
 
 function SignUp(props) {
   //   const { dispatch, navigation, onPress } = props;
@@ -33,8 +30,7 @@ function SignUp(props) {
   //   const [PhoneNumber, onChangePhone] = useState("");
   //   const [Password, onChangePass] = useState("");
   //   const [RePassword, onChangeRePass] = useState(" ");
-  const [showPass, showPassWord] = useState(true);
-  const [showPass2, showPassWord2] = useState(true);
+
   //   const [errorPhoneNumber, seterrorPassword] = useState("");
 
   //   const loginFunction = async (UserName, PhoneNumber, Password, RePassword) => {
@@ -68,47 +64,51 @@ function SignUp(props) {
   //     //     })
   //     //     .catch((e) => alert("Tài khoản đã tồn tại"));
   //   };
-
-  // const password = useRef({});
-  //   <TextInput
-  //                 style={styles.textInput}
-  //                 onChangeText={(text) => onChangeName(text)}
-  //                 label="Họ tên"
-  //                 theme={{
-  //                   colors: {
-  //                     primary: "gray",
-  //                   },
-  //                 }}
-  //               />
+  const [showPass, showPassWord] = useState(true);
+  const [showPass2, showPassWord2] = useState(true);
+  const [verificationId, setVerificationId] = useState(null);
+  const recaptchaVerifier = useRef(null);
+  const { dispatch, navigation, onPress } = props;
   const {
     control,
     handleSubmit,
     formState: { errors },
     getValues,
   } = useForm();
-const onSubmit = async (data) => {
-    //Check xem sddt đã tồn tại hay chưa 
-    if(data.phonenumber){
-        console.log(data.phonenumber)
-        await axios
-          .post("https://smai-app-api.herokuapp.com/account/getPhone", {
-            PhoneNumber: data.phonenumber,
-          })
-          .then((res) => {
-            if (res.data === "Oke") {
-              console.log(res.data);
-              props.navigation.navigate("VerifyOtps"); //chuyển trang
-            }
-            else {
-                alert("Số điện thoại đã tồn tại")
-            }
-          })
-          .catch((err) => {
-            console.log(err);
-          });
+  const onSubmit = async (data) => {
+    //Check xem sddt đã tồn tại hay chưa
+    if (data.phonenumber) {
+      await axios
+        .post("https://smai-app-api.herokuapp.com/account/getPhone", {
+          PhoneNumber: data.phonenumber,
+        })
+        .then((res) => {
+          if (res.data === "Oke") {
+            let strphone = "+84" + data.phonenumber.substring(1);
+            const phoneProvider = new firebase.auth.PhoneAuthProvider();
+            phoneProvider
+              .verifyPhoneNumber(strphone, recaptchaVerifier.current)
+              .then(setVerificationId)
+              .catch((error) => {
+                console.error("The Promise is rejected!", error);
+              });
+            dispatch({
+              type: "REGISTER_OTP",
+              username: data.username,
+              phonenumber: data.phonenumber,
+              password: data.password,
+              verificationId: verificationId,
+            });
+            props.navigation.navigate("VerifyOtps"); //chuyển trang
+          } else {
+            alert("Số điện thoại đã tồn tại");
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     }
-  
-};
+  };
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
@@ -252,6 +252,11 @@ const onSubmit = async (data) => {
           <Text style={styles.error}> {errors.repassword.message}</Text>
         )}
       </View>
+      <FirebaseRecaptchaVerifierModal
+        ref={recaptchaVerifier}
+        firebaseConfig={firebaseConfig}
+        attemptInvisibleVerification={true}
+      />
       <View style={styles.layoutBtnLogin}>
         <Button
           onPress={handleSubmit(onSubmit)}
@@ -333,5 +338,5 @@ const styles = StyleSheet.create({
 });
 
 export default connect(function (state) {
-  return { auth: state.auth };
+  return { auth: state.auth, register: state.register };
 })(SignUp);

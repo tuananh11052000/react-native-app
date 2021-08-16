@@ -6,11 +6,11 @@ import OTPTextView from "react-native-otp-textinput";
 export default function OtpBox(Props) {
   const [otpInput, setotpInput] = useState("");
   const [inputText, setinputText] = useState("");
-
+ 
   return (
     <View style={styles.container}>
       <OTPTextView
-        handleTextChange={(e) => {}}
+        handleTextChange={(e) =>setinputText(e)}
         containerStyle={styles.textInputContainer}
         textInputStyle={styles.roundedTextInput}
         inputCount={6}
