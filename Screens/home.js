@@ -19,7 +19,6 @@ import { Feather } from "@expo/vector-icons";
 import GiftComponent from "../components/gift.component";
 import SearchComponent from "../components/search.component";
 import TitleComponent from "../components/title.component";
-import ProductComponent from "../components/product.component";
 import NewsedBox from "../components/newsedBox.components";
 import * as SecureStore from "expo-secure-store";
 import axios from "axios";
@@ -166,7 +165,7 @@ function Home(props) {
             </Text>
           </View>
           <Text style={styles.address}>
-            {item.address.slice(0, 15) + "..."}
+            {item.address.slice(0, 17) + "..."}
           </Text>
         </View>
       </View>
@@ -278,7 +277,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
   },
   time: {
-    fontSize: 20,
+    fontSize: 15,
     marginLeft: 7,
     color: "gray",
   },
@@ -292,7 +291,7 @@ const styles = StyleSheet.create({
   },
   address: {
     color: "gray",
-    fontSize: 20,
+    fontSize: 15,
   },
   //////////////////////////////////////////////////
 });
