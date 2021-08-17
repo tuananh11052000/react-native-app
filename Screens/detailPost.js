@@ -34,7 +34,8 @@ export default function App(props) {
   useEffect(() => {
     const checkTokenLocal = async () => {
       let token = await SecureStore.getItemAsync("token");
-
+      console.log("detail")
+      console.log(token);
       if (token) {
         axios
           .put(
@@ -48,7 +49,7 @@ export default function App(props) {
           )
           .then((response) => {})
           .catch((error) => {
-            alert(error);
+            alert(error.message);
           });
       } else {
         return await null;
@@ -170,7 +171,7 @@ const styles = StyleSheet.create({
     marginTop: 10,
     width,
     height,
-    backgroundColor: '#FFF',
+    backgroundColor: "#FFF",
   },
   contentContainer: {
     flexGrow: 1,

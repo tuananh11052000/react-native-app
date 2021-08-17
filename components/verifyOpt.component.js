@@ -11,6 +11,7 @@ async function save(key, value) {
   await SecureStore.setItemAsync(key, value);
 }
 function VerifyOtp(props) {
+  console.log(props.register)
   const [otpInput, setotpInput] = useState("");
   const [inputText, setinputText] = useState("");
   const confirmCode = () => {
@@ -25,28 +26,26 @@ function VerifyOtp(props) {
         .auth()
         .signInWithCredential(credential)
         .then((result) => {
-           axios
+          axios
             .post("https://smai-app-api.herokuapp.com/account/register", {
-              UserName: props.register.username,
+              FullName: props.register.username,
               PhoneNumber: props.register.phonenumber,
               Password: props.register.password,
             })
-            .then(async(data) => {
+            .then(async (data) => {
               if (data.status == 201) {
                 await save("token", data.data.accessToken);
                 await save("FullName", props.register.username);
-                console.log(props.auth.token);
                 if (props.auth.token == "null") {
-                console.log("1234");
-                await dispatch({
-                   type: "SIGN_IN",
-                   token: data.data.accessToken,
-                   PhoneNumber: PhoneNumber,
-                 });
+                  await dispatch({
+                    type: "SIGN_IN",
+                    token: data.data.accessToken,
+                    PhoneNumber: PhoneNumber,
+                  });
                 }
                 await props.navigation.navigate("Home");
               }
-            })
+            });
         })
         .catch((error) => {
           console.error("The Promise is rejected!", error);
@@ -139,5 +138,5 @@ const styles = StyleSheet.create({
   },
 });
 export default connect(function (state) {
-  return {auth: state.auth, register: state.register };
+  return { auth: state.auth, register: state.register };
 })(VerifyOtp);

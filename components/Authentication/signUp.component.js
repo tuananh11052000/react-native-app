@@ -23,60 +23,8 @@ try {
 } catch (err) {
   // ignore app already initialized error in snack
 }
-// async function save(key, value) {
-//     await SecureStore.setItemAsync(key, value);
-// }
-
-// async function getValueFor(key) {
-//     let result = await SecureStore.getItemAsync(key);
-//     if (result) {
-//         alert(result)
-//         return result;
-//     } else {
-//         return "null"
-//     }
-// }
 
 function SignUp(props) {
-  //   const { dispatch, navigation, onPress } = props;
-  //   const [UserName, onChangeName] = useState("");
-  //   const [PhoneNumber, onChangePhone] = useState("");
-  //   const [Password, onChangePass] = useState("");
-  //   const [RePassword, onChangeRePass] = useState(" ");
-
-  //   const [errorPhoneNumber, seterrorPassword] = useState("");
-
-  //   const loginFunction = async (UserName, PhoneNumber, Password, RePassword) => {
-  //     if (UserName === "") {
-  //       seterrorPassword("Yêu cầu nhập họ và tên.");
-  //     } else {
-  //       seterrorPassword("");
-  //     }
-  //     if (PhoneNumber === "") {
-  //       seterror("Yêu cầu nhập số điện thoại");
-  //     }
-
-  //     //   await axios
-  //     //     .post("https://smai-app-api.herokuapp.com/account/register", {
-  //     //       UserName: UserName,
-  //     //       PhoneNumber: PhoneNumber,
-  //     //       Password: Password,
-  //     //     })
-  //     //     .then(async (data) => {
-  //     //       if (data.status == 201) {
-  //     //         await save("token", data.data.accessToken);
-  //     //         if (props.auth.token == "null") {
-  //     //           dispatch({
-  //     //             type: "SIGN_IN",
-  //     //             token: data.data.accessToken,
-  //     //             PhoneNumber: PhoneNumber,
-  //     //           });
-  //     //           props.onPress_();
-  //     //         }
-  //     //       }
-  //     //     })
-  //     //     .catch((e) => alert("Tài khoản đã tồn tại"));
-  //   };
   const [showPass, showPassWord] = useState(true);
   const [showPass2, showPassWord2] = useState(true);
   const [verificationId, setVerificationId] = useState(null);
@@ -105,22 +53,21 @@ function SignUp(props) {
         .post("https://smai-app-api.herokuapp.com/account/getPhone", {
           PhoneNumber: data.phonenumber,
         })
-        .then((res) => {
+        .then(async (res) => {
           if (res.data === "Oke") {
             let strphone = "+84" + data.phonenumber.substring(1);
-            const phoneProvider = new firebase.auth.PhoneAuthProvider();
-            phoneProvider
-              .verifyPhoneNumber(strphone, recaptchaVerifier.current)
-              .then(setVerificationId)
-            if (verificationId != null)
-            {
-              dispatch({
+            const phoneProvider = await new firebase.auth.PhoneAuthProvider();
+            const verificationId = await phoneProvider.verifyPhoneNumber(
+             strphone,
+             recaptchaVerifier.current
+           );
+            if (verificationId != null) {
+              await dispatch({
                 type: "REGISTER_OTP",
                 username: data.username,
                 phonenumber: data.phonenumber,
                 password: data.password,
                 verificationId: verificationId,
-              
               });
             }
             props.navigation.navigate("VerifyOtps"); //chuyển trang
