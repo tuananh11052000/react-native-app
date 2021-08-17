@@ -226,7 +226,7 @@ function SignUp(props) {
       <FirebaseRecaptchaVerifierModal
         ref={recaptchaVerifier}
         firebaseConfig={firebaseConfig}
-        attemptInvisibleVerification={true}
+        // attemptInvisibleVerification={true}
       />
       <View style={styles.layoutBtnLogin}>
         <Button
