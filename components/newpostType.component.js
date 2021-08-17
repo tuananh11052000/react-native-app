@@ -2,13 +2,12 @@ import React from 'react'
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native'
 
 export default function NewPostType(props) {
-  const { newpost } = props;
   return (
     <TouchableOpacity
       activeOpacity={0.3}
       onPress={props.onPress}>
       <View style={styles.container}>
-        <Text style={styles.title}>{newpost.title}</Text>
+        <Text style={styles.title}>{props.title}</Text>
       </View>
     </TouchableOpacity>
   );
