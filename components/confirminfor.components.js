@@ -50,7 +50,10 @@ function App(props) {
     </>
   );
   const getTypeAuthor = () => {
-    if (props.infoPost.TypeAuthor == "tangcongdong") return "Tặng cộng đồng";
+    if (props.infoPost.TypeAuthor == "tangcongdong")
+      return "Tặng cộng đồng";
+    if (props.infoPost.TypeAuthor == "cá nhân")
+      return 'Người nghèo/ Hoàn cảnh khó khăn'
     else return props.infoPost.TypeAuthor;
   };
   return (
