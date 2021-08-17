@@ -59,8 +59,8 @@ function ConfirmInforScreen(props) {
             "idpost": res.data.idpost,
             Accept: "application/json",
             "Content-Type": "multipart/form-data",
-            Authorization: 'bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2NvdW50SUQiOiI2MGU5Y2M5ZjJkMzlkYzJkMTBkOGM2OWQiLCJpYXQiOjE2Mjc5OTkwNzh9.XxzvJigOW0GGSotGY69Xs-GxuEZ8DFxfRd5WzetDvgc'
-          },
+            Authorization: props.auth.token
+          }
         };
         fetch(apiUrl, options).then((res) => {
           setIsDisplay(false);
@@ -74,6 +74,7 @@ function ConfirmInforScreen(props) {
       }
     }).catch(err => console.log(err))
   }
+  console.log(props.infoPost)
   return (
     <View style={styles.container}>
       <Spinner
