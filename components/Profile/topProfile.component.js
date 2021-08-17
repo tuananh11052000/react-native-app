@@ -15,9 +15,10 @@ import axios from 'axios'
 
 //We will consider isLogin state and decide what will appear on the screen
 function TopProfile(props) {
-    const [avatar, getAvatar] = useState({ data: "" });
     const [FullName, getName] = useState('');
     const [isDisplay, setDisplay] = useState(false)
+    const [avatar, getAvatar] = useState('');
+    //Ham mo thu vien anh
     let openImagePickerAsync = async () => {
         let token = await SecureStore.getItemAsync('token');
         let permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
@@ -70,7 +71,7 @@ function TopProfile(props) {
     useEffect(() => {
         const getAvtFunc = async () => {
             if (props.auth.isLogin == true) {
-                let avatar_ = await SecureStore.getItemAsync('avatar');
+                let avatar_ = props.profile.avatar
                 let Name = await SecureStore.getItemAsync('FullName');
                 getAvatar({ ...avatar, data: avatar_ })
                 getName(Name);
@@ -224,5 +225,5 @@ const styles = StyleSheet.create({
 })
 
 export default connect(function (state) {
-    return { auth: state.auth }
+    return { auth: state.auth, profile: state.profile }
 })(TopProfile);

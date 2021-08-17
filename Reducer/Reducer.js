@@ -8,6 +8,7 @@ import controlThreadTCD from "./redirectScreen";
 import controlThreadGiveFor from "./redirectGiveFor";
 import dataCategory from "./dataCategory";
 import register from "./register"
+import profile from './profile'
 import { combineReducers } from "redux";
 
 var reducer = combineReducers({
@@ -21,6 +22,7 @@ var reducer = combineReducers({
   controlThreadGiveFor,
   dataCategory,
   register,
+  profile,
 });
 
 export default reducer;

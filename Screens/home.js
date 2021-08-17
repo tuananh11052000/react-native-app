@@ -42,11 +42,11 @@ function Home(props) {
     LogBox.ignoreLogs(["VirtualizedLists should never be nested"]);
     const checkTokenLocal = async () => {
       let result = await SecureStore.getItemAsync("token");
-      console.log(result);
+      let avatar = await SecureStore.getItemAsync("avatar")
       let PhoneNumber = await SecureStore.getItemAsync("PhoneNumber");
       if (result) {
         dispatch({ type: "SIGN_IN", token: result, PhoneNumber: PhoneNumber });
-        return await result;
+        dispatch({ type: "GET_AVATAR", avatar: avatar })
       } else {
         return await null;
       }
@@ -302,5 +302,6 @@ export default connect(function (state) {
     infoPost: state.infoPost,
     newestPost: state.newestPost,
     controlThreadGiveFor: state.controlThreadGiveFor,
+    profile: state.profile
   };
 })(Home);

@@ -1,9 +1,12 @@
 {
   "expo": {
     "name": "Your App Name",
-    "icon": "./assets/gift1.png",
     "version": "1.0.0",
     "slug": "your-app-slug",
+    "ios": {
+      "bundleIdentifier": "com.yourcompany.yourappname",
+      "buildNumber": "1.0.0"
+    },
     "android": {
       "package": "com.yourcompany.yourappname",
       "versionCode": 1

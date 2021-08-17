@@ -25,7 +25,7 @@ const UselessTextInput = (props) => {
 
 function App(props) {
   const address = props.infoPost.address.split(",");
-  console.log(address);
+  console.log(props.infoPost)
   const renderItem = ({ item }) => (
     <Image
       style={{
@@ -64,7 +64,7 @@ function App(props) {
       </View>
       <View style={styles.container}>
         <Text style={styles.childTitle}>Danh mục*</Text>
-        <Text style={styles.textContent}>Danh mục nhận tặng</Text>
+        <Text style={styles.textContent}>{props.infoPost.NameProduct[0].NameProduct}</Text>
       </View>
       <View style={styles.backgroundTitle}>
         <Text style={styles.textTitle}>THÔNG TIN MÔ TẢ</Text>
@@ -172,7 +172,7 @@ const styles = StyleSheet.create({
     padding: 5,
   },
   backgroundTitle: {
-    backgroundColor: "#E1E1E1",
+    backgroundColor: "#CED4DA",
     paddingLeft: 20,
     paddingTop: 10,
     paddingBottom: 10,
