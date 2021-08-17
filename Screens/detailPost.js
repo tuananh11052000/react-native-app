@@ -34,8 +34,6 @@ export default function App(props) {
   useEffect(() => {
     const checkTokenLocal = async () => {
       let token = await SecureStore.getItemAsync("token");
-      console.log("detail")
-      console.log(token);
       if (token) {
         axios
           .put(
