@@ -15,7 +15,6 @@ import { connect } from "react-redux";
 import * as SecureStore from "expo-secure-store";
 import axios from "axios";
 import { Feather } from "@expo/vector-icons";
-import config from "../config"
 import AppLoading from "expo-app-loading";
 import {
   useFonts,
@@ -30,10 +29,9 @@ import {
   OpenSans_800ExtraBold,
   OpenSans_800ExtraBold_Italic,
 } from "@expo-google-fonts/open-sans";
-
-const { width, height } = Dimensions.get("window");
-
 function ProductComponent(props) {
+  const [loading, setloading] = useState(true);
+  const [dataRender, setData] = useState([]);
   const [fontsLoaded, error] = useFonts({
     OpenSans_300Light,
     OpenSans_300Light_Italic,
@@ -46,8 +44,28 @@ function ProductComponent(props) {
     OpenSans_800ExtraBold,
     OpenSans_800ExtraBold_Italic,
   });
-  const [loading, setloading] = useState(true);
-  const [dataRender, setData] = useState([]);
+  useEffect(() => {
+    getDataHistory();
+    return () => {};
+  }, []);
+   const getDataHistory = async () => {
+     let result = await SecureStore.getItemAsync("token");
+     await axios({
+       method: "get",
+       url: "https://smai-app-api.herokuapp.com/user/getHistoryPost",
+       headers: {
+         Authorization: result,
+       },
+     })
+       .then((data) => {
+         setloading(false);
+         setData(data.data);
+       })
+       .catch((error) => {
+         console.log("Error: ", error);
+       })
+       .finally(() => setisLoading(false));
+   };
   if (!fontsLoaded) {
     return <AppLoading />;
   }
@@ -81,31 +99,31 @@ function ProductComponent(props) {
   };
   //get post
 
-  useEffect(() => {
-    const getDataHome = async () => {
-      let temp = await axios({
-        method: "get",
-        url: "https://smai-app-api.herokuapp.com/post/getNewPost",
-      }).finally(() => setloading(false));
-      setData(temp.data);
-    };
-    const getDataHistory = async () => {
-      let result = await SecureStore.getItemAsync("token");
-      await axios({
-        method: "get",
-        url: "https://smai-app-api.herokuapp.com/user/getHistoryPost",
-        headers: {
-          Authorization: result,
-        },
-      }).then((data) => {
-        setloading(false);
-        setData(data.data);
-      });
-    };
-    if (props.type == "history") {
-      getDataHistory();
-    } else getDataHome();
-  }, [props.data_]);
+  // useEffect(() => {
+  //   // const getDataHome = async () => {
+  //   //   let temp = await axios({
+  //   //     method: "get",
+  //   //     url: "https://smai-app-api.herokuapp.com/post/getNewPost",
+  //   //   }).finally(() => setloading(false));
+  //   //   setData(temp.data);
+  //   // };
+  //   const getDataHistory = async () => {
+  //     let result = await SecureStore.getItemAsync("token");
+  //     await axios({
+  //       method: "get",
+  //       url: "https://smai-app-api.herokuapp.com/user/getHistoryPost",
+  //       headers: {
+  //         Authorization: result,
+  //       },
+  //     }).then((data) => {
+  //       setloading(false);
+  //       setData(data.data);
+  //     });
+  //   };
+  //   if (props.type == "history") {
+  //     getDataHistory();
+  //   } else getDataHome();
+  // }, [props.data_]);
   //Function handling title post
   const renderTitle = (item) => {
     item = item.charAt(0).toUpperCase() + item.slice(1);
@@ -186,10 +204,44 @@ function ProductComponent(props) {
   );
 }
 
-const style = StyleSheet.create({
-  containerr: {
-    backgroundColor: "#FFF",
+const styles = StyleSheet.create({
+  containter: {
+    flex: 1,
+    backgroundColor: "#e5e5e5",
   },
+  containterLoading: {
+    flex: 1,
+    justifyContent: "center",
+  },
+  // style search
+  searchFilterContainer: {
+    height: 60,
+    backgroundColor: "#F5F5F5",
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  wrapFilterButton: {
+    flexDirection: "row",
+    backgroundColor: "#FFF",
+    width: "55%",
+    maxWidth: "55%",
+    height: "70%",
+    paddingLeft: "1%",
+    borderWidth: 2,
+    borderColor: "#EEEEEE",
+    justifyContent: "space-around",
+    alignItems: "center",
+    marginLeft: "3%",
+  },
+  searchText: {
+    backgroundColor: "#fff",
+    paddingHorizontal: 20,
+    fontSize: 20,
+    maxWidth: "90%",
+  },
+
+  // style product
   wrapCategory: {
     padding: 15,
     marginBottom: 10,
@@ -207,21 +259,20 @@ const style = StyleSheet.create({
   wrapInfoProduct: {
     flex: 1,
     marginLeft: 10,
-    justifyContent: "space-around",
+    // justifyContent: "space-around",
   },
   wrapTypePrice: {
     flexDirection: "row",
     justifyContent: "space-between",
+    marginVertical: 12,
   },
   wrapTimeAddress: {
     flexDirection: "row",
     justifyContent: "space-between",
   },
   titlePost: {
-    // fontSize: config.fontsize_2,
-    // fontFamily: "OpenSans_700Bold",
-    fontSize: 20,
-    fontWeight: "900",
+    fontSize: config.fontsize_2,
+    fontFamily: "OpenSans_700Bold",
   },
   wrapTime: {
     display: "flex",
@@ -229,21 +280,25 @@ const style = StyleSheet.create({
     flexDirection: "row",
   },
   time: {
-    fontSize: 15,
-    marginLeft: 7,
-    color: "gray",
+    fontSize: config.fontsize_3,
+    marginLeft: 5,
+    color: "black",
+    fontFamily: "OpenSans_400Regular",
   },
   price: {
     color: "green",
-    fontSize: 20,
+    fontSize: config.fontsize_3,
+    fontFamily: "OpenSans_400Regular",
   },
   type: {
-    fontSize: 20,
+    fontSize: config.fontsize_3,
     color: "gray",
+    fontFamily: "OpenSans_400Regular",
   },
   address: {
-    color: "gray",
-    fontSize: 15,
+    color: "black",
+    fontSize: config.fontsize_3,
+    fontFamily: "OpenSans_400Regular",
   },
 });
 
