@@ -15,6 +15,7 @@ import { connect } from "react-redux";
 import * as SecureStore from "expo-secure-store";
 import axios from "axios";
 import { Feather } from "@expo/vector-icons";
+import config from "../config";
 import AppLoading from "expo-app-loading";
 import {
   useFonts,
@@ -204,7 +205,7 @@ function ProductComponent(props) {
   );
 }
 
-const styles = StyleSheet.create({
+const style = StyleSheet.create({
   containter: {
     flex: 1,
     backgroundColor: "#e5e5e5",
