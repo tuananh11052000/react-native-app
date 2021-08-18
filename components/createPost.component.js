@@ -2,6 +2,20 @@ import React, { useState } from "react";
 import { View, Text, Image, StyleSheet, TouchableOpacity } from "react-native";
 import { Picker } from "@react-native-picker/picker";
 import DropDownPicker from "react-native-dropdown-picker";
+import AppLoading from 'expo-app-loading';
+import {
+  useFonts,
+  OpenSans_300Light,
+  OpenSans_300Light_Italic,
+  OpenSans_400Regular,
+  OpenSans_400Regular_Italic,
+  OpenSans_600SemiBold,
+  OpenSans_600SemiBold_Italic,
+  OpenSans_700Bold,
+  OpenSans_700Bold_Italic,
+  OpenSans_800ExtraBold,
+  OpenSans_800ExtraBold_Italic,
+} from "@expo-google-fonts/open-sans";
 
 import AddImg from "../assets/add.png";
 
@@ -15,6 +29,22 @@ export default function CreatePosts(props) {
     { label: "Tin tặng cộng đồng", value: "2" },
     { label: "Tin cần xin đồ", value: "3" },
   ]);
+  const [fontsLoaded, error] = useFonts({
+    OpenSans_300Light,
+    OpenSans_300Light_Italic,
+    OpenSans_400Regular,
+    OpenSans_400Regular_Italic,
+    OpenSans_600SemiBold,
+    OpenSans_600SemiBold_Italic,
+    OpenSans_700Bold,
+    OpenSans_700Bold_Italic,
+    OpenSans_800ExtraBold,
+    OpenSans_800ExtraBold_Italic,
+  });
+  if (!fontsLoaded) {
+    return <AppLoading />;
+  }
+
   let dropdown;
   if (Platform.OS === "ios") {
     //switch for ios
@@ -113,7 +143,7 @@ export default function CreatePosts(props) {
 
 const styles = StyleSheet.create({
   wrapContent: {
-    backgroundColor: "#fff",
+    backgroundColor: "#e5e5e5",
     flexDirection: "row",
     justifyContent: "space-between",
     paddingHorizontal: 15,
@@ -125,14 +155,14 @@ const styles = StyleSheet.create({
     // flexDirection: "row",
     borderRadius: 4,
     borderColor: "gray",
-    width: "60%",
+    width: "57%",
   },
   wrapPiker: {
     // borderWidth: 1,
     // flexDirection: "row",
     borderRadius: 4,
     borderColor: "gray",
-    width: "60%",
+    width: "57%",
   },
   pickerStyle: {
     height: 40,
@@ -142,10 +172,12 @@ const styles = StyleSheet.create({
   btnCreate: {
     alignItems: "center",
     flexDirection: "row",
-    backgroundColor: "#018786",
-    height: 41,
+    backgroundColor: "#00a2e8",
+    height: 42,
     paddingHorizontal: 18,
-    borderRadius: 4,
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: "#fff",
     shadowColor: "#000",
     shadowOpacity: 0.3,
     shadowRadius: 10,
@@ -156,7 +188,7 @@ const styles = StyleSheet.create({
   btnText: {
     fontWeight: "600",
     fontSize: 16,
-    textTransform: "uppercase",
-    color: "#fff",
+    color: "#000",
+    fontFamily: "OpenSans_700Bold"
   },
 });

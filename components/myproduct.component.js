@@ -11,7 +11,7 @@ import {
 import { connect } from "react-redux";
 import * as SecureStore from "expo-secure-store";
 import axios from "axios";
-
+import config from "../config";
 import { Feather } from "@expo/vector-icons";
 import {
   MenuProvider,
@@ -21,6 +21,20 @@ import {
   MenuOption,
   MenuTrigger,
 } from "react-native-popup-menu";
+import AppLoading from "expo-app-loading";
+import {
+  useFonts,
+  OpenSans_300Light,
+  OpenSans_300Light_Italic,
+  OpenSans_400Regular,
+  OpenSans_400Regular_Italic,
+  OpenSans_600SemiBold,
+  OpenSans_600SemiBold_Italic,
+  OpenSans_700Bold,
+  OpenSans_700Bold_Italic,
+  OpenSans_800ExtraBold,
+  OpenSans_800ExtraBold_Italic,
+} from "@expo-google-fonts/open-sans";
 
 async function getToken() {
   let result = await SecureStore.getItemAsync("token");
@@ -58,12 +72,26 @@ function MyProductComponent(props) {
           Authorization: `${token}`,
         },
         url: "https://smai-app-api.herokuapp.com/post/getPostByAccountId",
-      })
+      });
       dispatch({ type: "UP", data: temp.data });
       // console.log(temp);
     };
     getData();
-
+    const [fontsLoaded, error] = useFonts({
+      OpenSans_300Light,
+      OpenSans_300Light_Italic,
+      OpenSans_400Regular,
+      OpenSans_400Regular_Italic,
+      OpenSans_600SemiBold,
+      OpenSans_600SemiBold_Italic,
+      OpenSans_700Bold,
+      OpenSans_700Bold_Italic,
+      OpenSans_800ExtraBold,
+      OpenSans_800ExtraBold_Italic,
+    });
+    if (!fontsLoaded) {
+      return <AppLoading />;
+    }
     //Function handling title post
     const calculatingTime = (d1, d2) => {
       d1 = new Date(d1);
@@ -88,10 +116,10 @@ function MyProductComponent(props) {
       const calYear = () => {
         return d2.getFullYear() - d1.getFullYear();
       };
-      if (calYear() != 0) return `${calYear()} năm `;
-      else if (calMonth() != 0) return `${calMonth()} tháng `;
-      else if (calDay() != 0) return `${calDay()} ngày `;
-      else return `${calHour()} giờ `;
+      if (calYear() != 0) return `${calYear()}y `;
+      else if (calMonth() != 0) return `${calMonth()}m `;
+      else if (calDay() != 0) return `${calDay()}d `;
+      else return `${calHour()}h `;
     };
     //Function handling title post
     const renderTitle = (item) => {
@@ -106,17 +134,35 @@ function MyProductComponent(props) {
     };
     const renderAuthor = (item) => {
       if (item == "tangcongdong") return "Tặng cộng đồng";
-      else return "Cần xin đồ"
+      else return "Cần hỗ trợ";
     };
+    // const renderConfirm = (item) => {
+    //   if (item) return "Đang hiển thị";
+    //   else return "Chờ xác thực";
+    // };
+
     const renderConfirm = (item) => {
-      if (item) return "Đang hiển thị";
-      else return "Chờ xác thực"
+      if (item)
+        return (
+          <View style={style.wrapBot}>
+            <Feather
+              name="eye"
+              size={18}
+              color="#00a2e8"
+              style={{ width: 18, height: 18 }}
+            />
+            <Text style={style.textStatusTrue}>&ensp;Hiển thị</Text>
+          </View>
+        );
+      else return <Text style={style.textStatusFalse}>Chờ xác thực</Text>;
     };
+
     //sang trang detail
     const _pressRow = (item) => {
       props.navigation.navigate("DetailPost", { data: item }); //chuyển trang
     };
     const currentTime = new Date();
+
     return (
       <View style={style.constainer}>
         {props.myPost.map((item, key) => {
@@ -174,9 +220,9 @@ function MyProductComponent(props) {
                       <View style={style.wrapTime}>
                         <Feather
                           name="clock"
-                          size={20}
+                          size={18}
                           color="gray"
-                          style={{ width: 20, height: 20 }}
+                          style={{ width: 18, height: 18 }}
                         />
                         <Text style={style.time}>
                           {calculatingTime(item.createdAt, currentTime)}
@@ -189,9 +235,14 @@ function MyProductComponent(props) {
                   </MenuProvider>
                 </View>
               </View>
-              <View style={style.wrapBot}> 
-                <Text style={style.textCate}>{renderAuthor(item.TypeAuthor)}</Text>
-                <Text style={style.textStatus}>{renderConfirm(item.confirm)}</Text>
+              <View style={style.wrapBot}>
+                <Text style={style.textCate}>
+                  {renderAuthor(item.TypeAuthor)}
+                </Text>
+                <Text style={style.textStatus}>
+                  {renderConfirm(item.confirm)}
+                </Text>
+                {/* {confirmStatus} */}
               </View>
             </TouchableOpacity>
           );
@@ -203,11 +254,12 @@ function MyProductComponent(props) {
 
 const style = StyleSheet.create({
   constainer: {
-    backgroundColor: "#DDD",
+    backgroundColor: "#e5e5e5",
   },
   wrapCategory: {
     padding: 15,
-    marginTop: 10,
+    paddingBottom: 10,
+    marginBottom: 10,
     flex: 1,
     display: "flex",
     backgroundColor: "white",
@@ -247,14 +299,16 @@ const style = StyleSheet.create({
   wrapTypePrice: {
     flexDirection: "row",
     justifyContent: "space-between",
+    marginVertical: 5,
   },
   wrapTimeAddress: {
     flexDirection: "row",
     justifyContent: "space-between",
   },
   titlePost: {
-    fontSize: 20,
-    fontWeight: "bold",
+    fontSize: config.fontsize_2,
+    // fontWeight: "bold",
+    fontFamily: "OpenSans_700Bold",
   },
   wrapTime: {
     display: "flex",
@@ -262,41 +316,50 @@ const style = StyleSheet.create({
     flexDirection: "row",
   },
   time: {
-    fontSize: 20,
+    fontSize: config.fontsize_3,
     marginLeft: 7,
-    color: "gray",
+    color: "black",
   },
   price: {
     color: "green",
-    fontSize: 20,
+    fontSize: config.fontsize_3,
+    fontFamily: "OpenSans_400Regular",
   },
   type: {
-    fontSize: 20,
+    fontSize: config.fontsize_3,
     color: "gray",
+    fontFamily: "OpenSans_400Regular",
   },
   address: {
-    color: "gray",
-    fontSize: 20,
+    color: "black",
+    fontSize: config.fontsize_3,
+    fontFamily: "OpenSans_400Regular",
   },
   wrapBot: {
-    flex: 1,
+    // flex: 1,
     flexDirection: "row",
-    alignContent: "space-between",
+    // alignContent: "space-between",
+    alignItems: "center",
     justifyContent: "space-between",
     paddingTop: 5,
   },
   textCate: {
-    fontSize: 20,
+    fontSize: config.fontsize_3,
+    // fontSize: 20,
     color: "gray",
+    fontFamily: "OpenSans_400Regular",
   },
-  textStatus: {
-    fontSize: 20,
+  textStatusTrue: {
+    fontSize: config.fontsize_3,
+    // fontSize: 20,
     color: "black",
+    fontFamily: "OpenSans_400Regular",
   },
-  textFalse: {
-    color: "gray",
-    textAlign: "center",
-    // backgroundColor: "white",
+  textStatusFalse: {
+    fontSize: config.fontsize_3,
+    // fontSize: 20,
+    color: "red",
+    fontFamily: "OpenSans_400Regular",
   },
 });
 
@@ -304,16 +367,16 @@ const optionsStyles = {
   optionsContainer: {
     backgroundColor: "#f2f2f2",
     width: "70%",
-    borderRadius: 5
+    borderRadius: 5,
   },
   optionsWrapper: {
     backgroundColor: "#f2f2f2",
-    borderRadius: 5
+    borderRadius: 5,
   },
   optionWrapper: {
     backgroundColor: "white",
     marginBottom: 2,
-    borderRadius: 5
+    borderRadius: 5,
   },
   optionTouchable: {
     underlayColor: "gold",
@@ -323,6 +386,7 @@ const optionsStyles = {
     color: "black",
     fontSize: 16,
     padding: 6,
+    fontFamily: "OpenSans_400Regular",
   },
 };
 

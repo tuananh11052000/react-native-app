@@ -32,7 +32,7 @@ const styles = StyleSheet.create({
     flex: 1,
     // flexDirection: 'row',
     // marginTop: heightStatusBar,
-    backgroundColor: "#f2f2f2",
+    backgroundColor: "#e5e5e5",
   },
 });
 
