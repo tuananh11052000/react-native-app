@@ -317,8 +317,9 @@ const style = StyleSheet.create({
   },
   time: {
     fontSize: config.fontsize_3,
-    marginLeft: 7,
+    marginLeft: 5,
     color: "black",
+    fontFamily: "OpenSans_400Regular",
   },
   price: {
     color: "green",
