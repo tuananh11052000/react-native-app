@@ -61,9 +61,11 @@ const styles = StyleSheet.create({
   },
   textNote: {
     fontSize: 20,
+    fontFamily: "OpenSans_400Regular",
   },
   textContent: {
     padding: 16,
+    fontFamily: "OpenSans_400Regular",
   }
 });
 
