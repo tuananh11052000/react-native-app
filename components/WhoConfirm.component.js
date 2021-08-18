@@ -46,6 +46,7 @@ const styles = StyleSheet.create({
   title: {
     fontWeight: '500',
     fontSize: 16,
+    fontFamily: "OpenSans_400Regular",
   }
 })
 

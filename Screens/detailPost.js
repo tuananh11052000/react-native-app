@@ -14,6 +14,14 @@ import { Button } from "galio-framework";
 import config from "../config";
 import axios from "axios";
 import * as SecureStore from "expo-secure-store";
+import AppLoading from "expo-app-loading";
+import {
+  useFonts,
+  OpenSans_400Regular,
+  OpenSans_400Regular_Italic,
+  OpenSans_700Bold,
+  OpenSans_700Bold_Italic,
+} from "@expo-google-fonts/open-sans";
 
 const { width } = Dimensions.get("window");
 const height = width * 0.6;
@@ -74,6 +82,16 @@ export default function App(props) {
     };
     getPhone(data.AuthorID);
   }, []);
+
+  const [fontsLoaded, error] = useFonts({
+    OpenSans_400Regular,
+    OpenSans_400Regular_Italic,
+    OpenSans_700Bold,
+    OpenSans_700Bold_Italic,
+  });
+  if (!fontsLoaded) {
+    return <AppLoading />;
+  }
 
   //render btn
   let button;
@@ -148,7 +166,7 @@ export default function App(props) {
             </Text>
           </View>
           <View style={styles.wrapInfor}>
-            <FontAwesome name="user-circle-o" size={70} color="#BDBDBD" />
+            <FontAwesome name="user-circle-o" size={60} color="#fff200" />
             <View style={styles.wrapName}>
               <Text style={styles.textName}>{data.NameAuthor}</Text>
               <Text style={styles.textTypeUser}>Cá nhân</Text>
@@ -166,7 +184,8 @@ export default function App(props) {
 
 const styles = StyleSheet.create({
   container: {
-    marginTop: 10,
+    // marginTop: 10,
+    paddingTop: 10,
     width,
     height,
     backgroundColor: "#FFF",
@@ -208,8 +227,8 @@ const styles = StyleSheet.create({
   },
   textTitle: {
     color: "#000",
-    fontSize: 25,
-    fontWeight: "bold",
+    fontSize: config.fontsize_2,
+    fontFamily: "OpenSans_700Bold",
     marginBottom: 10,
   },
   wrapCategory: {
@@ -218,15 +237,22 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   textCategory: {
-    fontSize: 20,
+    // fontSize: 20,
+    fontSize: config.fontsize_3,
+    color: "gray",
+    fontFamily: "OpenSans_400Regular",
   },
   textPrice: {
-    fontSize: 20,
+    fontSize: config.fontsize_3,
+    fontFamily: "OpenSans_400Regular",
     color: "#3DA20E",
   },
   textAddress: {
-    color: "#A1A1A1",
-    fontSize: 18,
+    fontSize: config.fontsize_3,
+    color: "black",
+    fontFamily: "OpenSans_400Regular",
+    // color: "#A1A1A1",
+    // fontSize: 18,
   },
   wrapInfor: {
     flexDirection: "row",
@@ -241,25 +267,32 @@ const styles = StyleSheet.create({
     marginLeft: 20,
   },
   textName: {
-    fontSize: 25,
+    fontSize: config.fontsize_2,
+    color: "black",
+    fontFamily: "OpenSans_400Regular",
+    marginBottom: "5%"
   },
   textTypeUser: {
-    fontSize: 20,
-    color: "#757575",
+    fontSize: config.fontsize_3,
+    color: "gray",
+    fontFamily: "OpenSans_400Regular",
   },
   textDescription: {
-    fontSize: 20,
-    color: "#000",
     marginBottom: 20,
+    fontSize: config.fontsize_2,
+    color: "black",
+    fontFamily: "OpenSans_400Regular",
   },
   wrapButton: {
     justifyContent: "center",
     alignItems: "center",
-    marginBottom: 20,
+    // marginBottom: 20,
+    paddingVertical: 10,
+    backgroundColor: "#e5e5e5"
   },
   textCall: {
     fontSize: 20,
     color: "#FFF",
-    fontWeight: "bold",
+    fontFamily: "OpenSans_700Bold",
   },
 });

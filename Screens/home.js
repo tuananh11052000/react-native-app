@@ -22,6 +22,21 @@ import TitleComponent from "../components/title.component";
 import NewsedBox from "../components/newsedBox.components";
 import * as SecureStore from "expo-secure-store";
 import axios from "axios";
+import config from "../config";
+import AppLoading from 'expo-app-loading';
+import {
+  useFonts,
+  OpenSans_300Light,
+  OpenSans_300Light_Italic,
+  OpenSans_400Regular,
+  OpenSans_400Regular_Italic,
+  OpenSans_600SemiBold,
+  OpenSans_600SemiBold_Italic,
+  OpenSans_700Bold,
+  OpenSans_700Bold_Italic,
+  OpenSans_800ExtraBold,
+  OpenSans_800ExtraBold_Italic,
+} from "@expo-google-fonts/open-sans";
 
 const heightStatusBar = StatusBar.currentHeight;
 function Home(props) {
@@ -89,6 +104,21 @@ function Home(props) {
     } else navigation.replace("Authentication");
   };
   const { navigation } = props;
+  const [fontsLoaded, error] = useFonts({
+    OpenSans_300Light,
+    OpenSans_300Light_Italic,
+    OpenSans_400Regular,
+    OpenSans_400Regular_Italic,
+    OpenSans_600SemiBold,
+    OpenSans_600SemiBold_Italic,
+    OpenSans_700Bold,
+    OpenSans_700Bold_Italic,
+    OpenSans_800ExtraBold,
+    OpenSans_800ExtraBold_Italic,
+  });
+  if (!fontsLoaded) {
+    return <AppLoading />;
+  }
   //ConfirmAddress
   // product component////////////////////////////////////////////////////
   const calculatingTime = (d1, d2) => {
@@ -114,10 +144,10 @@ function Home(props) {
     const calYear = () => {
       return d2.getFullYear() - d1.getFullYear();
     };
-    if (calYear() != 0) return `${calYear()} năm trước`;
-    else if (calMonth() != 0) return `${calMonth()} tháng trước`;
-    else if (calDay() != 0) return `${calDay()} ngày trước`;
-    else return `${calHour()} giờ trước`;
+    if (calYear() != 0) return `${calYear()}y`;
+    else if (calMonth() != 0) return `${calMonth()}m`;
+    else if (calDay() != 0) return `${calDay()}d`;
+    else return `${calHour()}h`;
   };
   //get post
 
@@ -161,7 +191,7 @@ function Home(props) {
         </View>
         <View style={styles.wrapTimeAddress}>
           <View style={styles.wrapTime}>
-            <Feather name="clock" size={20} color="gray" />
+            <Feather name="clock" size={18} color="gray" />
             <Text style={styles.time}>
               {calculatingTime(item.createdAt, currentTime)}
             </Text>
@@ -228,7 +258,7 @@ const styles = StyleSheet.create({
   container: {
     marginTop: heightStatusBar,
     flex: 1,
-    backgroundColor: "#FFF",
+    backgroundColor: "#e5e5e5",
   },
   child: {},
   gift_component: {
@@ -244,10 +274,10 @@ const styles = StyleSheet.create({
   },
   wrapCategory: {
     padding: 15,
-    marginBottom: 10,
+    // paddingBottom: 5,
+    // marginBottom: 10,
     flex: 1,
     alignItems: "center",
-    display: "flex",
     flexDirection: "row",
     justifyContent: "space-around",
     backgroundColor: "white",
@@ -259,19 +289,21 @@ const styles = StyleSheet.create({
   wrapInfoProduct: {
     flex: 1,
     marginLeft: 10,
-    justifyContent: "space-around",
+    // justifyContent: "space-around",
+    // paddingBottom: 10,
   },
   wrapTypePrice: {
     flexDirection: "row",
     justifyContent: "space-between",
+    marginVertical: 12,
   },
   wrapTimeAddress: {
     flexDirection: "row",
     justifyContent: "space-between",
   },
   titlePost: {
-    fontSize: 20,
-    fontWeight: "900",
+    fontSize: config.fontsize_2,
+    fontFamily: "OpenSans_700Bold",
   },
   wrapTime: {
     display: "flex",
@@ -279,21 +311,25 @@ const styles = StyleSheet.create({
     flexDirection: "row",
   },
   time: {
-    fontSize: 15,
-    marginLeft: 7,
-    color: "gray",
+    fontSize: config.fontsize_3,
+    marginLeft: 5,
+    color: "black",
+    fontFamily: "OpenSans_400Regular",
   },
   price: {
     color: "green",
-    fontSize: 20,
+    fontSize: config.fontsize_3,
+    fontFamily: "OpenSans_400Regular",
   },
   type: {
-    fontSize: 20,
+    fontSize: config.fontsize_3,
     color: "gray",
+    fontFamily: "OpenSans_400Regular",
   },
   address: {
-    color: "gray",
-    fontSize: 15,
+    color: "black",
+    fontSize: config.fontsize_3,
+    fontFamily: "OpenSans_400Regular",
   },
   //////////////////////////////////////////////////
 });

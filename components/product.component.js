@@ -9,23 +9,52 @@ import {
   FlatList,
   SafeAreaView,
   ActivityIndicator,
-  RefreshControl, 
+  RefreshControl,
 } from "react-native";
 import { connect } from "react-redux";
 import * as SecureStore from "expo-secure-store";
 import axios from "axios";
 import SearchComponent from "../components/search.component";
-
 import { Feather } from "@expo/vector-icons";
+import config from "../config"
+import AppLoading from "expo-app-loading";
+import {
+  useFonts,
+  OpenSans_300Light,
+  OpenSans_300Light_Italic,
+  OpenSans_400Regular,
+  OpenSans_400Regular_Italic,
+  OpenSans_600SemiBold,
+  OpenSans_600SemiBold_Italic,
+  OpenSans_700Bold,
+  OpenSans_700Bold_Italic,
+  OpenSans_800ExtraBold,
+  OpenSans_800ExtraBold_Italic,
+} from "@expo-google-fonts/open-sans";
 
 const { width, height } = Dimensions.get("window");
 
 function ProductComponent(props) {
-  var { dispatch } = props; 
+  var { dispatch } = props;
   const [loading, setloading] = useState(true);
 
-  const [dataRender, setData] = useState([])
+  const [dataRender, setData] = useState([]);
 
+  const [fontsLoaded, error] = useFonts({
+    OpenSans_300Light,
+    OpenSans_300Light_Italic,
+    OpenSans_400Regular,
+    OpenSans_400Regular_Italic,
+    OpenSans_600SemiBold,
+    OpenSans_600SemiBold_Italic,
+    OpenSans_700Bold,
+    OpenSans_700Bold_Italic,
+    OpenSans_800ExtraBold,
+    OpenSans_800ExtraBold_Italic,
+  });
+  if (!fontsLoaded) {
+    return <AppLoading />;
+  }
   const calculatingTime = (d1, d2) => {
     d1 = new Date(d1);
     const calHour = () => {
@@ -61,28 +90,25 @@ function ProductComponent(props) {
       let temp = await axios({
         method: "get",
         url: "https://smai-app-api.herokuapp.com/post/getNewPost",
-      }).finally(() =>setloading(false));
-      setData(temp.data)
+      }).finally(() => setloading(false));
+      setData(temp.data);
     };
-    const getDataHistory = async()=>{
+    const getDataHistory = async () => {
       let result = await SecureStore.getItemAsync("token");
       await axios({
-        method:'get',
-        url:"https://smai-app-api.herokuapp.com/user/getHistoryPost",
-        headers:{
-          Authorization: result
-        }
-      }).then((data) =>{
-        setloading(false)
-        setData(data.data)
+        method: "get",
+        url: "https://smai-app-api.herokuapp.com/user/getHistoryPost",
+        headers: {
+          Authorization: result,
+        },
+      }).then((data) => {
+        setloading(false);
+        setData(data.data);
       });
-    }
-    if(props.type=="history")
-    {
-      getDataHistory()
-    }
-    else
-      getDataHome();
+    };
+    if (props.type == "history") {
+      getDataHistory();
+    } else getDataHome();
   }, [props.data_]);
   //Function handling title post
   const renderTitle = (item) => {
@@ -103,7 +129,6 @@ function ProductComponent(props) {
   const currentTime = new Date();
 
   const renderItem = ({ item }) => (
-     
     <TouchableOpacity
       style={style.wrapCategory}
       activeOpacity={0.4}
@@ -138,15 +163,21 @@ function ProductComponent(props) {
   // space between item flatlist
   const ItemSeparatorView = () => {
     return (
-    <View style={{height: 10, width: '100%', backgroundColor: '#EEEEEE'}}/>
-    )
-  }
+      <View style={{ height: 10, width: "100%", backgroundColor: "#EEEEEE" }} />
+    );
+  };
   return (
     <View style={style.containerr}>
       {loading ? (
-          <View style={{flexDirection: 'row', justifyContent: 'center', height: '100%',}}>
-                <ActivityIndicator color="#BDBDBD" size="small" />
-          </View>
+        <View
+          style={{
+            flexDirection: "row",
+            justifyContent: "center",
+            height: "100%",
+          }}
+        >
+          <ActivityIndicator color="#BDBDBD" size="small" />
+        </View>
       ) : (
         <FlatList
           data={dataRender}
@@ -191,6 +222,8 @@ const style = StyleSheet.create({
     justifyContent: "space-between",
   },
   titlePost: {
+    // fontSize: config.fontsize_2,
+    // fontFamily: "OpenSans_700Bold",
     fontSize: 20,
     fontWeight: "900",
   },

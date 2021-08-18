@@ -307,7 +307,6 @@ const style = StyleSheet.create({
   },
   titlePost: {
     fontSize: config.fontsize_2,
-    // fontWeight: "bold",
     fontFamily: "OpenSans_700Bold",
   },
   wrapTime: {
@@ -317,8 +316,9 @@ const style = StyleSheet.create({
   },
   time: {
     fontSize: config.fontsize_3,
-    marginLeft: 7,
+    marginLeft: 5,
     color: "black",
+    fontFamily: "OpenSans_400Regular",
   },
   price: {
     color: "green",
