@@ -1,6 +1,5 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useState, useRef } from "react";
 import { connect } from "react-redux";
-import * as SecureStore from "expo-secure-store";
 import { StyleSheet, Text, View, ScrollView } from "react-native";
 import { Button } from "galio-framework";
 import config from "../../config";

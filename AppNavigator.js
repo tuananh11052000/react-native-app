@@ -30,6 +30,7 @@ import GiveFor from "./Screens/giveFor";
 import ForgotPasswords from "./Screens/forgotPassword";
 import FilterDonationComunity from "./Screens/FilterDonationComunity";
 import CategoryCheckBox from './Screens/categoryNeedSomeThing';
+import NewPassword from "./Screens/newPassword";
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
 
@@ -61,7 +62,7 @@ function AppNavigator(props) {
             },
           })}
         />
-        
+
         <Stack.Screen
           name="ConfirmAddress"
           component={ConfirmAddress}
@@ -94,18 +95,17 @@ function AppNavigator(props) {
               <TouchableOpacity
                 style={styles.wrapTextCancel}
                 onPress={() => {
-                  Alert.alert(
-                    "Thông báo",
-                    "Bạn có chắc muốn hủy!",
-                    [
-                      {
-                        text: "Không",
-                        style: "cancel"
-                      },
-                      { text: "Có", style: "cancel", onPress: () => navigation.navigate("Home") }
-                    ]
-                  );
-
+                  Alert.alert("Thông báo", "Bạn có chắc muốn hủy!", [
+                    {
+                      text: "Không",
+                      style: "cancel",
+                    },
+                    {
+                      text: "Có",
+                      style: "cancel",
+                      onPress: () => navigation.navigate("Home"),
+                    },
+                  ]);
                 }}
               >
                 <Text style={styles.textCancel}>Hủy</Text>
@@ -139,18 +139,17 @@ function AppNavigator(props) {
               <TouchableOpacity
                 style={styles.wrapTextCancel}
                 onPress={() => {
-                  Alert.alert(
-                    "Thông báo",
-                    "Bạn có chắc muốn hủy!",
-                    [
-                      {
-                        text: "Không",
-                        style: "cancel"
-                      },
-                      { text: "Có", style: "cancel", onPress: () => navigation.navigate("Home") }
-                    ]
-                  );
-
+                  Alert.alert("Thông báo", "Bạn có chắc muốn hủy!", [
+                    {
+                      text: "Không",
+                      style: "cancel",
+                    },
+                    {
+                      text: "Có",
+                      style: "cancel",
+                      onPress: () => navigation.navigate("Home"),
+                    },
+                  ]);
                 }}
               >
                 <Text style={styles.textCancel}>Hủy</Text>
@@ -185,18 +184,17 @@ function AppNavigator(props) {
               <TouchableOpacity
                 style={styles.wrapTextCancel}
                 onPress={() => {
-                  Alert.alert(
-                    "Thông báo",
-                    "Bạn có chắc muốn hủy!",
-                    [
-                      {
-                        text: "Không",
-                        style: "cancel"
-                      },
-                      { text: "Có", style: "cancel", onPress: () => navigation.navigate("Home") }
-                    ]
-                  );
-
+                  Alert.alert("Thông báo", "Bạn có chắc muốn hủy!", [
+                    {
+                      text: "Không",
+                      style: "cancel",
+                    },
+                    {
+                      text: "Có",
+                      style: "cancel",
+                      onPress: () => navigation.navigate("Home"),
+                    },
+                  ]);
                 }}
               >
                 <Text style={styles.textCancel}>Hủy</Text>
@@ -205,7 +203,7 @@ function AppNavigator(props) {
             headerLeft: () => (
               <HeaderBackButton
                 onPress={() => {
-                  dispatch({ type: 'RESET_SCREEN_INFORMATION' })
+                  dispatch({ type: "RESET_SCREEN_INFORMATION" });
                   navigation.navigate("ConfirmAddress");
                 }}
                 tintColor={"white"}
@@ -231,18 +229,17 @@ function AppNavigator(props) {
               <TouchableOpacity
                 style={styles.wrapTextCancel}
                 onPress={() => {
-                  Alert.alert(
-                    "Thông báo",
-                    "Bạn có chắc muốn hủy!",
-                    [
-                      {
-                        text: "Không",
-                        style: "cancel"
-                      },
-                      { text: "Có", style: "cancel", onPress: () => navigation.navigate("Home") }
-                    ]
-                  );
-
+                  Alert.alert("Thông báo", "Bạn có chắc muốn hủy!", [
+                    {
+                      text: "Không",
+                      style: "cancel",
+                    },
+                    {
+                      text: "Có",
+                      style: "cancel",
+                      onPress: () => navigation.navigate("Home"),
+                    },
+                  ]);
                 }}
               >
                 <Text style={styles.textCancel}>Hủy</Text>
@@ -440,6 +437,21 @@ function AppNavigator(props) {
           component={ForgotPasswords}
           options={({ navigation }) => ({
             title: "Quên mật khẩu",
+            headerShown: true,
+            headerStyle: {
+              backgroundColor: config.color_header_background,
+            },
+            headerTintColor: config.headerTintColor,
+            headerTitleStyle: {
+              // fontWeight: "bold",
+            },
+          })}
+        />
+        <Stack.Screen
+          name="NewPassword"
+          component={NewPassword}
+          options={({ navigation }) => ({
+            title: "Mật khẩu mới",
             headerShown: true,
             headerStyle: {
               backgroundColor: config.color_header_background,

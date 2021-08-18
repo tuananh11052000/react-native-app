@@ -12,6 +12,11 @@ var newuser = (
         password: action.password,
         verificationId: action.verificationId,
       };
+    case "RESET_PASSWORD":
+      return {
+        ...state,
+        phonenumber: action.phonenumber,
+      };
     default:
       return state;
   }

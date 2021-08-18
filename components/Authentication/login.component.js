@@ -1,5 +1,5 @@
 import { StatusBar } from "expo-status-bar";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { connect } from "react-redux";
 import * as SecureStore from "expo-secure-store";
 import {
@@ -7,15 +7,12 @@ import {
   Text,
   View,
   Image,
-  ScrollView,
   Platform,
   Switch,
-  TouchableOpacity,
 } from "react-native";
 import axios from "axios";
 import LogoSmai from "../../assets/logo_smai.png";
 import { Checkbox, TextInput } from "react-native-paper";
-import { MaterialIcons } from "@expo/vector-icons";
 import config from "../../config";
 import { Button } from "galio-framework";
 async function save(key, value) {
