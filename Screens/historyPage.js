@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import {
   StyleSheet,
   View,
-  Text
 } from "react-native";
 import ProductComponent from '../components/product.component'
 import axios from 'axios'

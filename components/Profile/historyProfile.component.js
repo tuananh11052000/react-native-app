@@ -21,20 +21,21 @@ import {
 } from "@expo-google-fonts/open-sans";
 //We will consider isLogin state and decide what will appear on the screen
 function HeaderLoginPage(props) {
+   const [fontsLoaded, error] = useFonts({
+     OpenSans_400Regular,
+     OpenSans_400Regular_Italic,
+     OpenSans_700Bold,
+     OpenSans_700Bold_Italic,
+   });
   const _pressRow = async () => {
     let result = await SecureStore.getItemAsync("token");
     if (result) {
       props.navigation.navigate("History"); //chuyển trang
     } else {
-      props.navigation.navigate("Authentication"); //chuyển trang
+      props.navigation.replace("Authentication"); //chuyển trang
     }
   };
-  const [fontsLoaded, error] = useFonts({
-    OpenSans_400Regular,
-    OpenSans_400Regular_Italic,
-    OpenSans_700Bold,
-    OpenSans_700Bold_Italic,
-  });
+ 
   if (!fontsLoaded) {
     return <AppLoading />;
   }

@@ -14,7 +14,6 @@ import {
 import { connect } from "react-redux";
 import * as SecureStore from "expo-secure-store";
 import axios from "axios";
-import SearchComponent from "../components/search.component";
 import { Feather } from "@expo/vector-icons";
 import config from "../config"
 import AppLoading from "expo-app-loading";
@@ -35,11 +34,6 @@ import {
 const { width, height } = Dimensions.get("window");
 
 function ProductComponent(props) {
-  var { dispatch } = props;
-  const [loading, setloading] = useState(true);
-
-  const [dataRender, setData] = useState([]);
-
   const [fontsLoaded, error] = useFonts({
     OpenSans_300Light,
     OpenSans_300Light_Italic,
@@ -52,6 +46,8 @@ function ProductComponent(props) {
     OpenSans_800ExtraBold,
     OpenSans_800ExtraBold_Italic,
   });
+  const [loading, setloading] = useState(true);
+  const [dataRender, setData] = useState([]);
   if (!fontsLoaded) {
     return <AppLoading />;
   }
