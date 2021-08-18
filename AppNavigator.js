@@ -61,6 +61,7 @@ function AppNavigator(props) {
             },
           })}
         />
+        
         <Stack.Screen
           name="ConfirmAddress"
           component={ConfirmAddress}
