@@ -21,6 +21,15 @@ import axios from "axios";
 import { Feather } from "@expo/vector-icons";
 const { width } = Dimensions.get("window");
 const height = width * 0.6;
+import config from "../config";
+import AppLoading from "expo-app-loading";
+import {
+  useFonts,
+  OpenSans_400Regular,
+  OpenSans_400Regular_Italic,
+  OpenSans_700Bold,
+  OpenSans_700Bold_Italic,
+} from "@expo-google-fonts/open-sans";
 
 function App(props) {
   const [data, setData] = useState([]);
@@ -52,6 +61,15 @@ function App(props) {
       .finally(() => setisLoading(false));
   };
 
+  const [fontsLoaded, error] = useFonts({
+    OpenSans_400Regular,
+    OpenSans_400Regular_Italic,
+    OpenSans_700Bold,
+    OpenSans_700Bold_Italic,
+  });
+  if (!fontsLoaded) {
+    return <AppLoading />;
+  }
   const calculatingTime = (d1, d2) => {
     d1 = new Date(d1);
     const calHour = () => {
@@ -75,10 +93,10 @@ function App(props) {
     const calYear = () => {
       return d2.getFullYear() - d1.getFullYear();
     };
-    if (calYear() != 0) return `${calYear()} năm trước`;
-    else if (calMonth() != 0) return `${calMonth()} tháng trước`;
-    else if (calDay() != 0) return `${calDay()} ngày trước`;
-    else return `${calHour()} giờ trước`;
+    if (calYear() != 0) return `${calYear()}y`;
+    else if (calMonth() != 0) return `${calMonth()}m`;
+    else if (calDay() != 0) return `${calDay()}d`;
+    else return `${calHour()}h`;
   };
 
   //Function handling title post
@@ -122,11 +140,10 @@ function App(props) {
         }
       }
     }
-    console.log("Sau khi lọc")
+    console.log("Sau khi lọc");
     // console.log(listAfterFilter)
   };
   // filterCategory();
-
 
   // handle picker address
   const handleFilter = (city) => {
@@ -174,7 +191,7 @@ function App(props) {
           </View>
           <View style={styles.wrapTimeAddress}>
             <View style={styles.wrapTime}>
-              <Feather name="clock" size={20} color="gray" />
+              <Feather name="clock" size={18} color="gray" />
               <Text style={styles.time}>
                 {calculatingTime(item.createdAt, currentTime)}
               </Text>
@@ -238,7 +255,7 @@ function App(props) {
 const styles = StyleSheet.create({
   containter: {
     flex: 1,
-    backgroundColor: "#DDD",
+    backgroundColor: "#e5e5e5",
   },
   containterLoading: {
     flex: 1,
@@ -290,39 +307,46 @@ const styles = StyleSheet.create({
   wrapInfoProduct: {
     flex: 1,
     marginLeft: 10,
-    justifyContent: "space-around",
+    // justifyContent: "space-around",
   },
   wrapTypePrice: {
     flexDirection: "row",
     justifyContent: "space-between",
+    marginVertical: 12,
   },
   wrapTimeAddress: {
     flexDirection: "row",
     justifyContent: "space-between",
   },
   titlePost: {
-    fontSize: 20,
-    fontWeight: "900",
+    fontSize: config.fontsize_2,
+    fontFamily: "OpenSans_700Bold",
   },
   wrapTime: {
+    display: "flex",
+    alignItems: "center",
     flexDirection: "row",
   },
   time: {
-    fontSize: 20,
-    marginLeft: 7,
-    color: "gray",
+    fontSize: config.fontsize_3,
+    marginLeft: 5,
+    color: "black",
+    fontFamily: "OpenSans_400Regular",
   },
   price: {
     color: "green",
-    fontSize: 20,
+    fontSize: config.fontsize_3,
+    fontFamily: "OpenSans_400Regular",
   },
   type: {
-    fontSize: 20,
+    fontSize: config.fontsize_3,
     color: "gray",
+    fontFamily: "OpenSans_400Regular",
   },
   address: {
-    color: "gray",
-    fontSize: 20,
+    color: "black",
+    fontSize: config.fontsize_3,
+    fontFamily: "OpenSans_400Regular",
   },
 });
 export default connect(function (state) {
