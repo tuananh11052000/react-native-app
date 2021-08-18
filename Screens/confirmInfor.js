@@ -14,6 +14,7 @@ import ConfirmInfor from '../components/confirminfor.components';
 function ConfirmInforScreen(props) {
   const { navigation } = props;
   const { dispatch } = props;
+  console.log(props.auth.token);
   //khai bao state hien thi man hinh cho
   const [isDisplay, setIsDisplay] = useState(false)
   //khai bao bien luu thong tin anh
@@ -59,7 +60,7 @@ function ConfirmInforScreen(props) {
             "idpost": res.data.idpost,
             Accept: "application/json",
             "Content-Type": "multipart/form-data",
-            Authorization: props.auth.token
+            Authorization: "bearer "  + props.auth.token
           }
         };
         fetch(apiUrl, options).then((res) => {
@@ -79,7 +80,7 @@ function ConfirmInforScreen(props) {
     <View style={styles.container}>
       <Spinner
         visible={isDisplay}
-        textContent={'Đăng xử lý yêu cầu...'}
+        textContent={'Đang xử lý yêu cầu...'}
         textStyle={styles.spinnerTextStyle}
       />
       <ConfirmInfor dataImage={image}></ConfirmInfor>

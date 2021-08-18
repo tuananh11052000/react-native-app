@@ -29,6 +29,7 @@ import VerifyOtps from "./Screens/verifyOtp";
 import GiveFor from "./Screens/giveFor";
 import ForgotPasswords from "./Screens/forgotPassword";
 import FilterDonationComunity from "./Screens/FilterDonationComunity";
+import CategoryCheckBox from './Screens/categoryNeedSomeThing';
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
 
@@ -60,12 +61,13 @@ function AppNavigator(props) {
             },
           })}
         />
+        
         <Stack.Screen
           name="ConfirmAddress"
           component={ConfirmAddress}
           options={({ navigation }) => ({
             title: "Xác nhận địa chỉ ",
-            headerShown: true,
+            headerShown: false,
             headerStyle: {
               backgroundColor: config.color_header_background,
             },
@@ -120,6 +122,52 @@ function AppNavigator(props) {
             ),
           })}
         />
+        <Stack.Screen
+          name="CategoryCheckBox"
+          component={CategoryCheckBox}
+          options={({ navigation }) => ({
+            title: "Danh mục ",
+            headerShown: true,
+            headerStyle: {
+              backgroundColor: config.color_header_background,
+            },
+            headerTintColor: config.headerTintColor,
+            headerTitleStyle: {
+              fontWeight: "bold",
+            },
+            headerRight: () => (
+              <TouchableOpacity
+                style={styles.wrapTextCancel}
+                onPress={() => {
+                  Alert.alert(
+                    "Thông báo",
+                    "Bạn có chắc muốn hủy!",
+                    [
+                      {
+                        text: "Không",
+                        style: "cancel"
+                      },
+                      { text: "Có", style: "cancel", onPress: () => navigation.navigate("Home") }
+                    ]
+                  );
+
+                }}
+              >
+                <Text style={styles.textCancel}>Hủy</Text>
+              </TouchableOpacity>
+            ),
+            headerBackTitle: "some label",
+
+            headerLeft: () => (
+              <HeaderBackButton
+                onPress={() => navigation.navigate("ConfirmAddress")}
+                tintColor={"white"}
+                label="Quay lại" //back
+              />
+            ),
+          })}
+        />
+
         <Stack.Screen
           name="Description"
           component={Description}

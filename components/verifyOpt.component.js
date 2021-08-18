@@ -11,9 +11,7 @@ async function save(key, value) {
   await SecureStore.setItemAsync(key, value);
 }
 function VerifyOtp(props) {
-  console.log(props.register)
   const [otpInput, setotpInput] = useState("");
-  const [inputText, setinputText] = useState("");
   const confirmCode = () => {
     if (otpInput.length != 6) {
       alert("Nhập đầy đủ 6 số");
@@ -33,8 +31,10 @@ function VerifyOtp(props) {
               Password: props.register.password,
             })
             .then(async (data) => {
-              if (data.status == 201) {
-                await save("token", data.data.accessToken);
+              console.log(data.data.accessToken);
+              if (data.status == 201 && data.data.message == "OK") {
+                await save("token", "bearer " + data.data.accessToken);
+                await save("PhoneNumber", props.register.phonenumber);
                 await save("FullName", props.register.username);
                 if (props.auth.token == "null") {
                   await dispatch({
