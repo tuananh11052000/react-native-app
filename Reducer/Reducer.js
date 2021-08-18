@@ -9,6 +9,7 @@ import controlThreadGiveFor from "./redirectGiveFor";
 import dataCategory from "./dataCategory";
 import register from "./register"
 import profile from './profile'
+import controlConfirmAddress from './redirectConfirmAddress';
 import { combineReducers } from "redux";
 
 var reducer = combineReducers({
@@ -23,6 +24,7 @@ var reducer = combineReducers({
   dataCategory,
   register,
   profile,
+  controlConfirmAddress,
 });
 
 export default reducer;

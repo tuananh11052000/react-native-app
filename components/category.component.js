@@ -34,7 +34,11 @@ function ExpandableListView(props) {
         <Text style={styles.categoryText}>{props.item.category}</Text>
         {/* <Image source={chevrondown} style={styles.iconStyle} /> */}
         <View style={styles.iconStyle}>
-          <Entypo name="chevron-down" size={24} color="#757575" />
+          {props.item.isExpanded ? (
+            <Entypo name="chevron-up" size={24} color="#656464" />
+          ) : (
+            <Entypo name="chevron-down" size={24} color="#656464" />
+          )}
         </View>
       </TouchableOpacity>
       <View style={{ height: layoutHeight, overflow: 'hidden' }}>

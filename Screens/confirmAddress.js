@@ -11,6 +11,7 @@ import {
 } from "react-native";
 import RNPickerDialog from "rn-modal-picker";
 import { TextInput } from "react-native-paper";
+import { AntDesign } from '@expo/vector-icons';
 import db from "../db.json";
 import { connect } from "react-redux";
 import { Button } from "galio-framework";
@@ -120,7 +121,7 @@ function confirmAddress(props) {
   };
   //Khai bao ham xu ly su kien click
   const pressFunc = () => {
-    if (province == "" || district == "" || commune == "")
+    if (province == "" || district == "" || commune == "" || addressDetail == "")
       Alert.alert("Thông báo", "Vui lòng nhập đầy đủ địa chỉ", [
         { text: "OK" },
       ]);
@@ -140,6 +141,7 @@ function confirmAddress(props) {
                     const { dispatch } = props;
                     const address = `${addressDetail}, ${commune.name}, ${district.name}, ${province.name}`;
                     dispatch({ type: "CONFIRM_ADDRESS", address: address });
+                    console.log(props.controlConfirmAddress);
                     if (props.controlConfirmAddress == "category") {
                       navigation.navigate("Category");
                     } else {
@@ -157,6 +159,7 @@ function confirmAddress(props) {
         const { dispatch } = props;
         const address = `${addressDetail}, ${commune.name}, ${district.name}, ${province.name}`;
         dispatch({ type: "CONFIRM_ADDRESS", address: address });
+        console.log(props.controlConfirmAddress);
         if (props.controlConfirmAddress == "category") {
           navigation.navigate("Category");
         } else {
@@ -177,8 +180,11 @@ function confirmAddress(props) {
         />
         <View style={Styles.containermain}>
           <View style={Styles.top}>
-            <Text style={Styles.tittleText}>Xác nhận địa chỉ</Text>
-            {/* <Text>{data1[0].name}</Text> */}
+            <TouchableOpacity onPress={() => navigation.navigate("Home")}> 
+              <AntDesign name="close" size={36} color="black" />
+            </TouchableOpacity>
+         
+            <Text style={Styles.tittleText}>Địa chỉ của bạn</Text>
           </View>
           <View>
             <RNPickerDialog
@@ -239,7 +245,7 @@ function confirmAddress(props) {
           </View>
           <View style={Styles.inputAddress}>
             <TextInput
-              label="Địa chỉ"
+              label="Đường/ấp/thôn/số nhà,..."
               style={Styles.styleLabel}
               mode={"flat"}
               dense={"true"}
@@ -301,14 +307,14 @@ const Styles = StyleSheet.create({
     alignItems: "center",
   },
   containermain: {
-    marginLeft: "10%",
-    marginRight: "10%",
+    marginLeft: "5%",
+    marginRight: "5%",
     flex: 2,
     flexDirection: "column",
     alignItems: "center",
     justifyContent: "center",
     width: "80%",
-    borderWidth: 5,
+    borderWidth: 3,
     borderColor: "#E0E0E0",
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
@@ -415,11 +421,14 @@ const Styles = StyleSheet.create({
     borderWidth: 5,
     borderTopLeftRadius: 15,
     borderTopRightRadius: 15,
+    flexDirection: 'row',
+    paddingLeft: '2%',
   },
   tittleText: {
     fontSize: 25,
     fontWeight: "bold",
-    textAlign: "center",
+    marginLeft: '3%',
+    // textAlign: "center",
   },
   spinnerTextStyle: {
     color: "#FFF",

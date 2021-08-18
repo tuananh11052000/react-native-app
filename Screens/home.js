@@ -36,6 +36,7 @@ function Home(props) {
     }).finally(() => setrefreshing(false));
     setlistData(temp.data);
     dispatch({ type: "UPDATE", data: temp.data });
+ 
   };
   useEffect(() => {
     // ẩn warning
@@ -57,6 +58,7 @@ function Home(props) {
   // onPress tặng cộng đồng
   const actionOnPressTCD = () => {
     if (props.auth.isLogin == true) {
+      dispatch({ type: "setThreadCategory" });
       dispatch({ type: "setThreadTCD" });
       dispatch({ type: "SET_TYPE_AUTHOR", TypeAuthor: "tangcongdong" });
       navigation.navigate("ConfirmAddress");
@@ -302,6 +304,7 @@ export default connect(function (state) {
     infoPost: state.infoPost,
     newestPost: state.newestPost,
     controlThreadGiveFor: state.controlThreadGiveFor,
-    profile: state.profile
+    profile: state.profile,
+    controlConfirmAddress: state.controlConfirmAddress,
   };
 })(Home);

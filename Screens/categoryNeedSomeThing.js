@@ -10,7 +10,9 @@ const heightStatusBar = StatusBar.currentHeight;
 function Category(props) {
     const { navigation } = props;
     return <View style={style.container}>
-        <CategoryCheckBoxComponent onPress={() => {
+        <CategoryCheckBoxComponent 
+        type="canxindo"
+        onPress={() => {
             navigation.navigate("Description")
         }}/>
     </View>

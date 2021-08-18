@@ -66,7 +66,7 @@ function AppNavigator(props) {
           component={ConfirmAddress}
           options={({ navigation }) => ({
             title: "Xác nhận địa chỉ ",
-            headerShown: true,
+            headerShown: false,
             headerStyle: {
               backgroundColor: config.color_header_background,
             },

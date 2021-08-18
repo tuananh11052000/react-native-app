@@ -221,21 +221,19 @@ function CategoryCheckBoxComponent(props) {
         if (item.subCategory[j].checked == true) {
           let itemSub = {
             category: item.category,
-            name: item.subCategory[j].name,
+            NameProduct: item.subCategory[j].name,
           };
           dataFilterPost.push(itemSub);
         }
       }
-      // if (itemPost.length != 0) {
-      //     let child = {
-      //         category: item.category,
-      //         subCategory: itemPost,
-      //     }
-      //     dataFilterPost.push(child);
-      // }
     }
     // lưu những ô đã check vào state
-    dispatch({ type: "GET_NAMEPRODUCT", NameProduct: dataFilterPost });
+    if (props.type == "canxindo") {
+      dispatch({ type: "GET_NAME", NameProduct: dataFilterPost });
+    } else {
+      dispatch({ type: "GET_NAMEPRODUCT", NameProduct: dataFilterPost });
+    }
+    
     console.log(dataFilterPost);
     // function chuyển trang
     props.onPress();
@@ -298,5 +296,6 @@ const styles = StyleSheet.create({
 export default connect(function (state) {
   return {
     dataCategory: state.dataCategory,
+    infoPost: state.infoPost,
   };
 })(CategoryCheckBoxComponent);
