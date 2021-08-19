@@ -159,6 +159,9 @@ function Home(props) {
   };
   //Function handling type product
   const renderType = (pr) => {
+    // console.log("/////////////////////////////")
+    // console.log(pr);
+    // console.log("/////////////////////////////")
     if (pr.length > 1) return pr[0].Category + ", ...";
     else return pr[0].Category;
   };
@@ -168,7 +171,6 @@ function Home(props) {
   };
 
   const currentTime = new Date();
-
   const renderItem = ({ item }) => (
     <TouchableOpacity
       style={styles.wrapCategory}

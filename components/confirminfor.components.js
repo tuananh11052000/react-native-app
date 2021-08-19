@@ -25,7 +25,6 @@ const UselessTextInput = (props) => {
 
 function App(props) {
   const address = props.infoPost.address.split(",");
-  console.log(props.infoPost)
   const renderItem = ({ item }) => (
     <Image
       style={{

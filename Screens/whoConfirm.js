@@ -26,7 +26,7 @@ export default class whoConfirms extends React.Component {
         <FlatList
           data={whoconfirm}
           renderItem={({ item }) => <WhoConfirm who={item}
-            onPress={() => navigation.navigate('ConfirmAddress')} />}
+            onPress={() => navigation.navigate('CategoryCheckBox')} />}
           keyExtractor={item => `${item.id}`}
           style={styles.flatList}
         />

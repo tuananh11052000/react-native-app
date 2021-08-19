@@ -19,10 +19,12 @@ function ConfirmInforScreen(props) {
   const [isDisplay, setIsDisplay] = useState(false)
   //khai bao bien luu thong tin anh
   const image = props.infoPost.image;
+  console.log(props.infoPost.TypeAuthor)
   const submitInfoPost = async () => {
     //api upload infor json
     setIsDisplay(true)
     const data = props.infoPost;
+    ;
     axios({
       url: 'https://smai-app-api.herokuapp.com/post/CreatePost',
       method: 'post',
@@ -39,7 +41,7 @@ function ConfirmInforScreen(props) {
       }
     }).then(res => {
       //sau khi upload json xong thi tien hanh upload hinh anh su dung idpost duoc tra ve
-      if (props.infoPost[0]) {
+      if (props.infoPost.image[0]) {
         let apiUrl = "https://smai-app-api.herokuapp.com/post/UpdatePost";
         let formData = new FormData();
         for (let i = 0; i < image.length; i++) {
@@ -60,7 +62,7 @@ function ConfirmInforScreen(props) {
             "idpost": res.data.idpost,
             Accept: "application/json",
             "Content-Type": "multipart/form-data",
-            Authorization: "bearer "  + props.auth.token
+            Authorization: props.auth.token
           }
         };
         fetch(apiUrl, options).then((res) => {
@@ -75,7 +77,6 @@ function ConfirmInforScreen(props) {
       }
     }).catch(err => console.log(err))
   }
-  console.log(props.infoPost)
   return (
     <View style={styles.container}>
       <Spinner

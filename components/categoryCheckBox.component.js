@@ -220,7 +220,7 @@ function CategoryCheckBoxComponent(props) {
       for (let j = 0; j < item.subCategory.length; j++) {
         if (item.subCategory[j].checked == true) {
           let itemSub = {
-            category: item.category,
+            Category: item.category,
             NameProduct: item.subCategory[j].name,
           };
           dataFilterPost.push(itemSub);
@@ -234,7 +234,7 @@ function CategoryCheckBoxComponent(props) {
       dispatch({ type: "GET_NAMEPRODUCT", NameProduct: dataFilterPost });
     }
     
-    console.log(dataFilterPost);
+    // console.log(dataFilterPost);
     // function chuyển trang
     props.onPress();
   };

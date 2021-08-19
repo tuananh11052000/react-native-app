@@ -163,7 +163,7 @@ function confirmAddress(props) {
         if (props.controlConfirmAddress == "category") {
           navigation.navigate("Category");
         } else {
-          navigation.navigate("CategoryCheckBox");
+          navigation.navigate("WhoConfirm");
         }
       }
     }

@@ -48,7 +48,7 @@ const height = width * 0.6;
         for (let i=0; i<responData.length;i++) {
           let nameProduct = responData[i].NameProduct;
           for (let j=0; j<nameProduct.length;j++) {
-            if (nameProduct[j].NameProduct == props.infoPost.NameProduct[0].NameProduct && nameProduct[j].Category == props.infoPost.NameProduct[0].category) {
+            if (nameProduct[j].NameProduct == props.infoPost.NameProduct[0].NameProduct && nameProduct[j].Category == props.infoPost.NameProduct[0].Category) {
               realData.push(responData[i]);
             }
           }
@@ -58,7 +58,7 @@ const height = width * 0.6;
         setDataFilter(realData);
         setdataAddressFilter(realData);
         const { dispatch } = props;
-        dispatch({ type: 'RESET' })
+        // dispatch({ type: 'RESET' })
       })
       .catch((error) => {
         console.log("Error: ", error);
@@ -110,6 +110,7 @@ const height = width * 0.6;
   const _pressRow = (item) => {
     props.navigation.navigate("DetailPost", { data: item }); //chuyển trang
   };
+  
   // render item product
   const renderItem = ({ item, index }) => {
     return (

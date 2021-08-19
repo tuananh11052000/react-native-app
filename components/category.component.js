@@ -24,8 +24,7 @@ function ExpandableListView(props) {
   }, [props.item.isExpanded]);
   const showSelectedCategory = (item, category) => {
     const { dispatch } = props
-    dispatch({ type: "GET_NAME", NameProduct: [{ category: category, NameProduct: item.name }] });
-    
+    dispatch({ type: "GET_NAME", NameProduct: [{ Category: category, NameProduct: item.name }] });
     props.onPress()
   }
   return (
