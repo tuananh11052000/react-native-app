@@ -11,12 +11,26 @@ import {
 } from "react-native";
 import RNPickerDialog from "rn-modal-picker";
 import { TextInput } from "react-native-paper";
-import { AntDesign } from '@expo/vector-icons';
+import { AntDesign } from "@expo/vector-icons";
 import db from "../db.json";
 import { connect } from "react-redux";
 import { Button } from "galio-framework";
 import * as SecureStore from "expo-secure-store";
 import Spinner from "react-native-loading-spinner-overlay";
+import AppLoading from "expo-app-loading";
+import {
+  useFonts,
+  OpenSans_300Light,
+  OpenSans_300Light_Italic,
+  OpenSans_400Regular,
+  OpenSans_400Regular_Italic,
+  OpenSans_600SemiBold,
+  OpenSans_600SemiBold_Italic,
+  OpenSans_700Bold,
+  OpenSans_700Bold_Italic,
+  OpenSans_800ExtraBold,
+  OpenSans_800ExtraBold_Italic,
+} from "@expo-google-fonts/open-sans";
 
 function confirmAddress(props) {
   //khai bao cac local state
@@ -27,6 +41,7 @@ function confirmAddress(props) {
   const [district, setDistrict] = useState("");
   const [commune, setCommune] = useState("");
   const [addressDetail, setAddressDetail] = useState("");
+
   //lay ra dia chi
   useEffect(() => {
     // ẩn warning
@@ -50,6 +65,7 @@ function confirmAddress(props) {
         idProvince: idProvince,
       };
     };
+
     //lay ra dia chi va gan chung vao cac o input
     getAddress().then((result) => {
       if (result) {
@@ -121,7 +137,12 @@ function confirmAddress(props) {
   };
   //Khai bao ham xu ly su kien click
   const pressFunc = () => {
-    if (province == "" || district == "" || commune == "" || addressDetail == "")
+    if (
+      province == "" ||
+      district == "" ||
+      commune == "" ||
+      addressDetail == ""
+    )
       Alert.alert("Thông báo", "Vui lòng nhập đầy đủ địa chỉ", [
         { text: "OK" },
       ]);
@@ -147,7 +168,6 @@ function confirmAddress(props) {
                     } else {
                       navigation.navigate("CategoryCheckBox");
                     }
-                    
                   });
                 });
               });
@@ -169,7 +189,21 @@ function confirmAddress(props) {
     }
   };
   //ca ham xu ly neu da tung nhap thong tin  dia chi vao
-
+  const [fontsLoaded, error] = useFonts({
+    OpenSans_300Light,
+    OpenSans_300Light_Italic,
+    OpenSans_400Regular,
+    OpenSans_400Regular_Italic,
+    OpenSans_600SemiBold,
+    OpenSans_600SemiBold_Italic,
+    OpenSans_700Bold,
+    OpenSans_700Bold_Italic,
+    OpenSans_800ExtraBold,
+    OpenSans_800ExtraBold_Italic,
+  });
+  if (!fontsLoaded) {
+    return <AppLoading />;
+  }
   return (
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
       <View style={Styles.border}>
@@ -180,10 +214,10 @@ function confirmAddress(props) {
         />
         <View style={Styles.containermain}>
           <View style={Styles.top}>
-            <TouchableOpacity onPress={() => navigation.navigate("Home")}> 
+            <TouchableOpacity onPress={() => navigation.navigate("Home")}>
               <AntDesign name="close" size={36} color="black" />
             </TouchableOpacity>
-         
+
             <Text style={Styles.tittleText}>Địa chỉ của bạn</Text>
           </View>
           <View>
@@ -275,11 +309,11 @@ const Styles = StyleSheet.create({
     width: "95%",
   },
   styleLabel: {
-    fontSize: 20,
+    fontSize: 18,
     backgroundColor: "#FFFFFF",
     borderBottomColor: "gray",
     overflow: "hidden",
-    fontFamily: "Cochin",
+    fontFamily: "OpenSans_400Regular",
   },
   touchableButton: {
     width: "90%",
@@ -291,7 +325,7 @@ const Styles = StyleSheet.create({
     paddingTop: 10,
     paddingBottom: 10,
     backgroundColor: "#E53935",
-    borderRadius: 10,
+    borderRadius: 5,
   },
   buttonConfirm: {
     color: "#fff",
@@ -299,6 +333,7 @@ const Styles = StyleSheet.create({
     paddingLeft: 10,
     paddingRight: 10,
     fontSize: 20,
+    fontFamily: "OpenSans_600SemiBold",
   },
   border: {
     flex: 1,
@@ -339,6 +374,7 @@ const Styles = StyleSheet.create({
     fontSize: 20,
     paddingLeft: 10,
     marginTop: -2,
+    fontFamily: "OpenSans_400Regular",
   },
   selectedTextStyle1: {
     height: 50,
@@ -347,9 +383,10 @@ const Styles = StyleSheet.create({
     justifyContent: "center",
     width: "100%",
     color: "black",
-    fontSize: 20,
+    fontSize: 18,
     paddingLeft: 10,
     marginTop: 15,
+    fontFamily: "OpenSans_400Regular",
   },
   listTextStyle: {
     color: "#000",
@@ -421,13 +458,13 @@ const Styles = StyleSheet.create({
     borderWidth: 5,
     borderTopLeftRadius: 15,
     borderTopRightRadius: 15,
-    flexDirection: 'row',
-    paddingLeft: '2%',
+    flexDirection: "row",
+    paddingLeft: "2%",
   },
   tittleText: {
-    fontSize: 25,
-    fontWeight: "bold",
-    marginLeft: '3%',
+    fontSize: 22,
+    marginLeft: "3%",
+    fontFamily: "OpenSans_600SemiBold",
     // textAlign: "center",
   },
   spinnerTextStyle: {

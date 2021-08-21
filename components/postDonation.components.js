@@ -27,6 +27,7 @@ import {
   useFonts,
   OpenSans_400Regular,
   OpenSans_400Regular_Italic,
+  OpenSans_600SemiBold,
   OpenSans_700Bold,
   OpenSans_700Bold_Italic,
 } from "@expo-google-fonts/open-sans";
@@ -320,7 +321,7 @@ const styles = StyleSheet.create({
   },
   titlePost: {
     fontSize: config.fontsize_2,
-    fontFamily: "OpenSans_700Bold",
+    fontFamily: "OpenSans_600SemiBold",
   },
   wrapTime: {
     display: "flex",

@@ -136,7 +136,7 @@ const styles = StyleSheet.create({
     height: 40,
     borderWidth: 1,
     borderRadius: 5,
-    fontSize: 20,
+    fontSize: 18,
     paddingTop: 8,
     paddingLeft: 10,
     paddingBottom: 8,
@@ -145,6 +145,7 @@ const styles = StyleSheet.create({
     color: "#000",
     borderColor: "#B1B1B1",
     backgroundColor: "#FFF",
+    fontFamily: "OpenSans_400Regular"
   },
   inputDescription: {
     borderColor: "#B1B1B1",
@@ -156,11 +157,12 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   textInputDescription: {
-    fontSize: 20,
+    fontSize: 18,
     color: "#000",
     textAlignVertical: "top",
     paddingLeft: 10,
     paddingTop: 10,
+    fontFamily: "OpenSans_400Regular"
   },
   borderUpload: {
     width: "25%",
@@ -183,17 +185,20 @@ const styles = StyleSheet.create({
   textTitle: {
     color: "#999999",
     fontSize: 18,
-    fontWeight: "bold",
+    // fontWeight: "bold",
+    fontFamily: "OpenSans_700Bold",
   },
   childTitle: {
     color: "#A1A1A1",
     fontSize: 15,
     marginBottom: 10,
+    fontFamily: "OpenSans_400Regular"
   },
   textContent: {
     color: "#000",
-    fontSize: 20,
+    fontSize: 18,
     marginBottom: 10,
+    fontFamily: "OpenSans_400Regular"
   },
 });
 export default connect(function (state) {

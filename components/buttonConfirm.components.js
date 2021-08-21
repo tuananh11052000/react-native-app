@@ -29,13 +29,14 @@ const styles = StyleSheet.create({
     },
     button: {
         backgroundColor: '#E70910',
-        borderRadius: 3,
+        borderRadius: 5,
         padding: 5,
     },
     buttonText: {
         color: '#FFF',
         textAlign: 'center',
         fontSize: 20,
+        fontFamily: "OpenSans_600SemiBold",
     }
 
 

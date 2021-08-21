@@ -305,7 +305,7 @@ const styles = StyleSheet.create({
   },
   titlePost: {
     fontSize: config.fontsize_2,
-    fontFamily: "OpenSans_700Bold",
+    fontFamily: "OpenSans_600SemiBold",
   },
   wrapTime: {
     display: "flex",
