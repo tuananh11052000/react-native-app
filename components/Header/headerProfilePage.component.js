@@ -56,12 +56,6 @@ function HeaderLoginPage(props) {
               >
                 Đăng xuất
               </MenuItem>
-              {/* <MenuItem onPress={hideMenu}>Menu item 2</MenuItem>
-                    <MenuItem onPress={hideMenu} disabled>
-                        Menu item 3
-                    </MenuItem>
-                    <MenuDivider />
-                    <MenuItem onPress={hideMenu}>Menu item 4</MenuItem> */}
             </Menu>
           </View>
         </View>
@@ -79,7 +73,6 @@ function HeaderLoginPage(props) {
 }
 const styles = StyleSheet.create({
   wrapAll: {
-    // marginTop: config.heightStatusBar,
     height: config.header,
     backgroundColor: config.color_header_background,
     alignItems: "center",
@@ -89,7 +82,6 @@ const styles = StyleSheet.create({
     width: "100%",
     justifyContent: "space-between",
   },
-
   Settings: {
     color: "#fff",
     fontSize: config.fontsize_3,
@@ -98,7 +90,7 @@ const styles = StyleSheet.create({
     padding: 8,
     fontSize: config.fontsize_2,
     color: "#fff",
-    fontWeight: "bold",
+    fontFamily: "OpenSans_700Bold",
   },
   icon_settings: {},
 });

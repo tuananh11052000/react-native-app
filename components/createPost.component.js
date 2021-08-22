@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { View, Text, Image, StyleSheet, TouchableOpacity } from "react-native";
 import { Picker } from "@react-native-picker/picker";
 import DropDownPicker from "react-native-dropdown-picker";
-import AppLoading from 'expo-app-loading';
+import AppLoading from "expo-app-loading";
 import {
   useFonts,
   OpenSans_300Light,
@@ -30,16 +30,12 @@ export default function CreatePosts(props) {
     { label: "Tin cần xin đồ", value: "3" },
   ]);
   const [fontsLoaded, error] = useFonts({
-    OpenSans_300Light,
-    OpenSans_300Light_Italic,
     OpenSans_400Regular,
     OpenSans_400Regular_Italic,
     OpenSans_600SemiBold,
     OpenSans_600SemiBold_Italic,
     OpenSans_700Bold,
     OpenSans_700Bold_Italic,
-    OpenSans_800ExtraBold,
-    OpenSans_800ExtraBold_Italic,
   });
   if (!fontsLoaded) {
     return <AppLoading />;
@@ -57,8 +53,6 @@ export default function CreatePosts(props) {
         setValue={setValue}
         setItems={setItems}
         placeholder="Tất cả tin đăng"
-        // zIndex: {10}
-        // style={{ height: 41,}}
         style={{
           borderTopLeftRadius: 5,
           borderTopRightRadius: 5,
@@ -91,44 +85,7 @@ export default function CreatePosts(props) {
   }
   return (
     <View style={styles.wrapContent}>
-      <View style={styles.wrapPikerA}>
-        {dropdown}
-        {/* <Picker
-          selectedValue={selectedValue}
-          onValueChange={(itemValue, itemIndex) => setSelectedValue(itemValue)}
-          mode={"dropdown"}
-          style={{ height: 40 }}
-          // style={styles.pikerStyle}
-        >
-          <Picker.Item label="Tất cả tin đăng" value="1" />
-          <Picker.Item label="Tin tặng cộng đồng" value="2" />
-          <Picker.Item label="Tin cần xin đồ" value="3" />
-        </Picker> */}
-        {/* <DropDownPicker
-          open={open}
-          value={value}
-          items={items}
-          setOpen={setOpen}
-          setValue={setValue}
-          setItems={setItems}
-          placeholder="Tất cả tin đăng"
-          // zIndex: {10}
-          // style={{ height: 41,}}
-          style={{
-            
-            borderTopLeftRadius: 5,
-            borderTopRightRadius: 5,
-            borderBottomLeftRadius: 5,
-            borderBottomRightRadius: 5,
-            height: 41,
-            borderColor: "gray",
-          }}
-          dropDownContainerStyle={{
-            backgroundColor: "white",
-            borderColor: "gray",
-          }}
-        /> */}
-      </View>
+      <View style={styles.wrapPikerA}>{dropdown}</View>
       <TouchableOpacity
         activeOpacity={0.5}
         onPress={props.onPress}
@@ -148,25 +105,20 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     paddingHorizontal: 15,
     paddingVertical: 10,
-    // marginBottom: 10,
   },
   wrapPikerA: {
     borderWidth: 1,
-    // flexDirection: "row",
     borderRadius: 4,
     borderColor: "gray",
     width: "57%",
   },
   wrapPiker: {
-    // borderWidth: 1,
-    // flexDirection: "row",
     borderRadius: 4,
     borderColor: "gray",
     width: "57%",
   },
   pickerStyle: {
     height: 40,
-    // width: '100%',
   },
 
   btnCreate: {
@@ -189,6 +141,6 @@ const styles = StyleSheet.create({
     fontWeight: "600",
     fontSize: 16,
     color: "#000",
-    fontFamily: "OpenSans_700Bold"
+    fontFamily: "OpenSans_700Bold",
   },
 });

@@ -37,7 +37,7 @@ const style = StyleSheet.create({
     alignItems: "flex-start",
     paddingLeft: 20,
     paddingTop: 20,
-    paddingBottom: 20,
+    paddingBottom: 10,
   },
   bookImage: {
     width: 70,
@@ -45,6 +45,7 @@ const style = StyleSheet.create({
     borderRadius: 6,
   },
   title: {
+    paddingTop: 5,
     fontSize: 15,
     textAlign: "center",
     fontFamily: "OpenSans_400Regular",

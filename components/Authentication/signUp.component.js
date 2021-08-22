@@ -57,9 +57,9 @@ function SignUp(props) {
             let strphone = "+84" + data.phonenumber.substring(1);
             const phoneProvider = await new firebase.auth.PhoneAuthProvider();
             const verificationId = await phoneProvider.verifyPhoneNumber(
-             strphone,
-             recaptchaVerifier.current
-           );
+              strphone,
+              recaptchaVerifier.current
+            );
             if (verificationId != null) {
               await dispatch({
                 type: "REGISTER_OTP",
@@ -281,9 +281,10 @@ const styles = StyleSheet.create({
     marginBottom: "4%",
   },
   textInput: {
-    fontSize: 20,
+    fontSize: 18,
     width: "95%",
     backgroundColor: "#FFF",
+    fontFamily: "OpenSans_400Regular",
   },
 
   //btn
@@ -300,10 +301,12 @@ const styles = StyleSheet.create({
   btnLogin: {
     color: "white",
     fontSize: 20,
+    fontFamily: "OpenSans_600SemiBold",
   },
   error: {
     color: "#bf1650",
     alignSelf: "flex-start",
+    fontFamily: "OpenSans_400Regular",
   },
 });
 
