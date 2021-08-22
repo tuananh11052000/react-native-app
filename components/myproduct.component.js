@@ -90,6 +90,7 @@ function MyProductComponent(props) {
     if (!fontsLoaded) {
       return <AppLoading />;
     }
+
     //Function handling title post
     const calculatingTime = (d1, d2) => {
       d1 = new Date(d1);
@@ -130,6 +131,36 @@ function MyProductComponent(props) {
       if (pr.length > 1) return pr[0].Category + ", ...";
       else return pr[0].Category;
     };
+     // render address
+ const renderDistrict = (district, city) => {
+  if (district.indexOf("Thành phố") != -1) {
+    return district.slice(10);
+  } 
+  if (district.indexOf("Quận") != -1 && city.indexOf("Hồ Chí Minh") == -1) {
+    return district.slice(5);
+  }
+  if (district.indexOf("Quận") != -1 && city.indexOf("Hồ Chí Minh") != -1) {
+    return district;
+  }
+  if (district.indexOf("Huyện") != -1) {
+    return district.slice(7);
+  } 
+}
+// render địa chỉ
+const renderAddress = (address) => {
+  let add = address.split(",");
+  let huyen = "",
+    tinh = "";
+  if (add[3].indexOf("Thành phố") != -1) {
+    tinh = add[3].slice(10);
+  } else {
+    tinh = add[3].slice(6);
+  }
+  huyen = renderDistrict(add[2], add[3]);
+
+  let diachi = huyen + ", " + tinh;
+  return diachi;
+};
     const renderAuthor = (item) => {
       if (item == "tangcongdong") return "Tặng cộng đồng";
       else return "Cần hỗ trợ";
@@ -244,7 +275,7 @@ function MyProductComponent(props) {
                         </Text>
                       </View>
                       <Text style={style.address}>
-                        {item.address.slice(0, 15) + "..."}
+                        {renderAddress(item.address)}
                       </Text>
                     </View>
                   </MenuProvider>

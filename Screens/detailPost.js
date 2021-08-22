@@ -7,12 +7,15 @@ import {
   ScrollView,
   Dimensions,
   Linking,
+  Modal,
+  TouchableOpacity,
 } from "react-native";
 import { FontAwesome } from "@expo/vector-icons";
 import { Entypo } from "@expo/vector-icons";
 import { Button } from "galio-framework";
 import config from "../config";
 import axios from "axios";
+import ModelShowCategory from "../components/ModalShowCategorySelected.component";
 import * as SecureStore from "expo-secure-store";
 import AppLoading from "expo-app-loading";
 import {
@@ -27,7 +30,7 @@ const { width } = Dimensions.get("window");
 const height = width * 0.6;
 export default function App(props) {
   let data = props.route.params.data; // data from list
-
+  const [isShowModelCate, setisShowModelCate] = useState(false);
   const [active, setActive] = useState(0);
   const [phoneNumber, setPhoneNumber] = useState(" "); //useState using for phonenumber
   const change = ({ nativeEvent }) => {
@@ -38,6 +41,7 @@ export default function App(props) {
       setActive(slide);
     }
   };
+
   //update history
   useEffect(() => {
     const checkTokenLocal = async () => {
@@ -63,7 +67,6 @@ export default function App(props) {
     };
     checkTokenLocal();
   }, []);
-
   //get phone number author post
   useEffect(() => {
     const getPhone = async (AuthorID) => {
@@ -118,6 +121,29 @@ export default function App(props) {
 
     Linking.openURL(phoneNumber);
   };
+  const renderCategory = () => {
+    if (data.NameProduct.length == 1) {
+      return (
+        <View style={styles.wrapCategory}>
+          <Text style={styles.textCategory}>
+            {data.NameProduct[0].NameProduct}
+          </Text>
+          <Text style={styles.textPrice}>Miễn phí</Text>
+        </View>
+      );
+    } else {
+      return (
+        <View style={styles.wrapCategory}>
+          <Text style={styles.textCategory}>
+            Danh mục xin: {data.NameProduct.length}
+          </Text>
+          <TouchableOpacity onPress={() => setisShowModelCate(true)}>
+            <Text style={styles.wraptManyCategories}>Chi tiết</Text>
+          </TouchableOpacity>
+        </View>
+      );
+    }
+  };
   return (
     <ScrollView
       style={styles.container}
@@ -153,12 +179,12 @@ export default function App(props) {
           <View>
             <Text style={styles.textTitle}>{data.title}</Text>
           </View>
-          <View style={styles.wrapCategory}>
-            <Text style={styles.textCategory}>
+          {/* <Text style={styles.textCategory}>
               {data.NameProduct[0].NameProduct}
             </Text>
-            <Text style={styles.textPrice}>Miễn phí</Text>
-          </View>
+            <Text style={styles.textPrice}>Miễn phí</Text> */}
+          {renderCategory()}
+
           <View>
             <Text style={styles.textAddress}>
               <Entypo name="location" size={24} color="black" /> {"  "}
@@ -177,6 +203,12 @@ export default function App(props) {
           </View>
         </View>
       </View>
+      <ModelShowCategory
+        show={isShowModelCate}
+        onPress={() => {
+          setisShowModelCate(false);
+        }}
+      />
       <View style={styles.wrapButton}>{button}</View>
     </ScrollView>
   );
@@ -270,7 +302,7 @@ const styles = StyleSheet.create({
     fontSize: config.fontsize_2,
     color: "black",
     fontFamily: "OpenSans_400Regular",
-    marginBottom: "5%"
+    marginBottom: "5%",
   },
   textTypeUser: {
     fontSize: config.fontsize_3,
@@ -288,11 +320,17 @@ const styles = StyleSheet.create({
     alignItems: "center",
     // marginBottom: 20,
     paddingVertical: 10,
-    backgroundColor: "#e5e5e5"
+    backgroundColor: "#e5e5e5",
   },
   textCall: {
     fontSize: 20,
     color: "#FFF",
     fontFamily: "OpenSans_700Bold",
+  },
+  wraptManyCategories: {
+    color: "#039BE5",
+    fontFamily: "OpenSans_400Regular",
+    paddingRight: "4%",
+    fontSize: 16,
   },
 });

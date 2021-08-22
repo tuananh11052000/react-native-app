@@ -245,7 +245,11 @@ function CategoryCheckBoxComponent(props) {
           />
         ))}
       </ScrollView>
-      <ButtonCofirm onPress={() => filterButton()} />
+      <View style={styles.wrapButton}>
+            <TouchableOpacity activeOpacity={0.6} style={styles.button} onPress={() => filterButton()}>
+                <Text style={styles.buttonText}>Tiếp theo</Text>
+            </TouchableOpacity>
+      </View>
     </View>
   );
 }
@@ -287,6 +291,21 @@ const styles = StyleSheet.create({
     alignItems: "center",
     backgroundColor: "#F5F5F5",
   },
+  button: {
+    backgroundColor: '#E70910',
+    borderRadius: 5,
+    padding: 5,
+},
+buttonText: {
+    color: '#FFF',
+    textAlign: 'center',
+    fontSize: 20,
+    fontFamily: "OpenSans_600SemiBold",
+},
+wrapButton: {
+  padding: '3%',
+  backgroundColor: '#DDD'
+}
 });
 export default connect(function (state) {
   return {
