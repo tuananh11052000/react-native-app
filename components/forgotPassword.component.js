@@ -47,6 +47,7 @@ function ForgotPassword(props) {
               recaptchaVerifier.current
             );
             setVerificationId(verificationId);
+            console.log(verificationId);
           }
           else  {
             alert("Số điện thoại không tồn tại");
@@ -82,7 +83,9 @@ function ForgotPassword(props) {
       <FirebaseRecaptchaVerifierModal
         ref={recaptchaVerifier}
         firebaseConfig={firebaseConfig}
-        // attemptInvisibleVerification={true}
+        attemptInvisibleVerification={
+          true | false /* experimental - this will make it invisible */
+        }
       />
       {/* <Text style={styles.styleText}>Nhập số điện thoại:</Text> */}
       <View style={styles.username}>
