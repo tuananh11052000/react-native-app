@@ -13,6 +13,7 @@ import {
   Dimensions,
   TextInput,
 } from "react-native";
+import ModelFilterAddress from "./ModelFilterAddress.component";
 import { connect } from "react-redux";
 import { Entypo, EvilIcons, FontAwesome, AntDesign } from "@expo/vector-icons";
 import { Picker } from "@react-native-picker/picker";
@@ -31,15 +32,29 @@ import {
   OpenSans_700Bold,
   OpenSans_700Bold_Italic,
 } from "@expo-google-fonts/open-sans";
+import ModelFilterAddressComponent from "./ModelFilterAddress.component";
 
 function App(props) {
   const [data, setData] = useState([]);
   const [isLoading, setisLoading] = useState(true);
   const [typeAuthor, settypeAuthor] = useState("tangcongdong");
   const [listAfterFilter, setlistAfterFilter] = useState([]);
+  const [showModelAddress, setshowModelAddress] = useState(false);
   const { dispatch } = props;
+  // địa chỉ đã chọn
+  const filterAddressFunc = (address) => {
+    const listTemp = data.filter((pr) => {
+      if (pr.address.indexOf(address) != -1) {
+        return true;
+      } else return false;
+    });
+    setData(listTemp);
+  };
+  const addr = props.dataCategory.addressFilter;
+
   // function lọc các danh mục đã chọn
   const categoryFilter = props.dataCategory.NameProduct;
+
   const filterCategory = (arrayProduct) => {
     if (categoryFilter.length != 0) {
       const listTemp = listAfterFilter.filter((item) => {
@@ -55,7 +70,6 @@ function App(props) {
         }
         return true;
       });
-      console.log(listTemp.length);
       setData(listTemp);
     } else {
       console.log("nônnononon");
@@ -63,15 +77,21 @@ function App(props) {
   };
 
   useEffect(() => {
-    console.log(categoryFilter)
-    if (categoryFilter.length == 0) {
-      console.log("tuấn anh ở đây")
+    if (categoryFilter.length == 0 && addr.length == 0) {
       getListPhotos();
     } else {
-      filterCategory(categoryFilter);
+      if (addr.length != 0 && categoryFilter.length == 0 ) {
+        filterAddressFunc(addr);
+      } else {
+        if (addr.length != 0 && categoryFilter.length != 0)
+        filterAddressFunc(addr);
+        filterCategory(categoryFilter);
+        
+      }
+      
     }
     
-  }, [categoryFilter]);
+  }, [categoryFilter, addr]);
 
   // call api
   //https://smai-back-end.herokuapp.com/post/getPostByTypeAuthor?typeauthor=%7BLoaij
@@ -87,7 +107,6 @@ function App(props) {
         console.log("Error: ", error);
       })
       .finally(() => setisLoading(false));
-    console.log("API");
   };
 
   const [fontsLoaded, error] = useFonts({
@@ -99,6 +118,8 @@ function App(props) {
   if (!fontsLoaded) {
     return <AppLoading />;
   }
+  // filter address
+
   const calculatingTime = (d1, d2) => {
     d1 = new Date(d1);
     const calHour = () => {
@@ -178,7 +199,9 @@ function App(props) {
   const pressFilter = () => {
     navigation.navigate("FilterDonationComunity");
   };
-
+  const pressAddress = () => {
+    setshowModelAddress(true);
+  };
   const currentTime = new Date();
   // render item product
   const renderItem = ({ item, index }) => {
@@ -240,6 +263,7 @@ function App(props) {
             </TouchableOpacity>
             <View style={{ width: "40%" }}>
               <TouchableOpacity
+                onPress={() => pressAddress()}
                 style={{
                   alignItems: "center",
                   flexDirection: "row",
@@ -253,7 +277,15 @@ function App(props) {
               </TouchableOpacity>
             </View>
           </View>
-
+          <ModelFilterAddressComponent
+            show={showModelAddress}
+            closeModel={() => {
+              setshowModelAddress(false);
+            }}
+            onPress={() => {
+              setshowModelAddress(false);
+            }}
+          />
           <FlatList
             style={styles.list}
             data={data}

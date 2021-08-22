@@ -381,6 +381,7 @@ function AppNavigator(props) {
               <HeaderBackButton
                 onPress={() => {
                   dispatch({ type: "RESET_NAMEPRODUCT"});
+                  dispatch({ type: "RESET_ADDRESS_FILTER"});
                   navigation.navigate("Home");
                 }}
                 tintColor={"white"}
