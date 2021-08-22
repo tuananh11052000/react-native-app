@@ -2,19 +2,22 @@ import { StatusBar } from "expo-status-bar";
 import React, { useState } from "react";
 import { connect } from "react-redux";
 import * as SecureStore from "expo-secure-store";
-import {
-  StyleSheet,
-  Text,
-  View,
-  Image,
-  Platform,
-  Switch,
-} from "react-native";
+import { StyleSheet, Text, View, Image, Platform, Switch } from "react-native";
 import axios from "axios";
 import LogoSmai from "../../assets/logo_smai.png";
 import { Checkbox, TextInput } from "react-native-paper";
 import config from "../../config";
 import { Button } from "galio-framework";
+import AppLoading from "expo-app-loading";
+import {
+  useFonts,
+  OpenSans_400Regular,
+  OpenSans_400Regular_Italic,
+  OpenSans_600SemiBold,
+  OpenSans_600SemiBold_Italic,
+  OpenSans_700Bold,
+  OpenSans_700Bold_Italic,
+} from "@expo-google-fonts/open-sans";
 async function save(key, value) {
   await SecureStore.setItemAsync(key, value);
 }
@@ -86,6 +89,17 @@ function Login(props) {
         <Text style={styles.label}>Lưu tài khoản cho lần đăng nhập sau</Text>
       </View>
     );
+  }
+  const [fontsLoaded, error] = useFonts({
+    OpenSans_400Regular,
+    OpenSans_400Regular_Italic,
+    OpenSans_600SemiBold,
+    OpenSans_600SemiBold_Italic,
+    OpenSans_700Bold,
+    OpenSans_700Bold_Italic,
+  });
+  if (!fontsLoaded) {
+    return <AppLoading />;
   }
   return (
     <View style={styles.container}>
@@ -166,9 +180,10 @@ const styles = StyleSheet.create({
     backgroundColor: "#FFF",
   },
   textInput: {
-    fontSize: 20,
+    fontSize: 18,
     width: "95%",
     backgroundColor: "#FFF",
+    fontFamily: "OpenSans_400Regular",
   },
   image_logo: {
     maxHeight: "40%",
@@ -195,7 +210,8 @@ const styles = StyleSheet.create({
   },
 
   label: {
-    margin: 8,
+    marginVertical: 8,
+    fontFamily: "OpenSans_400Regular",
   },
   checkboxContainer: {
     flexDirection: "row",
@@ -206,6 +222,7 @@ const styles = StyleSheet.create({
     fontSize: config.fontsize_3,
     marginTop: "5%",
     color: "blue",
+    fontFamily: "OpenSans_400Regular",
   },
 
   //btn
@@ -222,6 +239,7 @@ const styles = StyleSheet.create({
   btnLogin: {
     fontSize: 20,
     color: "white",
+    fontFamily: "OpenSans_600SemiBold",
   },
 });
 

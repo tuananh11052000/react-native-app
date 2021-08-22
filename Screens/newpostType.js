@@ -1,5 +1,12 @@
 import React, { useState } from "react";
-import { FlatList, StyleSheet, View, StatusBar, Image, Text } from "react-native";
+import {
+  FlatList,
+  StyleSheet,
+  View,
+  StatusBar,
+  Image,
+  Text,
+} from "react-native";
 import { connect } from "react-redux";
 import axios from "axios";
 
@@ -89,6 +96,7 @@ const styles = StyleSheet.create({
   },
   textContent: {
     padding: 16,
+    textAlign: "justify",
     fontFamily: "OpenSans_400Regular",
   },
 });

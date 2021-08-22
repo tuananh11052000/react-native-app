@@ -1,8 +1,15 @@
-import React from 'react';
-import { FlatList, Image, StyleSheet, View, Text, StatusBar } from 'react-native';
+import React from "react";
+import {
+  FlatList,
+  Image,
+  StyleSheet,
+  View,
+  Text,
+  StatusBar,
+} from "react-native";
 
-import WhoConfirm from '../components/WhoConfirm.component';
-import PriorityImg from '../assets/priority_preview.png'
+import WhoConfirm from "../components/WhoConfirm.component";
+import PriorityImg from "../assets/priority_preview.png";
 
 // const heightStatusBar = StatusBar.currentHeight;//get status bar height
 
@@ -11,11 +18,11 @@ export default class whoConfirms extends React.Component {
     super(props);
     this.state = {
       whoconfirm: [
-        { id: 1, title: 'Hoàn cảnh khó khăn' },
-        { id: 2, title: 'Quỹ/ Nhóm từ thiện' },
-        { id: 3, title: 'Tổ chức công ích' },
-      ]
-    }
+        { id: 1, title: "Hoàn cảnh khó khăn" },
+        { id: 2, title: "Quỹ/ Nhóm từ thiện" },
+        { id: 3, title: "Tổ chức công ích" },
+      ],
+    };
   }
 
   render() {
@@ -25,9 +32,13 @@ export default class whoConfirms extends React.Component {
       <View style={styles.container}>
         <FlatList
           data={whoconfirm}
-          renderItem={({ item }) => <WhoConfirm who={item}
-            onPress={() => navigation.navigate('CategoryCheckBox')} />}
-          keyExtractor={item => `${item.id}`}
+          renderItem={({ item }) => (
+            <WhoConfirm
+              who={item}
+              onPress={() => navigation.navigate("CategoryCheckBox")}
+            />
+          )}
+          keyExtractor={(item) => `${item.id}`}
           style={styles.flatList}
         />
         <View style={styles.row}>
@@ -35,19 +46,21 @@ export default class whoConfirms extends React.Component {
           <Text style={styles.textNote}> Lưu ý</Text>
         </View>
         <Text style={styles.textContent}>
-          Tổ chức công ích bao gồm: Trường học, bệnh viện, UBND, Hội Chữ Thập Đỏ, Nhà thờ, ... cần quyên góp xây dựng "đường, cầu cống, nhà tình thương".
+          Tổ chức công ích bao gồm: Trường học, bệnh viện, UBND, Hội Chữ Thập
+          Đỏ, Nhà thờ, ... cần quyên góp xây dựng "đường, cầu cống, nhà tình
+          thương".
         </Text>
       </View>
-    )
+    );
   }
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f2f2f2',
+    backgroundColor: "#f2f2f2",
     // marginTop: heightStatusBar,
-    paddingTop: 0
+    paddingTop: 0,
   },
   flatList: {
     flexGrow: 0,
@@ -65,7 +78,7 @@ const styles = StyleSheet.create({
   },
   textContent: {
     padding: 16,
+    textAlign: "justify",
     fontFamily: "OpenSans_400Regular",
-  }
+  },
 });
-

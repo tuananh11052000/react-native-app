@@ -89,6 +89,7 @@ const styles = StyleSheet.create({
   styleText: {
     marginBottom: 30,
     fontSize: 16,
+    fontFamily: "OpenSans_400Regular",
   },
   button: {
     marginTop: 40,
@@ -101,6 +102,7 @@ const styles = StyleSheet.create({
     color: "#FFF",
     textAlign: "center",
     fontSize: 20,
+    fontFamily: "OpenSans_600SemiBold",
   },
   optStyle: {
     flexDirection: "row",
@@ -108,7 +110,6 @@ const styles = StyleSheet.create({
   },
   optInput: {
     borderWidth: 0.5,
-    // borderColor: "red",
     borderRadius: 5,
     marginHorizontal: 5,
     paddingHorizontal: 4,
@@ -117,14 +118,9 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   container: {
-    // flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    // backgroundColor: "#F5FCFF",
     padding: 5,
-    // flexDirection: "column",
-    // justifyContent: "center",
-    // alignItems: "center",
   },
   textInputContainer: {
     marginBottom: 20,
