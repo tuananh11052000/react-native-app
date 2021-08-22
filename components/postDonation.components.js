@@ -36,12 +36,34 @@ function App(props) {
   const [data, setData] = useState([]);
   const [isLoading, setisLoading] = useState(true);
   const [typeAuthor, settypeAuthor] = useState("tangcongdong");
-  const [dataAddressFilter, setdataAddressFilter] = useState([]);
   const [selectedValue, setSelectedValue] = useState("1");
   const [listAddress, setListAddress] = useState(db.province);
-  const [dataCategoryFilter, setdataCategoryFilter] = useState([]);
+  const { dispatch } = props;
+  // function lọc các danh mục đã chọn
+  const categoryFilter = props.dataCategory.NameProduct;
+  let listAfterFilter = [];
+  const filterCategory = () => {
+    // const listData = dataCategoryFilter;
+    for (let i = 0; i < categoryFilter.length; i++) {
+      for (let j = 0; j < data.length; j++) {
+        let namepro = data[j].NameProduct;
+        if (categoryFilter[i].Category == namepro[0].Category) {
+          if (categoryFilter[i].NameProduct == namepro[0].NameProduct) {
+            listAfterFilter.push(data[j]);
+          }
+        }
+      }
+    }
+    console.log(listAfterFilter)
+    if (listAfterFilter.length != 0) {
+      setData(listAfterFilter)
+    }
+    // dispatch({ type: "RESET_NAMEPRODUCT"});
+  };
+
   useEffect(() => {
     getListPhotos();
+   
     return () => {};
   }, []);
 
@@ -53,8 +75,6 @@ function App(props) {
       .get(apiURL)
       .then((resjson) => {
         setData(resjson.data);
-        setdataAddressFilter(resjson.data);
-        setdataCategoryFilter(resjson.data);
       })
       .catch((error) => {
         console.log("Error: ", error);
@@ -111,6 +131,36 @@ function App(props) {
     if (pr.length > 1) return pr[0].Category + ", ...";
     else return pr[0].Category;
   };
+   // render address
+   const renderDistrict = (district, city) => {
+    if (district.indexOf("Thành phố") != -1) {
+      return district.slice(10);
+    } 
+    if (district.indexOf("Quận") != -1 && city.indexOf("Hồ Chí Minh") == -1) {
+      return district.slice(5);
+    }
+    if (district.indexOf("Quận") != -1 && city.indexOf("Hồ Chí Minh") != -1) {
+      return district;
+    }
+    if (district.indexOf("Huyện") != -1) {
+      return district.slice(7);
+    } 
+  }
+  // render địa chỉ
+  const renderAddress = (address) => {
+    let add = address.split(",");
+    let huyen = "",
+      tinh = "";
+    if (add[3].indexOf("Thành phố") != -1) {
+      tinh = add[3].slice(10);
+    } else {
+      tinh = add[3].slice(6);
+    }
+    huyen = renderDistrict(add[2], add[3]);
+
+    let diachi = huyen + ", " + tinh;
+    return diachi;
+  };
   //sang trang detail
   const { navigation } = props;
   const _pressRow = (item) => {
@@ -119,47 +169,15 @@ function App(props) {
   //chuyển trang filter
   const pressFilter = () => {
     navigation.navigate("FilterDonationComunity");
+
   };
-  // function lọc các danh mục đã chọn
-  const categoryFilter = props.dataCategory.NameProduct;
-  let listAfterFilter = [];
-  const filterCategory = () => {
-    const listData = dataCategoryFilter;
-    for (let i = 0; i < categoryFilter.length; i++) {
-      for (let j = 0; j < listData.length; j++) {
-        let namepro = listData[j].NameProduct;
-        console.log("Đây là name product***************************\n");
-        console.log(namepro[0].Category);
-        console.log(namepro[0].NameProduct);
-        console.log(categoryFilter[i].category);
-        console.log(categoryFilter[i].name);
-        console.log("**************************************\n");
-        if (categoryFilter[i].category == namepro[0].Category) {
-          if (categoryFilter[i].name == namepro[0].NameProduct) {
-            listAfterFilter.push(listData[j]);
-          }
-        }
-      }
-    }
-    console.log("Sau khi lọc");
-    // console.log(listAfterFilter)
-  };
-  // filterCategory();
+  
+
+ 
 
   // handle picker address
   const handleFilter = (city) => {
-    console.log(city);
-    setSelectedValue(city);
-    if (city == 0) {
-      setData(dataAddressFilter);
-    } else {
-      const dataAddress = dataAddressFilter.filter((pr) => {
-        if (pr.address.indexOf(city) != -1) {
-          return true;
-        } else return false;
-      });
-      setData(dataAddress);
-    }
+   
   };
   //  render spinner city
   const countryList = () => {
@@ -198,7 +216,7 @@ function App(props) {
               </Text>
             </View>
             <Text style={styles.address}>
-              {item.address.slice(0, 15) + "..."}
+              {renderAddress(item.address)}
             </Text>
           </View>
         </View>
@@ -218,7 +236,7 @@ function App(props) {
               activeOpacity={0.5}
               onPress={() => pressFilter()}
             >
-              <Text style={{ fontSize: 20 }}>Tất cả</Text>
+              <Text style={{ fontSize: config.fontsize_2, color: '#BDBDBD' }}>Tất cả...</Text>
               <AntDesign
                 name="appstore-o"
                 size={24}
@@ -227,17 +245,10 @@ function App(props) {
               />
             </TouchableOpacity>
             <View style={{ width: "40%" }}>
-              <Picker
-                selectedValue={selectedValue}
-                onValueChange={(itemValue, itemIndex) =>
-                  handleFilter(itemValue)
-                }
-                mode={"dropdown"}
-                style={{ height: 40 }}
-              >
-                <Picker.Item label="Tỉnh/thành phố" value="0" />
-                {countryList()}
-              </Picker>
+              <TouchableOpacity style={{alignItems: 'center', flexDirection: 'row', justifyContent: 'space-around'}}>
+                <Text style={{color: '#BDBDBD', fontSize: config.fontsize_3}}>Tỉnh/thành phố</Text>
+                <AntDesign name="caretdown" size={10} color="#BDBDBDBD" />
+              </TouchableOpacity>
             </View>
           </View>
 
@@ -277,8 +288,8 @@ const styles = StyleSheet.create({
     maxWidth: "55%",
     height: "70%",
     paddingLeft: "1%",
-    borderWidth: 2,
-    borderColor: "#EEEEEE",
+    borderWidth: 1,
+    borderColor: "#BDBDBD",
     justifyContent: "space-around",
     alignItems: "center",
     marginLeft: "3%",

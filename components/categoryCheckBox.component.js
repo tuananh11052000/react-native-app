@@ -6,12 +6,7 @@ import {
   View,
   Text,
   ScrollView,
-  UIManager,
   TouchableOpacity,
-  Platform,
-  Image,
-  Button,
-  CheckBox,
 } from "react-native";
 import { connect } from "react-redux";
 import { MaterialCommunityIcons, Entypo } from "@expo/vector-icons";
@@ -233,7 +228,7 @@ function CategoryCheckBoxComponent(props) {
     } else {
       dispatch({ type: "GET_NAMEPRODUCT", NameProduct: dataFilterPost });
     }
-    
+
     // console.log(dataFilterPost);
     // function chuyển trang
     props.onPress();

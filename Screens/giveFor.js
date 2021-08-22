@@ -13,15 +13,15 @@ import {
   Dimensions,
   TextInput,
 } from "react-native";
-import { Entypo, EvilIcons, FontAwesome } from "@expo/vector-icons";
+import { Entypo, EvilIcons, FontAwesome, FontAwesome5  } from "@expo/vector-icons";
 import { Picker } from "@react-native-picker/picker";
 import db from "../db.json";
-import axios from 'axios';
-import { connect } from 'react-redux'
+import axios from "axios";
+import { connect } from "react-redux";
 const { width } = Dimensions.get("window");
-const height = width * 0.6;
+const height = width * 0.5;
 
- function App(props) {
+function App(props) {
   const [data, setData] = useState([]);
   const [isLoading, setisLoading] = useState(true);
   const [typeAuthor, settypeAuthor] = useState(props.controlThreadGiveFor);
@@ -30,25 +30,28 @@ const height = width * 0.6;
   const [dataAddressFilter, setdataAddressFilter] = useState([]);
   const [selectedValue, setSelectedValue] = useState("1");
   const [listAddress, setListAddress] = useState(db.province);
-  
 
   useEffect(() => {
     getListPhotos();
     return () => {};
   }, []);
-  console.log(props.controlThreadGiveFor)
   // call api
   //https://smai-back-end.herokuapp.com/post/getPostByTypeAuthor?typeauthor=%7BLoaij
   const getListPhotos = () => {
     const apiURL = `https://smai-app-api.herokuapp.com/post/getPostByTypeAuthor?typeauthor=${typeAuthor}`;
-    axios.get(apiURL)
+    axios
+      .get(apiURL)
       .then((resjson) => {
-        let responData = resjson.data
+        let responData = resjson.data;
         let realData = [];
-        for (let i=0; i<responData.length;i++) {
+        for (let i = 0; i < responData.length; i++) {
           let nameProduct = responData[i].NameProduct;
-          for (let j=0; j<nameProduct.length;j++) {
-            if (nameProduct[j].NameProduct == props.infoPost.NameProduct[0].NameProduct && nameProduct[j].Category == props.infoPost.NameProduct[0].Category) {
+          for (let j = 0; j < nameProduct.length; j++) {
+            if (
+              nameProduct[j].NameProduct ==
+                props.infoPost.NameProduct[0].NameProduct &&
+              nameProduct[j].Category == props.infoPost.NameProduct[0].Category
+            ) {
               realData.push(responData[i]);
             }
           }
@@ -67,9 +70,34 @@ const height = width * 0.6;
   };
 
   // render address
+  const renderDistrict = (district, city) => {
+    if (district.indexOf("Thành phố") != -1) {
+      return district.slice(10);
+    } 
+    if (district.indexOf("Quận") != -1 && city.indexOf("Hồ Chí Minh") == -1) {
+      return district.slice(5);
+    }
+    if (district.indexOf("Quận") != -1 && city.indexOf("Hồ Chí Minh") != -1) {
+      return district;
+    }
+    if (district.indexOf("Huyện") != -1) {
+      return district.slice(7);
+    } 
+  }
+  // render địa chỉ
   const renderAddress = (address) => {
     let add = address.split(",");
-    return add[2] + ", " + add[3];
+    let huyen = "",
+      tinh = "";
+    if (add[3].indexOf("Thành phố") != -1) {
+      tinh = add[3].slice(10);
+    } else {
+      tinh = add[3].slice(6);
+    }
+    huyen = renderDistrict(add[2], add[3]);
+
+    let diachi = huyen + ", " + tinh;
+    return diachi;
   };
   const handleSearch = (text) => {
     setQuery(text);
@@ -87,9 +115,8 @@ const height = width * 0.6;
     }
   };
 
-  // handle picker address 
+  // handle picker address
   const handleFilter = (city) => {
-    console.log(city)
     setSelectedValue(city);
     if (city == 0) {
       setData(dataAddressFilter);
@@ -98,10 +125,10 @@ const height = width * 0.6;
         if (pr.address.indexOf(city) != -1) {
           return true;
         } else return false;
-      })
+      });
       setData(dataAddress);
     }
-  }
+  };
   const countryList = () => {
     return listAddress.map((x, i) => {
       return <Picker.Item label={x.name} key={i} value={x.name} />;
@@ -110,18 +137,22 @@ const height = width * 0.6;
   const _pressRow = (item) => {
     props.navigation.navigate("DetailPost", { data: item }); //chuyển trang
   };
-  
+
   // render item product
   const renderItem = ({ item, index }) => {
     return (
-      <TouchableOpacity style={styles.wrapProduct} activeOpacity={0.8} onPress={() => _pressRow(item)}>
+      <TouchableOpacity
+        style={styles.wrapProduct}
+        activeOpacity={0.8}
+        onPress={() => _pressRow(item)}
+      >
         <View style={styles.wrapBorder}>
-          <FontAwesome name="user-circle-o" size={70} color="#BDBDBD" />
+          <FontAwesome name="user-circle-o" size={60} color="#FFC911" />
           <View style={styles.wrapInfor}>
             <Text style={styles.wrapName}>{item.NameAuthor}</Text>
             <View style={styles.wrapAddress}>
-              <Entypo name="location" size={24} color="black" />
-              <Text style={styles.address}>{renderAddress(item.address)}</Text>
+              <FontAwesome5 name="user-alt" size={20} color="#BDBDBD" />
+              <Text style={styles.address}>{item.TypeAuthor}</Text>
             </View>
           </View>
         </View>
@@ -130,6 +161,12 @@ const height = width * 0.6;
         </View>
         <View style={styles.wrapImage}>
           <Image source={{ uri: item.urlImage[0] }} style={styles.image} />
+        </View>
+        <View style={styles.wrapBorderBottom}>
+          <View style={styles.wrapAddress}>
+            <Entypo name="location" size={20} color="#BDBDBD" />
+            <Text style={styles.address}>{renderAddress(item.address)}</Text>
+          </View>
         </View>
       </TouchableOpacity>
     );
@@ -158,12 +195,16 @@ const height = width * 0.6;
               <Picker
                 selectedValue={selectedValue}
                 onValueChange={(itemValue, itemIndex) =>
-                handleFilter(itemValue)
+                  handleFilter(itemValue)
                 }
                 mode={"dropdown"}
                 style={{ height: 40 }}
               >
-                <Picker.Item label="Tỉnh/thành phố" value="0" />
+                <Picker.Item
+                  label="Tỉnh/thành phố"
+                  value="0"
+                  style={{ color: "#BDBDBD" }}
+                />
                 {countryList()}
               </Picker>
             </View>
@@ -204,25 +245,35 @@ const styles = StyleSheet.create({
     paddingLeft: "3%",
     paddingRight: "3%",
   },
+  wrapBorderBottom: {
+    flexDirection: "row",
+    width: "100%",
+    alignItems: "center",
+    paddingLeft: "3%",
+    paddingRight: "3%",
+  },
   wrapInfor: {
     marginLeft: "3%",
     width: "80%",
   },
   wrapName: {
-    fontSize: 25,
+    fontSize: 20,
+    fontWeight: 'bold'
   },
   wrapAddress: {
     flexDirection: "row",
     marginTop: "3%",
+    width: '80%',
   },
   address: {
-    fontSize: 18,
+    fontSize: 16,
     marginLeft: "3%",
+    color: '#BDBDBD'
   },
   description: {
-    fontSize: 23,
-    marginLeft: "3%",
-    marginBottom: "3%",
+    fontSize: 18,
+    // marginLeft: "3%",
+    marginBottom: "1%",
     marginTop: "3%",
   },
   wrapImage: {
@@ -233,7 +284,7 @@ const styles = StyleSheet.create({
   image: {
     height: height,
     width: width,
-    resizeMode: "contain",
+    // resizeMode: "contain",
   },
 
   // style search
@@ -247,22 +298,27 @@ const styles = StyleSheet.create({
   wrapSearch: {
     flexDirection: "row",
     backgroundColor: "#FFF",
-    width: "60%",
-    maxWidth: "60%",
+    width: "55%",
+    maxWidth: "55%",
     height: "70%",
     paddingLeft: "1%",
+    marginLeft: "5%",
     borderRadius: 10,
-    borderWidth: 2,
-    borderColor: "#EEEEEE",
+    borderWidth: 1,
+    borderColor: "#BDBDBD",
     alignItems: "center",
   },
   searchText: {
     backgroundColor: "#fff",
-    paddingHorizontal: 20,
-    fontSize: 20,
-    maxWidth: "90%",
+    fontSize: 18,
+    marginLeft: "3%",
+    maxWidth: "85%",
+    width: "85%",
   },
 });
 export default connect(function (state) {
-  return { infoPost: state.infoPost, controlThreadGiveFor: state.controlThreadGiveFor }
+  return {
+    infoPost: state.infoPost,
+    controlThreadGiveFor: state.controlThreadGiveFor,
+  };
 })(App);
