@@ -430,6 +430,26 @@ function AppNavigator(props) {
             headerTitleStyle: {
               fontWeight: "bold",
             },
+            headerRight: () => (
+              <TouchableOpacity
+                style={styles.wrapTextCancel}
+                onPress={() => {
+                  Alert.alert("Thông báo", "Bạn có chắc muốn hủy!", [
+                    {
+                      text: "Không",
+                      style: "cancel",
+                    },
+                    {
+                      text: "Có",
+                      style: "cancel",
+                      onPress: () => navigation.navigate("Home"),
+                    },
+                  ]);
+                }}
+              >
+                <Text style={styles.textCancel}>Hủy</Text>
+              </TouchableOpacity>
+            ),
           })}
         />
         <Stack.Screen
