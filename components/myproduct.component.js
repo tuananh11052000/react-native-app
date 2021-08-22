@@ -163,7 +163,22 @@ function MyProductComponent(props) {
       props.navigation.navigate("DetailPost", { data: item }); //chuyển trang
     };
     const currentTime = new Date();
-
+    //Ham xoa bai dang
+    const deletePost = (id) => {
+      let url = "https://smai-app-api.herokuapp.com/post/deletePostbyUser?_id=" + id;
+      console.log(url)
+      axios({
+        method: "delete",
+        url: url,
+        headers: {
+          Authorization: `${token}`,
+        }
+      }).then((res) => {
+        if (res.status == 201) {
+          alert('Xoá bài thành công.')
+        }
+      })
+    }
     return (
       <View style={style.constainer}>
         {props.myPost.map((item, key) => {
@@ -203,7 +218,7 @@ function MyProductComponent(props) {
                               customStyles={optionsStyles}
                               onSelect={false}
                             >
-                              <MenuOption value="Delete" text="Xóa tin" />
+                              <MenuOption value="Delete" text="Xóa tin" onSelect={() => deletePost(item._id)} />
                             </MenuOptions>
                           </Menu>
                         </View>
