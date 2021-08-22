@@ -379,7 +379,10 @@ function AppNavigator(props) {
           options={({ navigation }) => ({
             headerLeft: () => (
               <HeaderBackButton
-                onPress={() => navigation.navigate("Home")}
+                onPress={() => {
+                  dispatch({ type: "RESET_NAMEPRODUCT"});
+                  navigation.navigate("Home");
+                }}
                 tintColor={"white"}
                 label="Quay lại" //back
               />
@@ -500,6 +503,6 @@ const styles = StyleSheet.create({
 
 
 export default connect(function (state) {
-  return { infoPost: state.infoPost }
+  return { infoPost: state.infoPost, dataCategory: state.dataCategory, }
 })(AppNavigator);
 

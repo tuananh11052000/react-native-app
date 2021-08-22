@@ -36,36 +36,42 @@ function App(props) {
   const [data, setData] = useState([]);
   const [isLoading, setisLoading] = useState(true);
   const [typeAuthor, settypeAuthor] = useState("tangcongdong");
-  const [selectedValue, setSelectedValue] = useState("1");
-  const [listAddress, setListAddress] = useState(db.province);
+  const [listAfterFilter, setlistAfterFilter] = useState([]);
   const { dispatch } = props;
   // function lọc các danh mục đã chọn
   const categoryFilter = props.dataCategory.NameProduct;
-  let listAfterFilter = [];
-  const filterCategory = () => {
-    // const listData = dataCategoryFilter;
-    for (let i = 0; i < categoryFilter.length; i++) {
-      for (let j = 0; j < data.length; j++) {
-        let namepro = data[j].NameProduct;
-        if (categoryFilter[i].Category == namepro[0].Category) {
-          if (categoryFilter[i].NameProduct == namepro[0].NameProduct) {
-            listAfterFilter.push(data[j]);
+  const filterCategory = (arrayProduct) => {
+    if (categoryFilter.length != 0) {
+      const listTemp = listAfterFilter.filter((item) => {
+        for (let i = 0; i < arrayProduct.length; i++) {
+          if (
+            item.NameProduct[0].Category == arrayProduct[i].Category &&
+            item.NameProduct[0].NameProduct == arrayProduct[i].NameProduct
+          ) {
+            return true;
+          } else {
+            return false;
           }
         }
-      }
+        return true;
+      });
+      console.log(listTemp.length);
+      setData(listTemp);
+    } else {
+      console.log("nônnononon");
     }
-    console.log(listAfterFilter)
-    if (listAfterFilter.length != 0) {
-      setData(listAfterFilter)
-    }
-    // dispatch({ type: "RESET_NAMEPRODUCT"});
   };
 
   useEffect(() => {
-    getListPhotos();
-   
-    return () => {};
-  }, []);
+    console.log(categoryFilter)
+    if (categoryFilter.length == 0) {
+      console.log("tuấn anh ở đây")
+      getListPhotos();
+    } else {
+      filterCategory(categoryFilter);
+    }
+    
+  }, [categoryFilter]);
 
   // call api
   //https://smai-back-end.herokuapp.com/post/getPostByTypeAuthor?typeauthor=%7BLoaij
@@ -75,11 +81,13 @@ function App(props) {
       .get(apiURL)
       .then((resjson) => {
         setData(resjson.data);
+        setlistAfterFilter(resjson.data);
       })
       .catch((error) => {
         console.log("Error: ", error);
       })
       .finally(() => setisLoading(false));
+    console.log("API");
   };
 
   const [fontsLoaded, error] = useFonts({
@@ -131,11 +139,11 @@ function App(props) {
     if (pr.length > 1) return pr[0].Category + ", ...";
     else return pr[0].Category;
   };
-   // render address
-   const renderDistrict = (district, city) => {
+  // render address
+  const renderDistrict = (district, city) => {
     if (district.indexOf("Thành phố") != -1) {
       return district.slice(10);
-    } 
+    }
     if (district.indexOf("Quận") != -1 && city.indexOf("Hồ Chí Minh") == -1) {
       return district.slice(5);
     }
@@ -144,8 +152,8 @@ function App(props) {
     }
     if (district.indexOf("Huyện") != -1) {
       return district.slice(7);
-    } 
-  }
+    }
+  };
   // render địa chỉ
   const renderAddress = (address) => {
     let add = address.split(",");
@@ -169,22 +177,8 @@ function App(props) {
   //chuyển trang filter
   const pressFilter = () => {
     navigation.navigate("FilterDonationComunity");
-
   };
-  
 
- 
-
-  // handle picker address
-  const handleFilter = (city) => {
-   
-  };
-  //  render spinner city
-  const countryList = () => {
-    return listAddress.map((x, i) => {
-      return <Picker.Item label={x.name} key={i} value={x.name} />;
-    });
-  };
   const currentTime = new Date();
   // render item product
   const renderItem = ({ item, index }) => {
@@ -215,9 +209,7 @@ function App(props) {
                 {calculatingTime(item.createdAt, currentTime)}
               </Text>
             </View>
-            <Text style={styles.address}>
-              {renderAddress(item.address)}
-            </Text>
+            <Text style={styles.address}>{renderAddress(item.address)}</Text>
           </View>
         </View>
       </TouchableOpacity>
@@ -236,7 +228,9 @@ function App(props) {
               activeOpacity={0.5}
               onPress={() => pressFilter()}
             >
-              <Text style={{ fontSize: config.fontsize_2, color: '#BDBDBD' }}>Tất cả...</Text>
+              <Text style={{ fontSize: config.fontsize_2, color: "#BDBDBD" }}>
+                Tất cả...
+              </Text>
               <AntDesign
                 name="appstore-o"
                 size={24}
@@ -245,8 +239,16 @@ function App(props) {
               />
             </TouchableOpacity>
             <View style={{ width: "40%" }}>
-              <TouchableOpacity style={{alignItems: 'center', flexDirection: 'row', justifyContent: 'space-around'}}>
-                <Text style={{color: '#BDBDBD', fontSize: config.fontsize_3}}>Tỉnh/thành phố</Text>
+              <TouchableOpacity
+                style={{
+                  alignItems: "center",
+                  flexDirection: "row",
+                  justifyContent: "space-around",
+                }}
+              >
+                <Text style={{ color: "#BDBDBD", fontSize: config.fontsize_3 }}>
+                  Tỉnh/thành phố
+                </Text>
                 <AntDesign name="caretdown" size={10} color="#BDBDBDBD" />
               </TouchableOpacity>
             </View>
