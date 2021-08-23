@@ -13,10 +13,12 @@ import {
   Dimensions,
   TextInput,
 } from "react-native";
-import { Entypo, EvilIcons, FontAwesome, FontAwesome5  } from "@expo/vector-icons";
+import { Entypo, EvilIcons, FontAwesome, FontAwesome5, AntDesign} from "@expo/vector-icons";
 import { Picker } from "@react-native-picker/picker";
 import db from "../db.json";
 import axios from "axios";
+import config from "../config";
+import ModalFilterAddress from '../components/ModelFilterAddress.component';
 import { connect } from "react-redux";
 const { width } = Dimensions.get("window");
 const height = width * 0.5;
@@ -30,11 +32,23 @@ function App(props) {
   const [dataAddressFilter, setdataAddressFilter] = useState([]);
   const [selectedValue, setSelectedValue] = useState("1");
   const [listAddress, setListAddress] = useState(db.province);
-
+  const [showModelAddress, setshowModelAddress] = useState(false);
+  const addr = props.dataCategory.addressFilter;
   useEffect(() => {
-    getListPhotos();
-    return () => {};
-  }, []);
+    if ( addr.length == 0) {
+      getListPhotos();
+    } else {
+        filterAddressFunc(addr);
+    }
+  }, [addr]);
+  const filterAddressFunc = (address) => {
+    const listTemp = data.filter((pr) => {
+      if (pr.address.indexOf(address) != -1) {
+        return true;
+      } else return false;
+    });
+    setData(listTemp);
+  };
   // call api
   //https://smai-back-end.herokuapp.com/post/getPostByTypeAuthor?typeauthor=%7BLoaij
   const getListPhotos = () => {
@@ -68,7 +82,7 @@ function App(props) {
       })
       .finally(() => setisLoading(false));
   };
-
+  
   // render address
   const renderDistrict = (district, city) => {
     if (district.indexOf("Thành phố") != -1) {
@@ -115,25 +129,6 @@ function App(props) {
     }
   };
 
-  // handle picker address
-  const handleFilter = (city) => {
-    setSelectedValue(city);
-    if (city == 0) {
-      setData(dataAddressFilter);
-    } else {
-      const dataAddress = dataAddressFilter.filter((pr) => {
-        if (pr.address.indexOf(city) != -1) {
-          return true;
-        } else return false;
-      });
-      setData(dataAddress);
-    }
-  };
-  const countryList = () => {
-    return listAddress.map((x, i) => {
-      return <Picker.Item label={x.name} key={i} value={x.name} />;
-    });
-  };
   const _pressRow = (item) => {
     props.navigation.navigate("DetailPost", { data: item }); //chuyển trang
   };
@@ -192,24 +187,30 @@ function App(props) {
               />
             </View>
             <View style={{ width: "40%" }}>
-              <Picker
-                selectedValue={selectedValue}
-                onValueChange={(itemValue, itemIndex) =>
-                  handleFilter(itemValue)
-                }
-                mode={"dropdown"}
-                style={{ height: 40 }}
+              <TouchableOpacity
+                onPress={() => setshowModelAddress(true)}
+                style={{
+                  alignItems: "center",
+                  flexDirection: "row",
+                  justifyContent: "space-around",
+                }}
               >
-                <Picker.Item
-                  label="Tỉnh/thành phố"
-                  value="0"
-                  style={{ color: "#BDBDBD" }}
-                />
-                {countryList()}
-              </Picker>
+                <Text style={{ color: "#BDBDBD", fontSize: config.fontsize_3 }}>
+                  Tỉnh/thành phố
+                </Text>
+                <AntDesign name="caretdown" size={10} color="#BDBDBDBD" />
+              </TouchableOpacity>
             </View>
           </View>
-
+          <ModalFilterAddress
+            show={showModelAddress}
+            closeModel={() => {
+              setshowModelAddress(false);
+            }}
+            onPress={() => {
+              setshowModelAddress(false);
+            }}
+          />
           <FlatList
             style={styles.list}
             data={data}
@@ -320,5 +321,6 @@ export default connect(function (state) {
   return {
     infoPost: state.infoPost,
     controlThreadGiveFor: state.controlThreadGiveFor,
+    dataCategory: state.dataCategory,
   };
 })(App);

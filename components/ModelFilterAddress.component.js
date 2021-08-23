@@ -139,6 +139,8 @@ function confirmAddress(props) {
               <TouchableOpacity onPress={() => {
                   dispatch({ type: "RESET_ADDRESS_FILTER"});
                   setProvince("")
+                  setDistrict("")
+                  setCommune("")
                   props.closeModel()}} >
                 <Text style={{color: 'red'}}>Bỏ lọc</Text>
               </TouchableOpacity>
@@ -236,6 +238,7 @@ const Styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "flex-end",
     alignItems: "center",
+    backgroundColor: '#000000aa'
   },
   containermain: {
     marginLeft: "5%",

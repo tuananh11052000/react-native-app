@@ -13,7 +13,6 @@ import {
   Dimensions,
   TextInput,
 } from "react-native";
-import ModelFilterAddress from "./ModelFilterAddress.component";
 import { connect } from "react-redux";
 import { Entypo, EvilIcons, FontAwesome, AntDesign } from "@expo/vector-icons";
 import { Picker } from "@react-native-picker/picker";

@@ -487,7 +487,9 @@ function AppNavigator(props) {
                     {
                       text: "Có",
                       style: "cancel",
-                      onPress: () => navigation.navigate("Home"),
+                      onPress: () => {
+                        dispatch({ type: "RESET_ADDRESS_FILTER"});
+                        navigation.navigate("Home")}
                     },
                   ]);
                 }}
