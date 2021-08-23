@@ -141,11 +141,10 @@ function Login(props) {
         </View>
 
         {checkbox}
-        {/* <Text>Is CheckBox selected: {checked ? "👍" : "👎"}</Text> */}
+     
         <Text
           style={styles.forgotPassword}
           onPress={() => {
-            // loginFunction(UserName, PhoneNumber, Password)
             props.navigation.navigate("ForgotPasswords");
           }}
         >

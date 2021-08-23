@@ -1,11 +1,16 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native";
+import { View,TextInput, Text, StyleSheet, Image, TouchableOpacity } from "react-native";
 import { SearchBar } from "react-native-elements";
 import axios from "axios";
 import { FlatList } from "react-native-gesture-handler";
 import { Feather } from "@expo/vector-icons";
 import config from "../config";
 import AppLoading from 'expo-app-loading';
+import {
+  AntDesign,
+  EvilIcons,
+} from "@expo/vector-icons";
+
 import {
   useFonts,
   OpenSans_400Regular,
@@ -15,7 +20,9 @@ import {
   OpenSans_700Bold,
   OpenSans_700Bold_Italic,
 } from "@expo-google-fonts/open-sans";
+import { Platform } from "react-native";
 export default function (props) {
+   const { navigation } = props;
   const [allPost, setAllPost] = useState([]);
   const [resultSearch, setResult] = useState([]);
   const [keySearch, setKeySearch] = useState("");
@@ -136,15 +143,52 @@ export default function (props) {
       </TouchableOpacity>
     );
   }
+ 
+ function backleft(){ 
+       if(Platform.OS == 'ios')
+       {
+         return (
+           <AntDesign
+             name="left"
+             size={28}
+             color="white"
+             onPress={() => navigation.goBack()}
+           />
+         );
+       }else{
+         return (
+           <AntDesign
+             name="arrowleft"
+             size={28}
+             color="white"
+             onPress={() => navigation.goBack()}
+           />
+         );
+       }
+   }
   return (
     <View>
-      <SearchBar
-        placeholder="Tìm kiếm..."
-        onChangeText={async(value) => getResult(value)}
-        value={keySearch}
-        lightTheme="true"
-        color="black"
-      />
+      <View
+        style={{
+          height: config.heightStatusBar,
+          width: "100%",
+          backgroundColor: config.color_header_background,
+        }}
+      ></View>
+      <View style={style.wrapHeader}>
+        {backleft()}
+        <View style={style.wrapSearch}>
+          <EvilIcons name="search" size={30} color="#BDBDBD" />
+          <TextInput
+            placeholder="Nhập cái gì đó..."
+            onChangeText={async (value) => getResult(value)}
+            value={keySearch}
+            lightTheme="true"
+            color="black"
+            style={style.searchText}
+          />
+        </View>
+      </View>
       <FlatList
         data={resultSearch}
         renderItem={({ item }) => renderItem(item)}
@@ -153,8 +197,35 @@ export default function (props) {
   );
 }
 const style = StyleSheet.create({
-  constainer: {
-    backgroundColor: "#e5e5e5",
+  // constainer: {
+  //   backgroundColor: config.color_header_background,
+  // },
+  wrapHeader: {
+    height: 60,
+    backgroundColor: config.color_header_background,
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  wrapSearch: {
+    flexDirection: "row",
+    backgroundColor: "#FFF",
+    width: "85%",
+    maxWidth: "85%",
+    height: "70%",
+    paddingLeft: "1%",
+    marginLeft: "4%",
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: "#BDBDBD",
+    alignItems: "center",
+  },
+  searchText: {
+    backgroundColor: "#fff",
+    fontSize: 18,
+    marginLeft: "3%",
+    maxWidth: "85%",
+    width: "85%",
   },
   wrapCategory: {
     padding: 15,

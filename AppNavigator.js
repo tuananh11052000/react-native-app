@@ -52,7 +52,7 @@ function AppNavigator(props) {
           component={Search}
           options={({ navigation }) => ({
             title: "Tìm kiếm",
-            headerShown: true,
+            headerShown: false,
             headerStyle: {
               backgroundColor: config.color_header_background,
             },
@@ -367,7 +367,7 @@ function AppNavigator(props) {
           options={({ navigation }) => ({
             headerLeft: () => (
               <HeaderBackButton
-                onPress={() => navigation.navigate("Home")}
+                onPress={() =>  navigation.goBack()}
                 tintColor={"white"}
                 label="Quay lại" //back
               />
@@ -423,7 +423,7 @@ function AppNavigator(props) {
                 onPress={() => {
                   dispatch({ type: "RESET_NAMEPRODUCT"});
                   dispatch({ type: "RESET_ADDRESS_FILTER"});
-                  navigation.navigate("Home");
+                  navigation.goBack();
                 }}
                 tintColor={"white"}
                 label="Quay lại" //back
