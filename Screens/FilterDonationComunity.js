@@ -20,8 +20,8 @@ function Category(props) {
     return <View style={style.container}>
         <CategoryCheckBoxComponent onPress={() => {
             navigation.navigate("PostDonation")
-
-        }}/>
+        }}
+        textButton="Tìm theo"/>
     </View>
 }
 

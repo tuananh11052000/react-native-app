@@ -358,6 +358,7 @@ function AppNavigator(props) {
             headerTitleStyle: {
               fontWeight: "bold",
             },
+            
           }}
         />
         <Stack.Screen

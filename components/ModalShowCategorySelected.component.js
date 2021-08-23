@@ -8,18 +8,50 @@ import {
   Button,
   TouchableOpacity,
   TextInput,
+  FlatList,
 } from "react-native";
-import { AntDesign } from "@expo/vector-icons";
+import { AntDesign, Ionicons } from "@expo/vector-icons";
 import { ScrollView } from "react-native-gesture-handler";
-
+import config from "../config";
 export default function App(props) {
   const [show, setshow] = useState(false);
+  console.log(props.dataNameProduct);
+  const renderItem = ({ item }) => (
+    <View
+      style={{
+        flexDirection: "row",
+        justifyContent: "space-between",
+        paddingLeft: "2%",
+        paddingRight: "2%",
+        paddingTop: "2%",
+        paddingBottom: "2%",
+      }}
+    >
+      <Text
+        style={{
+          fontSize: config.fontsize_2,
+
+          paddingRight: "2%",
+          paddingLeft: "2%",
+          textAlign: "center",
+        }}
+      >
+        {item.NameProduct}
+      </Text>
+      <Ionicons name="checkbox" size={24} color="#018786" />
+    </View>
+  );
+  const ItemSeparatorView = () => {
+    return (
+      <View style={{ height: 1, width: "100%", backgroundColor: "#EEEEEE" }} />
+    );
+  };
   return (
     <SafeAreaView style={styles.container}>
       <Modal transparent={true} visible={props.show} animationType="slide">
         <View style={{ backgroundColor: "#000000aa", flex: 1 }}>
           <View style={styles.wrapModel}>
-          <View
+            <View
               style={{
                 flexDirection: "row",
                 backgroundColor: "#DDD",
@@ -35,25 +67,12 @@ export default function App(props) {
               </TouchableOpacity>
               <Text style={styles.titleModel}>Danh mục xin</Text>
             </View>
-            <ScrollView>
-              <View style={{ paddingLeft: "2%" }}>
-                <Text style={{ fontSize: 20 }}>
-                  Lorem Ipsum is simply dummy text of the printing and
-                  typesetting industry. It is a long established fact that a
-                  reader will be distracted by the readable content of a page
-                  when looking at its layout. The point of using Lorem Ipsum is
-                  that it has a more-or-less normal distribution of letters, as
-                  opposed to using 'Content here, content here', making it look
-                  like readable English. Many desktop publishing packages and
-                  web page editors now use Lorem Ipsum as their default model
-                  text, and a search for 'lorem ipsum' will uncover many web
-                  sites still in their infancy. Various versions have evolved
-                  over the years, sometimes by accident, sometimes on purpose
-                  (injected humour and the like)
-                </Text>
-              </View>
-            </ScrollView>
-            
+            <FlatList
+              data={props.dataNameProduct}
+              renderItem={renderItem}
+              keyExtractor={(item) => item.NameProduct}
+              ItemSeparatorComponent={ItemSeparatorView}
+            />
           </View>
         </View>
       </Modal>

@@ -82,7 +82,7 @@ function App(props) {
   };
   return (
     <ScrollView>
-      <ModelShowCategory show={isShowModelCate} onPress={() => {setisShowModelCate(false)}}/>
+      <ModelShowCategory show={isShowModelCate} onPress={() => {setisShowModelCate(false)}} dataNameProduct={props.infoPost.NameProduct}/>
       <View style={styles.backgroundTitle}>
         <Text style={styles.textTitle}>THÔNG TIN CHUNG</Text>
       </View>

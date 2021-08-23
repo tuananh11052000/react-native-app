@@ -27,7 +27,7 @@ import {
 } from "@expo-google-fonts/open-sans";
 
 const { width } = Dimensions.get("window");
-const height = width * 0.6;
+const height = width * 0.5;
 export default function App(props) {
   let data = props.route.params.data; // data from list
   const [isShowModelCate, setisShowModelCate] = useState(false);
@@ -41,7 +41,7 @@ export default function App(props) {
       setActive(slide);
     }
   };
-
+ 
   //update history
   useEffect(() => {
     const checkTokenLocal = async () => {
@@ -179,23 +179,27 @@ export default function App(props) {
           <View>
             <Text style={styles.textTitle}>{data.title}</Text>
           </View>
-          {/* <Text style={styles.textCategory}>
-              {data.NameProduct[0].NameProduct}
-            </Text>
-            <Text style={styles.textPrice}>Miễn phí</Text> */}
           {renderCategory()}
 
-          <View>
+          <View style={{ paddingLeft: "3%", paddingRight: "3%" }}>
             <Text style={styles.textAddress}>
-              <Entypo name="location" size={24} color="black" /> {"  "}
+              <Entypo name="location" size={24} color="#DDD" /> {"  "}
               {data.address}
             </Text>
           </View>
           <View style={styles.wrapInfor}>
-            <FontAwesome name="user-circle-o" size={60} color="#fff200" />
-            <View style={styles.wrapName}>
-              <Text style={styles.textName}>{data.NameAuthor}</Text>
-              <Text style={styles.textTypeUser}>Cá nhân</Text>
+            <View
+              style={{
+                paddingLeft: "3%",
+                paddingRight: "3%",
+                flexDirection: "row",
+              }}
+            >
+              <FontAwesome name="user-circle-o" size={60} color="#fff200" />
+              <View style={styles.wrapName}>
+                <Text style={styles.textName}>{data.NameAuthor}</Text>
+                <Text style={styles.textTypeUser}>Cá nhân</Text>
+              </View>
             </View>
           </View>
           <View>
@@ -205,6 +209,7 @@ export default function App(props) {
       </View>
       <ModelShowCategory
         show={isShowModelCate}
+        dataNameProduct={data.NameProduct}
         onPress={() => {
           setisShowModelCate(false);
         }}
@@ -217,7 +222,7 @@ export default function App(props) {
 const styles = StyleSheet.create({
   container: {
     // marginTop: 10,
-    paddingTop: 10,
+    paddingTop: '1%',
     width,
     height,
     backgroundColor: "#FFF",
@@ -234,7 +239,7 @@ const styles = StyleSheet.create({
   image: {
     width,
     height,
-    resizeMode: "contain",
+    // resizeMode: "contain",
   },
   pagination: {
     flexDirection: "row",
@@ -253,8 +258,6 @@ const styles = StyleSheet.create({
     margin: 3,
   },
   wrapText: {
-    paddingLeft: 20,
-    paddingRight: 20,
     paddingTop: 20,
   },
   textTitle: {
@@ -262,11 +265,15 @@ const styles = StyleSheet.create({
     fontSize: config.fontsize_2,
     fontFamily: "OpenSans_700Bold",
     marginBottom: 10,
+    paddingLeft: "3%",
+    paddingRight: "3%",
   },
   wrapCategory: {
     flexDirection: "row",
     justifyContent: "space-between",
     marginBottom: 10,
+    paddingLeft: "3%",
+    paddingRight: "3%",
   },
   textCategory: {
     // fontSize: 20,
@@ -287,13 +294,13 @@ const styles = StyleSheet.create({
     // fontSize: 18,
   },
   wrapInfor: {
-    flexDirection: "row",
     borderTopWidth: 1,
-    marginBottom: 20,
-    marginTop: 20,
     borderBottomWidth: 1,
-    paddingTop: 10,
-    paddingBottom: 10,
+    borderColor: '#DDD',
+    marginBottom: '5%',
+    marginTop: '5%',
+    paddingTop: '2%',
+    paddingBottom: '2%',
   },
   wrapName: {
     marginLeft: 20,
@@ -314,6 +321,7 @@ const styles = StyleSheet.create({
     fontSize: config.fontsize_2,
     color: "black",
     fontFamily: "OpenSans_400Regular",
+    paddingLeft: '3%', paddingRight: '3%'
   },
   wrapButton: {
     justifyContent: "center",

@@ -247,7 +247,7 @@ function CategoryCheckBoxComponent(props) {
       </ScrollView>
       <View style={styles.wrapButton}>
             <TouchableOpacity activeOpacity={0.6} style={styles.button} onPress={() => filterButton()}>
-                <Text style={styles.buttonText}>Tiếp theo</Text>
+                <Text style={styles.buttonText}>{props.textButton}</Text>
             </TouchableOpacity>
       </View>
     </View>
