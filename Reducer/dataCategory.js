@@ -1,4 +1,4 @@
-var dataCategory = (state = { NameProduct: [], data: []}, action) => {
+var dataCategory = (state = { NameProduct: [], data: [], addressFilter: ""}, action) => {
     switch (action.type) {
         case 'GET_NAMEPRODUCT':
             return {
@@ -9,6 +9,16 @@ var dataCategory = (state = { NameProduct: [], data: []}, action) => {
             return {
                 ...state,
                 data: action.data
+            }
+        case 'SAVE_ADDRESS_FILTER':
+            return {
+                ...state,
+                addressFilter: action.addressFilter
+            }
+        case 'RESET_ADDRESS_FILTER':
+            return {
+                ...state,
+                addressFilter: "",
             }
         case 'RESET_NAMEPRODUCT':
             return {

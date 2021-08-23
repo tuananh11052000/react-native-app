@@ -132,22 +132,16 @@ function ForgotPassword(props) {
 const styles = StyleSheet.create({
   wrapContent: {
     flexDirection: "column",
-    // justifyContent: "center",
-    // alignItems: "center",
-    // flex: 1,
-    // paddingTop: '5%',
     width: "100%",
     alignItems: "center",
     backgroundColor: "#FFF",
-    // justifyContent: 'space-between',
   },
   styleText: {
     marginBottom: 30,
     fontSize: 16,
-    // marginLeft: 10,
+    fontFamily: "OpenSans_400Regular",
   },
   btn: {
-    // width: "90%",
     marginBottom: "15%",
     paddingVertical: 8,
     paddingHorizontal: "14%",
@@ -158,6 +152,7 @@ const styles = StyleSheet.create({
     color: "black",
     textAlign: "center",
     fontSize: 16,
+    fontFamily: "OpenSans_600SemiBold",
   },
   button: {
     marginTop: 35,
@@ -171,6 +166,7 @@ const styles = StyleSheet.create({
     color: "#FFF",
     textAlign: "center",
     fontSize: 20,
+    fontFamily: "OpenSans_600SemiBold",
   },
   optStyle: {
     flexDirection: "row",

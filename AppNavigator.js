@@ -267,6 +267,26 @@ function AppNavigator(props) {
             headerTitleStyle: {
               // fontWeight: "bold",
             },
+            headerRight: () => (
+              <TouchableOpacity
+                style={styles.wrapTextCancel}
+                onPress={() => {
+                  Alert.alert("Thông báo", "Bạn có chắc muốn hủy!", [
+                    {
+                      text: "Không",
+                      style: "cancel",
+                    },
+                    {
+                      text: "Có",
+                      style: "cancel",
+                      onPress: () => navigation.navigate("Home"),
+                    },
+                  ]);
+                }}
+              >
+                <Text style={styles.textCancel}>Hủy</Text>
+              </TouchableOpacity>
+            ),
           })}
         />
         <Stack.Screen
@@ -282,6 +302,26 @@ function AppNavigator(props) {
             headerTitleStyle: {
               // fontWeight: "bold",
             },
+            headerRight: () => (
+              <TouchableOpacity
+                style={styles.wrapTextCancel}
+                onPress={() => {
+                  Alert.alert("Thông báo", "Bạn có chắc muốn hủy!", [
+                    {
+                      text: "Không",
+                      style: "cancel",
+                    },
+                    {
+                      text: "Có",
+                      style: "cancel",
+                      onPress: () => navigation.navigate("Home"),
+                    },
+                  ]);
+                }}
+              >
+                <Text style={styles.textCancel}>Hủy</Text>
+              </TouchableOpacity>
+            ),
           })}
         />
         <Stack.Screen
@@ -318,6 +358,7 @@ function AppNavigator(props) {
             headerTitleStyle: {
               fontWeight: "bold",
             },
+            
           }}
         />
         <Stack.Screen
@@ -379,7 +420,11 @@ function AppNavigator(props) {
           options={({ navigation }) => ({
             headerLeft: () => (
               <HeaderBackButton
-                onPress={() => navigation.navigate("Home")}
+                onPress={() => {
+                  dispatch({ type: "RESET_NAMEPRODUCT"});
+                  dispatch({ type: "RESET_ADDRESS_FILTER"});
+                  navigation.navigate("Home");
+                }}
                 tintColor={"white"}
                 label="Quay lại" //back
               />
@@ -430,6 +475,26 @@ function AppNavigator(props) {
             headerTitleStyle: {
               fontWeight: "bold",
             },
+            headerRight: () => (
+              <TouchableOpacity
+                style={styles.wrapTextCancel}
+                onPress={() => {
+                  Alert.alert("Thông báo", "Bạn có chắc muốn hủy!", [
+                    {
+                      text: "Không",
+                      style: "cancel",
+                    },
+                    {
+                      text: "Có",
+                      style: "cancel",
+                      onPress: () => navigation.navigate("Home"),
+                    },
+                  ]);
+                }}
+              >
+                <Text style={styles.textCancel}>Hủy</Text>
+              </TouchableOpacity>
+            ),
           })}
         />
         <Stack.Screen
@@ -480,6 +545,6 @@ const styles = StyleSheet.create({
 
 
 export default connect(function (state) {
-  return { infoPost: state.infoPost }
+  return { infoPost: state.infoPost, dataCategory: state.dataCategory, }
 })(AppNavigator);
 

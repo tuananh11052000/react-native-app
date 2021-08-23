@@ -5,6 +5,7 @@ import {
   View,
   StyleSheet,
   TouchableOpacity,
+  Alert,
   Dimensions,
   FlatList,
 } from "react-native";
@@ -24,8 +25,6 @@ import {
 import AppLoading from "expo-app-loading";
 import {
   useFonts,
-  OpenSans_300Light,
-  OpenSans_300Light_Italic,
   OpenSans_400Regular,
   OpenSans_400Regular_Italic,
   OpenSans_600SemiBold,
@@ -51,8 +50,6 @@ async function getToken() {
 function MyProductComponent(props) {
   const [token, setToken] = useState("Null"); //token
   const [fontsLoaded, error] = useFonts({
-    OpenSans_300Light,
-    OpenSans_300Light_Italic,
     OpenSans_400Regular,
     OpenSans_400Regular_Italic,
     OpenSans_600SemiBold,
@@ -93,6 +90,7 @@ function MyProductComponent(props) {
     if (!fontsLoaded) {
       return <AppLoading />;
     }
+
     //Function handling title post
     const calculatingTime = (d1, d2) => {
       d1 = new Date(d1);
@@ -133,14 +131,40 @@ function MyProductComponent(props) {
       if (pr.length > 1) return pr[0].Category + ", ...";
       else return pr[0].Category;
     };
+     // render address
+ const renderDistrict = (district, city) => {
+  if (district.indexOf("Thành phố") != -1) {
+    return district.slice(10);
+  } 
+  if (district.indexOf("Quận") != -1 && city.indexOf("Hồ Chí Minh") == -1) {
+    return district.slice(5);
+  }
+  if (district.indexOf("Quận") != -1 && city.indexOf("Hồ Chí Minh") != -1) {
+    return district;
+  }
+  if (district.indexOf("Huyện") != -1) {
+    return district.slice(7);
+  } 
+}
+// render địa chỉ
+const renderAddress = (address) => {
+  let add = address.split(",");
+  let huyen = "",
+    tinh = "";
+  if (add[3].indexOf("Thành phố") != -1) {
+    tinh = add[3].slice(10);
+  } else {
+    tinh = add[3].slice(6);
+  }
+  huyen = renderDistrict(add[2], add[3]);
+
+  let diachi = huyen + ", " + tinh;
+  return diachi;
+};
     const renderAuthor = (item) => {
       if (item == "tangcongdong") return "Tặng cộng đồng";
       else return "Cần hỗ trợ";
     };
-    // const renderConfirm = (item) => {
-    //   if (item) return "Đang hiển thị";
-    //   else return "Chờ xác thực";
-    // };
 
     const renderConfirm = (item) => {
       if (item)
@@ -165,20 +189,22 @@ function MyProductComponent(props) {
     const currentTime = new Date();
     //Ham xoa bai dang
     const deletePost = (id) => {
-      let url = "https://smai-app-api.herokuapp.com/post/deletePostbyUser?_id=" + id;
-      console.log(url)
+      let url =
+        "https://smai-app-api.herokuapp.com/post/deletePostbyUser?_id=" + id;
+      console.log(url);
       axios({
         method: "delete",
         url: url,
         headers: {
           Authorization: `${token}`,
-        }
+        },
       }).then((res) => {
         if (res.status == 201) {
-          alert('Xoá bài thành công.')
+          // alert("Xoá bài thành công.");
+          Alert.alert("Thông báo", "Xóa bài thành công", [{ text: "OK" }]);
         }
-      })
-    }
+      });
+    };
     return (
       <View style={style.constainer}>
         {props.myPost.map((item, key) => {
@@ -218,7 +244,11 @@ function MyProductComponent(props) {
                               customStyles={optionsStyles}
                               onSelect={false}
                             >
-                              <MenuOption value="Delete" text="Xóa tin" onSelect={() => deletePost(item._id)} />
+                              <MenuOption
+                                value="Delete"
+                                text="Xóa tin"
+                                onSelect={() => deletePost(item._id)}
+                              />
                             </MenuOptions>
                           </Menu>
                         </View>
@@ -245,7 +275,7 @@ function MyProductComponent(props) {
                         </Text>
                       </View>
                       <Text style={style.address}>
-                        {item.address.slice(0, 15) + "..."}
+                        {renderAddress(item.address)}
                       </Text>
                     </View>
                   </MenuProvider>
@@ -376,6 +406,12 @@ const style = StyleSheet.create({
     // fontSize: 20,
     color: "red",
     fontFamily: "OpenSans_400Regular",
+  },
+  textFalse: {
+    color: "gray",
+    fontSize: config.fontsize_3,
+    fontFamily: "OpenSans_400Regular",
+    textAlign: "center",
   },
 });
 

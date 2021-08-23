@@ -7,9 +7,12 @@ import {
   ScrollView,
   FlatList,
   Image,
+  Modal,
 } from "react-native";
+import ModelShowCategory from './ModalShowCategorySelected.component';
 import { connect } from "react-redux";
 import { Entypo } from "@expo/vector-icons";
+import { TouchableOpacity } from "react-native";
 const UselessTextInput = (props) => {
   return (
     <TextInput
@@ -24,6 +27,7 @@ const UselessTextInput = (props) => {
 };
 
 function App(props) {
+  const [isShowModelCate, setisShowModelCate] = useState(false);
   const address = props.infoPost.address.split(",");
   const renderItem = ({ item }) => (
     <Image
@@ -49,14 +53,36 @@ function App(props) {
     </>
   );
   const getTypeAuthor = () => {
-    if (props.infoPost.TypeAuthor == "tangcongdong")
-      return "Tặng cộng đồng";
+    if (props.infoPost.TypeAuthor == "tangcongdong") return "Tặng cộng đồng";
     if (props.infoPost.TypeAuthor == "cá nhân")
-      return 'Người nghèo/ Hoàn cảnh khó khăn'
+      return "Người nghèo/ Hoàn cảnh khó khăn";
     else return props.infoPost.TypeAuthor;
+  };
+
+
+  const renderCategory = () => {
+    if (props.infoPost.NameProduct.length == 1) {
+      return (
+        <Text style={styles.textContent}>
+          {props.infoPost.NameProduct[0].NameProduct}
+        </Text>
+      );
+    } else {
+      return (
+        <View style={styles.wraptCategory}>
+          <Text style={styles.textContent}>
+            Danh mục xin: {props.infoPost.NameProduct.length}
+          </Text>
+          <TouchableOpacity onPress={() => setisShowModelCate(true)}>
+            <Text style={styles.wraptManyCategories}>Chi tiết</Text>
+          </TouchableOpacity>
+        </View>
+      );
+    }
   };
   return (
     <ScrollView>
+      <ModelShowCategory show={isShowModelCate} onPress={() => {setisShowModelCate(false)}} dataNameProduct={props.infoPost.NameProduct}/>
       <View style={styles.backgroundTitle}>
         <Text style={styles.textTitle}>THÔNG TIN CHUNG</Text>
       </View>
@@ -66,7 +92,7 @@ function App(props) {
       </View>
       <View style={styles.container}>
         <Text style={styles.childTitle}>Danh mục*</Text>
-        <Text style={styles.textContent}>{props.infoPost.NameProduct[0].NameProduct}</Text>
+        {renderCategory()}
       </View>
       <View style={styles.backgroundTitle}>
         <Text style={styles.textTitle}>THÔNG TIN MÔ TẢ</Text>
@@ -145,7 +171,7 @@ const styles = StyleSheet.create({
     color: "#000",
     borderColor: "#B1B1B1",
     backgroundColor: "#FFF",
-    fontFamily: "OpenSans_400Regular"
+    fontFamily: "OpenSans_400Regular",
   },
   inputDescription: {
     borderColor: "#B1B1B1",
@@ -162,7 +188,7 @@ const styles = StyleSheet.create({
     textAlignVertical: "top",
     paddingLeft: 10,
     paddingTop: 10,
-    fontFamily: "OpenSans_400Regular"
+    fontFamily: "OpenSans_400Regular",
   },
   borderUpload: {
     width: "25%",
@@ -176,7 +202,7 @@ const styles = StyleSheet.create({
     padding: 5,
   },
   backgroundTitle: {
-    backgroundColor: "#CED4DA",
+    backgroundColor: "#E1E1E1",
     paddingLeft: 20,
     paddingTop: 10,
     paddingBottom: 10,
@@ -192,13 +218,23 @@ const styles = StyleSheet.create({
     color: "#A1A1A1",
     fontSize: 15,
     marginBottom: 10,
-    fontFamily: "OpenSans_400Regular"
+    fontFamily: "OpenSans_400Regular",
   },
   textContent: {
     color: "#000",
     fontSize: 18,
     marginBottom: 10,
-    fontFamily: "OpenSans_400Regular"
+    fontFamily: "OpenSans_400Regular",
+  },
+  wraptCategory: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
+  wraptManyCategories: {
+    color: "#039BE5",
+    fontFamily: "OpenSans_400Regular",
+    paddingRight: "4%",
+    fontSize: 16,
   },
 });
 export default connect(function (state) {

@@ -7,117 +7,118 @@ import { useForm, Controller } from "react-hook-form";
 import axios from "axios";
 import config from "../config";
 
- function newPassword(props) {
-   const { navigation } = props;
-   const [showPass, showPassWord] = useState(true);
-   const [showPass2, showPassWord2] = useState(true);
-   const {
-     control,
-     handleSubmit,
-     formState: { errors },
-     getValues,
-   } = useForm();
-   const onSubmit = async (data) => {
-     await axios.post("https://smai-app-api.herokuapp.com/account/Forgot", {
-       PhoneNumber: props.register.phonenumber,
-       Password: data.password,
-     })
-     .then((res)=>{
-         navigation.replace("Authentication");
-     });
-   };
-   return (
-     <ScrollView contentContainerStyle={styles.container}>
-       <View style={styles.child_container}>
-         <View style={styles.password}>
-           <Controller
-             control={control}
-             render={({ field: { onChange, onBlur, value } }) => (
-               <TextInput
-                 style={styles.textInput}
-                 onBlur={onBlur}
-                 onChangeText={(value) => onChange(value)}
-                 label="Mật khẩu"
-                 secureTextEntry={showPass}
-                 theme={{
-                   colors: {
-                     primary: "gray",
-                   },
-                 }}
-                 right={
-                   <TextInput.Icon
-                     name="eye"
-                     onPress={() => {
-                       showPassWord(!showPass);
-                     }}
-                   />
-                 }
-               />
-             )}
-             name="password"
-             rules={{ required: "Yêu cầu nhập mật khẩu." }}
-             defaultValue=""
-           />
-         </View>
-         {errors.password && (
-           <Text style={styles.error}> {errors.password.message}</Text>
-         )}
+function newPassword(props) {
+  const { navigation } = props;
+  const [showPass, showPassWord] = useState(true);
+  const [showPass2, showPassWord2] = useState(true);
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+    getValues,
+  } = useForm();
+  const onSubmit = async (data) => {
+    await axios
+      .post("https://smai-app-api.herokuapp.com/account/Forgot", {
+        PhoneNumber: props.register.phonenumber,
+        Password: data.password,
+      })
+      .then((res) => {
+        navigation.replace("Authentication");
+      });
+  };
+  return (
+    <ScrollView contentContainerStyle={styles.container}>
+      <View style={styles.child_container}>
+        <View style={styles.password}>
+          <Controller
+            control={control}
+            render={({ field: { onChange, onBlur, value } }) => (
+              <TextInput
+                style={styles.textInput}
+                onBlur={onBlur}
+                onChangeText={(value) => onChange(value)}
+                label="Mật khẩu"
+                secureTextEntry={showPass}
+                theme={{
+                  colors: {
+                    primary: "gray",
+                  },
+                }}
+                right={
+                  <TextInput.Icon
+                    name="eye"
+                    onPress={() => {
+                      showPassWord(!showPass);
+                    }}
+                  />
+                }
+              />
+            )}
+            name="password"
+            rules={{ required: "Yêu cầu nhập mật khẩu." }}
+            defaultValue=""
+          />
+        </View>
+        {errors.password && (
+          <Text style={styles.error}> {errors.password.message}</Text>
+        )}
 
-         <View style={styles.password}>
-           <Controller
-             control={control}
-             render={({ field: { onChange, onBlur, value } }) => (
-               <TextInput
-                 style={styles.textInput}
-                 onBlur={onBlur}
-                 onChangeText={(value) => onChange(value)}
-                 label="Nhập lại mật khẩu"
-                 secureTextEntry={showPass2}
-                 theme={{
-                   colors: {
-                     primary: "gray",
-                   },
-                 }}
-                 right={
-                   <TextInput.Icon
-                     name="eye"
-                     onPress={() => {
-                       showPassWord2(!showPass2);
-                     }}
-                   />
-                 }
-               />
-             )}
-             name="repassword"
-             rules={{
-               required: "Yêu cầu nhập mật khẩu.",
-               validate: (value) => {
-                 if (value === getValues()["password"]) {
-                   return true;
-                 } else {
-                   return "Mật khẩu không trùng nhau";
-                 }
-               },
-             }}
-             defaultValue=""
-           />
-         </View>
-         {errors.repassword && (
-           <Text style={styles.error}> {errors.repassword.message}</Text>
-         )}
-       </View>
-       <View style={styles.layoutBtnLogin}>
-         <Button
-           onPress={handleSubmit(onSubmit)}
-           color={config.color_btn_1}
-           size="large"
-         >
-           <Text style={styles.btnLogin}>Xác nhận</Text>
-         </Button>
-       </View>
-     </ScrollView>
-   );
- }
+        <View style={styles.password}>
+          <Controller
+            control={control}
+            render={({ field: { onChange, onBlur, value } }) => (
+              <TextInput
+                style={styles.textInput}
+                onBlur={onBlur}
+                onChangeText={(value) => onChange(value)}
+                label="Nhập lại mật khẩu"
+                secureTextEntry={showPass2}
+                theme={{
+                  colors: {
+                    primary: "gray",
+                  },
+                }}
+                right={
+                  <TextInput.Icon
+                    name="eye"
+                    onPress={() => {
+                      showPassWord2(!showPass2);
+                    }}
+                  />
+                }
+              />
+            )}
+            name="repassword"
+            rules={{
+              required: "Yêu cầu nhập mật khẩu.",
+              validate: (value) => {
+                if (value === getValues()["password"]) {
+                  return true;
+                } else {
+                  return "Mật khẩu không trùng nhau";
+                }
+              },
+            }}
+            defaultValue=""
+          />
+        </View>
+        {errors.repassword && (
+          <Text style={styles.error}> {errors.repassword.message}</Text>
+        )}
+      </View>
+      <View style={styles.layoutBtnLogin}>
+        <Button
+          onPress={handleSubmit(onSubmit)}
+          color={config.color_btn_1}
+          size="large"
+        >
+          <Text style={styles.btnLogin}>Xác nhận</Text>
+        </Button>
+      </View>
+    </ScrollView>
+  );
+}
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -160,7 +161,7 @@ const styles = StyleSheet.create({
     marginBottom: "4%",
   },
   textInput: {
-    fontSize: 20,
+    fontSize: 18,
     width: "95%",
     backgroundColor: "#FFF",
   },
@@ -179,12 +180,13 @@ const styles = StyleSheet.create({
   btnLogin: {
     color: "white",
     fontSize: 20,
+    fontFamily: "OpenSans_600SemiBold",
   },
   error: {
     color: "#bf1650",
     alignSelf: "flex-start",
   },
 });
-export default connect(function(state){
+export default connect(function (state) {
   return { register: state.register };
-})(newPassword)
+})(newPassword);

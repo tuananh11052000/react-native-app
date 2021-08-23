@@ -14,7 +14,8 @@ function Category(props) {
         type="canxindo"
         onPress={() => {
             navigation.navigate("Description")
-        }}/>
+        }}
+        textButton="Tiếp theo"/>
     </View>
 }
 

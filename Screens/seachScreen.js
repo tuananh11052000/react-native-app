@@ -4,7 +4,17 @@ import { SearchBar } from "react-native-elements";
 import axios from "axios";
 import { FlatList } from "react-native-gesture-handler";
 import { Feather } from "@expo/vector-icons";
-
+import config from "../config";
+import AppLoading from 'expo-app-loading';
+import {
+  useFonts,
+  OpenSans_400Regular,
+  OpenSans_400Regular_Italic,
+  OpenSans_600SemiBold,
+  OpenSans_600SemiBold_Italic,
+  OpenSans_700Bold,
+  OpenSans_700Bold_Italic,
+} from "@expo-google-fonts/open-sans";
 export default function (props) {
   const [allPost, setAllPost] = useState([]);
   const [resultSearch, setResult] = useState([]);
@@ -61,15 +71,15 @@ export default function (props) {
     const calYear = () => {
       return d2.getFullYear() - d1.getFullYear();
     };
-    if (calYear() != 0) return `${calYear()} năm trước`;
-    else if (calMonth() != 0) return `${calMonth()} tháng trước`;
-    else if (calDay() != 0) return `${calDay()} ngày trước`;
-    else return `${calHour()} giờ trước`;
+    if (calYear() != 0) return `${calYear()}y`;
+    else if (calMonth() != 0) return `${calMonth()}m`;
+    else if (calDay() != 0) return `${calDay()}d`;
+    else return `${calHour()}h`;
   };
   //Function handling title post
   const renderTitle = (item) => {
     item = item.charAt(0).toUpperCase() + item.slice(1);
-    if (item.length > 28) return item.slice(0, 28) + "...";
+    if (item.length > 20) return item.slice(0, 20) + "...";
     else return item;
   };
   //Function handling type product
@@ -82,6 +92,17 @@ export default function (props) {
     props.navigation.navigate("DetailPost", { data: item }); //chuyển trang
   };
   const currentTime = new Date();
+  const [fontsLoaded, error] = useFonts({
+    OpenSans_400Regular,
+    OpenSans_400Regular_Italic,
+    OpenSans_600SemiBold,
+    OpenSans_600SemiBold_Italic,
+    OpenSans_700Bold,
+    OpenSans_700Bold_Italic,
+  });
+  if (!fontsLoaded) {
+    return <AppLoading />;
+  }
   function renderItem(item) {
     return (
       <TouchableOpacity
@@ -133,7 +154,7 @@ export default function (props) {
 }
 const style = StyleSheet.create({
   constainer: {
-    backgroundColor: "#ADB5BD",
+    backgroundColor: "#e5e5e5",
   },
   wrapCategory: {
     padding: 15,
@@ -157,32 +178,40 @@ const style = StyleSheet.create({
   wrapTypePrice: {
     flexDirection: "row",
     justifyContent: "space-between",
+    marginVertical: 12,
   },
   wrapTimeAddress: {
     flexDirection: "row",
     justifyContent: "space-between",
   },
   titlePost: {
-    fontSize: 20,
-    fontWeight: "900",
+    fontSize: config.fontsize_2,
+    fontFamily: "OpenSans_600SemiBold",
   },
   wrapTime: {
+    display: "flex",
+    alignItems: "center",
     flexDirection: "row",
   },
   time: {
-    fontSize: 16,
-    marginLeft: 7,
-    color: "gray",
+    fontSize: config.fontsize_3,
+    marginLeft: 5,
+    color: "black",
+    fontFamily: "OpenSans_400Regular",
   },
   price: {
     color: "green",
-    fontSize: 17,
+    fontSize: config.fontsize_3,
+    fontFamily: "OpenSans_400Regular",
   },
   type: {
-    fontSize: 17,
+    fontSize: config.fontsize_3,
     color: "gray",
+    fontFamily: "OpenSans_400Regular",
   },
   address: {
-    color: "gray",
+    color: "black",
+    fontSize: config.fontsize_3,
+    fontFamily: "OpenSans_400Regular",
   },
 });

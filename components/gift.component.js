@@ -74,7 +74,7 @@ const style = StyleSheet.create({
     height: 35,
   },
   wrapCategory: {
-    paddingBottom: 20,
+    paddingBottom: 10,
     flex: 1,
     alignItems: "center",
     display: "flex",

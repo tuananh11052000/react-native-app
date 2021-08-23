@@ -65,7 +65,7 @@ const styles = StyleSheet.create({
   },
   Text: {
     paddingLeft: 10,
-    fontSize: config.fontsize_2,
+    fontSize: 18,
     fontFamily: "OpenSans_400Regular",
   },
 });

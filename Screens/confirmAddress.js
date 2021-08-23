@@ -20,16 +20,12 @@ import Spinner from "react-native-loading-spinner-overlay";
 import AppLoading from "expo-app-loading";
 import {
   useFonts,
-  OpenSans_300Light,
-  OpenSans_300Light_Italic,
   OpenSans_400Regular,
   OpenSans_400Regular_Italic,
   OpenSans_600SemiBold,
   OpenSans_600SemiBold_Italic,
   OpenSans_700Bold,
   OpenSans_700Bold_Italic,
-  OpenSans_800ExtraBold,
-  OpenSans_800ExtraBold_Italic,
 } from "@expo-google-fonts/open-sans";
 
 function confirmAddress(props) {
@@ -190,16 +186,12 @@ function confirmAddress(props) {
   };
   //ca ham xu ly neu da tung nhap thong tin  dia chi vao
   const [fontsLoaded, error] = useFonts({
-    OpenSans_300Light,
-    OpenSans_300Light_Italic,
     OpenSans_400Regular,
     OpenSans_400Regular_Italic,
     OpenSans_600SemiBold,
     OpenSans_600SemiBold_Italic,
     OpenSans_700Bold,
     OpenSans_700Bold_Italic,
-    OpenSans_800ExtraBold,
-    OpenSans_800ExtraBold_Italic,
   });
   if (!fontsLoaded) {
     return <AppLoading />;
@@ -215,7 +207,7 @@ function confirmAddress(props) {
         <View style={Styles.containermain}>
           <View style={Styles.top}>
             <TouchableOpacity onPress={() => navigation.navigate("Home")}>
-              <AntDesign name="close" size={36} color="black" />
+              <AntDesign name="close" size={28} color="black" />
             </TouchableOpacity>
 
             <Text style={Styles.tittleText}>Địa chỉ của bạn</Text>
@@ -324,7 +316,7 @@ const Styles = StyleSheet.create({
     marginTop: 20,
     paddingTop: 10,
     paddingBottom: 10,
-    backgroundColor: "#E53935",
+    backgroundColor: "#ff443a",
     borderRadius: 5,
   },
   buttonConfirm: {
@@ -424,7 +416,6 @@ const Styles = StyleSheet.create({
     width: 10,
     height: 10,
     left: -40,
-    // marginTop: 20,
   },
   dropDownIconStyle1: {
     width: 10,
@@ -462,10 +453,9 @@ const Styles = StyleSheet.create({
     paddingLeft: "2%",
   },
   tittleText: {
-    fontSize: 22,
-    marginLeft: "3%",
+    fontSize: 20,
+    marginLeft: "5%",
     fontFamily: "OpenSans_600SemiBold",
-    // textAlign: "center",
   },
   spinnerTextStyle: {
     color: "#FFF",

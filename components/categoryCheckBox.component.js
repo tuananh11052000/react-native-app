@@ -6,12 +6,7 @@ import {
   View,
   Text,
   ScrollView,
-  UIManager,
   TouchableOpacity,
-  Platform,
-  Image,
-  Button,
-  CheckBox,
 } from "react-native";
 import { connect } from "react-redux";
 import { MaterialCommunityIcons, Entypo } from "@expo/vector-icons";
@@ -233,7 +228,7 @@ function CategoryCheckBoxComponent(props) {
     } else {
       dispatch({ type: "GET_NAMEPRODUCT", NameProduct: dataFilterPost });
     }
-    
+
     // console.log(dataFilterPost);
     // function chuyển trang
     props.onPress();
@@ -250,7 +245,11 @@ function CategoryCheckBoxComponent(props) {
           />
         ))}
       </ScrollView>
-      <ButtonCofirm onPress={() => filterButton()} />
+      <View style={styles.wrapButton}>
+            <TouchableOpacity activeOpacity={0.6} style={styles.button} onPress={() => filterButton()}>
+                <Text style={styles.buttonText}>{props.textButton}</Text>
+            </TouchableOpacity>
+      </View>
     </View>
   );
 }
@@ -292,6 +291,21 @@ const styles = StyleSheet.create({
     alignItems: "center",
     backgroundColor: "#F5F5F5",
   },
+  button: {
+    backgroundColor: '#E70910',
+    borderRadius: 5,
+    padding: 5,
+},
+buttonText: {
+    color: '#FFF',
+    textAlign: 'center',
+    fontSize: 20,
+    fontFamily: "OpenSans_600SemiBold",
+},
+wrapButton: {
+  padding: '3%',
+  backgroundColor: '#DDD'
+}
 });
 export default connect(function (state) {
   return {

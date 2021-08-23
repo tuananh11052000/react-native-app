@@ -50,7 +50,7 @@ export default function Authentication(props) {
           <TabBar
             {...props}
             renderLabel={({ route, color }) => (
-              <Text style={{ color: "black", margin: 8 }}>{route.title}</Text>
+              <Text style={styles.titleText}>{route.title}</Text>
             )}
             style={{ backgroundColor: "white", tabBarInactiveTextColor: "red" }}
             underlineColor="#000"
@@ -69,5 +69,11 @@ export default function Authentication(props) {
 const styles = StyleSheet.create({
   scene: {
     flex: 1,
+  },
+  titleText: {
+    color: "black",
+    marginVertical: 5,
+    fontSize: 15,
+    fontFamily: "OpenSans_600SemiBold",
   },
 });

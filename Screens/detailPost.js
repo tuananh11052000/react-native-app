@@ -7,12 +7,15 @@ import {
   ScrollView,
   Dimensions,
   Linking,
+  Modal,
+  TouchableOpacity,
 } from "react-native";
 import { FontAwesome } from "@expo/vector-icons";
 import { Entypo } from "@expo/vector-icons";
 import { Button } from "galio-framework";
 import config from "../config";
 import axios from "axios";
+import ModelShowCategory from "../components/ModalShowCategorySelected.component";
 import * as SecureStore from "expo-secure-store";
 import AppLoading from "expo-app-loading";
 import {
@@ -24,10 +27,10 @@ import {
 } from "@expo-google-fonts/open-sans";
 
 const { width } = Dimensions.get("window");
-const height = width * 0.6;
+const height = width * 0.5;
 export default function App(props) {
   let data = props.route.params.data; // data from list
-
+  const [isShowModelCate, setisShowModelCate] = useState(false);
   const [active, setActive] = useState(0);
   const [phoneNumber, setPhoneNumber] = useState(" "); //useState using for phonenumber
   const change = ({ nativeEvent }) => {
@@ -38,6 +41,7 @@ export default function App(props) {
       setActive(slide);
     }
   };
+ 
   //update history
   useEffect(() => {
     const checkTokenLocal = async () => {
@@ -63,7 +67,6 @@ export default function App(props) {
     };
     checkTokenLocal();
   }, []);
-
   //get phone number author post
   useEffect(() => {
     const getPhone = async (AuthorID) => {
@@ -118,6 +121,29 @@ export default function App(props) {
 
     Linking.openURL(phoneNumber);
   };
+  const renderCategory = () => {
+    if (data.NameProduct.length == 1) {
+      return (
+        <View style={styles.wrapCategory}>
+          <Text style={styles.textCategory}>
+            {data.NameProduct[0].NameProduct}
+          </Text>
+          <Text style={styles.textPrice}>Miễn phí</Text>
+        </View>
+      );
+    } else {
+      return (
+        <View style={styles.wrapCategory}>
+          <Text style={styles.textCategory}>
+            Danh mục xin: {data.NameProduct.length}
+          </Text>
+          <TouchableOpacity onPress={() => setisShowModelCate(true)}>
+            <Text style={styles.wraptManyCategories}>Chi tiết</Text>
+          </TouchableOpacity>
+        </View>
+      );
+    }
+  };
   return (
     <ScrollView
       style={styles.container}
@@ -153,23 +179,27 @@ export default function App(props) {
           <View>
             <Text style={styles.textTitle}>{data.title}</Text>
           </View>
-          <View style={styles.wrapCategory}>
-            <Text style={styles.textCategory}>
-              {data.NameProduct[0].NameProduct}
-            </Text>
-            <Text style={styles.textPrice}>Miễn phí</Text>
-          </View>
-          <View>
+          {renderCategory()}
+
+          <View style={{ paddingLeft: "3%", paddingRight: "3%" }}>
             <Text style={styles.textAddress}>
-              <Entypo name="location" size={24} color="black" /> {"  "}
+              <Entypo name="location" size={24} color="#DDD" /> {"  "}
               {data.address}
             </Text>
           </View>
           <View style={styles.wrapInfor}>
-            <FontAwesome name="user-circle-o" size={60} color="#fff200" />
-            <View style={styles.wrapName}>
-              <Text style={styles.textName}>{data.NameAuthor}</Text>
-              <Text style={styles.textTypeUser}>Cá nhân</Text>
+            <View
+              style={{
+                paddingLeft: "3%",
+                paddingRight: "3%",
+                flexDirection: "row",
+              }}
+            >
+              <FontAwesome name="user-circle-o" size={60} color="#fff200" />
+              <View style={styles.wrapName}>
+                <Text style={styles.textName}>{data.NameAuthor}</Text>
+                <Text style={styles.textTypeUser}>Cá nhân</Text>
+              </View>
             </View>
           </View>
           <View>
@@ -177,6 +207,13 @@ export default function App(props) {
           </View>
         </View>
       </View>
+      <ModelShowCategory
+        show={isShowModelCate}
+        dataNameProduct={data.NameProduct}
+        onPress={() => {
+          setisShowModelCate(false);
+        }}
+      />
       <View style={styles.wrapButton}>{button}</View>
     </ScrollView>
   );
@@ -185,7 +222,7 @@ export default function App(props) {
 const styles = StyleSheet.create({
   container: {
     // marginTop: 10,
-    paddingTop: 10,
+    paddingTop: '1%',
     width,
     height,
     backgroundColor: "#FFF",
@@ -202,7 +239,7 @@ const styles = StyleSheet.create({
   image: {
     width,
     height,
-    resizeMode: "contain",
+    // resizeMode: "contain",
   },
   pagination: {
     flexDirection: "row",
@@ -221,8 +258,6 @@ const styles = StyleSheet.create({
     margin: 3,
   },
   wrapText: {
-    paddingLeft: 20,
-    paddingRight: 20,
     paddingTop: 20,
   },
   textTitle: {
@@ -230,11 +265,15 @@ const styles = StyleSheet.create({
     fontSize: config.fontsize_2,
     fontFamily: "OpenSans_700Bold",
     marginBottom: 10,
+    paddingLeft: "3%",
+    paddingRight: "3%",
   },
   wrapCategory: {
     flexDirection: "row",
     justifyContent: "space-between",
     marginBottom: 10,
+    paddingLeft: "3%",
+    paddingRight: "3%",
   },
   textCategory: {
     // fontSize: 20,
@@ -255,13 +294,13 @@ const styles = StyleSheet.create({
     // fontSize: 18,
   },
   wrapInfor: {
-    flexDirection: "row",
     borderTopWidth: 1,
-    marginBottom: 20,
-    marginTop: 20,
     borderBottomWidth: 1,
-    paddingTop: 10,
-    paddingBottom: 10,
+    borderColor: '#DDD',
+    marginBottom: '5%',
+    marginTop: '5%',
+    paddingTop: '2%',
+    paddingBottom: '2%',
   },
   wrapName: {
     marginLeft: 20,
@@ -270,7 +309,7 @@ const styles = StyleSheet.create({
     fontSize: config.fontsize_2,
     color: "black",
     fontFamily: "OpenSans_400Regular",
-    marginBottom: "5%"
+    marginBottom: "5%",
   },
   textTypeUser: {
     fontSize: config.fontsize_3,
@@ -282,17 +321,24 @@ const styles = StyleSheet.create({
     fontSize: config.fontsize_2,
     color: "black",
     fontFamily: "OpenSans_400Regular",
+    paddingLeft: '3%', paddingRight: '3%'
   },
   wrapButton: {
     justifyContent: "center",
     alignItems: "center",
     // marginBottom: 20,
     paddingVertical: 10,
-    backgroundColor: "#e5e5e5"
+    backgroundColor: "#e5e5e5",
   },
   textCall: {
     fontSize: 20,
     color: "#FFF",
     fontFamily: "OpenSans_700Bold",
+  },
+  wraptManyCategories: {
+    color: "#039BE5",
+    fontFamily: "OpenSans_400Regular",
+    paddingRight: "4%",
+    fontSize: 16,
   },
 });
