@@ -52,7 +52,7 @@ function AppNavigator(props) {
           component={Search}
           options={({ navigation }) => ({
             title: "Tìm kiếm",
-            headerShown: true,
+            headerShown: false,
             headerStyle: {
               backgroundColor: config.color_header_background,
             },
