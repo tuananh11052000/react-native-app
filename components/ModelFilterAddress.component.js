@@ -121,17 +121,8 @@ function confirmAddress(props) {
     props.closeModel();
   };
   //ca ham xu ly neu da tung nhap thong tin  dia chi vao
-  const [fontsLoaded, error] = useFonts({
-    OpenSans_400Regular,
-    OpenSans_400Regular_Italic,
-    OpenSans_600SemiBold,
-    OpenSans_600SemiBold_Italic,
-    OpenSans_700Bold,
-    OpenSans_700Bold_Italic,
-  });
-  if (!fontsLoaded) {
-    return <AppLoading />;
-  }
+
+
   return (
     <Modal transparent={true} visible={props.show}>
       <TouchableWithoutFeedback
@@ -139,11 +130,6 @@ function confirmAddress(props) {
         style={{ backgroundColor: "#000000aa", flex: 1 }}
       >
         <View style={Styles.border}>
-          <Spinner
-            visible={isloading}
-            textContent={"Loading..."}
-            textStyle={Styles.spinnerTextStyle}
-          />
           <View style={Styles.containermain}>
             <View style={Styles.top}>
               <TouchableOpacity onPress={props.onPress}>
