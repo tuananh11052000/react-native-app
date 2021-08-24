@@ -84,7 +84,7 @@ function ForgotPassword(props) {
         ref={recaptchaVerifier}
         firebaseConfig={firebaseConfig}
         attemptInvisibleVerification={
-          true | false /* experimental - this will make it invisible */
+          false /* experimental - this will make it invisible */
         }
       />
       {/* <Text style={styles.styleText}>Nhập số điện thoại:</Text> */}
