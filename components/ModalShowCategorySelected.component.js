@@ -15,7 +15,6 @@ import { ScrollView } from "react-native-gesture-handler";
 import config from "../config";
 export default function App(props) {
   const [show, setshow] = useState(false);
-  console.log(props.dataNameProduct);
   const renderItem = ({ item }) => (
     <View
       style={{

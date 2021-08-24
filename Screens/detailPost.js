@@ -18,6 +18,7 @@ import axios from "axios";
 import ModelShowCategory from "../components/ModalShowCategorySelected.component";
 import * as SecureStore from "expo-secure-store";
 import AppLoading from "expo-app-loading";
+import { Avatar } from "react-native-elements";
 import {
   useFonts,
   OpenSans_400Regular,
@@ -32,6 +33,7 @@ export default function App(props) {
   let data = props.route.params.data; // data from list
   const [isShowModelCate, setisShowModelCate] = useState(false);
   const [active, setActive] = useState(0);
+  const [avatar, setAvatar] = useState('');
   const [phoneNumber, setPhoneNumber] = useState(" "); //useState using for phonenumber
   const change = ({ nativeEvent }) => {
     const slide = Math.ceil(
@@ -41,9 +43,11 @@ export default function App(props) {
       setActive(slide);
     }
   };
- 
+
   //update history
+  //get phone number author post
   useEffect(() => {
+    //kiem tra dang nhap tren thiet bi
     const checkTokenLocal = async () => {
       let token = await SecureStore.getItemAsync("token");
       if (token) {
@@ -57,7 +61,7 @@ export default function App(props) {
               },
             }
           )
-          .then((response) => {})
+          .then((response) => { })
           .catch((error) => {
             alert(error.message);
           });
@@ -66,26 +70,25 @@ export default function App(props) {
       }
     };
     checkTokenLocal();
-  }, []);
-  //get phone number author post
-  useEffect(() => {
+    //Lay ra so dien thoai nguoi dang bai
     const getPhone = async (AuthorID) => {
       try {
         await axios({
           method: "get",
           url:
-            "https://smai-app-api.herokuapp.com/user/getPhonNumber?AuthorID=" +
+            "https://smai-app-api.herokuapp.com/user/getInfoAuthor?AuthorID=" +
             AuthorID,
         }).then(async (data) => {
           setPhoneNumber(data.data.PhoneNumber);
+          setAvatar(data.data.ImgAuthor)
         });
       } catch (e) {
         alert(e);
       }
     };
     getPhone(data.AuthorID);
+    //Lay ra avatar
   }, []);
-
   const [fontsLoaded, error] = useFonts({
     OpenSans_400Regular,
     OpenSans_400Regular_Italic,
@@ -121,6 +124,7 @@ export default function App(props) {
 
     Linking.openURL(phoneNumber);
   };
+  //ham render danh muc
   const renderCategory = () => {
     if (data.NameProduct.length == 1) {
       return (
@@ -143,6 +147,33 @@ export default function App(props) {
         </View>
       );
     }
+  };
+  //Ham render avatar
+  const renderAvatar = () => {
+    if (avatar != '')
+      return (
+        <View>
+          <Avatar
+            size={70}
+            rounded
+            source={{ uri: avatar }}
+            containerStyle={styles.avatarContainer}
+          ></Avatar>
+        </View>
+      );
+    else
+      return (
+        <View>
+          <Avatar
+            size={70}
+            rounded
+            source={{
+              uri: "https://www.alliancerehabmed.com/wp-content/uploads/icon-avatar-default.png",
+            }}
+            containerStyle={styles.avatarContainer}
+          ></Avatar>
+        </View>
+      );
   };
   return (
     <ScrollView
@@ -180,7 +211,6 @@ export default function App(props) {
             <Text style={styles.textTitle}>{data.title}</Text>
           </View>
           {renderCategory()}
-
           <View style={{ paddingLeft: "3%", paddingRight: "3%" }}>
             <Text style={styles.textAddress}>
               <Entypo name="location" size={24} color="#DDD" /> {"  "}
@@ -195,7 +225,8 @@ export default function App(props) {
                 flexDirection: "row",
               }}
             >
-              <FontAwesome name="user-circle-o" size={60} color="#fff200" />
+              {/* <FontAwesome name="user-circle-o" size={60} color="#fff200" /> */}
+              {renderAvatar()}
               <View style={styles.wrapName}>
                 <Text style={styles.textName}>{data.NameAuthor}</Text>
                 <Text style={styles.textTypeUser}>Cá nhân</Text>

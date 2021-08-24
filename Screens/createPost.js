@@ -1,7 +1,6 @@
 import React, { useEffect } from "react";
 import { StyleSheet, Text, View, StatusBar, ScrollView } from "react-native";
 import { connect } from "react-redux";
-import axios from "axios";
 
 import CreatePosts from "../components/createPost.component";
 import MyProductComponent from "../components/myproduct.component";
@@ -13,7 +12,7 @@ function CreatePost(props) {
 
   return (
     <View style={styles.container}>
-      <View  style={{ zIndex: 1 }}>
+      <View style={{ zIndex: 1 }}>
         <CreatePosts
           onPress={() => navigation.navigate("PostType")}
         />
