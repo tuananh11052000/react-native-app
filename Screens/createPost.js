@@ -103,9 +103,9 @@ function CreatePost(props) {
     product = (
       <Text style={styles.textFalse}>Đăng nhập để xem tin của bạn</Text>
     );
-  } else if (selectedValue == 1) {
+  } else if (selectedValue == 1 || value == 1) {
     product = <MyProductComponent navigation={navigation} />;
-  } else if (selectedValue == 2) {
+  } else if (selectedValue == 2 || value == 2) {
     product = <DonateProductComponent navigation={navigation} />;
   } else {
     product = <HelpProductComponent navigation={navigation} />;
