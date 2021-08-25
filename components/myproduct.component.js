@@ -38,7 +38,6 @@ import {
 
 async function getToken() {
   let result = await SecureStore.getItemAsync("token");
-  // console.log(result.lenght);
   if (result) {
     return await result;
   } else {
@@ -60,10 +59,10 @@ export function MyProductComponent(props) {
   });
   useEffect(() => {
     getToken();
-    getDataHistory();
+    getMyPost();
     return () => {};
   }, []);
-  const getDataHistory = async () => {
+  const getMyPost = async () => {
     let result = await SecureStore.getItemAsync("token");
     await axios({
       method: "get",
@@ -86,6 +85,11 @@ export function MyProductComponent(props) {
   }
   const calculatingTime = (d1, d2) => {
     d1 = new Date(d1);
+    const calMinute = () => {
+      var t2 = d2.getTime();
+      var t1 = d1.getTime();
+      return parseInt((t2 - t1) / (60 * 1000));
+    };
     const calHour = () => {
       var t2 = d2.getTime();
       var t1 = d1.getTime();
@@ -108,9 +112,10 @@ export function MyProductComponent(props) {
       return d2.getFullYear() - d1.getFullYear();
     };
     if (calYear() != 0) return `${calYear()}y `;
-    else if (calMonth() != 0) return `${calMonth()}m `;
+    else if (calMonth() != 0) return `${calMonth()}mth `;
     else if (calDay() != 0) return `${calDay()}d `;
-    else return `${calHour()}h `;
+    else if (calHour() != 0) return `${calHour()}h `;
+    else return `${calMinute()}m `;
   };
 
   //Function handling title post
@@ -124,7 +129,7 @@ export function MyProductComponent(props) {
     if (pr.length > 1) return pr[0].Category + ", ...";
     else return pr[0].Category;
   };
-  // render address
+  // render District
   const renderDistrict = (district, city) => {
     if (district.indexOf("Thành phố") != -1) {
       return district.slice(10);
@@ -139,7 +144,7 @@ export function MyProductComponent(props) {
       return district.slice(7);
     }
   };
-  // render địa chỉ
+  // render address
   const renderAddress = (address) => {
     let add = address.split(",");
     let huyen = "",
@@ -309,10 +314,10 @@ export function DonateProductComponent(props) {
     OpenSans_700Bold_Italic,
   });
   useEffect(() => {
-    getDataHistory();
+    getMyPost();
     return () => {};
   }, []);
-  const getDataHistory = async () => {
+  const getMyPost = async () => {
     let result = await SecureStore.getItemAsync("token");
     await axios({
       method: "get",
@@ -338,6 +343,11 @@ export function DonateProductComponent(props) {
   }
   const calculatingTime = (d1, d2) => {
     d1 = new Date(d1);
+    const calMinute = () => {
+      var t2 = d2.getTime();
+      var t1 = d1.getTime();
+      return parseInt((t2 - t1) / (60 * 1000));
+    };
     const calHour = () => {
       var t2 = d2.getTime();
       var t1 = d1.getTime();
@@ -360,9 +370,10 @@ export function DonateProductComponent(props) {
       return d2.getFullYear() - d1.getFullYear();
     };
     if (calYear() != 0) return `${calYear()}y `;
-    else if (calMonth() != 0) return `${calMonth()}m `;
+    else if (calMonth() != 0) return `${calMonth()}mth `;
     else if (calDay() != 0) return `${calDay()}d `;
-    else return `${calHour()}h `;
+    else if (calHour() != 0) return `${calHour()}h `;
+    else return `${calMinute()}m `;
   };
 
   //Function handling title post
@@ -561,10 +572,10 @@ export function HelpProductComponent(props) {
     OpenSans_700Bold_Italic,
   });
   useEffect(() => {
-    getDataHistory();
+    getMyPost();
     return () => {};
   }, []);
-  const getDataHistory = async () => {
+  const getMyPost = async () => {
     let result = await SecureStore.getItemAsync("token");
     await axios({
       method: "get",
@@ -590,6 +601,11 @@ export function HelpProductComponent(props) {
   }
   const calculatingTime = (d1, d2) => {
     d1 = new Date(d1);
+    const calMinute = () => {
+      var t2 = d2.getTime();
+      var t1 = d1.getTime();
+      return parseInt((t2 - t1) / (60 * 1000));
+    };
     const calHour = () => {
       var t2 = d2.getTime();
       var t1 = d1.getTime();
@@ -612,9 +628,10 @@ export function HelpProductComponent(props) {
       return d2.getFullYear() - d1.getFullYear();
     };
     if (calYear() != 0) return `${calYear()}y `;
-    else if (calMonth() != 0) return `${calMonth()}m `;
+    else if (calMonth() != 0) return `${calMonth()}mth `;
     else if (calDay() != 0) return `${calDay()}d `;
-    else return `${calHour()}h `;
+    else if (calHour() != 0) return `${calHour()}h `;
+    else return `${calMinute()}m `;
   };
 
   //Function handling title post

@@ -32,8 +32,6 @@ import {
 } from "../components/myproduct.component";
 // import MyProductComponent from "../components/myproduct.component";
 
-// const heightStatusBar = StatusBar.currentHeight;//lay ra chieu cao cua thanh trang thai
-
 function CreatePost(props) {
   const { navigation } = props;
   const [selectedValue, setSelectedValue] = useState("1");
@@ -119,14 +117,16 @@ function CreatePost(props) {
           <View style={styles.wrapPikerA}>{dropdown}</View>
           <TouchableOpacity
             activeOpacity={0.5}
-            // onPress={props.onPress}
-            onPress={() => navigation.navigate("PostType")}
+            onPress={() => {
+              if (props.auth.isLogin == true) {
+                navigation.navigate("PostType");
+              } else navigation.replace("Authentication");
+            }}
             style={styles.btnCreate}
           >
             <Image source={AddImg} style={{ width: 20, height: 20 }} />
             <Text style={styles.btnText}>&ensp; Đăng tin</Text>
           </TouchableOpacity>
-          {/* <Text>{selectedValue}</Text> */}
         </View>
       </View>
       <View style={{ zIndex: 0 }}>
