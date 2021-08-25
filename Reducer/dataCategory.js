@@ -25,6 +25,11 @@ var dataCategory = (state = { NameProduct: [], data: [], addressFilter: ""}, act
                 ...state,
                 NameProduct: [],
             }
+        case 'RESET_DATA':
+            return {
+                ...state,
+                data: [],
+            }
         default:
             return state
     }

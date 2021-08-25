@@ -1,14 +1,15 @@
 {
   "expo": {
-    "name": "Your App Name",
+    "name": "Smai",
     "version": "1.0.0",
-    "slug": "your-app-slug",
+    "slug": "Smai",
+    "icon": "./assets/icon.png",
     "ios": {
-      "bundleIdentifier": "com.yourcompany.yourappname",
+      "bundleIdentifier": "com.smait.quyengop",
       "buildNumber": "1.0.0"
     },
     "android": {
-      "package": "com.yourcompany.yourappname",
+      "package": "com.smait.quyengop",
       "versionCode": 1
     }
   }

@@ -177,7 +177,18 @@ function CategoryCheckBoxComponent(props) {
       ],
     },
   ];
-  const [accordionData, setAccordionData] = useState(CONTENT);
+  const [CONTENT_SAVED, setcontensaved] = useState([]);
+  const [accordionData, setAccordionData] = useState([]);
+  const dataCate = props.dataCategory.data
+  
+ 
+  useEffect(() => {
+    if (dataCate.length != 0) {
+      setAccordionData(dataCate);
+    } else {
+      setAccordionData(CONTENT)
+    }
+  }, []);
   //   if (Platform.OS === "android") {
   //     UIManager.setLayoutAnimationEnabledExperimental(true);
   //   }
@@ -227,6 +238,7 @@ function CategoryCheckBoxComponent(props) {
       dispatch({ type: "GET_NAME", NameProduct: dataFilterPost });
     } else {
       dispatch({ type: "GET_NAMEPRODUCT", NameProduct: dataFilterPost });
+      dispatch({ type: "SET_DATA", data: accordionData });
     }
 
     // console.log(dataFilterPost);
