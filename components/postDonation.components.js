@@ -79,17 +79,14 @@ function App(props) {
     if (categoryFilter.length == 0 && addr.length == 0) {
       getListPhotos();
     } else {
-      if (addr.length != 0 && categoryFilter.length == 0 ) {
+      if (addr.length != 0 && categoryFilter.length == 0) {
         filterAddressFunc(addr);
       } else {
         if (addr.length != 0 && categoryFilter.length != 0)
-        filterAddressFunc(addr);
+          filterAddressFunc(addr);
         filterCategory(categoryFilter);
-        
       }
-      
     }
-    
   }, [categoryFilter, addr]);
 
   // call api
@@ -121,6 +118,11 @@ function App(props) {
 
   const calculatingTime = (d1, d2) => {
     d1 = new Date(d1);
+    const calMinute = () => {
+      var t2 = d2.getTime();
+      var t1 = d1.getTime();
+      return parseInt((t2 - t1) / (60 * 1000));
+    };
     const calHour = () => {
       var t2 = d2.getTime();
       var t1 = d1.getTime();
@@ -142,10 +144,11 @@ function App(props) {
     const calYear = () => {
       return d2.getFullYear() - d1.getFullYear();
     };
-    if (calYear() != 0) return `${calYear()}y`;
-    else if (calMonth() != 0) return `${calMonth()}m`;
-    else if (calDay() != 0) return `${calDay()}d`;
-    else return `${calHour()}h`;
+    if (calYear() != 0) return `${calYear()}y `;
+    else if (calMonth() != 0) return `${calMonth()}mth `;
+    else if (calDay() != 0) return `${calDay()}d `;
+    else if (calHour() != 0) return `${calHour()}h `;
+    else return `${calMinute()}m `;
   };
 
   //Function handling title post

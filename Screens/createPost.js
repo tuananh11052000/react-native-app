@@ -89,9 +89,9 @@ function CreatePost(props) {
         mode={"dropdown"}
         style={{ height: 40 }}
       >
-        <Picker.Item label="Tất cả tin đăng" value="1" />
-        <Picker.Item label="Tin tặng cộng đồng" value="2" />
-        <Picker.Item label="Tin cần hỗ trợ" value="3" />
+        <Picker.Item label="&ensp;Tất cả tin đăng " value="1" />
+        <Picker.Item label="&ensp;Tin tặng cộng đồng" value="2" />
+        <Picker.Item label="&ensp;Tin cần hỗ trợ" value="3" />
       </Picker>
     );
   }

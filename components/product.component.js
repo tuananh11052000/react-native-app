@@ -49,29 +49,34 @@ function ProductComponent(props) {
     getDataHistory();
     return () => {};
   }, []);
-   const getDataHistory = async () => {
-     let result = await SecureStore.getItemAsync("token");
-     await axios({
-       method: "get",
-       url: "https://smai-app-api.herokuapp.com/user/getHistoryPost",
-       headers: {
-         Authorization: result,
-       },
-     })
-       .then((data) => {
-         setloading(false);
-         setData(data.data);
-       })
-       .catch((error) => {
-         console.log("Error: ", error);
-       })
-       .finally(() => setisLoading(false));
-   };
+  const getDataHistory = async () => {
+    let result = await SecureStore.getItemAsync("token");
+    await axios({
+      method: "get",
+      url: "https://smai-app-api.herokuapp.com/user/getHistoryPost",
+      headers: {
+        Authorization: result,
+      },
+    })
+      .then((data) => {
+        setloading(false);
+        setData(data.data);
+      })
+      .catch((error) => {
+        console.log("Error: ", error);
+      })
+      .finally(() => setisLoading(false));
+  };
   if (!fontsLoaded) {
     return <AppLoading />;
   }
   const calculatingTime = (d1, d2) => {
     d1 = new Date(d1);
+    const calMinute = () => {
+      var t2 = d2.getTime();
+      var t1 = d1.getTime();
+      return parseInt((t2 - t1) / (60 * 1000));
+    };
     const calHour = () => {
       var t2 = d2.getTime();
       var t1 = d1.getTime();
@@ -93,10 +98,11 @@ function ProductComponent(props) {
     const calYear = () => {
       return d2.getFullYear() - d1.getFullYear();
     };
-    if (calYear() != 0) return `${calYear()} năm trước`;
-    else if (calMonth() != 0) return `${calMonth()} tháng trước`;
-    else if (calDay() != 0) return `${calDay()} ngày trước`;
-    else return `${calHour()} giờ trước`;
+    if (calYear() != 0) return `${calYear()}y `;
+    else if (calMonth() != 0) return `${calMonth()}mth `;
+    else if (calDay() != 0) return `${calDay()}d `;
+    else if (calHour() != 0) return `${calHour()}h `;
+    else return `${calMinute()}m `;
   };
   //get post
 
@@ -136,36 +142,36 @@ function ProductComponent(props) {
     if (pr.length > 1) return pr[0].Category + ", ...";
     else return pr[0].Category;
   };
- // render address
- const renderDistrict = (district, city) => {
-  if (district.indexOf("Thành phố") != -1) {
-    return district.slice(10);
-  } 
-  if (district.indexOf("Quận") != -1 && city.indexOf("Hồ Chí Minh") == -1) {
-    return district.slice(5);
-  }
-  if (district.indexOf("Quận") != -1 && city.indexOf("Hồ Chí Minh") != -1) {
-    return district;
-  }
-  if (district.indexOf("Huyện") != -1) {
-    return district.slice(7);
-  } 
-}
-// render địa chỉ
-const renderAddress = (address) => {
-  let add = address.split(",");
-  let huyen = "",
-    tinh = "";
-  if (add[3].indexOf("Thành phố") != -1) {
-    tinh = add[3].slice(10);
-  } else {
-    tinh = add[3].slice(6);
-  }
-  huyen = renderDistrict(add[2], add[3]);
+  // render address
+  const renderDistrict = (district, city) => {
+    if (district.indexOf("Thành phố") != -1) {
+      return district.slice(10);
+    }
+    if (district.indexOf("Quận") != -1 && city.indexOf("Hồ Chí Minh") == -1) {
+      return district.slice(5);
+    }
+    if (district.indexOf("Quận") != -1 && city.indexOf("Hồ Chí Minh") != -1) {
+      return district;
+    }
+    if (district.indexOf("Huyện") != -1) {
+      return district.slice(7);
+    }
+  };
+  // render địa chỉ
+  const renderAddress = (address) => {
+    let add = address.split(",");
+    let huyen = "",
+      tinh = "";
+    if (add[3].indexOf("Thành phố") != -1) {
+      tinh = add[3].slice(10);
+    } else {
+      tinh = add[3].slice(6);
+    }
+    huyen = renderDistrict(add[2], add[3]);
 
-  let diachi = huyen + ", " + tinh;
-  return diachi;
-};
+    let diachi = huyen + ", " + tinh;
+    return diachi;
+  };
   const _pressRow = (item) => {
     props.navigation.navigate("DetailPost", { data: item }); //chuyển trang
   };
