@@ -423,6 +423,7 @@ function AppNavigator(props) {
                 onPress={() => {
                   dispatch({ type: "RESET_NAMEPRODUCT"});
                   dispatch({ type: "RESET_ADDRESS_FILTER"});
+                  dispatch({ type: "RESET_DATA"});
                   navigation.goBack();
                 }}
                 tintColor={"white"}

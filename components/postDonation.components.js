@@ -53,23 +53,18 @@ function App(props) {
 
   // function lọc các danh mục đã chọn
   const categoryFilter = props.dataCategory.NameProduct;
-
   const filterCategory = (arrayProduct) => {
     if (categoryFilter.length != 0) {
-      const listTemp = listAfterFilter.filter((item) => {
-        for (let i = 0; i < arrayProduct.length; i++) {
-          if (
-            item.NameProduct[0].Category == arrayProduct[i].Category &&
-            item.NameProduct[0].NameProduct == arrayProduct[i].NameProduct
-          ) {
-            return true;
-          } else {
-            return false;
-          }
+      const list = [];
+      for (let i = 0; i < listAfterFilter.length; i++) {
+        for (let j = 0; j < arrayProduct.length; j++) {
+          if (listAfterFilter[i].NameProduct[0].Category == arrayProduct[j].Category &&
+            listAfterFilter[i].NameProduct[0].NameProduct == arrayProduct[j].NameProduct) {
+              list.push(listAfterFilter[i]);
+            }
         }
-        return true;
-      });
-      setData(listTemp);
+      }
+      setData(list);
     } else {
       console.log("nônnononon");
     }
@@ -244,7 +239,7 @@ function App(props) {
   return (
     <View style={isLoading ? styles.containterLoading : styles.containter}>
       {isLoading ? (
-        <ActivityIndicator size="large" color="#000" />
+        <ActivityIndicator size="small" color="#DDD" />
       ) : (
         <>
           <View style={styles.searchFilterContainer}>
