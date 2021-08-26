@@ -49,6 +49,7 @@ export function MyProductComponent(props) {
   const [loading, setloading] = useState(true);
   const [dataRender, setData] = useState([]);
   const [token, setToken] = useState("Null"); //token
+  const [reload, setReload] = useState(false)
   const [fontsLoaded, error] = useFonts({
     OpenSans_400Regular,
     OpenSans_400Regular_Italic,
@@ -60,9 +61,12 @@ export function MyProductComponent(props) {
   useEffect(() => {
     getToken();
     getMyPost();
-    return () => {};
-  }, []);
+    return () => { };
+  }, [reload]);
   const getMyPost = async () => {
+    if (reload == true) {
+      setReload(false)
+    }
     let result = await SecureStore.getItemAsync("token");
     await axios({
       method: "get",
@@ -202,6 +206,7 @@ export function MyProductComponent(props) {
       if (res.status == 201) {
         // alert("Xoá bài thành công.");
         Alert.alert("Thông báo", "Xóa bài thành công", [{ text: "OK" }]);
+        setReload(true)
       }
     });
   };
@@ -315,7 +320,7 @@ export function DonateProductComponent(props) {
   });
   useEffect(() => {
     getMyPost();
-    return () => {};
+    return () => { };
   }, []);
   const getMyPost = async () => {
     let result = await SecureStore.getItemAsync("token");
@@ -573,7 +578,7 @@ export function HelpProductComponent(props) {
   });
   useEffect(() => {
     getMyPost();
-    return () => {};
+    return () => { };
   }, []);
   const getMyPost = async () => {
     let result = await SecureStore.getItemAsync("token");

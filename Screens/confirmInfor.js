@@ -24,7 +24,6 @@ function ConfirmInforScreen(props) {
     //api upload infor json
     setIsDisplay(true)
     const data = props.infoPost;
-    ;
     axios({
       url: 'https://smai-app-api.herokuapp.com/post/CreatePost',
       method: 'post',
