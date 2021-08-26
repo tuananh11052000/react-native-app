@@ -7,6 +7,7 @@ import {
   Text,
   ScrollView,
   TouchableOpacity,
+  Pressable
 } from "react-native";
 import { connect } from "react-redux";
 import { MaterialCommunityIcons, Entypo } from "@expo/vector-icons";
@@ -54,7 +55,7 @@ function ExpandableListView(props) {
 
       <View style={{ height: layoutHeight, overflow: "hidden" }}>
         {dataa.subCategory.map((subitem, key) => (
-          <TouchableOpacity
+          <Pressable
             key={key}
             style={styles.subCategoryText}
             onPress={() => showSelectedCategory(subitem.id)}
@@ -75,7 +76,7 @@ function ExpandableListView(props) {
                 />
               )}
             </View>
-          </TouchableOpacity>
+          </Pressable>
         ))}
       </View>
     </View>

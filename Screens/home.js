@@ -247,16 +247,10 @@ const renderAddress = (address) => {
     setlistData([]);
     getData();
   };
-  ////////////////////////////////////////////////////
-
-  return (
-    <View style={styles.container}>
-      <ScrollView
-        refreshControl={
-          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-        }
-      >
-        <SearchComponent onPress={() => navigation.navigate("Search")} />
+  const listheader = () => {
+    return (
+      <>
+      <SearchComponent onPress={() => navigation.navigate("Search")} />
         <GiftComponent
           onPressTCD={() => actionOnPressTCD()}
           onPressGiveCaNhan={() => actionOnPressGiveCaNhan()}
@@ -270,7 +264,14 @@ const renderAddress = (address) => {
           onPress={() => navigation.navigate("PostDonation")}
         />
         <TitleComponent title="Tin mới nhất" />
-        {/* <ProductComponent navigation={navigation} listData={listData}/> */}
+      </>
+    )
+  }
+  ////////////////////////////////////////////////////
+
+  return (
+    <View style={styles.container}>
+    
         <View style={styles.containerr}>
           {refreshing ? (
             <ActivityIndicator />
@@ -280,10 +281,13 @@ const renderAddress = (address) => {
               renderItem={renderItem}
               keyExtractor={(item) => item._id}
               ItemSeparatorComponent={ItemSeparatorView}
+              ListHeaderComponent={listheader}
+              refreshControl={
+                <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+              }
             />
           )}
         </View>
-      </ScrollView>
     </View>
   );
 }
