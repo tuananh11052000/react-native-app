@@ -310,6 +310,7 @@ export function DonateProductComponent(props) {
   const [loading, setloading] = useState(true);
   const [dataRender, setData] = useState([]);
   const [token, setToken] = useState("Null"); //token
+  const [reload, setReload] = useState(false)
   const [fontsLoaded, error] = useFonts({
     OpenSans_400Regular,
     OpenSans_400Regular_Italic,
@@ -319,10 +320,14 @@ export function DonateProductComponent(props) {
     OpenSans_700Bold_Italic,
   });
   useEffect(() => {
+    getToken();
     getMyPost();
     return () => { };
-  }, []);
+  }, [reload]);
   const getMyPost = async () => {
+    if (reload == true) {
+      setReload(false)
+    }
     let result = await SecureStore.getItemAsync("token");
     await axios({
       method: "get",
@@ -465,6 +470,7 @@ export function DonateProductComponent(props) {
       if (res.status == 201) {
         // alert("Xoá bài thành công.");
         Alert.alert("Thông báo", "Xóa bài thành công", [{ text: "OK" }]);
+        setReload(true)
       }
     });
   };
@@ -568,6 +574,7 @@ export function HelpProductComponent(props) {
   const [loading, setloading] = useState(true);
   const [dataRender, setData] = useState([]);
   const [token, setToken] = useState("Null"); //token
+  const [reload, setReload] = useState(false)
   const [fontsLoaded, error] = useFonts({
     OpenSans_400Regular,
     OpenSans_400Regular_Italic,
@@ -577,10 +584,14 @@ export function HelpProductComponent(props) {
     OpenSans_700Bold_Italic,
   });
   useEffect(() => {
+    getToken();
     getMyPost();
     return () => { };
-  }, []);
+  }, [reload]);
   const getMyPost = async () => {
+    if (reload == true) {
+      setReload(false)
+    }
     let result = await SecureStore.getItemAsync("token");
     await axios({
       method: "get",
@@ -723,6 +734,7 @@ export function HelpProductComponent(props) {
       if (res.status == 201) {
         // alert("Xoá bài thành công.");
         Alert.alert("Thông báo", "Xóa bài thành công", [{ text: "OK" }]);
+        setReload(true)
       }
     });
   };
