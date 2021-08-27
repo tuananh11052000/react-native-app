@@ -7,7 +7,7 @@ import {
   Text,
   StatusBar,
 } from "react-native";
-
+import config from '../config';
 import WhoConfirm from "../components/WhoConfirm.component";
 import PriorityImg from "../assets/priority_preview.png";
 
@@ -73,12 +73,13 @@ const styles = StyleSheet.create({
     paddingRight: 16,
   },
   textNote: {
-    fontSize: 20,
+    fontSize: config.fontsize_2,
     fontFamily: "OpenSans_400Regular",
   },
   textContent: {
     padding: 16,
     textAlign: "justify",
     fontFamily: "OpenSans_400Regular",
+    fontSize: config.fontsize_3,
   },
 });
