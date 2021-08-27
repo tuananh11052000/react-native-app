@@ -176,8 +176,12 @@ function Home(props) {
   if (district.indexOf("Quận") != -1 && city.indexOf("Hồ Chí Minh") == -1) {
     return district.slice(5);
   }
-  if (district.indexOf("Quận") != -1 && city.indexOf("Hồ Chí Minh") != -1) {
+  const distritNumber = "Quận 1, Quận 2, Quận 3, Quận 4, Quận 5, Quận 6, Quận 7, Quận 8, Quận 9, Quận 10, Quận 11, Quận 12"
+  if (district.indexOf("Quận") != -1 && city.indexOf("Hồ Chí Minh") != -1 && distritNumber.indexOf(district) != -1) {
     return district;
+  }
+  if (district.indexOf("Quận") != -1 && city.indexOf("Hồ Chí Minh") != -1 && distritNumber.indexOf(district) == -1) {
+    return district.slice(5);
   }
   if (district.indexOf("Huyện") != -1) {
     return district.slice(7);
