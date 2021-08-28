@@ -13,6 +13,7 @@ import RNPickerDialog from "rn-modal-picker";
 import { TextInput } from "react-native-paper";
 import { AntDesign } from "@expo/vector-icons";
 import db from "../db.json";
+import config from '../config';
 import { connect } from "react-redux";
 import { Button } from "galio-framework";
 import * as SecureStore from "expo-secure-store";
@@ -137,7 +138,7 @@ function confirmAddress(props) {
       province == "" ||
       district == "" ||
       commune == "" ||
-      addressDetail == ""
+      addressDetail.trim() == ""
     )
       Alert.alert("Thông báo", "Vui lòng nhập đầy đủ địa chỉ", [
         { text: "OK" },
@@ -173,7 +174,7 @@ function confirmAddress(props) {
       } else {
         //neu ctrinh chay vao day tuc la khong co thay doi ve dia chi
         const { dispatch } = props;
-        const address = `${addressDetail}, ${commune.name}, ${district.name}, ${province.name}`;
+        const address = `${addressDetail.trim()}, ${commune.name}, ${district.name}, ${province.name}`;
         dispatch({ type: "CONFIRM_ADDRESS", address: address });
         console.log(props.controlConfirmAddress);
         if (props.controlConfirmAddress == "category") {
@@ -301,7 +302,7 @@ const Styles = StyleSheet.create({
     width: "95%",
   },
   styleLabel: {
-    fontSize: 18,
+    fontSize: config.fontsize_5,
     backgroundColor: "#FFFFFF",
     borderBottomColor: "gray",
     overflow: "hidden",
@@ -324,7 +325,7 @@ const Styles = StyleSheet.create({
     textAlign: "center",
     paddingLeft: 10,
     paddingRight: 10,
-    fontSize: 20,
+    fontSize: config.fontsize_2,
     fontFamily: "OpenSans_600SemiBold",
   },
   border: {
@@ -363,7 +364,7 @@ const Styles = StyleSheet.create({
     justifyContent: "center",
     width: "100%",
     color: "black",
-    fontSize: 20,
+    fontSize: config.fontsize_2,
     paddingLeft: 10,
     marginTop: -2,
     fontFamily: "OpenSans_400Regular",
@@ -375,7 +376,7 @@ const Styles = StyleSheet.create({
     justifyContent: "center",
     width: "100%",
     color: "black",
-    fontSize: 18,
+    fontSize: config.fontsize_5,
     paddingLeft: 10,
     marginTop: 15,
     fontFamily: "OpenSans_400Regular",
@@ -453,7 +454,7 @@ const Styles = StyleSheet.create({
     paddingLeft: "2%",
   },
   tittleText: {
-    fontSize: 20,
+    fontSize: config.fontsize_2,
     marginLeft: "5%",
     fontFamily: "OpenSans_600SemiBold",
   },

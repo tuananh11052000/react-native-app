@@ -9,6 +9,7 @@ import {
   OpenSans_700Bold,
   OpenSans_700Bold_Italic,
 } from "@expo-google-fonts/open-sans";
+import config from '../config';
 export default function NewsedBox(props) {
   const [fontsLoaded, error] = useFonts({
     OpenSans_400Regular,
@@ -46,7 +47,7 @@ const style = StyleSheet.create({
   },
   title: {
     paddingTop: 5,
-    fontSize: 15,
+    fontSize: config.fontsize_3,
     textAlign: "center",
     fontFamily: "OpenSans_400Regular",
   },

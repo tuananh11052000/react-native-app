@@ -78,7 +78,7 @@ const styles = StyleSheet.create({
   },
   Text: {
     paddingVertical: 10,
-    fontSize: 18,
+    fontSize: config.fontsize_5,
     marginLeft: 20,
     color: "#7F7E85",
     textTransform: "uppercase",
@@ -98,12 +98,12 @@ const styles = StyleSheet.create({
   },
   textPhone: {
     fontFamily: "OpenSans_400Regular_Italic",
-    fontSize: 18,
+    fontSize: config.fontsize_5,
     color: "#000",
   },
   numPhone: {
     fontFamily: "OpenSans_400Regular_Italic",
-    fontSize: 18,
+    fontSize: config.fontsize_5,
     color: "#00a2e8",
   },
 });

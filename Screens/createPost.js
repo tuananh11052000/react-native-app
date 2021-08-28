@@ -12,6 +12,7 @@ import { connect } from "react-redux";
 import { Picker } from "@react-native-picker/picker";
 import DropDownPicker from "react-native-dropdown-picker";
 import AppLoading from "expo-app-loading";
+import config from '../config';
 import {
   useFonts,
   OpenSans_400Regular,
@@ -89,9 +90,9 @@ function CreatePost(props) {
         mode={"dropdown"}
         style={{ height: 40 }}
       >
-        <Picker.Item label="&ensp;Tất cả tin đăng " value="1" />
-        <Picker.Item label="&ensp;Tin tặng cộng đồng" value="2" />
-        <Picker.Item label="&ensp;Tin cần hỗ trợ" value="3" />
+        <Picker.Item label="&ensp;Tất cả tin đăng " value="1" style={{fontSize: config.fontsize_3}} />
+        <Picker.Item label="&ensp;Tin tặng cộng đồng" value="2" style={{fontSize: config.fontsize_3}}/>
+        <Picker.Item label="&ensp;Tin cần hỗ trợ" value="3" style={{fontSize: config.fontsize_3}}/>
       </Picker>
     );
   }
@@ -182,7 +183,7 @@ const styles = StyleSheet.create({
   },
   btnText: {
     fontWeight: "600",
-    fontSize: 16,
+    fontSize: config.fontsize_3,
     color: "#000",
     fontFamily: "OpenSans_700Bold",
   },

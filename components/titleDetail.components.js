@@ -11,6 +11,7 @@ import {
 } from "react-native";
 import { connect } from "react-redux";
 import { AntDesign } from "@expo/vector-icons";
+import config from '../config';
 const UselessTextInput = (props) => {
   return (
     <TextInput
@@ -20,7 +21,7 @@ const UselessTextInput = (props) => {
       style={{
         textAlignVertical: "top",
         paddingLeft: 5,
-        fontSize: 18,
+        fontSize: config.fontsize_5,
         paddingTop: 10,
         paddingBottom: 10,
         fontFamily: "OpenSans_400Regular",
@@ -109,7 +110,7 @@ const styles = StyleSheet.create({
     marginTop: 10,
     marginBottom: 10,
     borderColor: "#B1B1B1",
-    fontSize: 18,
+    fontSize: config.fontsize_5,
     backgroundColor: "white",
     fontFamily: "OpenSans_400Regular",
   },

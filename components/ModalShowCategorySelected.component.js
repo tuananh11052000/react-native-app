@@ -94,7 +94,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   titleModel: {
-    fontSize: 20,
+    fontSize: config.fontsize_2,
     marginLeft: "5%",
     fontFamily: "OpenSans_600SemiBold",
   },

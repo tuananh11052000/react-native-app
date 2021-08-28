@@ -362,7 +362,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#e5e5e5",
   },
   textCall: {
-    fontSize: 20,
+    fontSize: config.fontsize_2,
     color: "#FFF",
     fontFamily: "OpenSans_700Bold",
   },
@@ -370,6 +370,6 @@ const styles = StyleSheet.create({
     color: "#039BE5",
     fontFamily: "OpenSans_400Regular",
     paddingRight: "4%",
-    fontSize: 16,
+    fontSize: config.fontsize_3,
   },
 });

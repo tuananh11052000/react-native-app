@@ -15,6 +15,7 @@ import { AntDesign } from "@expo/vector-icons";
 import db from "../db.json";
 import { connect } from "react-redux";
 import { Button } from "galio-framework";
+import config from '../config';
 import * as SecureStore from "expo-secure-store";
 import Spinner from "react-native-loading-spinner-overlay";
 import AppLoading from "expo-app-loading";
@@ -230,7 +231,7 @@ const Styles = StyleSheet.create({
     textAlign: "center",
     paddingLeft: 10,
     paddingRight: 10,
-    fontSize: 20,
+    fontSize: config.fontsize_2,
     fontFamily: "OpenSans_600SemiBold",
   },
   border: {
@@ -270,7 +271,7 @@ const Styles = StyleSheet.create({
     justifyContent: "center",
     width: "100%",
     color: "black",
-    fontSize: 20,
+    fontSize: config.fontsize_2,
     paddingLeft: 10,
     marginTop: -2,
     fontFamily: "OpenSans_400Regular",
@@ -282,7 +283,7 @@ const Styles = StyleSheet.create({
     justifyContent: "center",
     width: "100%",
     color: "black",
-    fontSize: 18,
+    fontSize: config.fontsize_5,
     paddingLeft: 10,
     marginTop: 15,
     fontFamily: "OpenSans_400Regular",
@@ -362,7 +363,7 @@ const Styles = StyleSheet.create({
     justifyContent: 'space-between'
   },
   tittleText: {
-    fontSize: 20,
+    fontSize: config.fontsize_2,
     marginLeft: "5%",
 
     fontFamily: "OpenSans_600SemiBold",

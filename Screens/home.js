@@ -37,13 +37,13 @@ import {
   OpenSans_800ExtraBold,
   OpenSans_800ExtraBold_Italic,
 } from "@expo-google-fonts/open-sans";
-
+var {width} = Dimensions.get('window');
 const heightStatusBar = StatusBar.currentHeight;
 function Home(props) {
   const { dispatch } = props;
   const [listData, setlistData] = useState([]);
   const [refreshing, setrefreshing] = useState(true);
-
+ 
   const getData = async () => {
     let temp = await axios({
       method: "get",
@@ -254,7 +254,7 @@ const renderAddress = (address) => {
   const listheader = () => {
     return (
       <>
-      <SearchComponent onPress={() => navigation.navigate("Search")} />
+      <SearchComponent onPress={() => navigation.navigate("Search")} pressAnnounce={() => navigation.navigate("Announce")} />
         <GiftComponent
           onPressTCD={() => actionOnPressTCD()}
           onPressGiveCaNhan={() => actionOnPressGiveCaNhan()}
@@ -315,9 +315,10 @@ const styles = StyleSheet.create({
     backgroundColor: "#FFF",
   },
   wrapCategory: {
-    padding: 15,
-    // paddingBottom: 5,
-    // marginBottom: 10,
+    paddingTop: '2%',
+    paddingBottom: '2%',
+    paddingLeft: '3%',
+    paddingRight: '3%',
     flex: 1,
     alignItems: "center",
     flexDirection: "row",
@@ -325,8 +326,8 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
   },
   tinyLogo: {
-    width: 90,
-    height: 90,
+    width: width*0.25,
+    height: width*0.25,
   },
   wrapInfoProduct: {
     flex: 1,

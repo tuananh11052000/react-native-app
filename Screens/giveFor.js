@@ -258,7 +258,7 @@ const styles = StyleSheet.create({
     width: "80%",
   },
   wrapName: {
-    fontSize: 20,
+    fontSize: config.fontsize_2,
     fontWeight: 'bold'
   },
   wrapAddress: {
@@ -267,12 +267,12 @@ const styles = StyleSheet.create({
     width: '80%',
   },
   address: {
-    fontSize: 16,
+    fontSize: config.fontsize_3,
     marginLeft: "3%",
     color: '#BDBDBD'
   },
   description: {
-    fontSize: 18,
+    fontSize: config.fontsize_5,
     // marginLeft: "3%",
     marginBottom: "1%",
     marginTop: "3%",
@@ -311,10 +311,10 @@ const styles = StyleSheet.create({
   },
   searchText: {
     backgroundColor: "#fff",
-    fontSize: 18,
+    fontSize: config.fontsize_5,
     marginLeft: "3%",
-    maxWidth: "85%",
-    width: "85%",
+    maxWidth: "80%",
+    width: "80%",
   },
 });
 export default connect(function (state) {

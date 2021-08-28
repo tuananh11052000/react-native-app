@@ -13,6 +13,7 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { EvilIcons } from "@expo/vector-icons";
 import bgrImage from "../assets/background.jpg";
 import bell from "../assets/bell.png";
+import { TouchableOpacity } from "react-native";
 
 export default function SearchComponent(props) {
   return (
@@ -24,9 +25,9 @@ export default function SearchComponent(props) {
           style={style.searchInput}
           onTouchStart={() => props.onPress()}
         />
-        <View style={style.wrapBell}>
+        <TouchableOpacity style={style.wrapBell} activeOpacity={0.95} onPress={() => props.pressAnnounce()}>
           <Image source={bell} style={style.bellImage} />
-        </View>
+        </TouchableOpacity>
       </View>
     </View>
   );

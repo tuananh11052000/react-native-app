@@ -31,6 +31,7 @@ import ForgotPasswords from "./Screens/forgotPassword";
 import FilterDonationComunity from "./Screens/FilterDonationComunity";
 import CategoryCheckBox from './Screens/categoryNeedSomeThing';
 import NewPassword from "./Screens/newPassword";
+import Announce from './Screens/announce';
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
 
@@ -536,6 +537,21 @@ function AppNavigator(props) {
             },
           })}
         />
+        <Stack.Screen
+          name="Announce"
+          component={Announce}
+          options={{
+            title: "Thông báo",
+            headerStyle: {
+              backgroundColor: config.color_header_background,
+            },
+            headerTintColor: config.headerTintColor,
+            headerTitleStyle: {
+              fontWeight: "bold",
+            },
+
+          }}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );
@@ -546,7 +562,7 @@ const styles = StyleSheet.create({
   },
   textCancel: {
     color: "#FFF",
-    fontSize: 18,
+    fontSize: config.fontsize_5,
     marginRight: 10,
 
   },
