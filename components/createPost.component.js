@@ -12,7 +12,7 @@ import {
   OpenSans_700Bold,
   OpenSans_700Bold_Italic,
 } from "@expo-google-fonts/open-sans";
-
+import config from '../config';
 import AddImg from "../assets/add.png";
 
 export default function CreatePosts(props) {
@@ -135,7 +135,7 @@ const styles = StyleSheet.create({
   },
   btnText: {
     fontWeight: "600",
-    fontSize: 16,
+    fontSize: config.fontsize_3,
     color: "#000",
     fontFamily: "OpenSans_700Bold",
   },

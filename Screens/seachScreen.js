@@ -100,6 +100,40 @@ export default function (props) {
     if (pr.length > 1) return pr[0].Category + ", ...";
     else return pr[0].Category;
   };
+  // render address
+ const renderDistrict = (district, city) => {
+  if (district.indexOf("Thành phố") != -1) {
+    return district.slice(10);
+  } 
+  if (district.indexOf("Quận") != -1 && city.indexOf("Hồ Chí Minh") == -1) {
+    return district.slice(5);
+  }
+  const distritNumber = "Quận 1, Quận 2, Quận 3, Quận 4, Quận 5, Quận 6, Quận 7, Quận 8, Quận 9, Quận 10, Quận 11, Quận 12"
+  if (district.indexOf("Quận") != -1 && city.indexOf("Hồ Chí Minh") != -1 && distritNumber.indexOf(district) != -1) {
+    return district;
+  }
+  if (district.indexOf("Quận") != -1 && city.indexOf("Hồ Chí Minh") != -1 && distritNumber.indexOf(district) == -1) {
+    return district.slice(5);
+  }
+  if (district.indexOf("Huyện") != -1) {
+    return district.slice(7);
+  } 
+}
+// render địa chỉ
+const renderAddress = (address) => {
+  let add = address.split(",");
+  let huyen = "",
+    tinh = "";
+  if (add[3].indexOf("Thành phố") != -1) {
+    tinh = add[3].slice(10);
+  } else {
+    tinh = add[3].slice(6);
+  }
+  huyen = renderDistrict(add[2], add[3]);
+
+  let diachi = huyen + ", " + tinh;
+  return diachi;
+};
   //sang trang detail
   const _pressRow = (item) => {
     props.navigation.navigate("DetailPost", { data: item }); //chuyển trang
@@ -116,6 +150,11 @@ export default function (props) {
   if (!fontsLoaded) {
     return <AppLoading />;
   }
+  const ItemSeparatorView = () => {
+    return (
+      <View style={{ height: 10, width: "100%", backgroundColor: "#EEEEEE" }} />
+    );
+  };
   function renderItem(item) {
     return (
       <TouchableOpacity
@@ -142,7 +181,7 @@ export default function (props) {
               </Text>
             </View>
             <Text style={style.address}>
-              {item.address.slice(0, 15) + "..."}
+              {renderAddress(item.address)}
             </Text>
           </View>
         </View>
@@ -173,7 +212,7 @@ export default function (props) {
        }
    }
   return (
-    <View>
+    <View style={{flex:1}}>
       <View
         style={{
           height: config.heightStatusBar,
@@ -198,6 +237,9 @@ export default function (props) {
       <FlatList
         data={resultSearch}
         renderItem={({ item }) => renderItem(item)}
+        keyExtractor={(item) => item._id} 
+        ItemSeparatorComponent={ItemSeparatorView}
+        
       />
     </View>
   );
@@ -235,7 +277,6 @@ const style = StyleSheet.create({
   },
   wrapCategory: {
     padding: 15,
-    marginBottom: 10,
     flex: 1,
     alignItems: "center",
     display: "flex",

@@ -8,6 +8,7 @@ import {
   OpenSans_700Bold,
   OpenSans_700Bold_Italic,
 } from "@expo-google-fonts/open-sans";
+import config from '../config';
 export default function TitleComponent(props) {
   const [fontsLoaded, error] = useFonts({
     OpenSans_400Regular,
@@ -32,7 +33,7 @@ const style = StyleSheet.create({
     paddingBottom: 5,
   },
   title: {
-    fontSize: 18,
+    fontSize: config.fontsize_3,
     marginLeft: 20,
     color: "#7F7E85",
     textTransform: "uppercase",

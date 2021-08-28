@@ -141,9 +141,13 @@ export function MyProductComponent(props) {
     if (district.indexOf("Quận") != -1 && city.indexOf("Hồ Chí Minh") == -1) {
       return district.slice(5);
     }
-    if (district.indexOf("Quận") != -1 && city.indexOf("Hồ Chí Minh") != -1) {
-      return district;
-    }
+    const distritNumber = "Quận 1, Quận 2, Quận 3, Quận 4, Quận 5, Quận 6, Quận 7, Quận 8, Quận 9, Quận 10, Quận 11, Quận 12"
+  if (district.indexOf("Quận") != -1 && city.indexOf("Hồ Chí Minh") != -1 && distritNumber.indexOf(district) != -1) {
+    return district;
+  }
+  if (district.indexOf("Quận") != -1 && city.indexOf("Hồ Chí Minh") != -1 && distritNumber.indexOf(district) == -1) {
+    return district.slice(5);
+  }
     if (district.indexOf("Huyện") != -1) {
       return district.slice(7);
     }
@@ -310,6 +314,7 @@ export function DonateProductComponent(props) {
   const [loading, setloading] = useState(true);
   const [dataRender, setData] = useState([]);
   const [token, setToken] = useState("Null"); //token
+  const [reload, setReload] = useState(false)
   const [fontsLoaded, error] = useFonts({
     OpenSans_400Regular,
     OpenSans_400Regular_Italic,
@@ -319,10 +324,14 @@ export function DonateProductComponent(props) {
     OpenSans_700Bold_Italic,
   });
   useEffect(() => {
+    getToken();
     getMyPost();
     return () => { };
-  }, []);
+  }, [reload]);
   const getMyPost = async () => {
+    if (reload == true) {
+      setReload(false)
+    }
     let result = await SecureStore.getItemAsync("token");
     await axios({
       method: "get",
@@ -400,9 +409,13 @@ export function DonateProductComponent(props) {
     if (district.indexOf("Quận") != -1 && city.indexOf("Hồ Chí Minh") == -1) {
       return district.slice(5);
     }
-    if (district.indexOf("Quận") != -1 && city.indexOf("Hồ Chí Minh") != -1) {
-      return district;
-    }
+    const distritNumber = "Quận 1, Quận 2, Quận 3, Quận 4, Quận 5, Quận 6, Quận 7, Quận 8, Quận 9, Quận 10, Quận 11, Quận 12"
+  if (district.indexOf("Quận") != -1 && city.indexOf("Hồ Chí Minh") != -1 && distritNumber.indexOf(district) != -1) {
+    return district;
+  }
+  if (district.indexOf("Quận") != -1 && city.indexOf("Hồ Chí Minh") != -1 && distritNumber.indexOf(district) == -1) {
+    return district.slice(5);
+  }
     if (district.indexOf("Huyện") != -1) {
       return district.slice(7);
     }
@@ -465,6 +478,7 @@ export function DonateProductComponent(props) {
       if (res.status == 201) {
         // alert("Xoá bài thành công.");
         Alert.alert("Thông báo", "Xóa bài thành công", [{ text: "OK" }]);
+        setReload(true)
       }
     });
   };
@@ -568,6 +582,7 @@ export function HelpProductComponent(props) {
   const [loading, setloading] = useState(true);
   const [dataRender, setData] = useState([]);
   const [token, setToken] = useState("Null"); //token
+  const [reload, setReload] = useState(false)
   const [fontsLoaded, error] = useFonts({
     OpenSans_400Regular,
     OpenSans_400Regular_Italic,
@@ -577,10 +592,14 @@ export function HelpProductComponent(props) {
     OpenSans_700Bold_Italic,
   });
   useEffect(() => {
+    getToken();
     getMyPost();
     return () => { };
-  }, []);
+  }, [reload]);
   const getMyPost = async () => {
+    if (reload == true) {
+      setReload(false)
+    }
     let result = await SecureStore.getItemAsync("token");
     await axios({
       method: "get",
@@ -658,9 +677,13 @@ export function HelpProductComponent(props) {
     if (district.indexOf("Quận") != -1 && city.indexOf("Hồ Chí Minh") == -1) {
       return district.slice(5);
     }
-    if (district.indexOf("Quận") != -1 && city.indexOf("Hồ Chí Minh") != -1) {
-      return district;
-    }
+    const distritNumber = "Quận 1, Quận 2, Quận 3, Quận 4, Quận 5, Quận 6, Quận 7, Quận 8, Quận 9, Quận 10, Quận 11, Quận 12"
+  if (district.indexOf("Quận") != -1 && city.indexOf("Hồ Chí Minh") != -1 && distritNumber.indexOf(district) != -1) {
+    return district;
+  }
+  if (district.indexOf("Quận") != -1 && city.indexOf("Hồ Chí Minh") != -1 && distritNumber.indexOf(district) == -1) {
+    return district.slice(5);
+  }
     if (district.indexOf("Huyện") != -1) {
       return district.slice(7);
     }
@@ -723,6 +746,7 @@ export function HelpProductComponent(props) {
       if (res.status == 201) {
         // alert("Xoá bài thành công.");
         Alert.alert("Thông báo", "Xóa bài thành công", [{ text: "OK" }]);
+        setReload(true)
       }
     });
   };

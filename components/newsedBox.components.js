@@ -1,6 +1,7 @@
 import React from "react";
 import { Text, View, StyleSheet, TouchableOpacity, Image } from "react-native";
 import books from "../assets/bookstore.png";
+import config from '../config';
 import AppLoading from "expo-app-loading";
 import {
   useFonts,
@@ -46,7 +47,7 @@ const style = StyleSheet.create({
   },
   title: {
     paddingTop: 5,
-    fontSize: 15,
+    fontSize: config.fontsize_3,
     textAlign: "center",
     fontFamily: "OpenSans_400Regular",
   },
