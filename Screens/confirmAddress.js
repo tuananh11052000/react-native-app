@@ -18,7 +18,6 @@ import { Button } from "galio-framework";
 import * as SecureStore from "expo-secure-store";
 import Spinner from "react-native-loading-spinner-overlay";
 import AppLoading from "expo-app-loading";
-import config from '../config';
 import {
   useFonts,
   OpenSans_400Regular,
@@ -138,7 +137,7 @@ function confirmAddress(props) {
       province == "" ||
       district == "" ||
       commune == "" ||
-      addressDetail.trim() == ""
+      addressDetail == ""
     )
       Alert.alert("Thông báo", "Vui lòng nhập đầy đủ địa chỉ", [
         { text: "OK" },
@@ -157,7 +156,7 @@ function confirmAddress(props) {
                 save("idCommune", commune.idCoummune).then((res) => {
                   save("commune", commune.name).then((res) => {
                     const { dispatch } = props;
-                    const address = `${addressDetail.trim()}, ${commune.name}, ${district.name}, ${province.name}`;
+                    const address = `${addressDetail}, ${commune.name}, ${district.name}, ${province.name}`;
                     dispatch({ type: "CONFIRM_ADDRESS", address: address });
                     console.log(props.controlConfirmAddress);
                     if (props.controlConfirmAddress == "category") {
@@ -302,7 +301,7 @@ const Styles = StyleSheet.create({
     width: "95%",
   },
   styleLabel: {
-    fontSize: config.fontsize_5,
+    fontSize: 18,
     backgroundColor: "#FFFFFF",
     borderBottomColor: "gray",
     overflow: "hidden",
@@ -325,7 +324,7 @@ const Styles = StyleSheet.create({
     textAlign: "center",
     paddingLeft: 10,
     paddingRight: 10,
-    fontSize: config.fontsize_2,
+    fontSize: 20,
     fontFamily: "OpenSans_600SemiBold",
   },
   border: {
@@ -364,7 +363,7 @@ const Styles = StyleSheet.create({
     justifyContent: "center",
     width: "100%",
     color: "black",
-    fontSize: config.fontsize_2,
+    fontSize: 20,
     paddingLeft: 10,
     marginTop: -2,
     fontFamily: "OpenSans_400Regular",
@@ -376,7 +375,7 @@ const Styles = StyleSheet.create({
     justifyContent: "center",
     width: "100%",
     color: "black",
-    fontSize: config.fontsize_5,
+    fontSize: 18,
     paddingLeft: 10,
     marginTop: 15,
     fontFamily: "OpenSans_400Regular",
@@ -454,7 +453,7 @@ const Styles = StyleSheet.create({
     paddingLeft: "2%",
   },
   tittleText: {
-    fontSize: config.fontsize_2,
+    fontSize: 20,
     marginLeft: "5%",
     fontFamily: "OpenSans_600SemiBold",
   },

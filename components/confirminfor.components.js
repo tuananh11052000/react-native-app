@@ -13,7 +13,6 @@ import ModelShowCategory from './ModalShowCategorySelected.component';
 import { connect } from "react-redux";
 import { Entypo } from "@expo/vector-icons";
 import { TouchableOpacity } from "react-native";
-import config from '../config';
 const UselessTextInput = (props) => {
   return (
     <TextInput
@@ -163,7 +162,7 @@ const styles = StyleSheet.create({
     height: 40,
     borderWidth: 1,
     borderRadius: 5,
-    fontSize: config.fontsize_5,
+    fontSize: 18,
     paddingTop: 8,
     paddingLeft: 10,
     paddingBottom: 8,
@@ -184,7 +183,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   textInputDescription: {
-    fontSize: config.fontsize_5,
+    fontSize: 18,
     color: "#000",
     textAlignVertical: "top",
     paddingLeft: 10,
@@ -211,19 +210,19 @@ const styles = StyleSheet.create({
   },
   textTitle: {
     color: "#999999",
-    fontSize: config.fontsize_5,
+    fontSize: 18,
     // fontWeight: "bold",
     fontFamily: "OpenSans_700Bold",
   },
   childTitle: {
     color: "#A1A1A1",
-    fontSize: config.fontsize_3,
+    fontSize: 15,
     marginBottom: 10,
     fontFamily: "OpenSans_400Regular",
   },
   textContent: {
     color: "#000",
-    fontSize: config.fontsize_5,
+    fontSize: 18,
     marginBottom: 10,
     fontFamily: "OpenSans_400Regular",
   },
@@ -235,7 +234,7 @@ const styles = StyleSheet.create({
     color: "#039BE5",
     fontFamily: "OpenSans_400Regular",
     paddingRight: "4%",
-    fontSize: config.fontsize_3,
+    fontSize: 16,
   },
 });
 export default connect(function (state) {

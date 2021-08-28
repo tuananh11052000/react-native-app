@@ -5,7 +5,7 @@ import {
     Text,
     TouchableOpacity,
 } from 'react-native';
-import config from '../config';
+
 
 const buttonConfirm = (props) => {
 
@@ -35,7 +35,7 @@ const styles = StyleSheet.create({
     buttonText: {
         color: '#FFF',
         textAlign: 'center',
-        fontSize: config.fontsize_2,
+        fontSize: 20,
         fontFamily: "OpenSans_600SemiBold",
     }
 

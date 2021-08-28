@@ -84,7 +84,7 @@ const style = StyleSheet.create({
   },
   title: {
     textAlign: "center",
-    fontSize: config.fontsize_3,
+    fontSize: 15,
     fontFamily: "OpenSans_400Regular",
   },
   category: {

@@ -24,18 +24,15 @@ export default function App(props) {
         paddingRight: "2%",
         paddingTop: "2%",
         paddingBottom: "2%",
-        width: '100%',
-        maxWidth: '100%'
       }}
     >
       <Text
         style={{
-          fontSize: config.fontsize_3,
+          fontSize: config.fontsize_2,
+
           paddingRight: "2%",
           paddingLeft: "2%",
-          
-          width: '90%',
-          maxWidth: '100%'
+          textAlign: "center",
         }}
       >
         {item.NameProduct}
@@ -74,7 +71,6 @@ export default function App(props) {
               renderItem={renderItem}
               keyExtractor={(item) => item.NameProduct}
               ItemSeparatorComponent={ItemSeparatorView}
-          
             />
           </View>
         </View>
@@ -98,7 +94,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   titleModel: {
-    fontSize: config.fontsize_2,
+    fontSize: 20,
     marginLeft: "5%",
     fontFamily: "OpenSans_600SemiBold",
   },

@@ -11,7 +11,6 @@ import {
 import { connect } from "react-redux";
 import { Picker } from "@react-native-picker/picker";
 import DropDownPicker from "react-native-dropdown-picker";
-import config from '../config';
 import AppLoading from "expo-app-loading";
 import {
   useFonts,
@@ -90,9 +89,9 @@ function CreatePost(props) {
         mode={"dropdown"}
         style={{ height: 40 }}
       >
-        <Picker.Item label="&ensp;Tất cả tin đăng" style={{fontSize: config.fontsize_3}} value="1" />
-        <Picker.Item label="&ensp;Tin tặng cộng đồng" style={{fontSize: config.fontsize_3}} value="2" />
-        <Picker.Item label="&ensp;Tin cần hỗ trợ" style={{fontSize: config.fontsize_3}} value="3" />
+        <Picker.Item label="&ensp;Tất cả tin đăng " value="1" />
+        <Picker.Item label="&ensp;Tin tặng cộng đồng" value="2" />
+        <Picker.Item label="&ensp;Tin cần hỗ trợ" value="3" />
       </Picker>
     );
   }
@@ -170,8 +169,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     backgroundColor: "#00a2e8",
     height: 42,
-    paddingLeft: '3%',
-    paddingRight: '3%',
+    paddingHorizontal: 18,
     borderRadius: 10,
     borderWidth: 1,
     borderColor: "#fff",
@@ -184,13 +182,13 @@ const styles = StyleSheet.create({
   },
   btnText: {
     fontWeight: "600",
-    fontSize: config.fontsize_3,
+    fontSize: 16,
     color: "#000",
     fontFamily: "OpenSans_700Bold",
   },
   textFalse: {
     color: "gray",
-    fontSize: config.fontsize_3,
+    fontSize: 15,
     fontFamily: "OpenSans_400Regular",
     textAlign: "center",
   },
