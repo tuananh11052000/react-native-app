@@ -25,6 +25,7 @@
     "expo-firebase-recaptcha": "^1.4.2",
     "expo-font": "~9.2.1",
     "expo-image-picker": "^10.2.2",
+    "expo-image-picker-multiple": "^1.4.1",
     "expo-images-picker": "^2.0.1",
     "expo-media-library": "^12.1.2",
     "expo-secure-store": "^10.2.0",
@@ -63,7 +64,8 @@
     "react-redux": "^7.2.4",
     "react-router-native": "^5.2.0",
     "redux": "^4.1.0",
-    "rn-modal-picker": "^0.3.2"
+    "rn-modal-picker": "^0.3.2",
+    "unimodules-permissions-interface": "^6.1.0"
   },
   "devDependencies": {
     "@babel/core": "^7.9.0",

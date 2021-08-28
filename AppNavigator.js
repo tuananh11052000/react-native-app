@@ -358,7 +358,7 @@ function AppNavigator(props) {
             headerTitleStyle: {
               fontWeight: "bold",
             },
-            
+
           }}
         />
         <Stack.Screen
@@ -367,7 +367,7 @@ function AppNavigator(props) {
           options={({ navigation }) => ({
             headerLeft: () => (
               <HeaderBackButton
-                onPress={() =>  navigation.goBack()}
+                onPress={() => navigation.goBack()}
                 tintColor={"white"}
                 label="Quay lại" //back
               />
@@ -411,7 +411,7 @@ function AppNavigator(props) {
           name="PickImage"
           component={PickerImage}
           options={{
-            headerShown: false,
+            headerShown: true,
           }}
         />
         <Stack.Screen
@@ -421,9 +421,9 @@ function AppNavigator(props) {
             headerLeft: () => (
               <HeaderBackButton
                 onPress={() => {
-                  dispatch({ type: "RESET_NAMEPRODUCT"});
-                  dispatch({ type: "RESET_ADDRESS_FILTER"});
-                  dispatch({ type: "RESET_DATA"});
+                  dispatch({ type: "RESET_NAMEPRODUCT" });
+                  dispatch({ type: "RESET_ADDRESS_FILTER" });
+                  dispatch({ type: "RESET_DATA" });
                   navigation.goBack();
                 }}
                 tintColor={"white"}
@@ -489,8 +489,9 @@ function AppNavigator(props) {
                       text: "Có",
                       style: "cancel",
                       onPress: () => {
-                        dispatch({ type: "RESET_ADDRESS_FILTER"});
-                        navigation.navigate("Home")}
+                        dispatch({ type: "RESET_ADDRESS_FILTER" });
+                        navigation.navigate("Home")
+                      }
                     },
                   ]);
                 }}
