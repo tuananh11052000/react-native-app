@@ -129,7 +129,7 @@ import { ImageBrowser } from 'expo-image-picker-multiple';
 
 function PickerImage(props) {
   const _getHeaderLoader = () => (
-    <ActivityIndicator size='small' color={'#0580FF'} />
+    <ActivityIndicator size='small' color={'#0580FF'} style={styles.loading} />
   );
 
   const imagesCallback = (callback) => {
@@ -165,14 +165,14 @@ function PickerImage(props) {
 
   const _renderDoneButton = (count, onSubmit) => {
     if (!count) return null;
-    return <TouchableOpacity title={'Done'} onPress={onSubmit}>
-      <Text onPress={onSubmit}>Done</Text>
+    return <TouchableOpacity onPress={onSubmit} style={styles.wrap_btn_xong}>
+      <Text onPress={onSubmit} style={{ color: 'white', fontSize: 18 }}>Xong</Text>
     </TouchableOpacity>
   }
 
   const updateHandler = (count, onSubmit) => {
     props.navigation.setOptions({
-      title: `Selected ${count} files`,
+      title: `Đã chọn ${count} ảnh`,
       headerRight: () => _renderDoneButton(count, onSubmit)
     });
   };
@@ -188,7 +188,7 @@ function PickerImage(props) {
   return (
     <View style={[styles.flex, styles.container]}>
       <ImageBrowser
-        max={4}
+        max={5}
         onChange={updateHandler}
         callback={imagesCallback}
         renderSelectedComponent={renderSelectedComponent}
@@ -209,6 +209,8 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   countBadge: {
+    width: 30,
+    height: 30,
     paddingHorizontal: 8.6,
     paddingVertical: 5,
     borderRadius: 50,
@@ -223,6 +225,12 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     padding: 'auto',
     color: '#ffffff'
+  },
+  wrap_btn_xong: {
+    paddingRight: 10
+  },
+  loading: {
+    marginRight: 10
   }
 });
 

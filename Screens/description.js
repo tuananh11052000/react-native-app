@@ -18,7 +18,7 @@ function Description(props) {
         "Thông báo",
         "Vui lòng nhập tiêu đề!",
         [
-          { text: "OK"}
+          { text: "OK" }
         ]
       );
     }
@@ -29,7 +29,7 @@ function Description(props) {
   const { navigation } = props;
   return (
     <View style={styles.container}>
-      <TitleDetail onPress={() => navigation.navigate('PickImage')}></TitleDetail>
+      <TitleDetail onPress={() => navigation.navigate('Chọn ảnh')}></TitleDetail>
       <ButtonConfirm onPress={() => onPressFunc()} />
     </View>
   );

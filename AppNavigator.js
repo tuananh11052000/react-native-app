@@ -408,10 +408,15 @@ function AppNavigator(props) {
         />
 
         <Stack.Screen
-          name="PickImage"
+          name="Chọn ảnh"
           component={PickerImage}
           options={{
             headerShown: true,
+            headerTintColor: config.headerTintColor,
+            headerStyle: {
+              color: 'white',
+              backgroundColor: config.color_header_background,
+            }
           }}
         />
         <Stack.Screen
