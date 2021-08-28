@@ -133,22 +133,23 @@ function PickerImage(props) {
   );
 
   const imagesCallback = (callback) => {
-    const { navigation } = props;
+    const { navigation, dispatch } = props;
     props.navigation.setOptions({
       headerRight: () => _getHeaderLoader()
     });
 
     callback.then(async (photos) => {
-      const cPhotos = [];
+      const data = [];
       for (let photo of photos) {
         const pPhoto = await _processImageAsync(photo.uri);
-        cPhotos.push({
+        data.push({
           uri: pPhoto.uri,
           name: photo.filename,
           type: 'image/jpg'
         })
       }
-      navigation.navigate('Main', { photos: cPhotos });
+      dispatch({ type: 'GET_IMG', image: data })
+      navigation.pop();
     })
       .catch((e) => console.log(e));
   };
