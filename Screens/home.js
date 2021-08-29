@@ -82,6 +82,7 @@ function Home(props) {
   // onPress tặng người nghèo
   const actionOnPressGiveCaNhan = () => {
     if (props.auth.isLogin == true) {
+      dispatch({ type: "setThreadCategory" });
       dispatch({ type: "setThreadGiveGroup" });
       dispatch({ type: "giveForCaNhan" });
       navigation.navigate("ConfirmAddress");
@@ -90,6 +91,7 @@ function Home(props) {
   // onpress tặng quỹ từ thiện
   const actionOnPressGiveQuy = () => {
     if (props.auth.isLogin == true) {
+      dispatch({ type: "setThreadCategory" });
       dispatch({ type: "setThreadGiveGroup" });
       dispatch({ type: "giveForQuy" });
       navigation.navigate("ConfirmAddress");
@@ -98,6 +100,7 @@ function Home(props) {
   // onpress quyên góp công ích
   const actionOnPressGiveCongIch = () => {
     if (props.auth.isLogin == true) {
+      dispatch({ type: "setThreadCategory" });
       dispatch({ type: "setThreadGiveGroup" });
       dispatch({ type: "giveForCongIch" });
       navigation.navigate("ConfirmAddress");

@@ -216,7 +216,6 @@ function CategoryCheckBoxComponent(props) {
   //   function khi nhấn vào button tiếp theo
   const filterButton = () => {
     //  lưu những ô đã checked
-    dispatch({ type: "SET_DATA", data: accordionData });
     // Array lưu những ô đã check để filter khi chuyển qua màn hình tặng cộng động
     let dataFilterPost = [];
     for (let i = 0; i < accordionData.length; i++) {

@@ -21,6 +21,7 @@ function Category(props) {
         <CategoryCheckBoxComponent onPress={() => {
             navigation.navigate("PostDonation")
         }}
+        type="filter"
         textButton="Tìm theo"/>
     </View>
 }

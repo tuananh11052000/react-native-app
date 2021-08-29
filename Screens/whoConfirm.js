@@ -19,7 +19,7 @@ export default class whoConfirms extends React.Component {
     this.state = {
       whoconfirm: [
         { id: 1, title: "Hoàn cảnh khó khăn" },
-        { id: 2, title: "Quỹ/ Nhóm từ thiện" },
+        { id: 2, title: "Quỹ/Nhóm từ thiện" },
         { id: 3, title: "Tổ chức công ích" },
       ],
     };
