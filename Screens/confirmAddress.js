@@ -13,7 +13,7 @@ import RNPickerDialog from "rn-modal-picker";
 import { TextInput } from "react-native-paper";
 import { AntDesign } from "@expo/vector-icons";
 import db from "../db.json";
-import config from '../config';
+import config from "../config";
 import { connect } from "react-redux";
 import { Button } from "galio-framework";
 import * as SecureStore from "expo-secure-store";
@@ -53,6 +53,7 @@ function confirmAddress(props) {
       let idProvince = await SecureStore.getItemAsync("idProvince");
       let idDistrict = await SecureStore.getItemAsync("idDistrict");
       let idCommune = await SecureStore.getItemAsync("idCommune");
+      let addressDetail = await SecureStore.getItemAsync("detail");
       return {
         province: province,
         district: district,
@@ -60,6 +61,7 @@ function confirmAddress(props) {
         idDistrict: idDistrict,
         idCommune: idCommune,
         idProvince: idProvince,
+        addressDetail: addressDetail,
       };
     };
 
@@ -82,6 +84,7 @@ function confirmAddress(props) {
         };
         choseProvince(province_, false);
         choseDistrict(district_, false);
+        setAddressDetail(result.addressDetail);
         setCommune(commune_);
         setIsLoading(false);
       }
@@ -144,6 +147,7 @@ function confirmAddress(props) {
         { text: "OK" },
       ]);
     else {
+      
       if (isChage == true) {
         //neu chuong trinh chay vao day tuc la thong tin dia chi da duoc thay doi
         //can phai luu thon tin moi vao local store
@@ -156,15 +160,16 @@ function confirmAddress(props) {
               save("district", district.name).then((res) => {
                 save("idCommune", commune.idCoummune).then((res) => {
                   save("commune", commune.name).then((res) => {
-                    const { dispatch } = props;
-                    const address = `${addressDetail}, ${commune.name}, ${district.name}, ${province.name}`;
-                    dispatch({ type: "CONFIRM_ADDRESS", address: address });
-                    console.log(props.controlConfirmAddress);
-                    if (props.controlConfirmAddress == "category") {
-                      navigation.navigate("Category");
-                    } else {
-                      navigation.navigate("CategoryCheckBox");
-                    }
+                    save("detail", addressDetail).then((res) => {
+                      const { dispatch } = props;
+                      const address = `${addressDetail}, ${commune.name}, ${district.name}, ${province.name}`;                    
+                      dispatch({ type: "CONFIRM_ADDRESS", address: address });                 
+                      if (props.controlConfirmAddress == "category") {
+                        navigation.navigate("Category");
+                      } else {
+                        navigation.navigate("CategoryCheckBox");
+                      }
+                    });
                   });
                 });
               });
@@ -174,7 +179,9 @@ function confirmAddress(props) {
       } else {
         //neu ctrinh chay vao day tuc la khong co thay doi ve dia chi
         const { dispatch } = props;
-        const address = `${addressDetail.trim()}, ${commune.name}, ${district.name}, ${province.name}`;
+        const address = `${addressDetail.trim()}, ${commune.name}, ${
+          district.name
+        }, ${province.name}`;
         dispatch({ type: "CONFIRM_ADDRESS", address: address });
         console.log(props.controlConfirmAddress);
         if (props.controlConfirmAddress == "category") {
@@ -277,6 +284,7 @@ function confirmAddress(props) {
               mode={"flat"}
               dense={"true"}
               autoCapitalize="none"
+              value={addressDetail}
               multiline
               onChangeText={(text) => {
                 setAddressDetail(text);
