@@ -51,6 +51,7 @@ function Home(props) {
     }).finally(() => setrefreshing(false));
     setlistData(temp.data);
     dispatch({ type: "UPDATE", data: temp.data });
+    console.log(temp.data)
  
   };
   useEffect(() => {
@@ -168,8 +169,8 @@ function Home(props) {
   };
   //Function handling type product
   const renderType = (pr) => {
-    if (pr.length > 1) return pr[0].Category + ", ...";
-    else return pr[0].Category;
+    if (pr[0].NameProduct.length > 27) return pr[0].NameProduct.slice(0, 27) + ", ...";
+    else return pr[0].NameProduct;
   };
  // render address
  const renderDistrict = (district, city) => {
