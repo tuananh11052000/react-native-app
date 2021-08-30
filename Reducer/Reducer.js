@@ -11,6 +11,7 @@ import register from "./register"
 import profile from './profile'
 import controlConfirmAddress from './redirectConfirmAddress';
 import isDisplay from "./isDisplay";
+import reloadPost from './reloadPost';
 import { combineReducers } from "redux";
 
 var reducer = combineReducers({
@@ -26,7 +27,8 @@ var reducer = combineReducers({
   register,
   profile,
   controlConfirmAddress,
-  isDisplay
+  isDisplay,
+  reloadPost
 });
 
 export default reducer;

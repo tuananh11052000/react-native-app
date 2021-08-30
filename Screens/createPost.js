@@ -6,36 +6,31 @@ import {
   StatusBar,
   ScrollView,
   Image,
+  RefreshControl,
   TouchableOpacity,
+  FlatList,
+  ActivityIndicator,
+  Alert,
 } from "react-native";
 import { connect } from "react-redux";
+import Spinner from 'react-native-loading-spinner-overlay';
+import config from "../config";
+import MyPost from "../components/mypost.components";
+import * as SecureStore from "expo-secure-store";
+import AddImg from "../assets/add.png";
 import { Picker } from "@react-native-picker/picker";
 import DropDownPicker from "react-native-dropdown-picker";
-import AppLoading from "expo-app-loading";
-import config from '../config';
-import {
-  useFonts,
-  OpenSans_400Regular,
-  OpenSans_400Regular_Italic,
-  OpenSans_600SemiBold,
-  OpenSans_600SemiBold_Italic,
-  OpenSans_700Bold,
-  OpenSans_700Bold_Italic,
-} from "@expo-google-fonts/open-sans";
-
-import AddImg from "../assets/add.png";
-
-// import CreatePosts from "../components/createPost.component";
-import {
-  MyProductComponent,
-  DonateProductComponent,
-  HelpProductComponent,
-} from "../components/myproduct.component";
-// import MyProductComponent from "../components/myproduct.component";
-
+import Menu, { MenuItem, MenuDivider } from "react-native-material-menu";
+import axios from "axios";
 function CreatePost(props) {
-  const { navigation } = props;
-  const [selectedValue, setSelectedValue] = useState("1");
+  const { navigation, dispatch } = props;
+  const [loading, setloading] = useState(false);
+  const [refreshing, setrefreshing] = useState(true);
+  const [data, setData] = useState([]);
+  const [dataAll, setDataAll] = useState([]);
+  const [dataTCD, setDataTCD] = useState([]);
+  const [dataCXD, setDataCXD] = useState([]);
+  const [selectedValue, setSelectedValue] = useState(1);
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState(null);
   const [items, setItems] = useState([
@@ -43,18 +38,70 @@ function CreatePost(props) {
     { label: "Tin tặng cộng đồng", value: "2" },
     { label: "Tin cần hỗ trợ", value: "3" },
   ]);
-  const [fontsLoaded, error] = useFonts({
-    OpenSans_400Regular,
-    OpenSans_400Regular_Italic,
-    OpenSans_600SemiBold,
-    OpenSans_600SemiBold_Italic,
-    OpenSans_700Bold,
-    OpenSans_700Bold_Italic,
-  });
-  if (!fontsLoaded) {
-    return <AppLoading />;
-  }
+  useEffect(() => {
+    if (props.auth.isLogin == true) {
+      getMyPost();
+    }
+    onRefresh();
+  }, [props.auth.isLogin, props.reloadPost]);
+  const getMyPost = async () => {
+    if (props.auth.isLogin == true) {
+      let result =await SecureStore.getItemAsync("token");
+      await axios({
+        method: "get",
+        url: "https://smai-app-api.herokuapp.com/post/getPostByAccountId",
+        headers: {
+          Authorization: result,
+        },
+      })
+        .then((data) => {
+          setData(data.data);
+          setDataAll(data.data);
+        })
+        .catch((error) => {
+          console.log("Error: ", error);
+        })
+        .finally(() => setrefreshing(false));
+      const listTemp1 = dataAll.filter((pr) => {
+        if (pr.TypeAuthor == "tangcongdong") {
+          return true;
+        } else return false;
+      });
+      setDataTCD(listTemp1);
+      const listTemp2 = dataAll.filter((pr) => {
+        if (pr.TypeAuthor != "tangcongdong") {
+          return true;
+        } else return false;
+      });
+      setDataCXD(listTemp2);
+    } 
+    dispatch({ type: "setNoReload" });
+  };
 
+  const onRefresh = () => {
+    setData([]);
+    getMyPost();
+    setSelectedValue(1);
+  };
+  const deletePost = (id) => {
+    let result = SecureStore.getItemAsync("token");
+    setloading(true)
+    let url =
+      "https://smai-app-api.herokuapp.com/post/deletePostbyUser?_id=" + id;
+    axios({
+      method: "delete",
+      url: url,
+      headers: {
+        Authorization: result,
+      },
+    }).then((res) => {
+      if (res.status == 201) {
+        // alert("Xoá bài thành công.");
+        Alert.alert("Thông báo", "Xóa bài thành công", [{ text: "OK" }]);
+        getMyPost();
+      }
+    }).finally(() => setloading(false));
+  };
   let dropdown;
   if (Platform.OS === "ios") {
     //switch for ios
@@ -86,32 +133,80 @@ function CreatePost(props) {
     dropdown = (
       <Picker
         selectedValue={selectedValue}
-        onValueChange={(itemValue, itemIndex) => setSelectedValue(itemValue)}
+        onValueChange={(itemValue) => {
+          setSelectedValue(itemValue);
+          filter(itemValue);
+        }}
         mode={"dropdown"}
         style={{ height: 40 }}
       >
-        <Picker.Item label="&ensp;Tất cả tin đăng " value="1" style={{fontSize: config.fontsize_3}} />
-        <Picker.Item label="&ensp;Tin tặng cộng đồng" value="2" style={{fontSize: config.fontsize_3}}/>
-        <Picker.Item label="&ensp;Tin cần hỗ trợ" value="3" style={{fontSize: config.fontsize_3}}/>
+        <Picker.Item
+          label="&ensp;Tất cả tin đăng "
+          value="1"
+          style={{ fontSize: config.fontsize_3 }}
+        />
+        <Picker.Item
+          label="&ensp;Tin tặng cộng đồng"
+          value="2"
+          style={{ fontSize: config.fontsize_3 }}
+        />
+        <Picker.Item
+          label="&ensp;Tin cần hỗ trợ"
+          value="3"
+          style={{ fontSize: config.fontsize_3 }}
+        />
       </Picker>
     );
   }
+  const filter = (itemvalue, value) => {
+    if (props.auth.isLogin == true) {
+      if (itemvalue == 1 || value == 1) {
+        setData(dataAll);
+      }
+      if (itemvalue == 2 || value == 2) {
+        setData(dataTCD);
+      }
+      if (itemvalue == 3 || value == 3) {
+        setData(dataCXD);
+      }
+    }
+  };
 
-  let product;
-  if (props.auth.isLogin == false) {
-    product = (
-      <Text style={styles.textFalse}>Đăng nhập để xem tin của bạn</Text>
+  const _pressRow = (item) => {
+    props.navigation.navigate("DetailPost", { data: item }); //chuyển trang
+  };
+  const renderItem = ({ item }) => {
+    return (
+      <MyPost
+        urlImage={item.urlImage[0]}
+        title={item.title}
+        category={item.NameProduct}
+        time={item.createdAt}
+        address={item.address}
+        confirm={item.confirm}
+        typeAuthor={item.TypeAuthor}
+        cateReceives={item.NameProduct.length}
+        onPress={() => _pressRow(item)}
+        onPressDel={() => deletePost(item._id)}
+      />
     );
-  } else if (selectedValue == 1 || value == 1) {
-    product = <MyProductComponent navigation={navigation} />;
-  } else if (selectedValue == 2 || value == 2) {
-    product = <DonateProductComponent navigation={navigation} />;
-  } else {
-    product = <HelpProductComponent navigation={navigation} />;
-  }
+  };
+  const listheader = () => {
+    return <></>;
+  };
+  const ItemSeparatorView = () => {
+    return (
+      <View style={{ height: 10, width: "100%", backgroundColor: "#EEEEEE" }} />
+    );
+  };
 
   return (
     <View style={styles.container}>
+      <Spinner
+        visible={loading}
+        textContent={'Đang xóa bài...'}
+        textStyle={styles.spinnerTextStyle}
+      />
       <View style={{ zIndex: 1 }}>
         {/* <CreatePosts onPress={() => navigation.navigate("PostType")} /> */}
         <View style={styles.wrapContent}>
@@ -130,11 +225,51 @@ function CreatePost(props) {
           </TouchableOpacity>
         </View>
       </View>
-      <View style={{ zIndex: 0 }}>
-        <ScrollView style={{ zIndex: 100 }} nestedScrollEnabled={true}>
-          {product}
-        </ScrollView>
-      </View>
+
+      <>
+        {props.auth.isLogin ? (
+          <>
+            {refreshing ? (
+              <View
+                style={{
+                  flexDirection: "row",
+                  justifyContent: "center",
+                  height: "100%",
+                }}
+              >
+                <ActivityIndicator color="#BDBDBD" size="small" />
+              </View>
+            ) : (
+              <FlatList
+                data={data}
+                renderItem={renderItem}
+                keyExtractor={(item) => item._id}
+                ItemSeparatorComponent={ItemSeparatorView}
+                ListHeaderComponent={listheader}
+                refreshControl={
+                  <RefreshControl
+                    refreshing={refreshing}
+                    onRefresh={onRefresh}
+                  />
+                }
+              />
+            )}
+          </>
+        ) : (
+          <>
+            <View
+              style={{
+                backgroundColor: "#DDD",
+                height: "100%",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              <Text style={{ color: "#4B4C4F" }}>Vui lòng đăng nhập</Text>
+            </View>
+          </>
+        )}
+      </>
     </View>
   );
 }
@@ -142,7 +277,7 @@ function CreatePost(props) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#e5e5e5",
+    backgroundColor: "#DDD",
   },
   wrapContent: {
     backgroundColor: "#e5e5e5",
@@ -156,14 +291,6 @@ const styles = StyleSheet.create({
     borderRadius: 4,
     borderColor: "gray",
     width: "57%",
-  },
-  wrapPiker: {
-    borderRadius: 4,
-    borderColor: "gray",
-    width: "57%",
-  },
-  pickerStyle: {
-    height: 40,
   },
   btnCreate: {
     alignItems: "center",
@@ -187,14 +314,15 @@ const styles = StyleSheet.create({
     color: "#000",
     fontFamily: "OpenSans_700Bold",
   },
-  textFalse: {
-    color: "gray",
-    fontSize: 15,
-    fontFamily: "OpenSans_400Regular",
-    textAlign: "center",
+  spinnerTextStyle: {
+    color: '#FFF'
   },
 });
 
 export default connect(function (state) {
-  return { auth: state.auth, infoPost: state.infoPost };
+  return {
+    auth: state.auth,
+    infoPost: state.infoPost,
+    reloadPost: state.reloadPost,
+  };
 })(CreatePost);

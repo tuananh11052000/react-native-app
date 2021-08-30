@@ -220,7 +220,6 @@ function CategoryCheckBoxComponent(props) {
     let dataFilterPost = [];
     for (let i = 0; i < accordionData.length; i++) {
       let item = accordionData[i];
-      let itemPost = [];
       for (let j = 0; j < item.subCategory.length; j++) {
         if (item.subCategory[j].checked == true) {
           let itemSub = {
@@ -232,16 +231,20 @@ function CategoryCheckBoxComponent(props) {
       }
     }
     // lưu những ô đã check vào state
-    if (props.type == "canxindo") {
+    if (props.type == "canxindo" ) {
       dispatch({ type: "GET_NAME", NameProduct: dataFilterPost });
+      if (dataFilterPost.length == 0) {
+        Alert.alert("Thông báo", "Vui lòng chọn ít nhất 1 mục", [{ text: "OK" }]);
+      } else {
+        props.onPress();
+      }
     } else {
       dispatch({ type: "GET_NAMEPRODUCT", NameProduct: dataFilterPost });
       dispatch({ type: "SET_DATA", data: accordionData });
+      props.onPress();
     }
-
-    // console.log(dataFilterPost);
     // function chuyển trang
-    props.onPress();
+    
   };
   return (
     <View style={styles.container}>

@@ -49,7 +49,8 @@ export function MyProductComponent(props) {
   const [loading, setloading] = useState(true);
   const [dataRender, setData] = useState([]);
   const [token, setToken] = useState("Null"); //token
-  const [reload, setReload] = useState(false)
+  const [reload, setReload] = useState(false);
+  const [refreshing, setrefreshing] = useState(true);
   const [fontsLoaded, error] = useFonts({
     OpenSans_400Regular,
     OpenSans_400Regular_Italic,
@@ -81,12 +82,15 @@ export function MyProductComponent(props) {
       })
       .catch((error) => {
         console.log("Error: ", error);
-      })
-      .finally(() => setisLoading(false));
+      }).finally(() => setrefreshing(false));
   };
   if (!fontsLoaded) {
     return <AppLoading />;
   }
+  const onRefresh = () => {
+    setData([]);
+    getMyPost();
+  };
   const calculatingTime = (d1, d2) => {
     d1 = new Date(d1);
     const calMinute = () => {
@@ -288,7 +292,7 @@ export function MyProductComponent(props) {
   };
   return (
     <View style={style.container}>
-      {loading ? (
+      {refreshing ? (
         <View
           style={{
             flexDirection: "row",
@@ -304,6 +308,9 @@ export function MyProductComponent(props) {
           renderItem={renderItem}
           keyExtractor={(item) => item._id}
           ItemSeparatorComponent={ItemSeparatorView}
+          refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+          }
         />
       )}
     </View>
@@ -315,6 +322,7 @@ export function DonateProductComponent(props) {
   const [dataRender, setData] = useState([]);
   const [token, setToken] = useState("Null"); //token
   const [reload, setReload] = useState(false)
+  const [refreshing, setrefreshing] = useState(true);
   const [fontsLoaded, error] = useFonts({
     OpenSans_400Regular,
     OpenSans_400Regular_Italic,
@@ -349,8 +357,8 @@ export function DonateProductComponent(props) {
       })
       .catch((error) => {
         console.log("Error: ", error);
-      })
-      .finally(() => setisLoading(false));
+      }).finally(() => setrefreshing(false));
+
   };
   if (!fontsLoaded) {
     return <AppLoading />;
@@ -583,6 +591,7 @@ export function HelpProductComponent(props) {
   const [dataRender, setData] = useState([]);
   const [token, setToken] = useState("Null"); //token
   const [reload, setReload] = useState(false)
+  const [refreshing, setrefreshing] = useState(true);
   const [fontsLoaded, error] = useFonts({
     OpenSans_400Regular,
     OpenSans_400Regular_Italic,
@@ -617,8 +626,8 @@ export function HelpProductComponent(props) {
       })
       .catch((error) => {
         console.log("Error: ", error);
-      })
-      .finally(() => setisLoading(false));
+      }).finally(() => setrefreshing(false));
+  
   };
   if (!fontsLoaded) {
     return <AppLoading />;

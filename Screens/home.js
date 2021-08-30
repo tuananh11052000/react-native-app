@@ -50,9 +50,7 @@ function Home(props) {
       url: "https://smai-app-api.herokuapp.com/post/getNewPost",
     }).finally(() => setrefreshing(false));
     setlistData(temp.data);
-    dispatch({ type: "UPDATE", data: temp.data });
-    console.log(temp.data)
- 
+    dispatch({ type: "UPDATE", data: temp.data }) 
   };
   useEffect(() => {
     // ẩn warning

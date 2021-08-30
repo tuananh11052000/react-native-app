@@ -1,8 +1,8 @@
 import React, { Component, useState } from "react";
 import { StyleSheet, View, Text, TouchableOpacity } from "react-native";
-
-export default function Completed(props) {
-  const { navigation } = props;
+import { connect } from "react-redux";
+function Completed(props) {
+  const { navigation, dispatch } = props;
 
   return (
     <View style={styles.container}>
@@ -13,7 +13,10 @@ export default function Completed(props) {
         <TouchableOpacity
           activeOpacity={0.6}
           style={styles.buttonComplete}
-          onPress={() => navigation.navigate("Home")}
+          onPress={() => {
+            dispatch({ type: "setReload" });
+            navigation.navigate("Home")
+        }}
         >
           <Text style={styles.textComplete}>Xong</Text>
         </TouchableOpacity>
@@ -53,3 +56,7 @@ const styles = StyleSheet.create({
     fontFamily: "OpenSans_600SemiBold",
   },
 });
+
+export default connect(function (state) {
+  return { reloadPost: state.reloadPost };
+})(Completed);

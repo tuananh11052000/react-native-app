@@ -415,7 +415,6 @@ function AppNavigator(props) {
             headerShown: true,
             headerTintColor: config.headerTintColor,
             headerStyle: {
-              color: 'white',
               backgroundColor: config.color_header_background,
             }
           }}

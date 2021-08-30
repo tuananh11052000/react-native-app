@@ -5,7 +5,7 @@ import { ImageBrowser } from 'expo-image-picker-multiple';
 
 export default class ImageBrowserScreen extends Component {
     _getHeaderLoader = () => (
-        <ActivityIndicator size='small' color={'#0580FF'} />
+        <ActivityIndicator size='small' color="#FFF" />
     );
 
     imagesCallback = (callback) => {
