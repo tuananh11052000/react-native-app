@@ -2,7 +2,15 @@ import { StatusBar } from "expo-status-bar";
 import React, { useState } from "react";
 import { connect } from "react-redux";
 import * as SecureStore from "expo-secure-store";
-import { StyleSheet, Text, View, Image, Platform, Switch } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  Image,
+  Platform,
+  Switch,
+  Alert,
+} from "react-native";
 import axios from "axios";
 import LogoSmai from "../../assets/logo_smai.png";
 import { Checkbox, TextInput } from "react-native-paper";
@@ -56,8 +64,11 @@ function Login(props) {
             props.onPress();
           }
         });
-    } catch (e) {
-      alert(e);
+    } catch (error) {
+      if (error){
+        Alert.alert("Thông báo", "Số điện thoại hoặc mật khẩu không đúng", [{ text: "OK" }]);
+      }
+      
     }
   };
   const onToggleSwitch = () => setChecked(!checked); //dùng cho ios
