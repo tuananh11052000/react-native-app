@@ -288,6 +288,13 @@ function AppNavigator(props) {
                 <Text style={styles.textCancel}>Hủy</Text>
               </TouchableOpacity>
             ),
+            headerLeft: () => (
+              <HeaderBackButton
+                onPress={() => navigation.navigate("Home")}
+                tintColor={"white"}
+                label="Quay lại" //back
+              />
+            ),
           })}
         />
         <Stack.Screen

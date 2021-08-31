@@ -65,7 +65,7 @@ function ProductComponent(props) {
       .catch((error) => {
         console.log("Error: ", error);
       })
-      .finally(() => setisLoading(false));
+    
   };
   if (!fontsLoaded) {
     return <AppLoading />;
