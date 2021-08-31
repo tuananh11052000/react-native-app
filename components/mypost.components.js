@@ -12,12 +12,12 @@ import {
   Alert,
   RefreshControl,
 } from "react-native";
-import { Feather } from "@expo/vector-icons";
+import { Feather, FontAwesome } from "@expo/vector-icons";
 import config from "../config";
 import axios from "axios";
 import * as SecureStore from "expo-secure-store";
 import Menu, { MenuItem, MenuDivider } from "react-native-material-menu";
-
+var {width} = Dimensions.get('window');
 export default function MyPost(props) {
   const menu = useRef();
   const { dispatch } = props;
@@ -33,8 +33,9 @@ export default function MyPost(props) {
   };
   //Function handling type product
   const renderType = (pr) => {
-    if (pr.length > 1) return pr[0].Category + ", ...";
-    else return pr[0].Category;
+    if (pr[0].NameProduct.length > 27)
+      return pr[0].NameProduct.slice(0, 27) + ", ...";
+    else return pr[0].NameProduct;
   };
   const renderCategory = () => {
     if (props.typeAuthor == "tangcongdong") {
@@ -154,6 +155,20 @@ export default function MyPost(props) {
       );
     else return <Text style={style.textStatusFalse}>Chờ xác thực</Text>;
   };
+  const renderImage = () => {
+    if (props.urlImage != null) {
+      return (
+        <Image
+          style={style.tinyLogo}
+          source={{
+            uri: props.urlImage,
+          }}
+        />
+      );
+    } else {
+      return <FontAwesome name="file-photo-o" size={width*0.2} color="#CCCCCC" />;
+    }
+  };
   return (
     <TouchableOpacity
       style={style.container}
@@ -161,25 +176,26 @@ export default function MyPost(props) {
       onPress={() => props.onPress()}
     >
       <View style={style.wrapTop}>
-        <Image
-          style={style.tinyLogo}
-          source={{
-            uri: props.urlImage,
-          }}
-        />
+        <View style={style.wrapImage}>{renderImage()}</View>
 
         <View style={style.wrapInfoProduct}>
           <View style={style.wrapTitle}>
             <Text style={style.titlePost}>{renderTitle(props.title)}</Text>
             <View style={style.wrapMore}>
               <Menu
-                style={{backgroundColor: '#FFF'}}
+                style={{ backgroundColor: "#FFF" }}
                 ref={menu}
                 button={
-                  <Text onPress={showMenu}><Feather name="more-vertical" size={20} color="gray" /></Text>
+                  <Text onPress={showMenu}>
+                    <Feather name="more-vertical" size={20} color="gray" />
+                  </Text>
                 }
               >
-                <MenuItem onPress={() => {hideMenu(); }}>
+                <MenuItem
+                  onPress={() => {
+                    hideMenu();
+                  }}
+                >
                   Xóa tin
                 </MenuItem>
               </Menu>
@@ -215,7 +231,7 @@ const style = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#FFF",
-    paddingLeft: "4%",
+    paddingLeft: "3%",
     paddingRight: "4%",
     paddingTop: "2%",
     paddingBottom: "2%",
@@ -225,9 +241,13 @@ const style = StyleSheet.create({
     flexDirection: "row",
     paddingBottom: 5,
   },
+  wrapImage: {
+    width: "30%",
+    alignItems: 'center'
+  },
   tinyLogo: {
-    width: 90,
-    height: 90,
+    width: width * 0.25,
+    height: width *0.25,
   },
   wrapTitle: {
     alignItems: "center",
@@ -239,8 +259,8 @@ const style = StyleSheet.create({
     alignItems: "stretch",
   },
   wrapInfoProduct: {
-    marginLeft: "3%",
-    width: "76%",
+    marginLeft: "1%",
+    width: "70%",
     borderBottomColor: "gray",
     borderBottomWidth: 1,
     paddingBottom: 10,

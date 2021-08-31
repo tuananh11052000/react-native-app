@@ -154,8 +154,8 @@ function App(props) {
   };
   //Function handling type product
   const renderType = (pr) => {
-    if (pr.length > 1) return pr[0].Category + ", ...";
-    else return pr[0].Category;
+    if (pr[0].NameProduct.length > 27) return pr[0].NameProduct.slice(0, 27) + ", ...";
+    else return pr[0].NameProduct;
   };
   // render address
   const renderDistrict = (district, city) => {
@@ -204,6 +204,22 @@ function App(props) {
     setshowModelAddress(true);
   };
   const currentTime = new Date();
+  const renderImage = (urlImage) => {
+    if (urlImage != null) {
+      return (
+        <Image
+          style={styles.tinyLogo}
+          source={{
+            uri: urlImage,
+          }}
+        />
+      );
+    } else {
+      return <View style={{width: '26%', alignItems: 'center'}}>
+        <FontAwesome name="file-photo-o" size={width*0.2} color="#CCCCCC" />
+        </View>
+    }
+  };
   // render item product
   const renderItem = ({ item, index }) => {
     return (
@@ -214,12 +230,7 @@ function App(props) {
         onPress={() => _pressRow(item)}
       >
         {/* //dùng onStartShouldSetResponder để click vào view */}
-        <Image
-          style={styles.tinyLogo}
-          source={{
-            uri: item.urlImage[0],
-          }}
-        />
+        {renderImage(item.urlImage[0])}
         <View style={styles.wrapInfoProduct}>
           <Text style={styles.titlePost}>{renderTitle(item.title)}</Text>
           <View style={styles.wrapTypePrice}>
@@ -348,13 +359,13 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
   },
   tinyLogo: {
-    width: 90,
-    height: 90,
+    width: width*0.25,
+    height: width*0.25,
   },
   wrapInfoProduct: {
     flex: 1,
     marginLeft: 10,
-    // justifyContent: "space-around",
+    justifyContent: "space-around",
   },
   wrapTypePrice: {
     flexDirection: "row",

@@ -15,7 +15,7 @@ import {
   RefreshControl,
 } from "react-native";
 import { connect } from "react-redux";
-import { Feather } from "@expo/vector-icons";
+import { Feather, FontAwesome } from "@expo/vector-icons";
 import GiftComponent from "../components/gift.component";
 import SearchComponent from "../components/search.component";
 import TitleComponent from "../components/title.component";
@@ -207,7 +207,22 @@ const renderAddress = (address) => {
   const _pressRow = (item) => {
     navigation.navigate("DetailPost", { data: item }); //chuyển trang
   };
-
+  const renderImage = (urlImage) => {
+    if (urlImage != null) {
+      return (
+        <Image
+          style={styles.tinyLogo}
+          source={{
+            uri: urlImage,
+          }}
+        />
+      );
+    } else {
+      return <View style={{width: '26%', alignItems: 'center'}}>
+        <FontAwesome name="file-photo-o" size={width*0.2} color="#CCCCCC" />
+        </View>
+    }
+  };
   const currentTime = new Date();
   const renderItem = ({ item }) => (
     <TouchableOpacity
@@ -216,13 +231,9 @@ const renderAddress = (address) => {
       onPress={() => _pressRow(item)}
     >
       {/* //dùng onStartShouldSetResponder để click vào view */}
-
-      <Image
-        style={styles.tinyLogo}
-        source={{
-          uri: item.urlImage[0],
-        }}
-      />
+   
+        {renderImage(item.urlImage[0])}
+     
       <View style={styles.wrapInfoProduct}>
         <Text style={styles.titlePost}>{renderTitle(item.title)}</Text>
         <View style={styles.wrapTypePrice}>
@@ -334,7 +345,7 @@ const styles = StyleSheet.create({
   wrapInfoProduct: {
     flex: 1,
     marginLeft: 10,
-    // justifyContent: "space-around",
+    justifyContent: "space-around",
     // paddingBottom: 10,
   },
   wrapTypePrice: {

@@ -37,7 +37,6 @@ export default function App(props) {
       >
         {item.NameProduct}
       </Text>
-      <Ionicons name="checkbox" size={24} color="#018786" />
     </View>
   );
   const ItemSeparatorView = () => {

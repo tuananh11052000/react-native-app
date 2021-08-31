@@ -33,7 +33,7 @@ export default function App(props) {
   let data = props.route.params.data; // data from list
   const [isShowModelCate, setisShowModelCate] = useState(false);
   const [active, setActive] = useState(0);
-  const [avatar, setAvatar] = useState('');
+  const [avatar, setAvatar] = useState("");
   const [phoneNumber, setPhoneNumber] = useState(" "); //useState using for phonenumber
   const change = ({ nativeEvent }) => {
     const slide = Math.ceil(
@@ -61,7 +61,7 @@ export default function App(props) {
               },
             }
           )
-          .then((response) => { })
+          .then((response) => {})
           .catch((error) => {
             alert(error.message);
           });
@@ -80,7 +80,7 @@ export default function App(props) {
             AuthorID,
         }).then(async (data) => {
           setPhoneNumber(data.data.PhoneNumber);
-          setAvatar(data.data.ImgAuthor)
+          setAvatar(data.data.ImgAuthor);
         });
       } catch (e) {
         alert(e);
@@ -148,9 +148,46 @@ export default function App(props) {
       );
     }
   };
+  const renderSlideImage = () => {
+    if (data.urlImage.length != 0) {
+      return (
+        <>
+          <ScrollView
+            pagingEnabled
+            horizontal
+            onScroll={change}
+            showsHorizontalScrollIndicator={false}
+            style={styles.container}
+          >
+            {data.urlImage.map((image, index) => (
+              <Image key={index} source={{ uri: image }} style={styles.image} />
+            ))}
+          </ScrollView>
+          <View style={styles.pagination}>
+            {data.urlImage.map((i, k) => (
+              <Text
+                key={k}
+                style={
+                  k == active ? styles.pagingActiveText : styles.pagingText
+                }
+              >
+                ⬤
+              </Text>
+            ))}
+          </View>
+        </>
+      );
+    } else {
+      return (
+        <View style={styles.noImageContainer}>
+          <FontAwesome name="photo" size={width*0.5} color="#CCC" />
+        </View>
+      );
+    }
+  };
   //Ham render avatar
   const renderAvatar = () => {
-    if (avatar != '')
+    if (avatar != "")
       return (
         <View>
           <Avatar
@@ -181,31 +218,7 @@ export default function App(props) {
       contentContainerStyle={styles.contentContainer}
     >
       <View>
-        <View>
-          <ScrollView
-            pagingEnabled
-            horizontal
-            onScroll={change}
-            showsHorizontalScrollIndicator={false}
-            style={styles.container}
-          >
-            {data.urlImage.map((image, index) => (
-              <Image key={index} source={{ uri: image }} style={styles.image} />
-            ))}
-          </ScrollView>
-          <View style={styles.pagination}>
-            {data.urlImage.map((i, k) => (
-              <Text
-                key={k}
-                style={
-                  k == active ? styles.pagingActiveText : styles.pagingText
-                }
-              >
-                ⬤
-              </Text>
-            ))}
-          </View>
-        </View>
+        <View>{renderSlideImage()}</View>
         <View style={styles.wrapText}>
           <View>
             <Text style={styles.textTitle}>{data.title}</Text>
@@ -253,10 +266,18 @@ export default function App(props) {
 const styles = StyleSheet.create({
   container: {
     // marginTop: 10,
-    paddingTop: '1%',
+    paddingTop: "1%",
     width,
     height,
     backgroundColor: "#FFF",
+  },
+  noImageContainer: {
+    paddingTop: "1%",
+    width,
+    height,
+    backgroundColor: "#FFF",
+    justifyContent: 'center', 
+    alignItems: 'center',
   },
   contentContainer: {
     flexGrow: 1,
@@ -327,11 +348,11 @@ const styles = StyleSheet.create({
   wrapInfor: {
     borderTopWidth: 1,
     borderBottomWidth: 1,
-    borderColor: '#DDD',
-    marginBottom: '5%',
-    marginTop: '5%',
-    paddingTop: '2%',
-    paddingBottom: '2%',
+    borderColor: "#DDD",
+    marginBottom: "5%",
+    marginTop: "5%",
+    paddingTop: "2%",
+    paddingBottom: "2%",
   },
   wrapName: {
     marginLeft: 20,
@@ -352,7 +373,8 @@ const styles = StyleSheet.create({
     fontSize: config.fontsize_2,
     color: "black",
     fontFamily: "OpenSans_400Regular",
-    paddingLeft: '3%', paddingRight: '3%'
+    paddingLeft: "3%",
+    paddingRight: "3%",
   },
   wrapButton: {
     justifyContent: "center",

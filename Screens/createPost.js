@@ -41,8 +41,8 @@ function CreatePost(props) {
   useEffect(() => {
     if (props.auth.isLogin == true) {
       getMyPost();
+      onRefresh();
     }
-    onRefresh();
   }, [props.auth.isLogin, props.reloadPost]);
   const getMyPost = async () => {
     if (props.auth.isLogin == true) {
@@ -54,34 +54,25 @@ function CreatePost(props) {
           Authorization: result,
         },
       })
-        .then((data) => {
-          setData(data.data);
-          setDataAll(data.data);
+        .then((res) => {
+          setData(res.data);
+          setDataAll(res.data)
         })
         .catch((error) => {
           console.log("Error: ", error);
         })
-        .finally(() => setrefreshing(false));
-      const listTemp1 = dataAll.filter((pr) => {
-        if (pr.TypeAuthor == "tangcongdong") {
-          return true;
-        } else return false;
-      });
-      setDataTCD(listTemp1);
-      const listTemp2 = dataAll.filter((pr) => {
-        if (pr.TypeAuthor != "tangcongdong") {
-          return true;
-        } else return false;
-      });
-      setDataCXD(listTemp2);
-    } 
+        .finally(() => {
+          setrefreshing(false)
+        });
+    }
+     
     dispatch({ type: "setNoReload" });
   };
 
   const onRefresh = () => {
     setData([]);
     getMyPost();
-    setSelectedValue(1);
+    setSelectedValue(1)
   };
   const deletePost = (id) => {
     let result = SecureStore.getItemAsync("token");
@@ -97,8 +88,9 @@ function CreatePost(props) {
     }).then((res) => {
       if (res.status == 201) {
         // alert("Xoá bài thành công.");
+        onRefresh();
         Alert.alert("Thông báo", "Xóa bài thành công", [{ text: "OK" }]);
-        getMyPost();
+        
       }
     }).finally(() => setloading(false));
   };
@@ -159,15 +151,26 @@ function CreatePost(props) {
     );
   }
   const filter = (itemvalue, value) => {
+    let tempData = dataAll;
     if (props.auth.isLogin == true) {
       if (itemvalue == 1 || value == 1) {
-        setData(dataAll);
+        setData(tempData) 
       }
       if (itemvalue == 2 || value == 2) {
-        setData(dataTCD);
+        const listTemp1 = tempData.filter((pr) => {
+          if (pr.TypeAuthor == "tangcongdong") {
+            return true;
+          } else return false;
+        });
+        setData(listTemp1);
       }
       if (itemvalue == 3 || value == 3) {
-        setData(dataCXD);
+        const listTemp1 = tempData.filter((pr) => {
+          if (pr.TypeAuthor != "tangcongdong") {
+            return true;
+          } else return false;
+        });
+        setData(listTemp1);
       }
     }
   };
@@ -175,6 +178,7 @@ function CreatePost(props) {
   const _pressRow = (item) => {
     props.navigation.navigate("DetailPost", { data: item }); //chuyển trang
   };
+  
   const renderItem = ({ item }) => {
     return (
       <MyPost
@@ -215,7 +219,9 @@ function CreatePost(props) {
             activeOpacity={0.5}
             onPress={() => {
               if (props.auth.isLogin == true) {
+                setSelectedValue(1);
                 navigation.navigate("PostType");
+
               } else navigation.replace("Authentication");
             }}
             style={styles.btnCreate}
