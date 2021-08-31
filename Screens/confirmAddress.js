@@ -187,7 +187,7 @@ function confirmAddress(props) {
         if (props.controlConfirmAddress == "category") {
           navigation.navigate("Category");
         } else {
-          navigation.navigate("WhoConfirm");
+          navigation.navigate("PostType");
         }
       }
     }

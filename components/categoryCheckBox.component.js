@@ -110,15 +110,12 @@ function CategoryCheckBoxComponent(props) {
       expanded: false,
       category: "ĐỒ TRẺ EM",
       subCategory: [
-        { id: 18, name: 'Dụng cụ hỗ trợ học tập' },
-        { id: 19, name: 'Đồ chơi trẻ em' },
-        { id: 20, name: 'Đồ trẻ mẫu giáo' },
-        { id: 12, name: 'Đồ chơi' },
-        { id: 13, name: 'xe đẩy bàn ăn' },
-        { id: 14, name: 'Tả. bỉm, sữa cho bé' },
-        { id: 15, name: 'Quần áo trẻ nam' },
-        { id: 16, name: 'Quần áo trẻ nữ' },
-        { id: 17, name: 'Đồ khác' },]
+        { id: 18, name: 'Đồ chơi' },
+        { id: 19, name: 'Xe đẩy, bàn ăn' },
+        { id: 20, name: 'Tả, bỉm, sữa cho bé' },
+        { id: 12, name: 'Quần áo trẻ nam' },
+        { id: 13, name: 'Quần áo trẻ nữ' },
+        { id: 14, name: 'Đồ khác' }]
     },
     {
       expanded: false,
@@ -172,9 +169,6 @@ function CategoryCheckBoxComponent(props) {
         { id: 46, name: 'Xe đạp, xe điện, xe máy' },
         { id: 47, name: 'Xe khác' },]
     },
-
-
-
   ];
   const [CONTENT_SAVED, setcontensaved] = useState([]);
   const [accordionData, setAccordionData] = useState([]);
@@ -196,14 +190,14 @@ function CategoryCheckBoxComponent(props) {
     LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
     const array = [...accordionData];
     // mở nhiều cái
-    // array[index]["isExpanded"] = !array[index]["isExpanded"];
+    array[index]["isExpanded"] = !array[index]["isExpanded"];
 
     // đóng tất cả khi một cái mở
-    array.map((value, placeindex) =>
-      placeindex === index
-        ? (array[placeindex]["isExpanded"] = !array[placeindex]["isExpanded"])
-        : (array[placeindex]["isExpanded"] = false)
-    );
+    // array.map((value, placeindex) =>
+    //   placeindex === index
+    //     ? (array[placeindex]["isExpanded"] = !array[placeindex]["isExpanded"])
+    //     : (array[placeindex]["isExpanded"] = false)
+    // );
     setAccordionData(array);
   };
   //   cập nhật layout khi nhấn vào child item

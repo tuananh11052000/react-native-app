@@ -30,7 +30,7 @@ function Description(props) {
   return (
     <View style={styles.container}>
       <TitleDetail onPress={() => navigation.navigate('Chọn ảnh')}></TitleDetail>
-      <ButtonConfirm onPress={() => onPressFunc()} />
+      <ButtonConfirm onPress={() => onPressFunc()} textBtn="Tiếp theo"/>
     </View>
   );
 }
@@ -38,7 +38,7 @@ function Description(props) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop: (Platform.OS === 'ios') ? 20 : 20,
+    paddingTop: 20,
     justifyContent: 'space-between',
     backgroundColor: '#F5F5F5',
   },

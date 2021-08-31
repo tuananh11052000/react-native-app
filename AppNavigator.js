@@ -116,7 +116,7 @@ function AppNavigator(props) {
 
             headerLeft: () => (
               <HeaderBackButton
-                onPress={() => navigation.navigate("ConfirmAddress")}
+                onPress={() => navigation.navigate("Home")}
                 tintColor={"white"}
                 label="Quay lại" //back
               />
@@ -160,7 +160,7 @@ function AppNavigator(props) {
 
             headerLeft: () => (
               <HeaderBackButton
-                onPress={() => navigation.navigate("ConfirmAddress")}
+                onPress={() => navigation.navigate("Home")}
                 tintColor={"white"}
                 label="Quay lại" //back
               />

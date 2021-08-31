@@ -20,27 +20,27 @@ function PostType(props) {
   const { dispatch } = props;
   const actionOnPressCXD = () => {
     dispatch({ type: "setThreadCategoryCheckBox" });
-    navigation.navigate("ConfirmAddress");
+    navigation.navigate("WhoConfirm");
   };
   const actionOnPressTCD = () => {
     dispatch({ type: "setThreadCategory" });
     dispatch({ type: "setThreadTCD" });
     dispatch({ type: "SET_TYPE_AUTHOR", TypeAuthor: "tangcongdong" });
-    navigation.navigate("ConfirmAddress");
+    navigation.navigate("Category");
   };
   // onPress tặng người nghèo
   const actionOnPressGiveCaNhan = () => {
     dispatch({ type: "setThreadCategory" });
     dispatch({ type: "setThreadGiveGroup" });
     dispatch({ type: "giveForCaNhan" });
-    navigation.navigate("ConfirmAddress");
+    navigation.navigate("Category");
   };
   // onpress tặng quỹ từ thiện
   const actionOnPressGiveQuy = () => {
     dispatch({ type: "setThreadCategory" });
     dispatch({ type: "setThreadGiveGroup" });
     dispatch({ type: "giveForQuy" });
-    navigation.navigate("ConfirmAddress");
+    navigation.navigate("Category");
   };
   // onpress quyên góp công ích
   const actionOnPressGiveCongIch = () => {

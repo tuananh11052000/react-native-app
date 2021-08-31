@@ -20,7 +20,6 @@ import * as SecureStore from "expo-secure-store";
 import AddImg from "../assets/add.png";
 import { Picker } from "@react-native-picker/picker";
 import DropDownPicker from "react-native-dropdown-picker";
-import Menu, { MenuItem, MenuDivider } from "react-native-material-menu";
 import axios from "axios";
 function CreatePost(props) {
   const { navigation, dispatch } = props;
@@ -131,6 +130,7 @@ function CreatePost(props) {
         }}
         mode={"dropdown"}
         style={{ height: 40 }}
+        itemStyle={{ backgroundColor: "#FFF"}}
       >
         <Picker.Item
           label="&ensp;Tất cả tin đăng "
@@ -220,7 +220,8 @@ function CreatePost(props) {
             onPress={() => {
               if (props.auth.isLogin == true) {
                 setSelectedValue(1);
-                navigation.navigate("PostType");
+                dispatch({ type: "setThreadCategoryCheckBox" });
+                navigation.navigate("ConfirmAddress");
 
               } else navigation.replace("Authentication");
             }}
@@ -295,8 +296,9 @@ const styles = StyleSheet.create({
   wrapPikerA: {
     borderWidth: 1,
     borderRadius: 4,
-    borderColor: "gray",
+    borderColor: "#BDBDBD",
     width: "57%",
+    backgroundColor: '#FFF'
   },
   btnCreate: {
     alignItems: "center",
@@ -330,5 +332,6 @@ export default connect(function (state) {
     auth: state.auth,
     infoPost: state.infoPost,
     reloadPost: state.reloadPost,
+    controlConfirmAddress: state.controlConfirmAddress,
   };
 })(CreatePost);

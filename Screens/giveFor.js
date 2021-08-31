@@ -34,6 +34,7 @@ function App(props) {
   const [listAddress, setListAddress] = useState(db.province);
   const [showModelAddress, setshowModelAddress] = useState(false);
   const addr = props.dataCategory.addressFilter;
+  
   useEffect(() => {
     if ( addr.length == 0) {
       getListPhotos();
@@ -82,7 +83,16 @@ function App(props) {
       })
       .finally(() => setisLoading(false));
   };
-  
+  const showFilterAddress = () => {
+    console.log(addr)
+    if (addr != "") {
+      let temp = addr.split(",");
+      if (temp[0].length > 10) return temp[0].slice(0, 10);
+      else return temp[0];
+    } else {
+      return "Tỉnh/thành phố"
+    }
+  }
   // render address
   const renderDistrict = (district, city) => {
     if (district.indexOf("Thành phố") != -1) {
@@ -195,8 +205,8 @@ function App(props) {
                   justifyContent: "space-around",
                 }}
               >
-                <Text style={{ color: "#BDBDBD", fontSize: config.fontsize_3 }}>
-                  Tỉnh/thành phố
+                <Text style={{ color: "#616161", fontSize: config.fontsize_3 }}>
+                  {showFilterAddress()}
                 </Text>
                 <AntDesign name="caretdown" size={10} color="#BDBDBDBD" />
               </TouchableOpacity>

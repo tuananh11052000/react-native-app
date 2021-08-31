@@ -50,9 +50,10 @@ function App(props) {
     setData(listTemp);
   };
   const addr = props.dataCategory.addressFilter;
-
+ 
   // function lọc các danh mục đã chọn
   const categoryFilter = props.dataCategory.NameProduct;
+  
   const filterCategory = (arrayProduct) => {
     if (categoryFilter.length != 0) {
       const list = [];
@@ -109,7 +110,22 @@ function App(props) {
   if (!fontsLoaded) {
     return <AppLoading />;
   }
-  // filter address
+  const renderItemSelected = () => {
+    if (categoryFilter.length != 0) {
+      return "Đã chọn:    " + categoryFilter.length;
+    } else {
+      return "Tất cả..."
+    }
+  }
+  const showFilterAddress = () => {
+    if (addr != "") {
+      let temp = addr.split(",");
+      if (temp[0].length > 10) return temp[0].slice(0, 10);
+      else return temp[0];
+    } else {
+      return "Tỉnh/thành phố"
+    }
+  }
 
   const calculatingTime = (d1, d2) => {
     d1 = new Date(d1);
@@ -263,8 +279,8 @@ function App(props) {
               activeOpacity={0.5}
               onPress={() => pressFilter()}
             >
-              <Text style={{ fontSize: config.fontsize_2, color: "#BDBDBD" }}>
-                Tất cả...
+              <Text style={{ fontSize: config.fontsize_3, color: "#616161" }}>
+                {renderItemSelected()}
               </Text>
               <AntDesign
                 name="appstore-o"
@@ -282,8 +298,8 @@ function App(props) {
                   justifyContent: "space-around",
                 }}
               >
-                <Text style={{ color: "#BDBDBD", fontSize: config.fontsize_3 }}>
-                  Tỉnh/thành phố
+                <Text style={{ color: "#616161", fontSize: config.fontsize_3 }}>
+                  {showFilterAddress()}
                 </Text>
                 <AntDesign name="caretdown" size={10} color="#BDBDBDBD" />
               </TouchableOpacity>

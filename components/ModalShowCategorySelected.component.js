@@ -9,6 +9,7 @@ import {
   TouchableOpacity,
   TextInput,
   FlatList,
+  TouchableWithoutFeedback 
 } from "react-native";
 import { AntDesign, Ionicons } from "@expo/vector-icons";
 import { ScrollView } from "react-native-gesture-handler";
@@ -45,9 +46,9 @@ export default function App(props) {
     );
   };
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView  style={styles.container}>
       <Modal transparent={true} visible={props.show} animationType="slide">
-        <View style={{ backgroundColor: "#000000aa", flex: 1 }}>
+        <View  style={{ backgroundColor: "#000000aa", flex: 1 }}>
           <View style={styles.wrapModel}>
             <View
               style={{

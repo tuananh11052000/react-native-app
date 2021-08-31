@@ -8,7 +8,7 @@ function Completed(props) {
     <View style={styles.container}>
       <View style={styles.backgroundBox}>
         <View>
-          <Text style={styles.textRequired}>Đã được yêu cầu thành công</Text>
+          <Text style={styles.textRequired}>Đăng tin thành công</Text>
         </View>
         <TouchableOpacity
           activeOpacity={0.6}

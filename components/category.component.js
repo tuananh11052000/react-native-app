@@ -83,15 +83,12 @@ function CategoryComponent(props) {
       expanded: false,
       category: "ĐỒ TRẺ EM",
       subCategory: [
-        { id: 18, name: 'Dụng cụ hỗ trợ học tập' },
-        { id: 19, name: 'Đồ chơi trẻ em' },
-        { id: 20, name: 'Đồ trẻ mẫu giáo' },
-        { id: 12, name: 'Đồ chơi' },
-        { id: 13, name: 'xe đẩy bàn ăn' },
-        { id: 14, name: 'Tả. bỉm, sữa cho bé' },
-        { id: 15, name: 'Quần áo trẻ nam' },
-        { id: 16, name: 'Quần áo trẻ nữ' },
-        { id: 17, name: 'Đồ khác' },]
+        { id: 18, name: 'Đồ chơi' },
+        { id: 19, name: 'Xe đẩy, bàn ăn' },
+        { id: 20, name: 'Tả, bỉm, sữa cho bé' },
+        { id: 12, name: 'Quần áo trẻ nam' },
+        { id: 13, name: 'Quần áo trẻ nữ' },
+        { id: 14, name: 'Đồ khác' },]
     },
     {
       expanded: false,

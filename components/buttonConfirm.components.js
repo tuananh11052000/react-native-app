@@ -12,7 +12,7 @@ const buttonConfirm = (props) => {
     return (
         <View style={styles.container}>
             <TouchableOpacity activeOpacity={0.6} style={styles.button} onPress={props.onPress}>
-                <Text style={styles.buttonText}>Tiếp theo</Text>
+                <Text style={styles.buttonText}>{props.textBtn}</Text>
             </TouchableOpacity>
         </View>
     )
@@ -24,8 +24,9 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         marginRight: 20,
         marginLeft: 20,
+        marginTop: 20,
         marginBottom: 20,
-        backgroundColor: '#FFF'
+        backgroundColor: '#DDD'
     },
     button: {
         backgroundColor: '#E70910',

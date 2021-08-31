@@ -1,90 +1,90 @@
-import React, { useState } from 'react';
-import {
-  StyleSheet,
-  View,
-  StatusBar
-} from 'react-native';
-import { connect } from 'react-redux'
-import axios from 'axios'
-import Spinner from 'react-native-loading-spinner-overlay';
+import React, { useState } from "react";
+import { StyleSheet, View, StatusBar } from "react-native";
+import { connect } from "react-redux";
+import axios from "axios";
+import Spinner from "react-native-loading-spinner-overlay";
 
-import ButtonConfirm from '../components/buttonConfirm.components';
-import ConfirmInfor from '../components/confirminfor.components';
+import ButtonConfirm from "../components/buttonConfirm.components";
+import ConfirmInfor from "../components/confirminfor.components";
 
 function ConfirmInforScreen(props) {
   const { navigation } = props;
   const { dispatch } = props;
   console.log(props.auth.token);
   //khai bao state hien thi man hinh cho
-  const [isDisplay, setIsDisplay] = useState(false)
+  const [isDisplay, setIsDisplay] = useState(false);
   //khai bao bien luu thong tin anh
   const image = props.infoPost.image;
-  console.log(props.infoPost.TypeAuthor)
+  console.log(props.infoPost.TypeAuthor);
   const submitInfoPost = async () => {
     //api upload infor json
-    setIsDisplay(true)
+    setIsDisplay(true);
     const data = props.infoPost;
     axios({
-      url: 'https://smai-app-api.herokuapp.com/post/CreatePost',
-      method: 'post',
+      url: "https://smai-app-api.herokuapp.com/post/CreatePost",
+      method: "post",
       data: {
         title: data.title,
         note: data.note,
         address: data.address,
         TypeAuthor: data.TypeAuthor,
-        NameProduct: data.NameProduct
+        NameProduct: data.NameProduct,
       },
       headers: {
         Accept: "application/json",
-        Authorization: props.auth.token
-      }
-    }).then(res => {
-      //sau khi upload json xong thi tien hanh upload hinh anh su dung idpost duoc tra ve
-      if (props.infoPost.image[0]) {
-        let apiUrl = "https://smai-app-api.herokuapp.com/post/UpdatePost";
-        let formData = new FormData();
-        for (let i = 0; i < image.length; i++) {
-          let uri = image[i].uri;
-          let uriArray = uri.split(".");
-          let fileType = uriArray[uriArray.length - 1];
-          formData.append("productImage", {
-            uri: uri,
-            name: `photo.${fileType}`,
-            type: `image/${fileType}`,
-          });
-        }
-        let options = {
-          method: "POST",
-          body: formData,
-          mode: 'cors',
-          headers: {
-            "idpost": res.data.idpost,
-            Accept: "application/json",
-            "Content-Type": "multipart/form-data",
-            Authorization: props.auth.token
+        Authorization: props.auth.token,
+      },
+    })
+      .then((res) => {
+        //sau khi upload json xong thi tien hanh upload hinh anh su dung idpost duoc tra ve
+        if (props.infoPost.image[0]) {
+          let apiUrl = "https://smai-app-api.herokuapp.com/post/UpdatePost";
+          let formData = new FormData();
+          for (let i = 0; i < image.length; i++) {
+            let uri = image[i].uri;
+            let uriArray = uri.split(".");
+            let fileType = uriArray[uriArray.length - 1];
+            formData.append("productImage", {
+              uri: uri,
+              name: `photo.${fileType}`,
+              type: `image/${fileType}`,
+            });
           }
-        };
-        fetch(apiUrl, options).then((res) => {
+          let options = {
+            method: "POST",
+            body: formData,
+            mode: "cors",
+            headers: {
+              idpost: res.data.idpost,
+              Accept: "application/json",
+              "Content-Type": "multipart/form-data",
+              Authorization: props.auth.token,
+            },
+          };
+          fetch(apiUrl, options).then((res) => {
+            setIsDisplay(false);
+            dispatch({ type: "RESET" });
+            navigation.navigate("Completed");
+          });
+        } else {
           setIsDisplay(false);
-          dispatch({ type: 'RESET' })
-          navigation.navigate('Completed')
-        })
-      } else {
-        setIsDisplay(false);
-        dispatch({ type: 'RESET' })
-        navigation.navigate('Completed')
-      }
-    }).catch(err => console.log(err))
-  }
+          dispatch({ type: "RESET" });
+          navigation.navigate("Completed");
+        }
+      })
+      .catch((err) => console.log(err));
+  };
   return (
     <View style={styles.container}>
       <Spinner
         visible={isDisplay}
-        textContent={'Đang xử lý yêu cầu...'}
+        textContent={"Đang xử lý yêu cầu..."}
         textStyle={styles.spinnerTextStyle}
       />
       <ConfirmInfor dataImage={image}></ConfirmInfor>
-      <ButtonConfirm onPress={() => submitInfoPost()} />
+      <View style={{backgroundColor: '#CCC'}}>
+        <ButtonConfirm onPress={() => submitInfoPost()} textBtn="Đăng tin" />
+      </View>
     </View>
   );
 }
@@ -93,18 +93,18 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     // paddingTop: (Platform.OS === 'ios') ? 20 : 20,
-    justifyContent: 'space-between'
+    justifyContent: "space-between",
   },
   waiting: {
     position: "relative",
-    backgroundColor: 'grey',
-    opacity: 0.2
+    backgroundColor: "grey",
+    opacity: 0.2,
   },
   spinnerTextStyle: {
-    color: '#FFF'
+    color: "#FFF",
   },
 });
 
 export default connect(function (state) {
-  return { infoPost: state.infoPost, auth: state.auth }
+  return { infoPost: state.infoPost, auth: state.auth };
 })(ConfirmInforScreen);
