@@ -47,7 +47,7 @@ function PostType(props) {
     dispatch({ type: "setThreadCategory" });
     dispatch({ type: "setThreadGiveGroup" });
     dispatch({ type: "giveForCongIch" });
-    navigation.navigate("ConfirmAddress");
+    navigation.navigate("Category");
   };
 
   return (

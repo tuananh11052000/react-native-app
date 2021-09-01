@@ -7,6 +7,7 @@ import {
   TextInput,
   ScrollView,
   ImageBackground,
+  Dimensions,
 } from "react-native";
 
 import { MaterialCommunityIcons } from "@expo/vector-icons";
@@ -14,7 +15,10 @@ import { EvilIcons } from "@expo/vector-icons";
 import bgrImage from "../assets/background.jpg";
 import bell from "../assets/bell.png";
 import { TouchableOpacity } from "react-native";
-
+const {
+  width: SCREEN_WIDTH,
+  height: SCREEN_HEIGHT,
+} = Dimensions.get("window");
 export default function SearchComponent(props) {
   return (
     <View style={style.wrapSearchBgr}>
@@ -36,17 +40,18 @@ export default function SearchComponent(props) {
 const style = StyleSheet.create({
   wrapSearchBgr: {
     flexDirection: "column",
-    height: 250,
-    backgroundColor: "#FFFFFF",
+    height: SCREEN_WIDTH*0.4,
+    backgroundColor: "#DDD",
+    marginBottom: '10%',
+    position: 'relative'
   },
   wrapSearchBox: {
-    display: "flex",
     flexDirection: "row",
     justifyContent: "center",
-    position: "absolute",
-    bottom: 20,
+    position: 'absolute',
     left: 0,
     right: 0,
+    bottom: -25,
   },
   wrapSearch: {
     borderWidth: 1,
@@ -87,7 +92,7 @@ const style = StyleSheet.create({
     borderColor: "#847B80",
   },
   bgr_style: {
-    height: 210,
-    width: "100%",
+    height: SCREEN_WIDTH*0.4,
+    width: '100%',
   },
 });

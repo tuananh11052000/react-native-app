@@ -41,8 +41,8 @@ function App(props) {
   const [showModelAddress, setshowModelAddress] = useState(false);
   const { dispatch } = props;
   // địa chỉ đã chọn
-  const filterAddressFunc = (address) => {
-    const listTemp = data.filter((pr) => {
+  const filterAddressFunc = (address, list) => {
+    const listTemp = list.filter((pr) => {
       if (pr.address.indexOf(address) != -1) {
         return true;
       } else return false;
@@ -50,19 +50,23 @@ function App(props) {
     setData(listTemp);
   };
   const addr = props.dataCategory.addressFilter;
- 
+
   // function lọc các danh mục đã chọn
   const categoryFilter = props.dataCategory.NameProduct;
-  
-  const filterCategory = (arrayProduct) => {
+
+  const filterCategory = (arrayProduct, listTemp) => {
     if (categoryFilter.length != 0) {
       const list = [];
-      for (let i = 0; i < listAfterFilter.length; i++) {
+      for (let i = 0; i < listTemp.length; i++) {
         for (let j = 0; j < arrayProduct.length; j++) {
-          if (listAfterFilter[i].NameProduct[0].Category == arrayProduct[j].Category &&
-            listAfterFilter[i].NameProduct[0].NameProduct == arrayProduct[j].NameProduct) {
-              list.push(listAfterFilter[i]);
-            }
+          if (
+            listTemp[i].NameProduct[0].Category ==
+              arrayProduct[j].Category &&
+            listTemp[i].NameProduct[0].NameProduct ==
+              arrayProduct[j].NameProduct
+          ) {
+            list.push(listTemp[i]);
+          }
         }
       }
       setData(list);
@@ -76,11 +80,15 @@ function App(props) {
       getListPhotos();
     } else {
       if (addr.length != 0 && categoryFilter.length == 0) {
-        filterAddressFunc(addr);
+        filterAddressFunc(addr, listAfterFilter);
       } else {
-        if (addr.length != 0 && categoryFilter.length != 0)
-          filterAddressFunc(addr);
-        filterCategory(categoryFilter);
+        if (addr.length != 0 && categoryFilter.length != 0) {
+          filterAddressFunc(addr, data);
+          filterCategory(categoryFilter, data);
+        } else {
+          if (addr.length == 0 && categoryFilter.length != 0)
+            filterCategory(categoryFilter, listAfterFilter);
+        }
       }
     }
   }, [categoryFilter, addr]);
@@ -114,18 +122,18 @@ function App(props) {
     if (categoryFilter.length != 0) {
       return "Đã chọn:    " + categoryFilter.length;
     } else {
-      return "Tất cả..."
+      return "Tất cả...";
     }
-  }
+  };
   const showFilterAddress = () => {
     if (addr != "") {
       let temp = addr.split(",");
       if (temp[0].length > 10) return temp[0].slice(0, 10);
       else return temp[0];
     } else {
-      return "Tỉnh/thành phố"
+      return "Tỉnh/thành phố";
     }
-  }
+  };
 
   const calculatingTime = (d1, d2) => {
     d1 = new Date(d1);
@@ -170,7 +178,8 @@ function App(props) {
   };
   //Function handling type product
   const renderType = (pr) => {
-    if (pr[0].NameProduct.length > 27) return pr[0].NameProduct.slice(0, 27) + ", ...";
+    if (pr[0].NameProduct.length > 27)
+      return pr[0].NameProduct.slice(0, 27) + ", ...";
     else return pr[0].NameProduct;
   };
   // render address
@@ -181,13 +190,22 @@ function App(props) {
     if (district.indexOf("Quận") != -1 && city.indexOf("Hồ Chí Minh") == -1) {
       return district.slice(5);
     }
-    const distritNumber = "Quận 1, Quận 2, Quận 3, Quận 4, Quận 5, Quận 6, Quận 7, Quận 8, Quận 9, Quận 10, Quận 11, Quận 12"
-  if (district.indexOf("Quận") != -1 && city.indexOf("Hồ Chí Minh") != -1 && distritNumber.indexOf(district) != -1) {
-    return district;
-  }
-  if (district.indexOf("Quận") != -1 && city.indexOf("Hồ Chí Minh") != -1 && distritNumber.indexOf(district) == -1) {
-    return district.slice(5);
-  }
+    const distritNumber =
+      "Quận 1, Quận 2, Quận 3, Quận 4, Quận 5, Quận 6, Quận 7, Quận 8, Quận 9, Quận 10, Quận 11, Quận 12";
+    if (
+      district.indexOf("Quận") != -1 &&
+      city.indexOf("Hồ Chí Minh") != -1 &&
+      distritNumber.indexOf(district) != -1
+    ) {
+      return district;
+    }
+    if (
+      district.indexOf("Quận") != -1 &&
+      city.indexOf("Hồ Chí Minh") != -1 &&
+      distritNumber.indexOf(district) == -1
+    ) {
+      return district.slice(5);
+    }
     if (district.indexOf("Huyện") != -1) {
       return district.slice(7);
     }
@@ -231,9 +249,11 @@ function App(props) {
         />
       );
     } else {
-      return <View style={{width: '26%', alignItems: 'center'}}>
-        <FontAwesome name="file-photo-o" size={width*0.2} color="#CCCCCC" />
+      return (
+        <View style={{ width: "26%", alignItems: "center" }}>
+          <FontAwesome name="file-photo-o" size={width * 0.2} color="#CCCCCC" />
         </View>
+      );
     }
   };
   // render item product
@@ -375,8 +395,8 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
   },
   tinyLogo: {
-    width: width*0.25,
-    height: width*0.25,
+    width: width * 0.25,
+    height: width * 0.25,
   },
   wrapInfoProduct: {
     flex: 1,

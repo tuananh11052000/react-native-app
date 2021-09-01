@@ -1,5 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { Text, View, StyleSheet, ActivityIndicator } from "react-native";
+import {
+  Text,
+  View,
+  StyleSheet,
+  ActivityIndicator,
+  Dimensions,
+} from "react-native";
 import { Avatar } from "react-native-elements";
 
 import { connect } from "react-redux";
@@ -9,6 +15,7 @@ import * as SecureStore from "expo-secure-store";
 import { Button } from "react-native-elements";
 import * as ImagePicker from "expo-image-picker";
 import axios from "axios";
+var { width } = Dimensions.get("window");
 //check token
 import AppLoading from "expo-app-loading";
 import {
@@ -169,13 +176,21 @@ function TopProfile(props) {
     return (
       <View style={styles.wrapAll}>
         {renderAvatar()}
-        <View>
-          <Text style={styles.text}>{FullName}</Text>
+        <View
+          style={{
+            marginLeft: "5%",
+            flexDirection: "column",
+            justifyContent: "space-between",
+          }}
+        >
+          <View>
+            <Text style={styles.text}>{FullName}</Text>
+          </View>
+
           <View style={styles.container}>
             <MaterialIcons
-              style={styles.icon_person}
               name="person-outline"
-              size={24}
+              size={width * 0.05}
               color="#BDBDBD"
             ></MaterialIcons>
             <Text style={styles.text_person}>Cá nhân</Text>
@@ -191,17 +206,16 @@ function TopProfile(props) {
 
 const styles = StyleSheet.create({
   wrapAll: {
-    height: 100,
+    height: width*0.2,
     backgroundColor: "#fff",
-    padding: 7,
     flexDirection: "row",
-    // alignItems: "flex-start",
+    paddingLeft: '3%',
     alignItems: "center",
     width: "100%",
   },
   wrap_avatar: {
-    height: 80,
-    width: 80,
+    height: width*0.3,
+    width: width*0.3,
     backgroundColor: "red",
     borderRadius: 60,
     justifyContent: "center",
@@ -217,30 +231,27 @@ const styles = StyleSheet.create({
     marginLeft: "5%",
   },
   text: {
-    padding: 10,
+    marginTop: "2%",
     fontSize: config.fontsize_2,
     fontFamily: "OpenSans_400Regular",
   },
   text_person: {
-    // padding: 10,
-    fontSize: 18,
+    marginLeft: "3%",
+    fontSize: config.fontsize_5,
     fontFamily: "OpenSans_400Regular",
     color: "gray",
   },
-  icon_person: {
-    // padding: 10,
-    paddingHorizontal: 10
-  },
   container: {
-    flex: 1,
     flexDirection: "row",
+    alignItems: "center",
+    marginTop: '2%',
   },
   buttonLogIn: {
     borderColor: config.color_btn_1,
   },
   titleStyle: {
     color: config.color_btn_1,
-    fontSize: 20,
+    fontSize: config.fontsize_2,
   },
   avatar: {
     marginTop: "20px",

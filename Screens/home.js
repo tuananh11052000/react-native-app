@@ -45,16 +45,19 @@ function Home(props) {
   const [refreshing, setrefreshing] = useState(true);
  
   const getData = async () => {
-    let temp = await axios({
+    await axios({
       method: "get",
       url: "https://smai-app-api.herokuapp.com/post/getNewPost",
-    }).finally(() => setrefreshing(false));
-    setlistData(temp.data);
-    dispatch({ type: "UPDATE", data: temp.data }) 
+    }).then((resjson) => {
+      setlistData(resjson.data);
+      dispatch({ type: "UPDATE", data: resjson.data }) 
+    })
+    .catch((err) => {console.log(err)})
+    .finally(() => setrefreshing(false));
+    dispatch({ type: "setNoReload" });
   };
   useEffect(() => {
-    // ẩn warning
-    LogBox.ignoreLogs(["VirtualizedLists should never be nested"]);
+    
     const checkTokenLocal = async () => {
       let result = await SecureStore.getItemAsync("token");
       let avatar = await SecureStore.getItemAsync("avatar")
@@ -68,7 +71,7 @@ function Home(props) {
     };
     checkTokenLocal();
     getData();
-  }, []);
+  }, [props.reloadPost]);
   // onPress tặng cộng đồng
   const actionOnPressTCD = () => {
     if (props.auth.isLogin == true) {
@@ -398,5 +401,6 @@ export default connect(function (state) {
     controlThreadGiveFor: state.controlThreadGiveFor,
     profile: state.profile,
     controlConfirmAddress: state.controlConfirmAddress,
+    reloadPost: state.reloadPost,
   };
 })(Home);

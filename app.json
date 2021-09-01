@@ -3,7 +3,7 @@
     "name": "Smai",
     "version": "1.0.0",
     "slug": "Smai",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/smaiicon.png",
     "ios": {
       "bundleIdentifier": "com.smait.quyengop",
       "buildNumber": "1.0.0"

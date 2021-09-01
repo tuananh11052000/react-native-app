@@ -110,12 +110,12 @@ function CategoryCheckBoxComponent(props) {
       expanded: false,
       category: "ĐỒ TRẺ EM",
       subCategory: [
-        { id: 18, name: 'Đồ chơi' },
-        { id: 19, name: 'Xe đẩy, bàn ăn' },
-        { id: 20, name: 'Tả, bỉm, sữa cho bé' },
-        { id: 12, name: 'Quần áo trẻ nam' },
-        { id: 13, name: 'Quần áo trẻ nữ' },
-        { id: 14, name: 'Đồ khác' }]
+        { id: 12, name: 'Đồ chơi' },
+        { id: 13, name: 'Xe đẩy, bàn ăn' },
+        { id: 14, name: 'Tả, bỉm, sữa cho bé' },
+        { id: 15, name: 'Quần áo trẻ nam' },
+        { id: 16, name: 'Quần áo trẻ nữ' },
+        { id: 17, name: 'Đồ khác' },]
     },
     {
       expanded: false,
@@ -153,21 +153,30 @@ function CategoryCheckBoxComponent(props) {
     },
     {
       expanded: false,
+      category: "ĐỒ ĐIỆN TỬ",
+      subCategory: [
+        { id: 41, name: 'Tivi, loa, đài,...' },
+        { id: 42, name: 'Điện thoại, laptop, máy tính,...' },
+        { id: 43, name: 'Đồ khác' },
+      ]
+    },
+    {
+      expanded: false,
       category: "ĐỒ NỘI NGOẠI THẤT",
       subCategory: [
-        { id: 41, name: 'Bàn ghế, giường, tủ, kệ,...' },
-        { id: 42, name: 'Cây cảnh, bàn ghế đá,...' },
-        { id: 43, name: 'Gạch, cát, xi măng, sắt,...' },
-        { id: 44, name: 'Đồ khác' },
+        { id: 44, name: 'Bàn ghế, giường, tủ, kệ,...' },
+        { id: 45, name: 'Cây cảnh, bàn ghế đá,...' },
+        { id: 46, name: 'Gạch, cát, xi măng, sắt,...' },
+        { id: 47, name: 'Đồ khác' },
       ]
     },
     {
       expanded: false,
       category: "XE CỘ",
       subCategory: [
-        { id: 45, name: 'Xe cho người khuyết tật' },
-        { id: 46, name: 'Xe đạp, xe điện, xe máy' },
-        { id: 47, name: 'Xe khác' },]
+        { id: 48, name: 'Xe cho người khuyết tật' },
+        { id: 49, name: 'Xe đạp, xe điện, xe máy' },
+        { id: 50, name: 'Xe khác' },]
     },
   ];
   const [CONTENT_SAVED, setcontensaved] = useState([]);
