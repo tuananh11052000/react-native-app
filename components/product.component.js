@@ -14,8 +14,9 @@ import {
 import { connect } from "react-redux";
 import * as SecureStore from "expo-secure-store";
 import axios from "axios";
-import { Feather } from "@expo/vector-icons";
+import { Feather, FontAwesome } from "@expo/vector-icons";
 import config from "../config";
+var { width } = Dimensions.get("window");
 import AppLoading from "expo-app-loading";
 import {
   useFonts,
@@ -31,8 +32,6 @@ import {
   OpenSans_800ExtraBold_Italic,
 } from "@expo-google-fonts/open-sans";
 function ProductComponent(props) {
-  const [loading, setloading] = useState(true);
-  const [dataRender, setData] = useState([]);
   const [fontsLoaded, error] = useFonts({
     OpenSans_300Light,
     OpenSans_300Light_Italic,
@@ -45,28 +44,7 @@ function ProductComponent(props) {
     OpenSans_800ExtraBold,
     OpenSans_800ExtraBold_Italic,
   });
-  useEffect(() => {
-    getDataHistory();
-    return () => {};
-  }, []);
-  const getDataHistory = async () => {
-    let result = await SecureStore.getItemAsync("token");
-    await axios({
-      method: "get",
-      url: "https://smai-app-api.herokuapp.com/user/getHistoryPost",
-      headers: {
-        Authorization: result,
-      },
-    })
-      .then((data) => {
-        setloading(false);
-        setData(data.data);
-      })
-      .catch((error) => {
-        console.log("Error: ", error);
-      })
-    
-  };
+
   if (!fontsLoaded) {
     return <AppLoading />;
   }
@@ -104,33 +82,7 @@ function ProductComponent(props) {
     else if (calHour() != 0) return `${calHour()}h `;
     else return `${calMinute()}m `;
   };
-  //get post
 
-  // useEffect(() => {
-  //   // const getDataHome = async () => {
-  //   //   let temp = await axios({
-  //   //     method: "get",
-  //   //     url: "https://smai-app-api.herokuapp.com/post/getNewPost",
-  //   //   }).finally(() => setloading(false));
-  //   //   setData(temp.data);
-  //   // };
-  //   const getDataHistory = async () => {
-  //     let result = await SecureStore.getItemAsync("token");
-  //     await axios({
-  //       method: "get",
-  //       url: "https://smai-app-api.herokuapp.com/user/getHistoryPost",
-  //       headers: {
-  //         Authorization: result,
-  //       },
-  //     }).then((data) => {
-  //       setloading(false);
-  //       setData(data.data);
-  //     });
-  //   };
-  //   if (props.type == "history") {
-  //     getDataHistory();
-  //   } else getDataHome();
-  // }, [props.data_]);
   //Function handling title post
   const renderTitle = (item) => {
     item = item.charAt(0).toUpperCase() + item.slice(1);
@@ -139,8 +91,26 @@ function ProductComponent(props) {
   };
   //Function handling type product
   const renderType = (pr) => {
-    if (pr.length > 1) return pr[0].Category + ", ...";
-    else return pr[0].Category;
+    if (pr.length > 1) return pr[0].NameProduct + ", ...";
+    else return pr[0].NameProduct;
+  };
+  const renderCategory = () => {
+    if (props.typeAuthor == "tangcongdong") {
+      return (
+        <View style={styles.wrapTypePrice}>
+          <Text style={styles.type}>{renderType(props.category)}</Text>
+          <Text style={styles.price}>Miễn phí</Text>
+        </View>
+      );
+    } else {
+      return (
+        <View style={styles.wrapTypePrice}>
+          <Text style={styles.type}>
+            Danh mục nhận tặng: {props.cateReceives}
+          </Text>
+        </View>
+      );
+    }
   };
   // render address
   const renderDistrict = (district, city) => {
@@ -150,13 +120,22 @@ function ProductComponent(props) {
     if (district.indexOf("Quận") != -1 && city.indexOf("Hồ Chí Minh") == -1) {
       return district.slice(5);
     }
-    const distritNumber = "Quận 1, Quận 2, Quận 3, Quận 4, Quận 5, Quận 6, Quận 7, Quận 8, Quận 9, Quận 10, Quận 11, Quận 12"
-  if (district.indexOf("Quận") != -1 && city.indexOf("Hồ Chí Minh") != -1 && distritNumber.indexOf(district) != -1) {
-    return district;
-  }
-  if (district.indexOf("Quận") != -1 && city.indexOf("Hồ Chí Minh") != -1 && distritNumber.indexOf(district) == -1) {
-    return district.slice(5);
-  }
+    const distritNumber =
+      "Quận 1, Quận 2, Quận 3, Quận 4, Quận 5, Quận 6, Quận 7, Quận 8, Quận 9, Quận 10, Quận 11, Quận 12";
+    if (
+      district.indexOf("Quận") != -1 &&
+      city.indexOf("Hồ Chí Minh") != -1 &&
+      distritNumber.indexOf(district) != -1
+    ) {
+      return district;
+    }
+    if (
+      district.indexOf("Quận") != -1 &&
+      city.indexOf("Hồ Chí Minh") != -1 &&
+      distritNumber.indexOf(district) == -1
+    ) {
+      return district.slice(5);
+    }
     if (district.indexOf("Huyện") != -1) {
       return district.slice(7);
     }
@@ -176,154 +155,88 @@ function ProductComponent(props) {
     let diachi = huyen + ", " + tinh;
     return diachi;
   };
+  const renderImage = () => {
+    if (props.urlImage != null) {
+      return (
+        <Image
+          style={styles.tinyLogo}
+          source={{
+            uri: props.urlImage,
+          }}
+        />
+      );
+    } else {
+      return (
+        <FontAwesome name="file-photo-o" size={width * 0.2} color="#CCCCCC" />
+      );
+    }
+  };
   const _pressRow = (item) => {
     props.navigation.navigate("DetailPost", { data: item }); //chuyển trang
   };
 
   const currentTime = new Date();
 
-  const renderItem = ({ item }) => (
-    <TouchableOpacity
-      style={style.wrapCategory}
-      activeOpacity={0.4}
-      onPress={() => _pressRow(item)}
-    >
-      {/* //dùng onStartShouldSetResponder để click vào view */}
-
-      <Image
-        style={style.tinyLogo}
-        source={{
-          uri: item.urlImage[0],
-        }}
-      />
-      <View style={style.wrapInfoProduct}>
-        <Text style={style.titlePost}>{renderTitle(item.title)}</Text>
-        <View style={style.wrapTypePrice}>
-          <Text style={style.type}>{renderType(item.NameProduct)}</Text>
-          <Text style={style.price}>Miễn phí</Text>
-        </View>
-        <View style={style.wrapTimeAddress}>
-          <View style={style.wrapTime}>
-            <Feather name="clock" size={20} color="gray" />
-            <Text style={style.time}>
-              {calculatingTime(item.createdAt, currentTime)}
-            </Text>
+  return (
+    <TouchableOpacity style={styles.containter} onPress={() => _pressRow(props.item)}>
+      <View style={{ flexDirection: "row" }}>
+        <View style={styles.wrapImage}>{renderImage()}</View>
+        <View style={styles.wrapInfoProduct}>
+          <View>
+            <Text style={styles.titlePost}>{renderTitle(props.title)}</Text>
           </View>
-          <Text style={style.address}>{renderAddress(item.address)}</Text>
+          {renderCategory()}
+          <View style={styles.wrapTimeAddress}>
+            <View style={styles.wrapTime}>
+              <Feather
+                name="clock"
+                size={18}
+                color="gray"
+                style={{ width: 18, height: 18 }}
+              />
+              <Text style={styles.time}>
+                {calculatingTime(props.time, currentTime)}
+              </Text>
+            </View>
+            <Text style={styles.address}>{renderAddress(props.address)}</Text>
+          </View>
         </View>
       </View>
     </TouchableOpacity>
   );
-  // space between item flatlist
-  const ItemSeparatorView = () => {
-    return (
-      <View style={{ height: 10, width: "100%", backgroundColor: "#EEEEEE" }} />
-    );
-  };
-  return (
-    <View style={style.containerr}>
-      {loading ? (
-        <View
-          style={{
-            flexDirection: "row",
-            justifyContent: "center",
-            height: "100%",
-          }}
-        >
-          <ActivityIndicator color="#BDBDBD" size="small" />
-        </View>
-      ) : (
-        <FlatList
-          data={dataRender}
-          renderItem={renderItem}
-          keyExtractor={(item) => item._id}
-          ItemSeparatorComponent={ItemSeparatorView}
-        />
-      )}
-    </View>
-  );
 }
 
-const style = StyleSheet.create({
+const styles = StyleSheet.create({
   containter: {
     flex: 1,
-    backgroundColor: "#e5e5e5",
-  },
-  containterLoading: {
-    flex: 1,
-    justifyContent: "center",
-  },
-  // style search
-  searchFilterContainer: {
-    height: 60,
-    backgroundColor: "#F5F5F5",
-    flexDirection: "row",
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  wrapFilterButton: {
-    flexDirection: "row",
     backgroundColor: "#FFF",
-    width: "55%",
-    maxWidth: "55%",
-    height: "70%",
     paddingLeft: "1%",
-    borderWidth: 2,
-    borderColor: "#EEEEEE",
-    justifyContent: "space-around",
-    alignItems: "center",
-    marginLeft: "3%",
+    paddingRight: "4%",
+    paddingTop: "2%",
+    paddingBottom: "2%",
   },
-  searchText: {
-    backgroundColor: "#fff",
-    paddingHorizontal: 20,
-    fontSize: 20,
-    maxWidth: "90%",
-  },
-
-  // style product
-  wrapCategory: {
-    padding: 15,
-    marginBottom: 10,
-    flex: 1,
+  wrapImage: {
+    width: "30%",
     alignItems: "center",
-    display: "flex",
-    flexDirection: "row",
-    justifyContent: "space-around",
-    backgroundColor: "white",
   },
   tinyLogo: {
-    width: 90,
-    height: 90,
+    width: width * 0.22,
+    height: width * 0.22,
+  },
+  titlePost: {
+    fontSize: config.fontsize_5,
+    fontFamily: "OpenSans_600SemiBold",
   },
   wrapInfoProduct: {
-    flex: 1,
-    marginLeft: 10,
-    // justifyContent: "space-around",
+    marginLeft: "1%",
+    width: "70%",
+    justifyContent: "center",
   },
   wrapTypePrice: {
     flexDirection: "row",
     justifyContent: "space-between",
-    marginVertical: 12,
-  },
-  wrapTimeAddress: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-  },
-  titlePost: {
-    fontSize: config.fontsize_2,
-    fontFamily: "OpenSans_600SemiBold",
-  },
-  wrapTime: {
-    display: "flex",
-    alignItems: "center",
-    flexDirection: "row",
-  },
-  time: {
-    fontSize: config.fontsize_3,
-    marginLeft: 5,
-    color: "black",
-    fontFamily: "OpenSans_400Regular",
+    marginBottom: "2%",
+    marginTop: "2%",
   },
   price: {
     color: "green",
@@ -333,6 +246,20 @@ const style = StyleSheet.create({
   type: {
     fontSize: config.fontsize_3,
     color: "gray",
+    fontFamily: "OpenSans_400Regular",
+  },
+  wrapTimeAddress: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
+  wrapTime: {
+    alignItems: "center",
+    flexDirection: "row",
+  },
+  time: {
+    fontSize: config.fontsize_3,
+    marginLeft: 5,
+    color: "black",
     fontFamily: "OpenSans_400Regular",
   },
   address: {

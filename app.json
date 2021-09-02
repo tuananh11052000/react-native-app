@@ -3,13 +3,13 @@
     "name": "Smai",
     "version": "1.0.0",
     "slug": "Smai",
-    "icon": "./assets/smaiicon.png",
+    "icon": "./assets/icon.png",
     "ios": {
-      "bundleIdentifier": "com.smait.quyengop",
+      "bundleIdentifier": "com.smait",
       "buildNumber": "1.0.0"
     },
     "android": {
-      "package": "com.smait.quyengop",
+      "package": "com.smai",
       "versionCode": 1
     }
   }
