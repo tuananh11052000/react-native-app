@@ -20,11 +20,11 @@ import GiftComponent from "../components/gift.component";
 import SearchComponent from "../components/search.component";
 import TitleComponent from "../components/title.component";
 import NewsedBox from "../components/newsedBox.components";
-import ProductComponent from '../components/product.component';
+import ProductComponent from "../components/product.component";
 import * as SecureStore from "expo-secure-store";
 import axios from "axios";
 import config from "../config";
-import AppLoading from 'expo-app-loading';
+import AppLoading from "expo-app-loading";
 import {
   useFonts,
   OpenSans_300Light,
@@ -38,34 +38,36 @@ import {
   OpenSans_800ExtraBold,
   OpenSans_800ExtraBold_Italic,
 } from "@expo-google-fonts/open-sans";
-var {width} = Dimensions.get('window');
+var { width } = Dimensions.get("window");
 const heightStatusBar = StatusBar.currentHeight;
 function Home(props) {
   const { dispatch } = props;
   const [listData, setlistData] = useState([]);
   const [refreshing, setrefreshing] = useState(true);
- 
+
   const getData = async () => {
     await axios({
       method: "get",
       url: "https://smai-app-api.herokuapp.com/post/getNewPost",
-    }).then((resjson) => {
-      setlistData(resjson.data);
-      dispatch({ type: "UPDATE", data: resjson.data }) 
     })
-    .catch((err) => {console.log(err)})
-    .finally(() => setrefreshing(false));
+      .then((resjson) => {
+        setlistData(resjson.data);
+        dispatch({ type: "UPDATE", data: resjson.data });
+      })
+      .catch((err) => {
+        console.log(err);
+      })
+      .finally(() => setrefreshing(false));
     dispatch({ type: "setNoReload" });
   };
   useEffect(() => {
-    
     const checkTokenLocal = async () => {
       let result = await SecureStore.getItemAsync("token");
-      let avatar = await SecureStore.getItemAsync("avatar")
+      let avatar = await SecureStore.getItemAsync("avatar");
       let PhoneNumber = await SecureStore.getItemAsync("PhoneNumber");
       if (result) {
         dispatch({ type: "SIGN_IN", token: result, PhoneNumber: PhoneNumber });
-        dispatch({ type: "GET_AVATAR", avatar: avatar })
+        dispatch({ type: "GET_AVATAR", avatar: avatar });
       } else {
         return await null;
       }
@@ -76,37 +78,23 @@ function Home(props) {
   // onPress tặng cộng đồng
   const actionOnPressTCD = () => {
     if (props.auth.isLogin == true) {
-      dispatch({ type: "setThreadCategory" });
+      dispatch({ type: "setThreadCategory" }); // redirect address giữa tặng cộng đồng và cần xin đồ ở home và createPost
       dispatch({ type: "setThreadTCD" });
       dispatch({ type: "SET_TYPE_AUTHOR", TypeAuthor: "tangcongdong" });
       navigation.navigate("ConfirmAddress");
     } else navigation.replace("Authentication");
   };
   // onPress tặng người nghèo
-  const actionOnPressGiveCaNhan = () => {
+  const actionOnPressCXD = () => {
     if (props.auth.isLogin == true) {
-      dispatch({ type: "setThreadCategory" });
-      dispatch({ type: "setThreadGiveGroup" });
-      dispatch({ type: "giveForCaNhan" });
+      dispatch({ type: "setThreadCXD" }); // redirect address giữa tặng cộng đồng và cần xin đồ ở home và createPost
       navigation.navigate("ConfirmAddress");
     } else navigation.replace("Authentication");
   };
   // onpress tặng quỹ từ thiện
-  const actionOnPressGiveQuy = () => {
+  const actionOnPressMedicalAdvise = () => {
     if (props.auth.isLogin == true) {
-      dispatch({ type: "setThreadCategory" });
-      dispatch({ type: "setThreadGiveGroup" });
-      dispatch({ type: "giveForQuy" });
-      navigation.navigate("ConfirmAddress");
-    } else navigation.replace("Authentication");
-  };
-  // onpress quyên góp công ích
-  const actionOnPressGiveCongIch = () => {
-    if (props.auth.isLogin == true) {
-      dispatch({ type: "setThreadCategory" });
-      dispatch({ type: "setThreadGiveGroup" });
-      dispatch({ type: "giveForCongIch" });
-      navigation.navigate("ConfirmAddress");
+      navigation.navigate("MedicalAdvise");
     } else navigation.replace("Authentication");
   };
   const { navigation } = props;
@@ -125,7 +113,7 @@ function Home(props) {
   if (!fontsLoaded) {
     return <AppLoading />;
   }
-  
+
   const renderItem = ({ item }) => {
     return (
       <ProductComponent
@@ -155,12 +143,14 @@ function Home(props) {
   const listheader = () => {
     return (
       <>
-      <SearchComponent onPress={() => navigation.navigate("Search")} pressAnnounce={() => navigation.navigate("Announce")} />
+        <SearchComponent
+          onPress={() => navigation.navigate("Search")}
+          pressAnnounce={() => navigation.navigate("Announce")}
+        />
         <GiftComponent
           onPressTCD={() => actionOnPressTCD()}
-          onPressGiveCaNhan={() => actionOnPressGiveCaNhan()}
-          onPressGiveQuy={() => actionOnPressGiveQuy()}
-          onPressGiveCongIch={() => actionOnPressGiveCongIch()}
+          onPressCXD={() => actionOnPressCXD()}
+          onPressMedicalAdvise={() => actionOnPressMedicalAdvise()}
           style={styles.gift_component}
         />
         <TitleComponent title="Tin đã đăng" />
@@ -170,29 +160,28 @@ function Home(props) {
         />
         <TitleComponent title="Tin mới nhất" />
       </>
-    )
-  }
+    );
+  };
   ////////////////////////////////////////////////////
 
   return (
     <View style={styles.container}>
-    
-        <View style={styles.containerr}>
-          {refreshing ? (
-            <ActivityIndicator />
-          ) : (
-            <FlatList
-              data={listData}
-              renderItem={renderItem}
-              keyExtractor={(item) => item._id}
-              ItemSeparatorComponent={ItemSeparatorView}
-              ListHeaderComponent={listheader}
-              refreshControl={
-                <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-              }
-            />
-          )}
-        </View>
+      <View style={styles.containerr}>
+        {refreshing ? (
+          <ActivityIndicator />
+        ) : (
+          <FlatList
+            data={listData}
+            renderItem={renderItem}
+            keyExtractor={(item) => item._id}
+            ItemSeparatorComponent={ItemSeparatorView}
+            ListHeaderComponent={listheader}
+            refreshControl={
+              <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+            }
+          />
+        )}
+      </View>
     </View>
   );
 }
@@ -211,71 +200,10 @@ const styles = StyleSheet.create({
   wrap_search_bgr: {
     flex: 1,
   },
-  // style product components///////////////////////////////////
+  // style product components///
   containerr: {
     backgroundColor: "#FFF",
   },
-  wrapCategory: {
-    paddingTop: '2%',
-    paddingBottom: '2%',
-    paddingLeft: '3%',
-    paddingRight: '3%',
-    flex: 1,
-    alignItems: "center",
-    flexDirection: "row",
-    justifyContent: "space-around",
-    backgroundColor: "white",
-  },
-  tinyLogo: {
-    width: width*0.25,
-    height: width*0.25,
-  },
-  wrapInfoProduct: {
-    flex: 1,
-    marginLeft: 10,
-    justifyContent: "space-around",
-    // paddingBottom: 10,
-  },
-  wrapTypePrice: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    marginVertical: 12,
-  },
-  wrapTimeAddress: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-  },
-  titlePost: {
-    fontSize: config.fontsize_2,
-    fontFamily: "OpenSans_600SemiBold",
-  },
-  wrapTime: {
-    display: "flex",
-    alignItems: "center",
-    flexDirection: "row",
-  },
-  time: {
-    fontSize: config.fontsize_3,
-    marginLeft: 5,
-    color: "black",
-    fontFamily: "OpenSans_400Regular",
-  },
-  price: {
-    color: "green",
-    fontSize: config.fontsize_3,
-    fontFamily: "OpenSans_400Regular",
-  },
-  type: {
-    fontSize: config.fontsize_3,
-    color: "gray",
-    fontFamily: "OpenSans_400Regular",
-  },
-  address: {
-    color: "black",
-    fontSize: config.fontsize_3,
-    fontFamily: "OpenSans_400Regular",
-  },
-  //////////////////////////////////////////////////
 });
 
 export default connect(function (state) {

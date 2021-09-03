@@ -145,7 +145,11 @@ function App(props) {
   const pressAddress = () => {
     setshowModelAddress(true);
   };
- 
+  const ItemSeparatorView = () => {
+    return (
+      <View style={{ height: 10, width: "100%", backgroundColor: "#EEEEEE" }} />
+    );
+  };
   // render item product
   const renderItem = ({ item }) => {
     return (
@@ -216,6 +220,7 @@ function App(props) {
             data={data}
             renderItem={renderItem}
             keyExtractor={(item) => `key-${item._id}`}
+            ItemSeparatorComponent={ItemSeparatorView}
           ></FlatList>
         </>
       )}
@@ -226,7 +231,7 @@ function App(props) {
 const styles = StyleSheet.create({
   containter: {
     flex: 1,
-    backgroundColor: "#e5e5e5",
+    backgroundColor: "#FFF",
   },
   containterLoading: {
     flex: 1,

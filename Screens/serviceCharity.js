@@ -8,14 +8,11 @@ import {
   Text,
 } from "react-native";
 import { connect } from "react-redux";
-import axios from "axios";
-
 import NewPostType from "../components/newpostType.component";
-import PriorityImg from "../assets/priority_preview.png";
-
+import config from '../config';
 // const heightStatusBar = StatusBar.currentHeight;//get status bar height
 
-function PostType(props) {
+function ServiceCharity(props) {
   const { navigation } = props;
   const { dispatch } = props;
   const actionOnPressCXD = () => {
@@ -24,55 +21,58 @@ function PostType(props) {
   };
   const actionOnPressTCD = () => {
     dispatch({ type: "setThreadCategory" });
-    dispatch({ type: "setThreadTCD" });// chia luồn cateogorynocheckbox giữa givefor và tặng cộng đồng
+    dispatch({ type: "setThreadTCD" });
     dispatch({ type: "SET_TYPE_AUTHOR", TypeAuthor: "tangcongdong" });
     navigation.navigate("Category");
   };
   // onPress tặng người nghèo
   const actionOnPressGiveCaNhan = () => {
     dispatch({ type: "setThreadCategory" });
-    dispatch({ type: "setThreadGiveGroup" }); // chia luồn cateogory nocheckbox giữa givefor và tặng cộng đồng
+    dispatch({ type: "setThreadGiveGroup" });
     dispatch({ type: "giveForCaNhan" });
     navigation.navigate("Category");
   };
   // onpress tặng quỹ từ thiện
   const actionOnPressGiveQuy = () => {
     dispatch({ type: "setThreadCategory" });
-    dispatch({ type: "setThreadGiveGroup" });// chia luồn cateogory nocheckbox giữa givefor và tặng cộng đồng
+    dispatch({ type: "setThreadGiveGroup" });
     dispatch({ type: "giveForQuy" });
     navigation.navigate("Category");
   };
   // onpress quyên góp công ích
   const actionOnPressGiveCongIch = () => {
     dispatch({ type: "setThreadCategory" });
-    dispatch({ type: "setThreadGiveGroup" });// chia luồn cateogory nocheckbox giữa givefor và tặng cộng đồng
+    dispatch({ type: "setThreadGiveGroup" });
     dispatch({ type: "giveForCongIch" });
     navigation.navigate("Category");
   };
 
   return (
     <View style={styles.container}>
-      <NewPostType title="Cần hỗ trợ" onPress={() => actionOnPressCXD()} />
       <NewPostType title="Tặng cộng đồng" onPress={() => actionOnPressTCD()} />
       <NewPostType
         title="Tặng người khó khăn"
         onPress={() => actionOnPressGiveCaNhan()}
       />
       <NewPostType
-        title="Tặng quỹ từ thiện"
+        title="Tặng Quỹ/Nhóm từ thiện"
         onPress={() => actionOnPressGiveQuy()}
       />
       <NewPostType
-        title="Quyên góp công ích"
+        title="Đóng góp công ích"
         onPress={() => actionOnPressGiveCongIch()}
       />
-      <View style={styles.row}>
-        <Image source={PriorityImg} style={{ width: 26, height: 26 }} />
-        <Text style={styles.textNote}> Lưu ý</Text>
-      </View>
+
       <Text style={styles.textContent}>
-        Tổ chức công ích bao gồm: Trường học, bệnh viện, UBND, Hội Chữ Thập Đỏ,
-        Nhà thờ, ... cần quyên góp xây dựng "đường, cầu cống, nhà tình thương".
+        <Text style={{ textDecorationLine: "underline" }}>Tặng cộng đồng</Text>{" "}
+        : Tin đăng được hiển thị cho mọi người ai cần sẽ trực tiếp liên hệ với
+        bạn.
+      </Text>
+      <Text style={styles.textContent}>
+        <Text style={{ textDecorationLine: "underline" }}>Góp công ích</Text> :
+        Góp cho trùng tu, xây dựng cầu đường, bệnh viện, trường học,... do các
+        tổ chức "UBND, Hội chữ thập đỏ, trường học, bệnh viện, nhà chùa, nhà
+        thờ,..." chủ trì
       </Text>
     </View>
   );
@@ -91,11 +91,13 @@ const styles = StyleSheet.create({
     paddingRight: 16,
   },
   textNote: {
-    fontSize: 20,
+    fontSize: config.fontsize_2,
     fontFamily: "OpenSans_400Regular",
   },
   textContent: {
-    padding: 16,
+    marginTop: '5%',
+    marginLeft: '4%', 
+    marginRight: '4%',
     textAlign: "justify",
     fontFamily: "OpenSans_400Regular",
   },
@@ -104,5 +106,6 @@ export default connect(function (state) {
   return {
     controlThreadGiveFor: state.controlThreadGiveFor,
     controlConfirmAddress: state.controlConfirmAddress,
+    controlThreadTCD: state.controlThreadTCD,
   };
-})(PostType);
+})(ServiceCharity);

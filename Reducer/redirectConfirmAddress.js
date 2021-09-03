@@ -6,6 +6,9 @@ var controlConfirmAddress = (state = "category", action) => {
       case "setThreadCategoryCheckBox": {
         return "categoryCheckBox";
       }
+      case "setThreadCXD": {
+        return "moveCXD";
+      }
       default:
         return state;
     }

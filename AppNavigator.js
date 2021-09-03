@@ -1,13 +1,19 @@
 import * as React from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { connect } from 'react-redux'
+import { connect } from "react-redux";
 
 import {
   createStackNavigator,
   HeaderBackButton,
 } from "@react-navigation/stack";
-import { Button, Text, TouchableOpacity, StyleSheet, Alert } from "react-native";
+import {
+  Button,
+  Text,
+  TouchableOpacity,
+  StyleSheet,
+  Alert,
+} from "react-native";
 
 import Search from "./Screens/seachScreen";
 import ConfirmAddress from "./Screens/confirmAddress";
@@ -29,9 +35,11 @@ import VerifyOtps from "./Screens/verifyOtp";
 import GiveFor from "./Screens/giveFor";
 import ForgotPasswords from "./Screens/forgotPassword";
 import FilterDonationComunity from "./Screens/FilterDonationComunity";
-import CategoryCheckBox from './Screens/categoryNeedSomeThing';
+import CategoryCheckBox from "./Screens/categoryNeedSomeThing";
 import NewPassword from "./Screens/newPassword";
-import Announce from './Screens/announce';
+import Announce from "./Screens/announce";
+import ServiceCharity from "./Screens/serviceCharity";
+import MedicalAdvise from "./Screens/medicalAdvice";
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
 
@@ -116,7 +124,7 @@ function AppNavigator(props) {
 
             headerLeft: () => (
               <HeaderBackButton
-                onPress={() => navigation.navigate("Home")}
+                onPress={() => navigation.goBack()}
                 tintColor={"white"}
                 label="Quay lại" //back
               />
@@ -157,8 +165,6 @@ function AppNavigator(props) {
               </TouchableOpacity>
             ),
             headerBackTitle: "some label",
-
-            
           })}
         />
 
@@ -360,7 +366,6 @@ function AppNavigator(props) {
             headerTitleStyle: {
               fontWeight: "bold",
             },
-
           }}
         />
         <Stack.Screen
@@ -417,7 +422,7 @@ function AppNavigator(props) {
             headerTintColor: config.headerTintColor,
             headerStyle: {
               backgroundColor: config.color_header_background,
-            }
+            },
           }}
         />
         <Stack.Screen
@@ -496,8 +501,8 @@ function AppNavigator(props) {
                       style: "cancel",
                       onPress: () => {
                         dispatch({ type: "RESET_ADDRESS_FILTER" });
-                        navigation.navigate("Home")
-                      }
+                        navigation.navigate("Home");
+                      },
                     },
                   ]);
                 }}
@@ -549,7 +554,64 @@ function AppNavigator(props) {
             headerTitleStyle: {
               fontWeight: "bold",
             },
+          }}
+        />
+        <Stack.Screen
+          name="ServiceCharity"
+          component={ServiceCharity}
+          options={({ navigation }) => ({
+            title: "Dịch vụ từ thiện",
+            headerShown: true,
+            headerStyle: {
+              backgroundColor: config.color_header_background,
+            },
+            headerTintColor: config.headerTintColor,
+            headerTitleStyle: {
+              fontWeight: "bold",
+            },
+            headerRight: () => (
+              <TouchableOpacity
+                style={styles.wrapTextCancel}
+                onPress={() => {
+                  Alert.alert("Thông báo", "Bạn có chắc muốn hủy!", [
+                    {
+                      text: "Không",
+                      style: "cancel",
+                    },
+                    {
+                      text: "Có",
+                      style: "cancel",
+                      onPress: () => navigation.navigate("Home"),
+                    },
+                  ]);
+                }}
+              >
+                <Text style={styles.textCancel}>Hủy</Text>
+              </TouchableOpacity>
+            ),
+            headerBackTitle: "some label",
 
+            headerLeft: () => (
+              <HeaderBackButton
+                onPress={() => navigation.navigate("Home")}
+                tintColor={"white"}
+                label="Quay lại" //back
+              />
+            ),
+          })}
+        />
+        <Stack.Screen
+          name="MedicalAdvise"
+          component={MedicalAdvise}
+          options={{
+            title: "Danh sách",
+            headerStyle: {
+              backgroundColor: config.color_header_background,
+            },
+            headerTintColor: config.headerTintColor,
+            headerTitleStyle: {
+              fontWeight: "bold",
+            },
           }}
         />
       </Stack.Navigator>
@@ -564,12 +626,9 @@ const styles = StyleSheet.create({
     color: "#FFF",
     fontSize: config.fontsize_5,
     marginRight: 10,
-
   },
 });
 
-
 export default connect(function (state) {
-  return { infoPost: state.infoPost, dataCategory: state.dataCategory, }
+  return { infoPost: state.infoPost, dataCategory: state.dataCategory };
 })(AppNavigator);
-

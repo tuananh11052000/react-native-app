@@ -147,7 +147,6 @@ function confirmAddress(props) {
         { text: "OK" },
       ]);
     else {
-      
       if (isChage == true) {
         //neu chuong trinh chay vao day tuc la thong tin dia chi da duoc thay doi
         //can phai luu thon tin moi vao local store
@@ -162,12 +161,16 @@ function confirmAddress(props) {
                   save("commune", commune.name).then((res) => {
                     save("detail", addressDetail).then((res) => {
                       const { dispatch } = props;
-                      const address = `${addressDetail}, ${commune.name}, ${district.name}, ${province.name}`;                    
-                      dispatch({ type: "CONFIRM_ADDRESS", address: address });                 
+                      const address = `${addressDetail}, ${commune.name}, ${district.name}, ${province.name}`;
+                      dispatch({ type: "CONFIRM_ADDRESS", address: address });
                       if (props.controlConfirmAddress == "category") {
-                        navigation.navigate("Category");
+                        navigation.navigate("ServiceCharity");
                       } else {
-                        navigation.navigate("CategoryCheckBox");
+                        if (props.controlConfirmAddress == "moveCXD") {
+                          navigation.navigate("WhoConfirm");
+                        } else {
+                          navigation.navigate("PostType");
+                        }
                       }
                     });
                   });
@@ -183,11 +186,14 @@ function confirmAddress(props) {
           district.name
         }, ${province.name}`;
         dispatch({ type: "CONFIRM_ADDRESS", address: address });
-        console.log(props.controlConfirmAddress);
         if (props.controlConfirmAddress == "category") {
-          navigation.navigate("Category");
+          navigation.navigate("ServiceCharity");
         } else {
-          navigation.navigate("PostType");
+          if (props.controlConfirmAddress == "moveCXD") {
+            navigation.navigate("WhoConfirm");
+          } else {
+            navigation.navigate("PostType");
+          }
         }
       }
     }

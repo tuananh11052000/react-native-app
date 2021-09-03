@@ -88,7 +88,7 @@ const styles = StyleSheet.create({
   },
   Text: {
     padding: 8,
-    fontSize: config.fontsize_2,
+    fontSize: config.fontsize_5,
     color: "#fff",
     fontFamily: "OpenSans_700Bold",
   },
