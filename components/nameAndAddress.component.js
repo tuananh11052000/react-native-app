@@ -37,8 +37,36 @@ import {
   OpenSans_800ExtraBold_Italic,
 } from "@expo-google-fonts/open-sans";
 import config from "../config";
+import { connect } from "react-redux";
+import * as SecureStore from "expo-secure-store";
 import PriorityImg from "../assets/priority_preview.png";
-export default function NameAndAddress(props) {
+import ModalDetailAddress from "./ModalDetailAddress";
+function NameAndAddress(props) {
+  const [FullName, getName] = useState("");
+  const [text, settext] = useState("");
+  const [showModelAddress, setshowModelAddress] = useState(false);
+  useEffect(() => {
+    const getAvtFunc = async () => {
+      if (props.auth.isLogin == true) {
+        let Name = await SecureStore.getItemAsync("FullName");
+        getName(Name);
+      }
+    };
+    getAvtFunc();
+  }, []);
+  const renderIMG = () => {
+    if (props.infoPost.image) {
+      return props.infoPost.image.map((img) => {
+        return (
+          <Image
+            source={{ uri: img.uri }}
+            key={img.uri}
+            style={styles.imgUpload}
+          />
+        );
+      });
+    }
+  };
   return (
     <ScrollView style={styles.container}>
       <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
@@ -48,24 +76,36 @@ export default function NameAndAddress(props) {
               <Text style={styles.title}>NGƯỜI TẶNG</Text>
             </View>
             <View style={styles.wrapName}>
-              <Text style={styles.name}>Nguyễn Hoàng An An - 0938566789</Text>
+              <Text style={styles.name}>
+                {FullName} - {props.auth.PhoneNumber}
+              </Text>
             </View>
             <View style={styles.wrapAddress}>
               <Entypo name="location" size={20} color="#BDBDBD" />
-              <Text style={styles.address}>
-                90 Võ Văn Ngân, phường Linh Chiểu, Tp Thủ Đức, Tp Hồ Chí Minh
-              </Text>
+              <Text style={styles.address}>{props.infoPost.address}</Text>
             </View>
             <View style={{ alignItems: "flex-end" }}>
-              <TouchableOpacity>
+              <TouchableOpacity onPress={() => setshowModelAddress(true)}>
                 <Text style={styles.changeAdd}>Thay đổi</Text>
               </TouchableOpacity>
             </View>
           </View>
           <View style={styles.wrapBottom}>
             <View style={styles.wrapTitleDescript}>
-              <Text style={styles.titleDescript}>Lời nhắn hoặc mô tả*</Text>
+              <View
+                style={{
+                  flexDirection: "row",
+                  justifyContent: "space-between",
+                }}
+              >
+                <Text style={styles.titleDescript}>Lời nhắn hoặc mô tả*</Text>
+                <Text style={{ color: "#BDBDBD", fontSize: config.fontsize_4 }}>
+                  {text.length}/200
+                </Text>
+              </View>
               <TextInput
+                onChangeText={(text) => settext(text)}
+                placeholder="Nhập lời nhắn hoặc mô tả"
                 editable={true}
                 maxLength={200}
                 onSubmitEditing={Keyboard.dismiss}
@@ -79,7 +119,7 @@ export default function NameAndAddress(props) {
               <ScrollView horizontal={true}>
                 <TouchableOpacity
                   style={styles.borderUpload}
-                  // onPress={() => props.onPress()}
+                  onPress={() => props.onPress()}
                 >
                   <MaterialIcons
                     name="add-photo-alternate"
@@ -87,14 +127,25 @@ export default function NameAndAddress(props) {
                     color="#B1B1B1"
                   />
                 </TouchableOpacity>
+                {renderIMG()}
               </ScrollView>
             </View>
+            <ModalDetailAddress
+              show={showModelAddress}
+              closeModel={() => {
+                setshowModelAddress(false);
+              }}
+              onPress={() => {
+                setshowModelAddress(false);
+              }}
+            />
             <View style={styles.row}>
               <Image source={PriorityImg} style={{ width: 26, height: 26 }} />
               <Text style={styles.textNote}> Lưu ý</Text>
             </View>
             <Text style={styles.textContent}>
-              Bạn cần cung cấp chính xác thông tin để người tặng có thể liên hệ, xác nhận, gửi đồ cho bạn.
+              Bạn cần cung cấp chính xác thông tin để người tặng có thể liên hệ,
+              xác nhận, gửi đồ cho bạn.
             </Text>
           </View>
         </View>
@@ -176,8 +227,8 @@ const styles = StyleSheet.create({
     borderWidth: 1,
   },
   borderUpload: {
-    width: 90,
-    height: 90,
+    width: 100,
+    height: 100,
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
@@ -189,9 +240,9 @@ const styles = StyleSheet.create({
     backgroundColor: "#FFF",
   },
   row: {
-    marginTop: '5%',
+    marginTop: "5%",
     flexDirection: "row",
-    alignItems: 'center'
+    alignItems: "center",
   },
   textNote: {
     fontSize: config.fontsize_5,
@@ -202,4 +253,14 @@ const styles = StyleSheet.create({
     fontFamily: "OpenSans_400Regular",
     fontSize: config.fontsize_3,
   },
+  imgUpload: {
+    height: 100,
+    width: 100,
+    marginLeft: 5,
+    marginTop: "4%",
+    borderRadius: 10,
+  },
 });
+export default connect(function (state) {
+  return { infoPost: state.infoPost, auth: state.auth };
+})(NameAndAddress);

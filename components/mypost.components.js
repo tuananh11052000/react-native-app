@@ -12,12 +12,17 @@ import {
   Alert,
   RefreshControl,
 } from "react-native";
-import { Feather, FontAwesome, MaterialIcons } from "@expo/vector-icons";
+import {
+  Feather,
+  FontAwesome,
+  MaterialIcons,
+  Ionicons,
+} from "@expo/vector-icons";
 import config from "../config";
 import axios from "axios";
 import * as SecureStore from "expo-secure-store";
 import Menu, { MenuItem, MenuDivider } from "react-native-material-menu";
-var {width} = Dimensions.get('window');
+var { width } = Dimensions.get("window");
 export default function MyPost(props) {
   const menu = useRef();
   const { dispatch } = props;
@@ -144,16 +149,33 @@ export default function MyPost(props) {
     if (props.confirm == true)
       return (
         <View style={style.wrapBot}>
-          <Feather
-            name="eye"
-            size={18}
-            color="#00a2e8"
-            style={{ width: 18, height: 18 }}
-          />
+          {/* <Feather name="eye" size={18} color="#00a2e8" style={{ width: 18, height: 18 }}/> */}
           <Text style={style.textStatusTrue}>&ensp;Hiển thị</Text>
         </View>
       );
     else return <Text style={style.textStatusFalse}>Chờ xác thực</Text>;
+  };
+  const renderMessage = () => {
+    if (props.typeAuthor == "tangcongdong") {
+      return (
+        <TouchableOpacity>
+          <View style={style.wrapBot}>
+            <Ionicons name="ios-mail-outline" size={18} color="#00a2e8" />
+            <Text style={style.textMessage}>&ensp;Lời nhắn</Text>
+            <Text
+              style={{
+                color: "#FE0101",
+                position: "absolute",
+                left: 10,
+                top: 1,
+              }}
+            >
+              &#11044;
+            </Text>
+          </View>
+        </TouchableOpacity>
+      );
+    }
   };
   const renderImage = () => {
     if (props.urlImage != null) {
@@ -166,7 +188,13 @@ export default function MyPost(props) {
         />
       );
     } else {
-      return <MaterialIcons name="volunteer-activism" size={width*0.1} color="#CCCCCC" />;
+      return (
+        <MaterialIcons
+          name="volunteer-activism"
+          size={width * 0.1}
+          color="#CCCCCC"
+        />
+      );
     }
   };
   return (
@@ -222,6 +250,7 @@ export default function MyPost(props) {
       <View style={style.wrapBot}>
         <Text style={style.textCate}>{renderTypeAuthor()}</Text>
         <Text style={style.textStatus}>{renderConfirm()}</Text>
+        {renderMessage()}
       </View>
     </TouchableOpacity>
   );
@@ -243,11 +272,11 @@ const style = StyleSheet.create({
   },
   wrapImage: {
     width: "30%",
-    alignItems: 'center'
+    alignItems: "center",
   },
   tinyLogo: {
     width: width * 0.25,
-    height: width *0.25,
+    height: width * 0.25,
   },
   wrapTitle: {
     alignItems: "center",
@@ -330,6 +359,11 @@ const style = StyleSheet.create({
     fontSize: config.fontsize_3,
     fontFamily: "OpenSans_400Regular",
     textAlign: "center",
+  },
+  textMessage: {
+    fontSize: config.fontsize_3,
+    color: "#00a2e8",
+    fontFamily: "OpenSans_400Regular",
   },
 });
 

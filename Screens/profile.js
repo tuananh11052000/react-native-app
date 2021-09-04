@@ -20,7 +20,7 @@ import {
   OpenSans_700Bold,
   OpenSans_700Bold_Italic,
 } from "@expo-google-fonts/open-sans";
-
+import * as SecureStore from "expo-secure-store";
 //const heightStatusBar = StatusBar.currentHeight;
 function ProfileScreen(props) {
   const { navigation } = props;
@@ -33,6 +33,14 @@ function ProfileScreen(props) {
   if (!fontsLoaded) {
     return <AppLoading />;
   }
+  const _pressRow = async () => {
+    let result = await SecureStore.getItemAsync("token");
+    if (result) {
+      navigation.navigate("History"); //chuyển trang
+    } else {
+      navigation.replace("Authentication"); //chuyển trang
+    }
+  };
   return (
     <View style={styles.container}>
       <View style={styles.scrollview}>
@@ -44,10 +52,13 @@ function ProfileScreen(props) {
           onPress={() => navigation.replace("Authentication")}
           navigation={navigation}
         />
+        <Text style={styles.Text}>Từ thiện</Text>
+        <HistoryProfileComponent textTitle="Thống kê bạn tặng" icon="give"/>
+        <HistoryProfileComponent textTitle="Thống kê nhận tặng" icon="receive"/>
         <Text style={styles.Text}>Quản lý</Text>
         <HistoryProfileComponent
-          navigation={navigation}
-        ></HistoryProfileComponent>
+          textTitle="Lịch sử xem" icon="history"
+          onPress={() => _pressRow()}/>
       </View>
 
       <View style={styles.phonenumber}>
@@ -78,7 +89,7 @@ const styles = StyleSheet.create({
   },
   Text: {
     paddingVertical: 10,
-    fontSize: config.fontsize_5,
+    fontSize: config.fontsize_3,
     marginLeft: 20,
     color: "#7F7E85",
     textTransform: "uppercase",
@@ -88,9 +99,9 @@ const styles = StyleSheet.create({
     maxWidth: "95%",
     minWidth: "90%",
     position: "absolute",
-    left: '3%',
+    left: "3%",
     bottom: 0,
-    padding: '3%',
+    padding: "3%",
     // marginBottom: 5,
     flexDirection: "row",
     // justifyContent: 'space-between',

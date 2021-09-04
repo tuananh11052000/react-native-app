@@ -94,7 +94,6 @@ function TopProfile(props) {
     };
     getAvtFunc();
   }, []);
-
   const renderOnloading = () => {
     if (isDisplay == true) {
       return (
