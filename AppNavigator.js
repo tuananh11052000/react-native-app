@@ -40,6 +40,7 @@ import NewPassword from "./Screens/newPassword";
 import Announce from "./Screens/announce";
 import ServiceCharity from "./Screens/serviceCharity";
 import MedicalAdvise from "./Screens/medicalAdvice";
+import ConfirmGiveFor from './Screens/confirmGiveFor';
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
 
@@ -613,6 +614,51 @@ function AppNavigator(props) {
               fontWeight: "bold",
             },
           }}
+        />
+        <Stack.Screen
+          name="ConfirmGiveFor"
+          component={ConfirmGiveFor}
+          options={({ navigation }) => ({
+            title: "Xác nhận gửi tặng",
+            headerShown: true,
+            headerStyle: {
+              backgroundColor: config.color_header_background,
+            },
+            headerTintColor: config.headerTintColor,
+            headerTitleStyle: {
+              fontWeight: "bold",
+            },
+            headerRight: () => (
+              <TouchableOpacity
+                style={styles.wrapTextCancel}
+                onPress={() => {
+                  Alert.alert("Thông báo", "Bạn có chắc muốn hủy!", [
+                    {
+                      text: "Không",
+                      style: "cancel",
+                    },
+                    {
+                      text: "Có",
+                      style: "cancel",
+                      onPress: () => navigation.navigate("Home"),
+                      
+                    },
+                  ]);
+                }}
+              >
+                <Text style={styles.textCancel}>Hủy</Text>
+              </TouchableOpacity>
+            ),
+            headerBackTitle: "some label",
+
+            headerLeft: () => (
+              <HeaderBackButton
+                onPress={() => navigation.goBack()}
+                tintColor={"white"}
+                label="Quay lại" //back
+              />
+            ),
+          })}
         />
       </Stack.Navigator>
     </NavigationContainer>

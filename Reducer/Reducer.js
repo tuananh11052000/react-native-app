@@ -12,6 +12,7 @@ import profile from './profile'
 import controlConfirmAddress from './redirectConfirmAddress';
 import isDisplay from "./isDisplay";
 import reloadPost from './reloadPost';
+import redirectComplete from './redirectComplete';
 import { combineReducers } from "redux";
 
 var reducer = combineReducers({
@@ -28,7 +29,8 @@ var reducer = combineReducers({
   profile,
   controlConfirmAddress,
   isDisplay,
-  reloadPost
+  reloadPost,
+  redirectComplete
 });
 
 export default reducer;

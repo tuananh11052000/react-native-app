@@ -10,12 +10,10 @@ import ConfirmInfor from "../components/confirminfor.components";
 function ConfirmInforScreen(props) {
   const { navigation } = props;
   const { dispatch } = props;
-  console.log(props.auth.token);
   //khai bao state hien thi man hinh cho
   const [isDisplay, setIsDisplay] = useState(false);
   //khai bao bien luu thong tin anh
   const image = props.infoPost.image;
-  console.log(props.infoPost.TypeAuthor);
   const submitInfoPost = async () => {
     //api upload infor json
     setIsDisplay(true);

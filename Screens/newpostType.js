@@ -19,10 +19,12 @@ function PostType(props) {
   const { navigation } = props;
   const { dispatch } = props;
   const actionOnPressCXD = () => {
+    dispatch({ type: "COMPLETE_CXD" }); //redirect màn hình complete
     dispatch({ type: "setThreadCategoryCheckBox" });
     navigation.navigate("WhoConfirm");
   };
   const actionOnPressTCD = () => {
+    dispatch({ type: "COMPLETE_TCD" }); //redirect màn hình complete
     dispatch({ type: "setThreadCategory" });
     dispatch({ type: "setThreadTCD" });// chia luồn cateogorynocheckbox giữa givefor và tặng cộng đồng
     dispatch({ type: "SET_TYPE_AUTHOR", TypeAuthor: "tangcongdong" });
@@ -104,5 +106,6 @@ export default connect(function (state) {
   return {
     controlThreadGiveFor: state.controlThreadGiveFor,
     controlConfirmAddress: state.controlConfirmAddress,
+    redirectComplete: state.redirectComplete,
   };
 })(PostType);

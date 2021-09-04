@@ -121,6 +121,7 @@ function CategoryComponent(props) {
       subCategory: [
         { id: 38, name: 'Đồ nội trợ nhà bếp' },
         { id: 39, name: 'Máy lạnh, máy giặt, quạt,...' },
+        { id: 51, name: 'Nệm, Chăn, gối, màn,...' },
         { id: 40, name: 'Đồ khác' },
       ]
     },

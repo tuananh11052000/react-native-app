@@ -12,7 +12,7 @@ import {
   Alert,
   RefreshControl,
 } from "react-native";
-import { Feather, FontAwesome } from "@expo/vector-icons";
+import { Feather, FontAwesome, MaterialIcons } from "@expo/vector-icons";
 import config from "../config";
 import axios from "axios";
 import * as SecureStore from "expo-secure-store";
@@ -166,7 +166,7 @@ export default function MyPost(props) {
         />
       );
     } else {
-      return <FontAwesome name="file-photo-o" size={width*0.2} color="#CCCCCC" />;
+      return <MaterialIcons name="volunteer-activism" size={width*0.1} color="#CCCCCC" />;
     }
   };
   return (

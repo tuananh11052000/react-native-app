@@ -33,9 +33,9 @@ function CreatePost(props) {
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState(null);
   const [items, setItems] = useState([
-    { label: "Tất cả tin đăng", value: "1" },
-    { label: "Tin tặng cộng đồng", value: "2" },
-    { label: "Tin cần hỗ trợ", value: "3" },
+    { label: "Tất cả", value: "1" },
+    { label: "Tặng cộng đồng", value: "2" },
+    { label: "Cần hỗ trợ", value: "3" },
   ]);
   useEffect(() => {
     if (props.auth.isLogin == true) {
@@ -104,7 +104,7 @@ function CreatePost(props) {
         setOpen={setOpen}
         setValue={setValue}
         setItems={setItems}
-        placeholder="Tất cả tin đăng"
+        placeholder="Tất cả"
         style={{
           borderTopLeftRadius: 5,
           borderTopRightRadius: 5,
@@ -133,17 +133,17 @@ function CreatePost(props) {
         itemStyle={{ backgroundColor: "#FFF"}}
       >
         <Picker.Item
-          label="&ensp;Tất cả tin đăng "
+          label="&ensp;Tất cả"
           value="1"
           style={{ fontSize: config.fontsize_3 }}
         />
         <Picker.Item
-          label="&ensp;Tin tặng cộng đồng"
+          label="&ensp;Tặng cộng đồng"
           value="2"
           style={{ fontSize: config.fontsize_3 }}
         />
         <Picker.Item
-          label="&ensp;Tin cần hỗ trợ"
+          label="&ensp;Cần hỗ trợ"
           value="3"
           style={{ fontSize: config.fontsize_3 }}
         />

@@ -15,34 +15,32 @@ import config from '../config';
 function ServiceCharity(props) {
   const { navigation } = props;
   const { dispatch } = props;
-  const actionOnPressCXD = () => {
-    dispatch({ type: "setThreadCategoryCheckBox" });
-    navigation.navigate("WhoConfirm");
-  };
+
   const actionOnPressTCD = () => {
+    dispatch({ type: "COMPLETE_TCD" }); // redirect màn hình complete
     dispatch({ type: "setThreadCategory" });
-    dispatch({ type: "setThreadTCD" });
+    dispatch({ type: "setThreadTCD" });// chia luồn cateogorynocheckbox giữa givefor và tặng cộng đồng
     dispatch({ type: "SET_TYPE_AUTHOR", TypeAuthor: "tangcongdong" });
     navigation.navigate("Category");
   };
   // onPress tặng người nghèo
   const actionOnPressGiveCaNhan = () => {
     dispatch({ type: "setThreadCategory" });
-    dispatch({ type: "setThreadGiveGroup" });
+    dispatch({ type: "setThreadGiveGroup" });// chia luồn cateogorynocheckbox giữa givefor và tặng cộng đồng
     dispatch({ type: "giveForCaNhan" });
     navigation.navigate("Category");
   };
   // onpress tặng quỹ từ thiện
   const actionOnPressGiveQuy = () => {
     dispatch({ type: "setThreadCategory" });
-    dispatch({ type: "setThreadGiveGroup" });
+    dispatch({ type: "setThreadGiveGroup" });// chia luồn cateogorynocheckbox giữa givefor và tặng cộng đồng
     dispatch({ type: "giveForQuy" });
     navigation.navigate("Category");
   };
   // onpress quyên góp công ích
   const actionOnPressGiveCongIch = () => {
     dispatch({ type: "setThreadCategory" });
-    dispatch({ type: "setThreadGiveGroup" });
+    dispatch({ type: "setThreadGiveGroup" });// chia luồn cateogorynocheckbox giữa givefor và tặng cộng đồng
     dispatch({ type: "giveForCongIch" });
     navigation.navigate("Category");
   };
@@ -107,5 +105,6 @@ export default connect(function (state) {
     controlThreadGiveFor: state.controlThreadGiveFor,
     controlConfirmAddress: state.controlConfirmAddress,
     controlThreadTCD: state.controlThreadTCD,
+    redirectComplete: state.redirectComplete,
   };
 })(ServiceCharity);

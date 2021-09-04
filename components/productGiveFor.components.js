@@ -12,11 +12,19 @@ import {
   RefreshControl,
 } from "react-native";
 import { connect } from "react-redux";
-import * as SecureStore from "expo-secure-store";
-import axios from "axios";
-import { Feather, FontAwesome, MaterialIcons  } from "@expo/vector-icons";
+import {
+  Feather,
+  FontAwesome,
+  FontAwesome5,
+  Entypo,
+  Ionicons,
+} from "@expo/vector-icons";
 import config from "../config";
+import axios from "axios";
+import { Avatar } from "react-native-elements";
+
 var { width } = Dimensions.get("window");
+const height = width * 0.5;
 import AppLoading from "expo-app-loading";
 import {
   useFonts,
@@ -31,7 +39,8 @@ import {
   OpenSans_800ExtraBold,
   OpenSans_800ExtraBold_Italic,
 } from "@expo-google-fonts/open-sans";
-function ProductComponent(props) {
+export default function ProductGiveForComponent(props) {
+  const [avatar, setAvatar] = useState(" ");
   const [fontsLoaded, error] = useFonts({
     OpenSans_300Light,
     OpenSans_300Light_Italic,
@@ -44,6 +53,43 @@ function ProductComponent(props) {
     OpenSans_800ExtraBold,
     OpenSans_800ExtraBold_Italic,
   });
+  useEffect(() => {
+    //Lay ra so dien thoai nguoi dang bai
+    const getPhone = async (AuthorID) => {
+      try {
+        await axios({
+          method: "get",
+          url:
+            "https://smai-app-api.herokuapp.com/user/getInfoAuthor?AuthorID=" +
+            AuthorID,
+        }).then(async (data) => {
+          setAvatar(data.data.ImgAuthor);
+        });
+      } catch (e) {
+        alert(e);
+      }
+    };
+    getPhone(props.authorID);
+    //Lay ra avatar
+  }, []);
+  const renderAvatar = () => {
+    if (avatar != null)
+      return (
+        <View>
+          <Avatar size={width * 0.15} rounded source={{ uri: avatar }}></Avatar>
+        </View>
+      );
+    else
+      return (
+        <View>
+          <Ionicons
+            name="person-circle-outline"
+            size={width * 0.15}
+            color="#DDD"
+          />
+        </View>
+      );
+  };
 
   if (!fontsLoaded) {
     return <AppLoading />;
@@ -83,35 +129,6 @@ function ProductComponent(props) {
     else return `${calMinute()}m `;
   };
 
-  //Function handling title post
-  const renderTitle = (item) => {
-    item = item.charAt(0).toUpperCase() + item.slice(1);
-    if (item.length > 28) return item.slice(0, 28) + "...";
-    else return item;
-  };
-  //Function handling type product
-  const renderType = (pr) => {
-    if (pr.length > 1) return pr[0].NameProduct + ", ...";
-    else return pr[0].NameProduct;
-  };
-  const renderCategory = () => {
-    if (props.typeAuthor == "tangcongdong") {
-      return (
-        <View style={styles.wrapTypePrice}>
-          <Text style={styles.type}>{renderType(props.category)}</Text>
-          <Text style={styles.price}>Miễn phí</Text>
-        </View>
-      );
-    } else {
-      return (
-        <View style={styles.wrapTypePrice}>
-          <Text style={styles.type}>
-            Danh mục nhận tặng: {props.cateReceives}
-          </Text>
-        </View>
-      );
-    }
-  };
   // render address
   const renderDistrict = (district, city) => {
     if (district.indexOf("Thành phố") != -1) {
@@ -159,48 +176,61 @@ function ProductComponent(props) {
     if (props.urlImage != null) {
       return (
         <Image
-          style={styles.tinyLogo}
+          style={styles.image}
           source={{
             uri: props.urlImage,
           }}
         />
       );
     } else {
-      return (
-        <MaterialIcons name="volunteer-activism" size={width*0.1} color="#CCCCCC" />
-      );
+      return <></>;
     }
   };
   const _pressRow = (item) => {
     props.navigation.navigate("DetailPost", { data: item }); //chuyển trang
   };
+  const pressGiveFor = () => {
+    props.navigation.navigate("ConfirmGiveFor"); //chuyển trang
+  };
 
   const currentTime = new Date();
 
   return (
-    <TouchableOpacity style={styles.containter} onPress={() => _pressRow(props.item)}>
-      <View style={{ flexDirection: "row" }}>
-        <View style={styles.wrapImage}>{renderImage()}</View>
-        <View style={styles.wrapInfoProduct}>
-          <View>
-            <Text style={styles.titlePost}>{renderTitle(props.title)}</Text>
-          </View>
-          {renderCategory()}
-          <View style={styles.wrapTimeAddress}>
-            <View style={styles.wrapTime}>
-              <Feather
-                name="clock"
-                size={18}
-                color="gray"
-                style={{ width: 18, height: 18 }}
-              />
-              <Text style={styles.time}>
-                {calculatingTime(props.time, currentTime)}
-              </Text>
-            </View>
-            <Text style={styles.address}>{renderAddress(props.address)}</Text>
+    <TouchableOpacity
+      style={styles.wrapProduct}
+      activeOpacity={0.8}
+      onPress={() => _pressRow(props.item)}
+    >
+      <View style={styles.wrapBorder}>
+        {renderAvatar()}
+        <View style={styles.wrapInfor}>
+          <Text style={styles.wrapName}>{props.nameAuthor}</Text>
+          <View style={styles.wrapAddress}>
+            <Feather name="clock" size={18} color="gray" />
+            <Text style={styles.address}>
+              {calculatingTime(props.time, currentTime)}
+            </Text>
           </View>
         </View>
+      </View>
+      <View style={styles.wrapBorder}>
+        <Text style={styles.description}>{props.title}</Text>
+        <Text style={styles.detail}>Chi tiết</Text>
+      </View>
+      <View style={styles.wrapImage}>{renderImage()}</View>
+      <View style={styles.wrapBorderBottom}>
+        <View style={styles.wrapAddress}>
+          <Entypo name="location" size={20} color="#BDBDBD" />
+          <Text style={styles.address}>{renderAddress(props.address)}</Text>
+        </View>
+        <TouchableOpacity
+          style={{ marginTop: "3%" }}
+          onPress={() => pressGiveFor()}
+        >
+          <View style={styles.btnGiveFor}>
+            <Text style={styles.textBtn}>Gửi tặng</Text>
+          </View>
+        </TouchableOpacity>
       </View>
     </TouchableOpacity>
   );
@@ -209,67 +239,88 @@ function ProductComponent(props) {
 const styles = StyleSheet.create({
   containter: {
     flex: 1,
-    backgroundColor: "#FFF",
-    paddingLeft: "1%",
-    paddingRight: "4%",
-    paddingTop: "2%",
-    paddingBottom: "2%",
+    backgroundColor: "#DDD",
   },
-  wrapImage: {
-    width: "30%",
-    alignItems: "center",
-    justifyContent: 'center'
-  },
-  tinyLogo: {
-    width: width * 0.22,
-    height: width * 0.22,
-  },
-  titlePost: {
-    fontSize: config.fontsize_5,
-    fontFamily: "OpenSans_600SemiBold",
-  },
-  wrapInfoProduct: {
-    marginLeft: "1%",
-    width: "70%",
+  containterLoading: {
+    flex: 1,
     justifyContent: "center",
   },
-  wrapTypePrice: {
-    flexDirection: "row",
-    justifyContent: "space-between",
+  wrapProduct: {
+    width: "100%",
+    paddingTop: 10,
+    backgroundColor: "#FFF",
     marginBottom: "2%",
-    marginTop: "2%",
+    paddingBottom: "3%",
   },
-  price: {
-    color: "green",
-    fontSize: config.fontsize_3,
-    fontFamily: "OpenSans_400Regular",
-  },
-  type: {
-    fontSize: config.fontsize_3,
-    color: "gray",
-    fontFamily: "OpenSans_400Regular",
-  },
-  wrapTimeAddress: {
+  wrapBorder: {
     flexDirection: "row",
+    width: "100%",
+    alignItems: "center",
+    paddingLeft: "3%",
+    paddingRight: "3%",
     justifyContent: "space-between",
   },
-  wrapTime: {
-    alignItems: "center",
+  wrapBorderBottom: {
     flexDirection: "row",
+    width: "100%",
+    alignItems: "center",
+    paddingLeft: "3%",
+    paddingRight: "3%",
+    justifyContent: "center",
   },
-  time: {
-    fontSize: config.fontsize_3,
-    marginLeft: 5,
-    color: "black",
-    fontFamily: "OpenSans_400Regular",
+  wrapInfor: {
+    marginLeft: "3%",
+    width: "80%",
+  },
+  wrapName: {
+    fontSize: config.fontsize_2,
+    fontFamily: "OpenSans_600SemiBold",
+  },
+  wrapAddress: {
+    flexDirection: "row",
+    marginTop: "3%",
+    width: "80%",
   },
   address: {
-    color: "black",
+    fontSize: config.fontsize_3,
+    marginLeft: "3%",
+    color: "#BDBDBD",
+    fontFamily: "OpenSans_400Regular",
+  },
+  description: {
+    fontSize: config.fontsize_5,
+    fontFamily: "OpenSans_400Regular",
+    marginBottom: "1%",
+    marginTop: "3%",
+  },
+  detail: {
+    color: "#26c6da",
+    fontSize: config.fontsize_3,
+    fontFamily: "OpenSans_400Regular",
+  },
+  wrapImage: {
+    flexDirection: "row",
+    width: width,
+    alignItems: "center",
+  },
+  image: {
+    height: height,
+    width: width,
+    // resizeMode: "contain",
+  },
+  btnGiveFor: {
+    borderColor: "#26c6da",
+    borderWidth: 1,
+    borderRadius: 10,
+    paddingLeft: "3%",
+    paddingRight: "3%",
+    paddingTop: "2%",
+    paddingBottom: "2%",
+    alignItems: "center",
+  },
+  textBtn: {
+    color: "#26c6da",
     fontSize: config.fontsize_3,
     fontFamily: "OpenSans_400Regular",
   },
 });
-
-export default connect(function (state) {
-  return { newestPost: state.newestPost };
-})(ProductComponent);

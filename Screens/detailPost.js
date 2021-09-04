@@ -10,8 +10,7 @@ import {
   Modal,
   TouchableOpacity,
 } from "react-native";
-import { FontAwesome } from "@expo/vector-icons";
-import { Entypo } from "@expo/vector-icons";
+import { FontAwesome, EvilIcons, Entypo, FontAwesome5, Ionicons, MaterialCommunityIcons  } from "@expo/vector-icons";
 import { Button } from "galio-framework";
 import config from "../config";
 import axios from "axios";
@@ -33,8 +32,9 @@ export default function App(props) {
   let data = props.route.params.data; // data from list
   const [isShowModelCate, setisShowModelCate] = useState(false);
   const [active, setActive] = useState(0);
-  const [avatar, setAvatar] = useState("");
+  const [avatar, setAvatar] = useState(" ");
   const [phoneNumber, setPhoneNumber] = useState(" "); //useState using for phonenumber
+  
   const change = ({ nativeEvent }) => {
     const slide = Math.ceil(
       nativeEvent.contentOffset.x / nativeEvent.layoutMeasurement.width
@@ -180,14 +180,14 @@ export default function App(props) {
     } else {
       return (
         <View style={styles.noImageContainer}>
-          <FontAwesome name="photo" size={width*0.5} color="#CCC" />
+          <MaterialCommunityIcons  name="home-heart" size={width*0.3} color="#CCC" />
         </View>
       );
     }
   };
   //Ham render avatar
   const renderAvatar = () => {
-    if (avatar != "")
+    if (avatar != null)
       return (
         <View>
           <Avatar
@@ -201,14 +201,7 @@ export default function App(props) {
     else
       return (
         <View>
-          <Avatar
-            size={70}
-            rounded
-            source={{
-              uri: "https://www.alliancerehabmed.com/wp-content/uploads/icon-avatar-default.png",
-            }}
-            containerStyle={styles.avatarContainer}
-          ></Avatar>
+          <Ionicons name="person-circle-outline" size={width*0.12} color="#DDD" />
         </View>
       );
   };

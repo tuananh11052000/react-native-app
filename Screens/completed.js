@@ -1,22 +1,46 @@
 import React, { Component, useState } from "react";
 import { StyleSheet, View, Text, TouchableOpacity } from "react-native";
+import config from "../config";
 import { connect } from "react-redux";
 function Completed(props) {
   const { navigation, dispatch } = props;
-
+  const renderText = () => {
+    if (props.redirectComplete == "TCD") {
+      return (
+        <View style={styles.wrapText}>
+          <Text style={styles.text1}>Đăng tin thành công</Text>
+          <Text style={styles.text2}>Cộng động ai cần sẽ liên hệ bạn</Text>
+        </View>
+      );
+    }
+    if (props.redirectComplete == "CXD") {
+      return (
+        <View style={styles.wrapText}>
+          <Text style={styles.text1}>Gửi yêu cầu hỗ trợ thành công</Text>
+          <Text style={styles.text2}>Vui lòng chờ xác thực</Text>
+        </View>
+      );
+    } else {
+      return (
+        <View style={styles.wrapText}>
+          <Text style={styles.text1}>Gửi tặng thành công</Text>
+          <Text style={styles.text2}>Cảm ơn tấm lòng hảo tâm của bạn</Text>
+          <Text style={styles.text2}>Trân trọng!</Text>
+        </View>
+      );
+    }
+  };
   return (
     <View style={styles.container}>
       <View style={styles.backgroundBox}>
-        <View>
-          <Text style={styles.textRequired}>Đăng tin thành công</Text>
-        </View>
+        {renderText()}
         <TouchableOpacity
           activeOpacity={0.6}
           style={styles.buttonComplete}
           onPress={() => {
             dispatch({ type: "setReload" });
-            navigation.navigate("Home")
-        }}
+            navigation.navigate("Home");
+          }}
         >
           <Text style={styles.textComplete}>Xong</Text>
         </TouchableOpacity>
@@ -37,10 +61,16 @@ const styles = StyleSheet.create({
     padding: 20,
     borderRadius: 5,
   },
-  textRequired: {
-    fontSize: 20,
-    fontWeight: "bold",
+  wrapText: {
+    marginBottom: "4%",
+  },
+  text1: {
+    fontSize: config.fontsize_5,
     fontFamily: "OpenSans_600SemiBold",
+  },
+  text2: {
+    fontSize: config.fontsize_5,
+    fontFamily: "OpenSans_400Regular",
   },
   buttonComplete: {
     backgroundColor: "#E53935",
@@ -52,11 +82,14 @@ const styles = StyleSheet.create({
   },
   textComplete: {
     color: "#FFF",
-    fontSize: 20,
+    fontSize: config.fontsize_2,
     fontFamily: "OpenSans_600SemiBold",
   },
 });
 
 export default connect(function (state) {
-  return { reloadPost: state.reloadPost };
+  return {
+    reloadPost: state.reloadPost,
+    redirectComplete: state.redirectComplete,
+  };
 })(Completed);

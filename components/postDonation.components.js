@@ -253,6 +253,7 @@ const styles = StyleSheet.create({
     height: "70%",
     paddingLeft: "1%",
     borderWidth: 1,
+    borderRadius: 3,
     borderColor: "#BDBDBD",
     justifyContent: "space-around",
     alignItems: "center",

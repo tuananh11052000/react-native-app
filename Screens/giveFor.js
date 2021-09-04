@@ -13,12 +13,19 @@ import {
   Dimensions,
   TextInput,
 } from "react-native";
-import { Entypo, EvilIcons, FontAwesome, FontAwesome5, AntDesign} from "@expo/vector-icons";
+import {
+  Entypo,
+  EvilIcons,
+  FontAwesome,
+  FontAwesome5,
+  AntDesign,
+} from "@expo/vector-icons";
 import { Picker } from "@react-native-picker/picker";
 import db from "../db.json";
 import axios from "axios";
 import config from "../config";
-import ModalFilterAddress from '../components/ModelFilterAddress.component';
+import ModalFilterAddress from "../components/ModelFilterAddress.component";
+import ProductGiveFor from "../components/productGiveFor.components";
 import { connect } from "react-redux";
 const { width } = Dimensions.get("window");
 const height = width * 0.5;
@@ -29,17 +36,14 @@ function App(props) {
   const [typeAuthor, settypeAuthor] = useState(props.controlThreadGiveFor);
   const [query, setQuery] = useState("");
   const [datafilter, setDataFilter] = useState([]);
-  const [dataAddressFilter, setdataAddressFilter] = useState([]);
-  const [selectedValue, setSelectedValue] = useState("1");
-  const [listAddress, setListAddress] = useState(db.province);
   const [showModelAddress, setshowModelAddress] = useState(false);
   const addr = props.dataCategory.addressFilter;
-  
+
   useEffect(() => {
-    if ( addr.length == 0) {
+    if (addr.length == 0) {
       getListPhotos();
     } else {
-        filterAddressFunc(addr);
+      filterAddressFunc(addr);
     }
   }, [addr]);
   const filterAddressFunc = (address) => {
@@ -74,9 +78,6 @@ function App(props) {
         // console.log(realData)
         setData(realData);
         setDataFilter(realData);
-        setdataAddressFilter(realData);
-        const { dispatch } = props;
-        // dispatch({ type: 'RESET' })
       })
       .catch((error) => {
         console.log("Error: ", error);
@@ -84,20 +85,19 @@ function App(props) {
       .finally(() => setisLoading(false));
   };
   const showFilterAddress = () => {
-    console.log(addr)
     if (addr != "") {
       let temp = addr.split(",");
       if (temp[0].length > 10) return temp[0].slice(0, 10);
       else return temp[0];
     } else {
-      return "Tỉnh/thành phố"
+      return "Tỉnh/thành phố";
     }
-  }
+  };
   // render address
   const renderDistrict = (district, city) => {
     if (district.indexOf("Thành phố") != -1) {
       return district.slice(10);
-    } 
+    }
     if (district.indexOf("Quận") != -1 && city.indexOf("Hồ Chí Minh") == -1) {
       return district.slice(5);
     }
@@ -106,8 +106,8 @@ function App(props) {
     }
     if (district.indexOf("Huyện") != -1) {
       return district.slice(7);
-    } 
-  }
+    }
+  };
   // render địa chỉ
   const renderAddress = (address) => {
     let add = address.split(",");
@@ -138,42 +138,20 @@ function App(props) {
       setData(data);
     }
   };
-
-  const _pressRow = (item) => {
-    props.navigation.navigate("DetailPost", { data: item }); //chuyển trang
-  };
-
+  const {navigation} = props;
   // render item product
-  const renderItem = ({ item, index }) => {
+  const renderItem = ({ item }) => {
     return (
-      <TouchableOpacity
-        style={styles.wrapProduct}
-        activeOpacity={0.8}
-        onPress={() => _pressRow(item)}
-      >
-        <View style={styles.wrapBorder}>
-          <FontAwesome name="user-circle-o" size={60} color="#FFC911" />
-          <View style={styles.wrapInfor}>
-            <Text style={styles.wrapName}>{item.NameAuthor}</Text>
-            <View style={styles.wrapAddress}>
-              <FontAwesome5 name="user-alt" size={20} color="#BDBDBD" />
-              <Text style={styles.address}>{item.TypeAuthor}</Text>
-            </View>
-          </View>
-        </View>
-        <View style={styles.wrapBorder}>
-          <Text style={styles.description}>{item.title}</Text>
-        </View>
-        <View style={styles.wrapImage}>
-          <Image source={{ uri: item.urlImage[0] }} style={styles.image} />
-        </View>
-        <View style={styles.wrapBorderBottom}>
-          <View style={styles.wrapAddress}>
-            <Entypo name="location" size={20} color="#BDBDBD" />
-            <Text style={styles.address}>{renderAddress(item.address)}</Text>
-          </View>
-        </View>
-      </TouchableOpacity>
+      <ProductGiveFor
+        item={item}
+        nameAuthor={item.NameAuthor}
+        title={item.title}
+        time={item.createdAt}
+        address={item.address}
+        urlImage={item.urlImage[0]}
+        navigation={navigation}
+        authorID={item.AuthorID}
+      />
     );
   };
 
@@ -262,6 +240,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     paddingLeft: "3%",
     paddingRight: "3%",
+    justifyContent: "center",
   },
   wrapInfor: {
     marginLeft: "3%",
@@ -269,17 +248,17 @@ const styles = StyleSheet.create({
   },
   wrapName: {
     fontSize: config.fontsize_2,
-    fontWeight: 'bold'
+    fontWeight: "bold",
   },
   wrapAddress: {
     flexDirection: "row",
     marginTop: "3%",
-    width: '80%',
+    width: "80%",
   },
   address: {
     fontSize: config.fontsize_3,
     marginLeft: "3%",
-    color: '#BDBDBD'
+    color: "#BDBDBD",
   },
   description: {
     fontSize: config.fontsize_5,
@@ -296,6 +275,16 @@ const styles = StyleSheet.create({
     height: height,
     width: width,
     // resizeMode: "contain",
+  },
+  btnGiveFor: {
+    borderColor: "#26c6da",
+    borderWidth: 1,
+    borderRadius: 10,
+    paddingLeft: "3%",
+    paddingRight: "3%",
+    paddingTop: "2%",
+    paddingBottom: "2%",
+    alignItems: "center",
   },
 
   // style search

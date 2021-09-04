@@ -141,7 +141,7 @@ function confirmAddress(props) {
       province == "" ||
       district == "" ||
       commune == "" ||
-      addressDetail.trim() == ""
+      addressDetail == null
     )
       Alert.alert("Thông báo", "Vui lòng nhập đầy đủ địa chỉ", [
         { text: "OK" },
@@ -161,7 +161,7 @@ function confirmAddress(props) {
                   save("commune", commune.name).then((res) => {
                     save("detail", addressDetail).then((res) => {
                       const { dispatch } = props;
-                      const address = `${addressDetail}, ${commune.name}, ${district.name}, ${province.name}`;
+                      const address = `${addressDetail.trim()}, ${commune.name}, ${district.name}, ${province.name}`;
                       dispatch({ type: "CONFIRM_ADDRESS", address: address });
                       if (props.controlConfirmAddress == "category") {
                         navigation.navigate("ServiceCharity");
