@@ -1,5 +1,6 @@
 var infoPost = (state = {
-    TypeAuthor: "tangcongdong", address: "", title: "", note: "", NameProduct: "", image: []
+    TypeAuthor: "tangcongdong", address: "", title: "", note: "", NameProduct: "", image: [], 
+    noteTransac: "",
 }, action) => {
     switch (action.type) {
         case 'CONFIRM_ADDRESS':
@@ -21,6 +22,11 @@ var infoPost = (state = {
             return {
                 ...state,
                 note: action.note
+            }
+        case 'GET_NOTE_TRANSAC':
+            return {
+                ...state,
+                noteTransac: action.noteTransac
             }
         case 'GET_IMG':
             return {
@@ -45,7 +51,8 @@ var infoPost = (state = {
                 ...state,
                 image: [],
                 title: '',
-                note: ''
+                note: '',
+                noteTransac: '',
             }
         default:
             return state

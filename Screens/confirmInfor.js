@@ -93,11 +93,6 @@ const styles = StyleSheet.create({
     // paddingTop: (Platform.OS === 'ios') ? 20 : 20,
     justifyContent: "space-between",
   },
-  waiting: {
-    position: "relative",
-    backgroundColor: "grey",
-    opacity: 0.2,
-  },
   spinnerTextStyle: {
     color: "#FFF",
   },

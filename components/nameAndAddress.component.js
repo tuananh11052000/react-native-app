@@ -45,6 +45,7 @@ function NameAndAddress(props) {
   const [FullName, getName] = useState("");
   const [text, settext] = useState("");
   const [showModelAddress, setshowModelAddress] = useState(false);
+  const {dispatch} = props;
   useEffect(() => {
     const getAvtFunc = async () => {
       if (props.auth.isLogin == true) {
@@ -104,7 +105,7 @@ function NameAndAddress(props) {
                 </Text>
               </View>
               <TextInput
-                onChangeText={(text) => settext(text)}
+                onChangeText={(text) => {settext(text); dispatch({ type: "GET_NOTE_TRANSAC", noteTransac: text }) }}
                 placeholder="Nhập lời nhắn hoặc mô tả"
                 editable={true}
                 maxLength={200}

@@ -189,8 +189,8 @@ export default function ProductGiveForComponent(props) {
   const _pressRow = (item) => {
     props.navigation.navigate("DetailPost", { data: item }); //chuyển trang
   };
-  const pressGiveFor = () => {
-    props.navigation.navigate("ConfirmGiveFor"); //chuyển trang
+  const pressGiveFor = (item) => {
+    props.navigation.navigate("ConfirmGiveFor", { data: item }); //chuyển trang
   };
 
   const currentTime = new Date();
@@ -225,7 +225,7 @@ export default function ProductGiveForComponent(props) {
         </View>
         <TouchableOpacity
           style={{ marginTop: "3%" }}
-          onPress={() => pressGiveFor()}
+          onPress={() => pressGiveFor(props.item)}
         >
           <View style={styles.btnGiveFor}>
             <Text style={styles.textBtn}>Gửi tặng</Text>

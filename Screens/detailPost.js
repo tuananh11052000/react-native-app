@@ -112,6 +112,7 @@ export default function App(props) {
       </Button>
     );
   }
+ 
   //url phonenumber
   const dialCall = (number) => {
     var number_temp = "0" + number;
