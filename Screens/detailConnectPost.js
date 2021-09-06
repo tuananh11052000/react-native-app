@@ -75,7 +75,7 @@ export default function DetailConnectPost(props) {
         return await null;
       }
     };
-    console.log(data);
+    // console.log(data);
     checkTokenLocal();
     //Lay ra so dien thoai nguoi dang bai
     const getPhone = async (AuthorID) => {
