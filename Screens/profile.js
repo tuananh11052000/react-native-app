@@ -10,7 +10,7 @@ import {
 import { connect } from "react-redux";
 import config from "../config";
 import TopProfile from "../components/Profile/topProfile.component";
-import HeaderLoginPage from "../components/Header/headerProfilePage.component";
+// import HeaderLoginPage from "../components/Header/headerProfilePage.component";
 import HistoryProfileComponent from "../components/Profile/historyProfile.component";
 import AppLoading from "expo-app-loading";
 import {
@@ -41,6 +41,12 @@ function ProfileScreen(props) {
       navigation.replace("Authentication"); //chuyển trang
     }
   };
+  const _pressListGiveTotal = () => {
+    props.navigation.navigate("YouGiveTotal"); //chuyển trang
+  };
+  const _pressListReveiceTotal = () => {
+    props.navigation.navigate("YouReceiveTotal"); //chuyển trang
+  };
   return (
     <View style={styles.container}>
       <View style={styles.scrollview}>
@@ -53,12 +59,22 @@ function ProfileScreen(props) {
           navigation={navigation}
         />
         <Text style={styles.Text}>Từ thiện</Text>
-        <HistoryProfileComponent textTitle="Thống kê bạn tặng" icon="give"/>
-        <HistoryProfileComponent textTitle="Thống kê nhận tặng" icon="receive"/>
+        <HistoryProfileComponent
+          textTitle="Thống kê bạn tặng"
+          icon="give"
+          onPress={() => _pressListGiveTotal()}
+        />
+        <HistoryProfileComponent
+          textTitle="Thống kê nhận tặng"
+          onPress={() => _pressListReveiceTotal()}
+          icon="receive"
+        />
         <Text style={styles.Text}>Quản lý</Text>
         <HistoryProfileComponent
-          textTitle="Lịch sử xem" icon="history"
-          onPress={() => _pressRow()}/>
+          textTitle="Lịch sử xem"
+          icon="history"
+          onPress={() => _pressRow()}
+        />
       </View>
 
       <View style={styles.phonenumber}>

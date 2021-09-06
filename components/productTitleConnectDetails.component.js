@@ -26,25 +26,19 @@ import {
   OpenSans_800ExtraBold_Italic,
 } from "@expo-google-fonts/open-sans";
 import { Entypo, Fontisto } from "@expo/vector-icons";
-export default function ProductTitleConnect(props) {
+export default function ProductTitleConnectDetails(props) {
   const { navigation, dispatch } = props;
 
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.mainContainer}>
-        <View style={styles.wrapTop}>
-          <TouchableOpacity style={styles.wrapTopLeft}
-            onPress={() => props.onPressList()}
-          >
-            <Fontisto name="rectangle" size={10} color="#26c6da" />
-            <Text style={styles.textTopLeft}>{props.title}</Text>
-          </TouchableOpacity>
-          <Text style={styles.textTopRight}>Chu kỳ 22 - 28/11/2021 </Text>
-        </View>
         <View style={styles.wrapBottom}>
-          <TouchableOpacity style={styles.wrapBottomLeft}>
-            <Text style={styles.textBottomLeft}>{props.type}</Text>
-          </TouchableOpacity>
+          <View style={styles.wrapBottomLeft}>
+            <View style={styles.wrapTopLeft}>
+              <Text style={styles.textTopLeft}>{props.title}</Text>
+            </View>
+            <Text style={styles.textTopRight}>22 - 28/11/2021 </Text>
+          </View>
           <View style={{ width: "65%", justifyContent: "center" }}>
             <View style={styles.wrapThings}>
               <Text style={styles.textThings}>Hiện vật</Text>
@@ -96,8 +90,8 @@ const styles = StyleSheet.create({
     fontSize: config.fontsize_3,
   },
   textTopLeft: {
-    textTransform: "uppercase",
-    marginLeft: "7%",
+    marginLeft: "10%",
+    marginTop: "10%",
     fontFamily: "OpenSans_700Bold",
     fontSize: config.fontsize_3,
   },
@@ -105,7 +99,6 @@ const styles = StyleSheet.create({
   wrapBottomLeft: {
     width: "35%",
     justifyContent: "center",
-    alignItems: "center",
   },
   textBottomLeft: {
     color: "#26c6da",

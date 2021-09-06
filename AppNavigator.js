@@ -43,6 +43,8 @@ import MedicalAdvise from "./Screens/medicalAdvice";
 import ConfirmGiveFor from './Screens/confirmGiveFor';
 import YouGive from "./Screens/youGive";
 import YouReceive from "./Screens/youReceive";
+import YouGiveTotal from "./Screens/youGiveTotal";
+import YouReceiveTotal from "./Screens/youReceiveTotal";
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
 
@@ -691,6 +693,36 @@ function AppNavigator(props) {
           component={YouReceive}
           options={({ YouReceive }) => ({
             title: "Nhận tặng",
+            headerShown: true,
+            headerStyle: {
+              backgroundColor: config.color_header_background,
+            },
+            headerTintColor: config.headerTintColor,
+            headerTitleStyle: {
+              // fontWeight: "bold",
+            },
+          })}
+        />
+        <Stack.Screen
+          name="YouGiveTotal"
+          component={YouGiveTotal}
+          options={({ YouGiveTotal }) => ({
+            title: "Thống kê bạn tặng",
+            headerShown: true,
+            headerStyle: {
+              backgroundColor: config.color_header_background,
+            },
+            headerTintColor: config.headerTintColor,
+            headerTitleStyle: {
+              // fontWeight: "bold",
+            },
+          })}
+        />
+        <Stack.Screen
+          name="YouReceiveTotal"
+          component={YouReceiveTotal}
+          options={({ YouReceiveTotal }) => ({
+            title: "Thống kê nhận tặng",
             headerShown: true,
             headerStyle: {
               backgroundColor: config.color_header_background,
