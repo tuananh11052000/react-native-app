@@ -45,6 +45,7 @@ import YouGive from "./Screens/youGive";
 import YouReceive from "./Screens/youReceive";
 import YouGiveTotal from "./Screens/youGiveTotal";
 import YouReceiveTotal from "./Screens/youReceiveTotal";
+import DetailConnectPost from "./Screens/detailConnectPost";
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
 
@@ -732,6 +733,20 @@ function AppNavigator(props) {
               // fontWeight: "bold",
             },
           })}
+        />
+        <Stack.Screen
+          name="DetailConnectPost"
+          component={DetailConnectPost}
+          options={{
+            title: "Chi tiết bạn tặng",
+            headerStyle: {
+              backgroundColor: config.color_header_background,
+            },
+            headerTintColor: config.headerTintColor,
+            headerTitleStyle: {
+              fontWeight: "bold",
+            },
+          }}
         />
       </Stack.Navigator>
     </NavigationContainer>

@@ -66,7 +66,7 @@ function Connection(props) {
   };
 
   const _pressRow = (item) => {
-    props.navigation.navigate("DetailPost", { data: item }); //chuyển trang
+    props.navigation.navigate("DetailConnectPost", { data: item }); //chuyển trang
   };
   const _pressListGive = () => {
     props.navigation.navigate("YouGive"); //chuyển trang

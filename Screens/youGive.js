@@ -167,7 +167,7 @@ function YouGive(props) {
   };
 
   const _pressRow = (item) => {
-    props.navigation.navigate("DetailPost", { data: item }); //chuyển trang
+    props.navigation.navigate("DetailConnectPost", { data: item }); //chuyển trang
   };
 
   const renderItem = ({ item }) => {
