@@ -10,7 +10,6 @@ import {
 import { connect } from "react-redux";
 import config from "../config";
 import TopProfile from "../components/Profile/topProfile.component";
-// import HeaderLoginPage from "../components/Header/headerProfilePage.component";
 import HistoryProfileComponent from "../components/Profile/historyProfile.component";
 import AppLoading from "expo-app-loading";
 import {
