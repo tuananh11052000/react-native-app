@@ -64,12 +64,12 @@ export default function GiftComponent(props) {
 
 const style = StyleSheet.create({
   giftIcon1: {
-    width: 45,
-    height: 45,
+    width: width*0.1,
+    height: width*0.1,
   },
   doctorIcon: {
-    width: 50,
-    height: 50,
+    width: width*0.1,
+    height: width*0.1,
   },
   wrapCategory: {
     paddingBottom: 10,

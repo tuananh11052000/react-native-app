@@ -44,7 +44,8 @@ var infoPost = (state = {
                 image: [],
                 title: "",
                 note: "",
-                TypeAuthor: ""
+                TypeAuthor: "",
+                noteTransac: ""
             }
         case 'RESET_SCREEN_INFORMATION':
             return {

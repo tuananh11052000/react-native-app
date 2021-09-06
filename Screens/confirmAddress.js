@@ -8,6 +8,7 @@ import {
   LogBox,
   Keyboard,
   TouchableWithoutFeedback,
+  Dimensions
 } from "react-native";
 import RNPickerDialog from "rn-modal-picker";
 import { TextInput } from "react-native-paper";
@@ -28,7 +29,7 @@ import {
   OpenSans_700Bold,
   OpenSans_700Bold_Italic,
 } from "@expo-google-fonts/open-sans";
-
+var { width } = Dimensions.get("window");
 function confirmAddress(props) {
   //khai bao cac local state
   const { navigation } = props;
@@ -221,7 +222,7 @@ function confirmAddress(props) {
         <View style={Styles.containermain}>
           <View style={Styles.top}>
             <TouchableOpacity onPress={() => navigation.navigate("Home")}>
-              <AntDesign name="close" size={28} color="black" />
+              <AntDesign name="close" size={width*0.05} color="black" />
             </TouchableOpacity>
 
             <Text style={Styles.tittleText}>Địa chỉ của bạn</Text>
@@ -324,21 +325,14 @@ const Styles = StyleSheet.create({
   },
   touchableButton: {
     width: "90%",
-    marginRight: 40,
-    marginLeft: 40,
-    marginTop: 10,
-    marginBottom: 20,
-    marginTop: 20,
-    paddingTop: 10,
-    paddingBottom: 10,
+    marginTop: '6%',
+    marginBottom: '6%',
     backgroundColor: "#ff443a",
     borderRadius: 5,
   },
   buttonConfirm: {
     color: "#fff",
     textAlign: "center",
-    paddingLeft: 10,
-    paddingRight: 10,
     fontSize: config.fontsize_2,
     fontFamily: "OpenSans_600SemiBold",
   },

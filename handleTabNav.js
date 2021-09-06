@@ -1,17 +1,28 @@
-import * as React from "react";
+import React, { useEffect, useRef } from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import { createStackNavigator } from "@react-navigation/stack";
-import { Entypo } from '@expo/vector-icons';
+import { Entypo } from "@expo/vector-icons";
 import Home from "./Screens/home";
 import ProfileScreen from "./Screens/profile";
 import createPost from "./Screens/createPost";
-import Connection from './Screens/connect';
+import Connection from "./Screens/connect";
 import config from "./config";
-
+import { connect } from "react-redux";
+import { MaterialIcons } from "@expo/vector-icons";
+import Menu, { MenuItem, MenuDivider } from "react-native-material-menu";
+import * as SecureStore from "expo-secure-store";
+import ProfileStackk from './ProfileStack';
+import {
+  Button,
+  Text,
+  TouchableOpacity,
+  StyleSheet,
+  Alert, Dimensions
+} from "react-native";
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
-
+var { width } = Dimensions.get("window");
 const HomeStack = ({ navigation }) => {
   return (
     <Stack.Navigator>
@@ -26,38 +37,68 @@ const HomeStack = ({ navigation }) => {
   );
 };
 
-const ProfileStack = () => {
+const ProfileStack = (props) => {
+  const menu = useRef();
+  const { dispatch, navigation } = props;
+  const showMenu = () => menu.current.show();
+  const hideMenu = async () => {
+    await SecureStore.deleteItemAsync("token");
+    await SecureStore.deleteItemAsync("avatar");
+    await SecureStore.deleteItemAsync("FullName");
+    dispatch({ type: "SIGN_OUT" });
+    navigation.jumpTo("Feed")
+  };
   return (
     <Stack.Navigator>
       <Stack.Screen
         name="Tài khoản"
         component={ProfileScreen}
-        options={{
-          headerShown: false,
-        }}
+        options={({ navigation }) => ({
+          headerLeft: null,
+          headerShown: true,
+          headerStyle: {
+            backgroundColor: config.color_header_background,
+          },
+          headerTintColor: config.headerTintColor,
+          headerRight: () => (
+            <Menu
+              ref={menu}
+              button={
+                <Text onPress={showMenu}><MaterialIcons name="settings" size={30} color="#FFF"></MaterialIcons></Text>
+              }
+            >
+              <MenuItem
+                onPress={() => {
+                  hideMenu();
+                }}
+              >
+                Đăng xuất
+              </MenuItem>
+            </Menu>
+          ),
+        })}
       />
     </Stack.Navigator>
   );
 };
 const ConnectionStack = () => {
-    return (
-      <Stack.Navigator>
-        <Stack.Screen
-          name="Kết nối"
-          component={Connection}
-          options={{
-            headerLeft: null,
-            headerShown: true,
-            headerStyle: {
-              backgroundColor: config.color_header_background,
-            },
-            headerTintColor: config.headerTintColor,
-          }}
-        />
-      </Stack.Navigator>
-    );
-  };
-  
+  return (
+    <Stack.Navigator>
+      <Stack.Screen
+        name="Kết nối"
+        component={Connection}
+        options={{
+          headerLeft: null,
+          headerShown: true,
+          headerStyle: {
+            backgroundColor: config.color_header_background,
+          },
+          headerTintColor: config.headerTintColor,
+        }}
+      />
+    </Stack.Navigator>
+  );
+};
 
 const CreatePostStack = () => {
   return (
@@ -81,14 +122,15 @@ const CreatePostStack = () => {
   );
 };
 
-export default function CustomeTabNav() {
+function CustomeTabNav(props) {
+  const {navigation, dispatch} = props;
   return (
     <Tab.Navigator
       initialRouteName="Feed"
       tabBarOptions={{
         activeTintColor: config.color_header_background,
         labelStyle: {
-          fontSize: 15,
+          fontSize: config.fontsize_3,
         },
       }}
     >
@@ -124,7 +166,7 @@ export default function CustomeTabNav() {
       />
       <Tab.Screen
         name="Profile"
-        component={ProfileStack}
+        component={ProfileStackk}
         options={{
           tabBarLabel: "Cá nhân",
           tabBarIcon: ({ color, size }) => (
@@ -135,3 +177,7 @@ export default function CustomeTabNav() {
     </Tab.Navigator>
   );
 }
+
+export default connect(function(state) {
+  return { auth: state.auth };
+})(CustomeTabNav)

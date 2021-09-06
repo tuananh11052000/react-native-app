@@ -40,8 +40,9 @@ function ConfirmGiveFor(props) {
     let formData = new FormData();
     //sau khi upload json xong thi tien hanh upload hinh anh su dung idpost duoc tra ve
     if (props.infoPost.image[0]) {
-      for (let i = 0; i < image.length; i++) {
-        let uri = image[i].uri;
+      let listImage = props.infoPost.image;
+      for (let i = 0; i < listImage.length; i++) {
+        let uri = listImage[i].uri;
         let uriArray = uri.split(".");
         let fileType = uriArray[uriArray.length - 1];
         formData.append("productImage", {
@@ -52,7 +53,7 @@ function ConfirmGiveFor(props) {
       }
     }
     formData.append("note", data.noteTransac);
-    formData.append("reciverID", detailPost.AuthorID);
+    formData.append("receiverID", detailPost.AuthorID);
     formData.append("postID", detailPost._id);
     formData.append("isConfirm", false);
     formData.append("isConnect", false);
@@ -68,11 +69,10 @@ function ConfirmGiveFor(props) {
       },
     };
     fetch(apiUrl, options).then(res => {
-      console.log(res.data)
       setIsDisplay(false);
       dispatch({ type: "COMPLETE_GIVEFOR" });
       dispatch({ type: "RESET" });
-      // navigation.navigate("Completed");
+      navigation.navigate("Completed");
     }).catch(err => {console.log(err)});
     }
   };

@@ -119,7 +119,7 @@ function TopProfile(props) {
       return (
         <View>
           <Avatar
-            size={70}
+            size={width*0.15}
             rounded
             source={{ uri: avatar.data }}
             containerStyle={styles.avatarContainer}
@@ -159,7 +159,7 @@ function TopProfile(props) {
   if (props.auth.isLogin == false) {
     return (
       <View style={styles.wrapAll}>
-        <MaterialIcons name="account-circle" size={96} color="#BDBDBD" />
+        <MaterialIcons name="account-circle" size={width*0.2} color="#BDBDBD" />
         <View style={styles.login}>
           <Button
             onPress={props.onPress}

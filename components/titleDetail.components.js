@@ -7,11 +7,12 @@ import {
   ScrollView,
   TouchableOpacity,
   Platform,
-  Image,
+  Image, Dimensions
 } from "react-native";
 import { connect } from "react-redux";
 import { AntDesign } from "@expo/vector-icons";
 import config from '../config';
+var { width } = Dimensions.get("window");
 const UselessTextInput = (props) => {
   return (
     <TextInput
@@ -51,7 +52,7 @@ const titleDetail = (props) => {
     <ScrollView>
       <View style={styles.container}>
         <View>
-          <Text style={{ fontFamily: "OpenSans_400Regular" }}>Tiêu đề*</Text>
+          <Text style={{ fontFamily: "OpenSans_400Regular", fontSize: config.fontsize_3}}>Tiêu đề*</Text>
           <TextInput
             style={styles.input}
             onChangeText={(text) =>
@@ -62,7 +63,7 @@ const titleDetail = (props) => {
           />
         </View>
         <View>
-          <Text style={{ fontFamily: "OpenSans_400Regular" }}>
+          <Text style={{ fontFamily: "OpenSans_400Regular", fontSize: config.fontsize_3 }}>
             Ghi chú thêm(nếu có)
           </Text>
           <View style={styles.inputDescription}>
@@ -75,7 +76,7 @@ const titleDetail = (props) => {
           </View>
         </View>
         <View>
-          <Text style={{ fontFamily: "OpenSans_400Regular" }}>
+          <Text style={{ fontFamily: "OpenSans_400Regular", fontSize: config.fontsize_3 }}>
             Hình ảnh (tối đa 5 hình ảnh)
           </Text>
           <ScrollView horizontal={true}>
@@ -101,7 +102,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#F5F5F5",
   },
   input: {
-    height: 40,
+    height: width*0.1,
     borderWidth: 1,
     borderRadius: 5,
     paddingTop: 8,

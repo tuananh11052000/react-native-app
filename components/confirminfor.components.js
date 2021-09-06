@@ -7,13 +7,14 @@ import {
   ScrollView,
   FlatList,
   Image,
-  Modal,
+  Modal, Dimensions
 } from "react-native";
 import ModelShowCategory from './ModalShowCategorySelected.component';
 import { connect } from "react-redux";
 import { Entypo } from "@expo/vector-icons";
 import config from '../config';
 import { TouchableOpacity } from "react-native";
+var { width } = Dimensions.get("window");
 const UselessTextInput = (props) => {
   return (
     <TextInput
@@ -160,7 +161,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#F5F5F5",
   },
   input: {
-    height: 40,
+    height: width*0.1,
     borderWidth: 1,
     borderRadius: 5,
     fontSize: config.fontsize_5,

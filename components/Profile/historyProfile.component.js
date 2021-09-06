@@ -4,12 +4,11 @@ import {
   View,
   StyleSheet,
   ScrollView,
-  TouchableOpacity,
+  TouchableOpacity, Dimensions
 } from "react-native";
 import { MaterialIcons, FontAwesome, Ionicons } from "@expo/vector-icons";
 import { connect } from "react-redux";
 import * as SecureStore from "expo-secure-store";
-
 import config from "../../config";
 import AppLoading from "expo-app-loading";
 import {
@@ -19,7 +18,7 @@ import {
   OpenSans_700Bold,
   OpenSans_700Bold_Italic,
 } from "@expo-google-fonts/open-sans";
-//We will consider isLogin state and decide what will appear on the screen
+var { width } = Dimensions.get("window");
 function HeaderLoginPage(props) {
   const [fontsLoaded, error] = useFonts({
     OpenSans_400Regular,
@@ -82,11 +81,11 @@ const styles = StyleSheet.create({
     marginBottom: "2%",
   },
   History: {
-    paddingLeft: 10,
+    paddingLeft: width*0.03,
   },
   Text: {
-    paddingLeft: 10,
-    fontSize: 18,
+    paddingLeft: width*0.04,
+    fontSize: config.fontsize_5,
     fontFamily: "OpenSans_400Regular",
   },
 });
