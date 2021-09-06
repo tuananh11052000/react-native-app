@@ -152,7 +152,7 @@ export default function ConnectPost(props) {
               size={width * 0.05}
               color="gray"
             />
-            <Text style={style.name}>{renderName(props.name)}</Text>
+            <Text style={style.name}>&ensp;{renderName(props.name)}</Text>
           </View>
           <View style={style.wrapTimeAddress}>
             <Text style={style.address}>

@@ -68,8 +68,11 @@ function Connection(props) {
   const _pressRow = (item) => {
     props.navigation.navigate("DetailPost", { data: item }); //chuyển trang
   };
-  const _pressList = () => {
+  const _pressListGive = () => {
     props.navigation.navigate("YouGive"); //chuyển trang
+  };
+  const _pressListReceive = () => {
+    props.navigation.navigate("YouReceive"); //chuyển trang
   };
 
   const renderItem = ({ item }) => {
@@ -99,8 +102,12 @@ function Connection(props) {
 
   return (
     <SafeAreaView style={styles.container}>
-      <ProductTitleConnect title="bạn tặng" type="Đăng tặng ?" onPress={() => _pressList()}/>
-      <ProductTitleConnect title="nhận tặng" type="Cần hỗ trợ ?" />
+      <ProductTitleConnect
+        title="bạn tặng"
+        type="Đăng tặng ?"
+        onPress={() => _pressListGive()}
+      />
+      <ProductTitleConnect title="nhận tặng" type="Cần hỗ trợ ?" onPress={() => _pressListReceive()}/>
       <Text style={styles.textTitle}>Danh sách</Text>
       <>
         {props.auth.isLogin ? (
@@ -178,28 +185,6 @@ const styles = StyleSheet.create({
     borderColor: "#BDBDBD",
     width: "57%",
     backgroundColor: "#FFF",
-  },
-  btnCreate: {
-    alignItems: "center",
-    flexDirection: "row",
-    backgroundColor: "#00a2e8",
-    height: 42,
-    paddingHorizontal: 18,
-    borderRadius: 10,
-    borderWidth: 1,
-    borderColor: "#fff",
-    shadowColor: "#000",
-    shadowOpacity: 0.3,
-    shadowRadius: 10,
-    shadowOffset: { width: 0, height: 0 },
-    width: "38%",
-    justifyContent: "space-around",
-  },
-  btnText: {
-    fontWeight: "600",
-    fontSize: config.fontsize_3,
-    color: "#000",
-    fontFamily: "OpenSans_700Bold",
   },
   spinnerTextStyle: {
     color: "#FFF",

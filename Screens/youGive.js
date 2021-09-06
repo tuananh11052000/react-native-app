@@ -21,6 +21,8 @@ import AddImg from "../assets/add.png";
 import { Picker } from "@react-native-picker/picker";
 import DropDownPicker from "react-native-dropdown-picker";
 import axios from "axios";
+import { SearchBar } from "react-native-elements";
+
 function YouGive(props) {
   const { navigation, dispatch } = props;
   const [loading, setloading] = useState(false);
@@ -32,8 +34,10 @@ function YouGive(props) {
   const [selectedValue, setSelectedValue] = useState(1);
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState(null);
+  const [search, setSearch] = useState("");
+
   const [items, setItems] = useState([
-    { label: "Tất cả", value: "1" },
+    { label: "Trạng thái", value: "1" },
     { label: "Chưa tặng", value: "2" },
     { label: "Đã tặng", value: "3" },
     { label: "Hủy", value: "4" },
@@ -74,7 +78,7 @@ function YouGive(props) {
     getConnectPost();
     setSelectedValue(1);
   };
-  
+
   let dropdown;
   if (Platform.OS === "ios") {
     //switch for ios
@@ -86,7 +90,7 @@ function YouGive(props) {
         setOpen={setOpen}
         setValue={setValue}
         setItems={setItems}
-        placeholder="Tất cả"
+        placeholder="Trạng thái"
         style={{
           borderTopLeftRadius: 5,
           borderTopRightRadius: 5,
@@ -115,7 +119,7 @@ function YouGive(props) {
         itemStyle={{ backgroundColor: "#FFF" }}
       >
         <Picker.Item
-          label="&ensp;Tất cả"
+          label="&ensp;Trạng thái"
           value="1"
           style={{ fontSize: config.fontsize_3 }}
         />
@@ -199,24 +203,21 @@ function YouGive(props) {
         textStyle={styles.spinnerTextStyle}
       />
       <View style={{ zIndex: 1 }}>
-        {/* <CreatePosts onPress={() => navigation.navigate("PostType")} /> */}
         <View style={styles.wrapContent}>
-        <TouchableOpacity
-            activeOpacity={0.5}
-            onPress={() => {
-              if (props.auth.isLogin == true) {
-                setSelectedValue(1);
-                dispatch({ type: "setThreadCategoryCheckBox" });
-                navigation.navigate("ConfirmAddress");
-              } else navigation.replace("Authentication");
-            }}
-            style={styles.btnCreate}
-          >
-            <Image source={AddImg} style={{ width: 20, height: 20 }} />
-            <Text style={styles.btnText}>&ensp; Đăng tin</Text>
-          </TouchableOpacity>
+          <View style={styles.wrapSearch}>
+            <SearchBar
+              placeholder="Tìm kiếm..."
+              onChangeText={setSearch}
+              value={search}
+              lightTheme="true"
+              style={{ fontSize: config.fontsize_3 }}
+              containerStyle={{ padding: 0 }}
+              inputStyle={{ color: "black" }}
+              inputContainerStyle={{ backgroundColor: "#FFF", height: 42 }}
+            />
+          </View>
+
           <View style={styles.wrapPikerA}>{dropdown}</View>
-          
         </View>
       </View>
 
@@ -280,34 +281,15 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15,
     paddingVertical: 10,
   },
+  wrapSearch: {
+    width: "55%",
+  },
   wrapPikerA: {
     borderWidth: 1,
     borderRadius: 4,
     borderColor: "#BDBDBD",
-    width: "57%",
+    width: "40%",
     backgroundColor: "#FFF",
-  },
-  btnCreate: {
-    alignItems: "center",
-    flexDirection: "row",
-    backgroundColor: "#00a2e8",
-    height: 42,
-    paddingHorizontal: 18,
-    borderRadius: 10,
-    borderWidth: 1,
-    borderColor: "#fff",
-    shadowColor: "#000",
-    shadowOpacity: 0.3,
-    shadowRadius: 10,
-    shadowOffset: { width: 0, height: 0 },
-    width: "38%",
-    justifyContent: "space-around",
-  },
-  btnText: {
-    fontWeight: "600",
-    fontSize: config.fontsize_3,
-    color: "#000",
-    fontFamily: "OpenSans_700Bold",
   },
   spinnerTextStyle: {
     color: "#FFF",
