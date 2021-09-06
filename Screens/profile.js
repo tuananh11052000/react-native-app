@@ -44,10 +44,10 @@ function ProfileScreen(props) {
   return (
     <View style={styles.container}>
       <View style={styles.scrollview}>
-        <HeaderLoginPage
+        {/* <HeaderLoginPage
           message={"ProfilePage"}
           onPress={() => navigation.jumpTo("Feed")}
-        />
+        /> */}
         <TopProfile
           onPress={() => navigation.replace("Authentication")}
           navigation={navigation}

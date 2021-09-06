@@ -123,7 +123,7 @@ function AppNavigator(props) {
                 <Text style={styles.textCancel}>Hủy</Text>
               </TouchableOpacity>
             ),
-            headerBackTitle: "some label",
+            headerBackTitle: "Quay lại",
 
             headerLeft: () => (
               <HeaderBackButton
@@ -167,7 +167,7 @@ function AppNavigator(props) {
                 <Text style={styles.textCancel}>Hủy</Text>
               </TouchableOpacity>
             ),
-            headerBackTitle: "some label",
+            headerBackTitle: "Quay lại",
           })}
         />
 
@@ -208,7 +208,7 @@ function AppNavigator(props) {
               <HeaderBackButton
                 onPress={() => {
                   dispatch({ type: "RESET_SCREEN_INFORMATION" });
-                  navigation.navigate("ConfirmAddress");
+                  navigation.goBack()
                 }}
                 tintColor={"white"}
                 label="Quay lại" //back
@@ -313,6 +313,15 @@ function AppNavigator(props) {
             headerTitleStyle: {
               // fontWeight: "bold",
             },
+            headerLeft: () => (
+              <HeaderBackButton
+                onPress={() => {
+                  navigation.goBack();
+                }}
+                tintColor={"white"}
+                label="Quay lại" //back
+              />
+            ),
             headerRight: () => (
               <TouchableOpacity
                 style={styles.wrapTextCancel}
@@ -592,7 +601,7 @@ function AppNavigator(props) {
                 <Text style={styles.textCancel}>Hủy</Text>
               </TouchableOpacity>
             ),
-            headerBackTitle: "some label",
+            headerBackTitle: "Quay lại",
 
             headerLeft: () => (
               <HeaderBackButton
@@ -651,7 +660,7 @@ function AppNavigator(props) {
                 <Text style={styles.textCancel}>Hủy</Text>
               </TouchableOpacity>
             ),
-            headerBackTitle: "some label",
+            headerBackTitle: "Quay lại",
 
             headerLeft: () => (
               <HeaderBackButton
@@ -702,7 +711,6 @@ const styles = StyleSheet.create({
   },
   textCancel: {
     color: "#FFF",
-    fontSize: config.fontsize_5,
     marginRight: 10,
   },
 });

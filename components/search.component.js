@@ -42,7 +42,7 @@ const style = StyleSheet.create({
     flexDirection: "column",
     height: SCREEN_WIDTH*0.4,
     backgroundColor: "#DDD",
-    marginBottom: '10%',
+    marginBottom: '8%',
     position: 'relative'
   },
   wrapSearchBox: {

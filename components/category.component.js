@@ -7,12 +7,12 @@ import {
   ScrollView,
   TouchableOpacity,
   Platform,
-  Image
+  Image, Dimensions
 } from 'react-native';
 import { connect } from 'react-redux'
 import config from '../config';
 import { Entypo } from '@expo/vector-icons';
-
+var { width } = Dimensions.get("window");
 function ExpandableListView(props) {
   const [layoutHeight, setLayoutHeight] = useState(0);
   useEffect(() => {
@@ -34,9 +34,9 @@ function ExpandableListView(props) {
         {/* <Image source={chevrondown} style={styles.iconStyle} /> */}
         <View style={styles.iconStyle}>
           {props.item.isExpanded ? (
-            <Entypo name="chevron-up" size={24} color="#656464" />
+            <Entypo name="chevron-up" size={width*0.06} color="#656464" />
           ) : (
-            <Entypo name="chevron-down" size={24} color="#656464" />
+            <Entypo name="chevron-down" size={width*0.06} color="#656464" />
           )}
         </View>
       </TouchableOpacity>

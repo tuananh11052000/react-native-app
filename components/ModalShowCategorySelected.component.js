@@ -9,11 +9,12 @@ import {
   TouchableOpacity,
   TextInput,
   FlatList,
-  TouchableWithoutFeedback 
+  Dimensions
 } from "react-native";
 import { AntDesign, Ionicons } from "@expo/vector-icons";
 import { ScrollView } from "react-native-gesture-handler";
 import config from "../config";
+var { width } = Dimensions.get("window");
 export default function App(props) {
   const [show, setshow] = useState(false);
   const renderItem = ({ item }) => (
@@ -62,7 +63,7 @@ export default function App(props) {
               }}
             >
               <TouchableOpacity onPress={props.onPress}>
-                <AntDesign name="close" size={30} color="black" />
+                <AntDesign name="close" size={width*0.05} color="black" />
               </TouchableOpacity>
               <Text style={styles.titleModel}>Danh mục xin</Text>
             </View>

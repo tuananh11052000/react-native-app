@@ -7,12 +7,13 @@ import {
   Text,
   ScrollView,
   TouchableOpacity,
-  Pressable
+  Pressable, Dimensions
 } from "react-native";
 import { connect } from "react-redux";
 import { MaterialCommunityIcons, Entypo } from "@expo/vector-icons";
 import ButtonCofirm from "./buttonConfirm.components";
 import config from '../config';
+var { width } = Dimensions.get("window");
 function ExpandableListView(props) {
   const [layoutHeight, setLayoutHeight] = useState(0);
   const [dataa, setDataa] = useState(props.item);
@@ -47,9 +48,9 @@ function ExpandableListView(props) {
         {/* <Image source={chevrondown} style={styles.iconStyle} /> */}
         <View style={styles.iconStyle}>
           {dataa.isExpanded ? (
-            <Entypo name="chevron-up" size={24} color="#656464" />
+            <Entypo name="chevron-up" size={width*0.06} color="#656464" />
           ) : (
-            <Entypo name="chevron-down" size={24} color="#656464" />
+            <Entypo name="chevron-down" size={width*0.06} color="#656464" />
           )}
         </View>
       </TouchableOpacity>
@@ -66,13 +67,13 @@ function ExpandableListView(props) {
               {subitem.checked ? (
                 <MaterialCommunityIcons
                   name="checkbox-marked"
-                  size={24}
+                  size={width*0.06}
                   color="#018786"
                 />
               ) : (
                 <MaterialCommunityIcons
                   name="checkbox-blank-outline"
-                  size={24}
+                  size={width*0.06}
                   color="#A0A0A0"
                 />
               )}
@@ -316,7 +317,7 @@ const styles = StyleSheet.create({
 buttonText: {
     color: '#FFF',
     textAlign: 'center',
-    fontSize: 20,
+    fontSize: config.fontsize_2,
     fontFamily: "OpenSans_600SemiBold",
 },
 wrapButton: {

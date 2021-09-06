@@ -1,6 +1,7 @@
 import React, { Component, useState } from "react";
-import { StyleSheet, View, Text, TouchableOpacity } from "react-native";
+import { StyleSheet, View, Text, TouchableOpacity, Dimensions } from "react-native";
 import config from "../config";
+var { width } = Dimensions.get("window");
 import { connect } from "react-redux";
 function Completed(props) {
   const { navigation, dispatch } = props;
@@ -76,7 +77,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#E53935",
     paddingVertical: 5,
     borderRadius: 5,
-    width: 100,
+    width: width*0.2,
     alignItems: "center",
     marginTop: 15,
   },

@@ -160,13 +160,13 @@ export default function MyPost(props) {
       return (
         <TouchableOpacity>
           <View style={style.wrapBot}>
-            <Ionicons name="ios-mail-outline" size={18} color="#00a2e8" />
+            <Ionicons name="ios-mail-outline" size={width*0.05} color="#00a2e8" />
             <Text style={style.textMessage}>&ensp;Lời nhắn</Text>
             <Text
               style={{
                 color: "#FE0101",
                 position: "absolute",
-                left: 10,
+                left: width*0.035,
                 top: 1,
               }}
             >
