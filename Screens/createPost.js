@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import {
   StyleSheet,
   Text,
@@ -12,14 +12,22 @@ import {
   ActivityIndicator,
   Alert,
 } from "react-native";
+import Menu, { MenuItem, MenuDivider } from "react-native-material-menu";
 import { connect } from "react-redux";
-import Spinner from 'react-native-loading-spinner-overlay';
+import Spinner from "react-native-loading-spinner-overlay";
 import config from "../config";
 import MyPost from "../components/mypost.components";
 import * as SecureStore from "expo-secure-store";
 import AddImg from "../assets/add.png";
 import { Picker } from "@react-native-picker/picker";
 import DropDownPicker from "react-native-dropdown-picker";
+import {
+  Feather,
+  FontAwesome,
+  MaterialIcons,
+  Ionicons,
+  AntDesign,
+} from "@expo/vector-icons";
 import axios from "axios";
 function CreatePost(props) {
   const { navigation, dispatch } = props;
@@ -27,16 +35,16 @@ function CreatePost(props) {
   const [refreshing, setrefreshing] = useState(true);
   const [data, setData] = useState([]);
   const [dataAll, setDataAll] = useState([]);
-  const [dataTCD, setDataTCD] = useState([]);
-  const [dataCXD, setDataCXD] = useState([]);
   const [selectedValue, setSelectedValue] = useState(1);
-  const [open, setOpen] = useState(false);
-  const [value, setValue] = useState(null);
-  const [items, setItems] = useState([
-    { label: "Tất cả", value: "1" },
-    { label: "Tặng cộng đồng", value: "2" },
-    { label: "Cần hỗ trợ", value: "3" },
-  ]);
+  const [valueMenu, setvalueMenu] = useState("Tất cả");
+  const menu = useRef();
+  const hideMenu = async (temp, title) => {
+    setvalueMenu(title);
+    filter(temp);
+    menu.current.hide();
+  };
+
+  const showMenu = () => menu.current.show();
   useEffect(() => {
     if (props.auth.isLogin == true) {
       getMyPost();
@@ -45,7 +53,7 @@ function CreatePost(props) {
   }, [props.auth.isLogin, props.reloadPost]);
   const getMyPost = async () => {
     if (props.auth.isLogin == true) {
-      let result =await SecureStore.getItemAsync("token");
+      let result = await SecureStore.getItemAsync("token");
       await axios({
         method: "get",
         url: "https://smai-app-api.herokuapp.com/post/getPostByAccountId",
@@ -55,27 +63,28 @@ function CreatePost(props) {
       })
         .then((res) => {
           setData(res.data);
-          setDataAll(res.data)
+          setDataAll(res.data);
         })
         .catch((error) => {
           console.log("Error: ", error);
         })
         .finally(() => {
-          setrefreshing(false)
+          setrefreshing(false);
         });
     }
-     
+
     dispatch({ type: "setNoReload" });
   };
 
   const onRefresh = () => {
     setData([]);
     getMyPost();
-    setSelectedValue(1)
+    setSelectedValue(1);
+    setvalueMenu("Tất cả")
   };
   const deletePost = (id) => {
     let result = SecureStore.getItemAsync("token");
-    setloading(true)
+    setloading(true);
     let url =
       "https://smai-app-api.herokuapp.com/post/deletePostbyUser?_id=" + id;
     axios({
@@ -84,40 +93,66 @@ function CreatePost(props) {
       headers: {
         Authorization: result,
       },
-    }).then((res) => {
-      if (res.status == 201) {
-        // alert("Xoá bài thành công.");
-        onRefresh();
-        Alert.alert("Thông báo", "Xóa bài thành công", [{ text: "OK" }]);
-        
-      }
-    }).finally(() => setloading(false));
+    })
+      .then((res) => {
+        if (res.status == 201) {
+          // alert("Xoá bài thành công.");
+          onRefresh();
+          Alert.alert("Thông báo", "Xóa bài thành công", [{ text: "OK" }]);
+        }
+      })
+      .finally(() => setloading(false));
   };
   let dropdown;
-  if (Platform.OS === "ios") {
+  if (Platform.OS === "android") {
     //switch for ios
     dropdown = (
-      <DropDownPicker
-        open={open}
-        value={value}
-        items={items}
-        setOpen={setOpen}
-        setValue={setValue}
-        setItems={setItems}
-        placeholder="Tất cả"
-        style={{
-          borderTopLeftRadius: 5,
-          borderTopRightRadius: 5,
-          borderBottomLeftRadius: 5,
-          borderBottomRightRadius: 5,
-          height: 41,
-          borderColor: "gray",
-        }}
-        dropDownContainerStyle={{
-          backgroundColor: "white",
-          borderColor: "gray",
-        }}
-      />
+      <Menu
+        style={{ backgroundColor: "#FFF" }}
+        ref={menu}
+        button={
+          <TouchableOpacity
+            onPress={showMenu}
+            style={{
+              flexDirection: "row",
+              alignItems: "center",
+              width: "73%",
+            }}
+          >
+            <View style={{width: '125%', paddingLeft: '5%'}}>
+              <Text style={{ fontSize: config.fontsize_3 }}>{valueMenu}</Text>
+            </View>
+            <View style={{width: '10%'}}>
+              <AntDesign name="caretdown" size={10} color="gray" />
+            </View>
+          </TouchableOpacity>
+        }
+      >
+        <MenuItem
+          onPress={() => {
+            hideMenu(1, "Tất cả");
+          }}
+          style={{ fontSize: config.fontsize_3 }}
+        >
+          Tất cả
+        </MenuItem>
+        <MenuItem
+          onPress={() => {
+            hideMenu(2, "Tặng cộng đồng");
+          }}
+          style={{ fontSize: config.fontsize_3 }}
+        >
+          Tặng cộng đồng
+        </MenuItem>
+        <MenuItem
+          onPress={() => {
+            hideMenu(3,  "Cần hỗ trợ");
+          }}
+          style={{ fontSize: config.fontsize_3 }}
+        >
+          Cần hỗ trợ
+        </MenuItem>
+      </Menu>
     );
   } else {
     //check box
@@ -130,7 +165,7 @@ function CreatePost(props) {
         }}
         mode={"dropdown"}
         style={{ height: 40 }}
-        itemStyle={{ backgroundColor: "#FFF"}}
+        itemStyle={{ backgroundColor: "#FFF" }}
       >
         <Picker.Item
           label="&ensp;Tất cả"
@@ -154,7 +189,7 @@ function CreatePost(props) {
     let tempData = dataAll;
     if (props.auth.isLogin == true) {
       if (itemvalue == 1 || value == 1) {
-        setData(tempData) 
+        setData(tempData);
       }
       if (itemvalue == 2 || value == 2) {
         const listTemp1 = tempData.filter((pr) => {
@@ -178,7 +213,7 @@ function CreatePost(props) {
   const _pressRow = (item) => {
     props.navigation.navigate("DetailPost", { data: item }); //chuyển trang
   };
-  
+
   const renderItem = ({ item }) => {
     return (
       <MyPost
@@ -208,7 +243,7 @@ function CreatePost(props) {
     <View style={styles.container}>
       <Spinner
         visible={loading}
-        textContent={'Đang xóa bài...'}
+        textContent={"Đang xóa bài..."}
         textStyle={styles.spinnerTextStyle}
       />
       <View style={{ zIndex: 1 }}>
@@ -222,7 +257,6 @@ function CreatePost(props) {
                 setSelectedValue(1);
                 dispatch({ type: "setThreadCategoryCheckBox" });
                 navigation.navigate("ConfirmAddress");
-
               } else navigation.replace("Authentication");
             }}
             style={styles.btnCreate}
@@ -298,7 +332,8 @@ const styles = StyleSheet.create({
     borderRadius: 4,
     borderColor: "#BDBDBD",
     width: "57%",
-    backgroundColor: '#FFF'
+    backgroundColor: '#FFF',
+    justifyContent: 'center'
   },
   btnCreate: {
     alignItems: "center",
@@ -323,7 +358,7 @@ const styles = StyleSheet.create({
     fontFamily: "OpenSans_700Bold",
   },
   spinnerTextStyle: {
-    color: '#FFF'
+    color: "#FFF",
   },
 });
 
