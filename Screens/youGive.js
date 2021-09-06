@@ -12,20 +12,32 @@ import {
   ActivityIndicator,
   Alert,
 } from "react-native";
-import { SafeAreaView } from "react-native";
 import { connect } from "react-redux";
+import Spinner from "react-native-loading-spinner-overlay";
 import config from "../config";
 import ConnectPost from "../components/connectPost.component";
-import ProductTitleConnect from "../components/productTitleConnect.component";
 import * as SecureStore from "expo-secure-store";
+import AddImg from "../assets/add.png";
+import { Picker } from "@react-native-picker/picker";
+import DropDownPicker from "react-native-dropdown-picker";
 import axios from "axios";
-function Connection(props) {
+function YouGive(props) {
   const { navigation, dispatch } = props;
   const [loading, setloading] = useState(false);
   const [refreshing, setrefreshing] = useState(true);
   const [data, setData] = useState([]);
   const [dataAll, setDataAll] = useState([]);
-
+  const [dataTCD, setDataTCD] = useState([]);
+  const [dataCXD, setDataCXD] = useState([]);
+  const [selectedValue, setSelectedValue] = useState(1);
+  const [open, setOpen] = useState(false);
+  const [value, setValue] = useState(null);
+  const [items, setItems] = useState([
+    { label: "Tất cả", value: "1" },
+    { label: "Chưa tặng", value: "2" },
+    { label: "Đã tặng", value: "3" },
+    { label: "Hủy", value: "4" },
+  ]);
   useEffect(() => {
     if (props.auth.isLogin == true) {
       getConnectPost();
@@ -37,7 +49,6 @@ function Connection(props) {
       let result = await SecureStore.getItemAsync("token");
       await axios({
         method: "get",
-        // url: "https://smai-app-api.herokuapp.com/post/getPostByAccountId",
         url: "https://smai-app-api.herokuapp.com/post/getNewPost",
         headers: {
           Authorization: result,
@@ -58,18 +69,101 @@ function Connection(props) {
     dispatch({ type: "setNoReload" });
   };
 
-  // console.log(dataAll);
-
   const onRefresh = () => {
     setData([]);
     getConnectPost();
+    setSelectedValue(1);
+  };
+  
+  let dropdown;
+  if (Platform.OS === "ios") {
+    //switch for ios
+    dropdown = (
+      <DropDownPicker
+        open={open}
+        value={value}
+        items={items}
+        setOpen={setOpen}
+        setValue={setValue}
+        setItems={setItems}
+        placeholder="Tất cả"
+        style={{
+          borderTopLeftRadius: 5,
+          borderTopRightRadius: 5,
+          borderBottomLeftRadius: 5,
+          borderBottomRightRadius: 5,
+          height: 41,
+          borderColor: "gray",
+        }}
+        dropDownContainerStyle={{
+          backgroundColor: "white",
+          borderColor: "gray",
+        }}
+      />
+    );
+  } else {
+    //check box
+    dropdown = (
+      <Picker
+        selectedValue={selectedValue}
+        onValueChange={(itemValue) => {
+          setSelectedValue(itemValue);
+          filter(itemValue);
+        }}
+        mode={"dropdown"}
+        style={{ height: 40 }}
+        itemStyle={{ backgroundColor: "#FFF" }}
+      >
+        <Picker.Item
+          label="&ensp;Tất cả"
+          value="1"
+          style={{ fontSize: config.fontsize_3 }}
+        />
+        <Picker.Item
+          label="&ensp;Chưa tặng"
+          value="2"
+          style={{ fontSize: config.fontsize_3 }}
+        />
+        <Picker.Item
+          label="&ensp;Đã tặng"
+          value="3"
+          style={{ fontSize: config.fontsize_3 }}
+        />
+        <Picker.Item
+          label="&ensp;Hủy"
+          value="4"
+          style={{ fontSize: config.fontsize_3 }}
+        />
+      </Picker>
+    );
+  }
+  const filter = (itemvalue, value) => {
+    let tempData = dataAll;
+    if (props.auth.isLogin == true) {
+      if (itemvalue == 1 || value == 1) {
+        setData(tempData);
+      }
+      if (itemvalue == 2 || value == 2) {
+        const listTemp1 = tempData.filter((pr) => {
+          if (pr.TypeAuthor == "tangcongdong") {
+            return true;
+          } else return false;
+        });
+        setData(listTemp1);
+      }
+      if (itemvalue == 3 || value == 3) {
+        const listTemp1 = tempData.filter((pr) => {
+          if (pr.TypeAuthor != "tangcongdong") {
+            return true;
+          } else return false;
+        });
+        setData(listTemp1);
+      }
+    }
   };
 
   const _pressRow = (item) => {
     props.navigation.navigate("DetailPost", { data: item }); //chuyển trang
-  };
-  const _pressList = () => {
-    props.navigation.navigate("YouGive"); //chuyển trang
   };
 
   const renderItem = ({ item }) => {
@@ -98,10 +192,34 @@ function Connection(props) {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
-      <ProductTitleConnect title="bạn tặng" type="Đăng tặng ?" onPress={() => _pressList()}/>
-      <ProductTitleConnect title="nhận tặng" type="Cần hỗ trợ ?" />
-      <Text style={styles.textTitle}>Danh sách</Text>
+    <View style={styles.container}>
+      <Spinner
+        visible={loading}
+        textContent={"Đang xóa bài..."}
+        textStyle={styles.spinnerTextStyle}
+      />
+      <View style={{ zIndex: 1 }}>
+        {/* <CreatePosts onPress={() => navigation.navigate("PostType")} /> */}
+        <View style={styles.wrapContent}>
+        <TouchableOpacity
+            activeOpacity={0.5}
+            onPress={() => {
+              if (props.auth.isLogin == true) {
+                setSelectedValue(1);
+                dispatch({ type: "setThreadCategoryCheckBox" });
+                navigation.navigate("ConfirmAddress");
+              } else navigation.replace("Authentication");
+            }}
+            style={styles.btnCreate}
+          >
+            <Image source={AddImg} style={{ width: 20, height: 20 }} />
+            <Text style={styles.btnText}>&ensp; Đăng tin</Text>
+          </TouchableOpacity>
+          <View style={styles.wrapPikerA}>{dropdown}</View>
+          
+        </View>
+      </View>
+
       <>
         {props.auth.isLogin ? (
           <>
@@ -146,7 +264,7 @@ function Connection(props) {
           </>
         )}
       </>
-    </SafeAreaView>
+    </View>
   );
 }
 
@@ -155,16 +273,6 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#DDD",
   },
-  textTitle: {
-    fontSize: config.fontsize_3,
-    marginLeft: "4%",
-    marginTop: "2%",
-    marginBottom: "2%",
-    color: "#7F7E85",
-    textTransform: "uppercase",
-    fontFamily: "OpenSans_700Bold",
-  },
-
   wrapContent: {
     backgroundColor: "#e5e5e5",
     flexDirection: "row",
@@ -213,4 +321,4 @@ export default connect(function (state) {
     reloadPost: state.reloadPost,
     controlConfirmAddress: state.controlConfirmAddress,
   };
-})(Connection);
+})(YouGive);

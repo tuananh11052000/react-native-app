@@ -41,6 +41,7 @@ import Announce from "./Screens/announce";
 import ServiceCharity from "./Screens/serviceCharity";
 import MedicalAdvise from "./Screens/medicalAdvice";
 import ConfirmGiveFor from './Screens/confirmGiveFor';
+import YouGive from "./Screens/youGive";
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
 
@@ -667,6 +668,21 @@ function AppNavigator(props) {
                 label="Quay lại" //back
               />
             ),
+          })}
+        />
+        <Stack.Screen
+          name="YouGive"
+          component={YouGive}
+          options={({ YouGive }) => ({
+            title: "Bạn tặng",
+            headerShown: true,
+            headerStyle: {
+              backgroundColor: config.color_header_background,
+            },
+            headerTintColor: config.headerTintColor,
+            headerTitleStyle: {
+              // fontWeight: "bold",
+            },
           })}
         />
       </Stack.Navigator>

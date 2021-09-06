@@ -44,7 +44,7 @@ export default function ProductTitleConnect(props) {
           <View style={{ width: "65%", justifyContent: "center" }}>
             <View style={styles.wrapThings}>
               <Text style={styles.textThings}>Hiện vật</Text>
-              <TouchableOpacity>
+              <TouchableOpacity onPress={() => props.onPress()}>
                 <View style={{ flexDirection: "row" }}>
                   <Text style={styles.numberThings}>12 ĐH</Text>
                   <Entypo name="chevron-small-right" size={24} color="black" />
@@ -68,9 +68,7 @@ export default function ProductTitleConnect(props) {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    
-  },
+  container: {},
   mainContainer: {
     borderColor: "#BDBDBD",
     borderWidth: 1,
