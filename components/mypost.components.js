@@ -156,9 +156,9 @@ export default function MyPost(props) {
     else return <Text style={style.textStatusFalse}>Chờ xác thực</Text>;
   };
   const renderMessage = () => {
-    if (props.typeAuthor == "tangcongdong") {
+    if (props.typeAuthor == "tangcongdong" && props.transaction.length != 0) {
       return (
-        <TouchableOpacity>
+        <TouchableOpacity onPress={() => props.pressGive()}>
           <View style={style.wrapBot}>
             <Ionicons name="ios-mail-outline" size={width*0.05} color="#00a2e8" />
             <Text style={style.textMessage}>&ensp;Lời nhắn</Text>
@@ -172,6 +172,16 @@ export default function MyPost(props) {
             >
               &#11044;
             </Text>
+          </View>
+        </TouchableOpacity>
+      );
+    } 
+    if (props.typeAuthor == "tangcongdong") {
+      return (
+        <TouchableOpacity onPress={() => props.pressGive()}>
+          <View style={style.wrapBot}>
+            <Ionicons name="ios-mail-outline" size={width*0.05} color="#00a2e8" />
+            <Text style={style.textMessage}>&ensp;Lời nhắn</Text>
           </View>
         </TouchableOpacity>
       );

@@ -58,8 +58,6 @@ function Connection(props) {
     dispatch({ type: "setNoReload" });
   };
 
-  // console.log(dataAll);
-
   const onRefresh = () => {
     setData([]);
     getConnectPost();

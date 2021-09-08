@@ -13,6 +13,7 @@ import controlConfirmAddress from './redirectConfirmAddress';
 import isDisplay from "./isDisplay";
 import reloadPost from './reloadPost';
 import redirectComplete from './redirectComplete';
+import redirectTransaction from './redirectTransaction';
 import { combineReducers } from "redux";
 
 var reducer = combineReducers({
@@ -30,7 +31,8 @@ var reducer = combineReducers({
   controlConfirmAddress,
   isDisplay,
   reloadPost,
-  redirectComplete
+  redirectComplete,
+  redirectTransaction
 });
 
 export default reducer;

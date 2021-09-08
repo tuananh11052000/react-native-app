@@ -108,18 +108,7 @@ function confirmAddress(props) {
     else {
       //neu ctrinh chay vao day tuc la khong co thay doi ve dia chi
       const { dispatch } = props;
-      let address = "";
-      if (commune.name != null) {
-        address = `${commune.name}, ${district.name}, ${province.name}`;
-      } else {
-        if (district.name != null) {
-          address = `${district.name}, ${province.name}`;
-        } else {
-          if (province.name != null) {
-            address = `${province.name}`;
-          }
-        }
-      }
+      const address = `${addressDetail.trim()}, ${commune.name}, ${district.name}, ${province.name}`;
       dispatch({ type: "CONFIRM_ADDRESS", address: address });
       props.closeModel();
       // dispatch({ type: "SAVE_ADDRESS_FILTER", addressFilter: address });

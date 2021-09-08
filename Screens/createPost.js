@@ -64,6 +64,7 @@ function CreatePost(props) {
         .then((res) => {
           setData(res.data);
           setDataAll(res.data);
+          console.log(data)
         })
         .catch((error) => {
           console.log("Error: ", error);
@@ -104,7 +105,7 @@ function CreatePost(props) {
       .finally(() => setloading(false));
   };
   let dropdown;
-  if (Platform.OS === "android") {
+  if (Platform.OS === "ios") {
     //switch for ios
     dropdown = (
       <Menu
@@ -213,10 +214,14 @@ function CreatePost(props) {
   const _pressRow = (item) => {
     props.navigation.navigate("DetailPost", { data: item }); //chuyển trang
   };
-
+  const pressGive = (id) => {
+    dispatch({ type: "SET_XIN" });
+    props.navigation.navigate("GiveFor", { name: 'Danh sách lời nhắn', postId: id }); //chuyển trang
+  };
   const renderItem = ({ item }) => {
     return (
       <MyPost
+        transaction={item.Transaction}
         urlImage={item.urlImage[0]}
         title={item.title}
         category={item.NameProduct}
@@ -227,6 +232,7 @@ function CreatePost(props) {
         cateReceives={item.NameProduct.length}
         onPress={() => _pressRow(item)}
         onPressDel={() => deletePost(item._id)}
+        pressGive={() => pressGive(item._id)}
       />
     );
   };
@@ -368,5 +374,6 @@ export default connect(function (state) {
     infoPost: state.infoPost,
     reloadPost: state.reloadPost,
     controlConfirmAddress: state.controlConfirmAddress,
+    redirectTransaction: state.redirectTransaction,
   };
 })(CreatePost);

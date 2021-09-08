@@ -372,7 +372,7 @@ function AppNavigator(props) {
         <Stack.Screen
           name="DetailPost"
           component={DetailPost}
-          options={{
+          options={({route}) => ({
             title: "Chi tiết bài đăng",
             headerStyle: {
               backgroundColor: config.color_header_background,
@@ -381,7 +381,7 @@ function AppNavigator(props) {
             headerTitleStyle: {
               fontWeight: "bold",
             },
-          }}
+          })}
         />
         <Stack.Screen
           name="History"
@@ -485,15 +485,15 @@ function AppNavigator(props) {
         <Stack.Screen
           name="GiveFor"
           component={GiveFor}
-          options={({ navigation }) => ({
+          options={({ navigation, route }) => ({
             headerLeft: () => (
               <HeaderBackButton
-                onPress={() => navigation.navigate("Category")}
+                onPress={() => navigation.goBack()}
                 tintColor={"white"}
                 label="Quay lại" //back
               />
             ),
-            title: "Gửi tặng đến",
+            title: route.params.name,
             headerShown: true,
             headerStyle: {
               backgroundColor: config.color_header_background,
@@ -763,5 +763,7 @@ const styles = StyleSheet.create({
 });
 
 export default connect(function (state) {
-  return { infoPost: state.infoPost, dataCategory: state.dataCategory };
+  return { infoPost: state.infoPost, 
+    dataCategory: state.dataCategory, 
+  };
 })(AppNavigator);

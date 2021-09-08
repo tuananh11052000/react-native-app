@@ -21,14 +21,9 @@ function ConfirmGiveFor(props) {
   const [isDisplay, setIsDisplay] = useState(false);
   const { dispatch, navigation } = props;
   let detailPost = props.route.params.data;
-  const pressConfirm = () => {
-    dispatch({ type: "COMPLETE_GIVEFOR" });
-    dispatch({ type: "RESET" });
-    navigation.navigate("Completed");
-  };
   const submitInfoPost = async () => {
-    if (props.infoPost.noteTransac.trim() == "") {
-      Alert.alert("Thông báo", "Vui lòng nhập mô tả", [
+    if (props.infoPost.noteTransac.trim() == "" || props.infoPost.address == "") {
+      Alert.alert("Thông báo", "Vui lòng nhập đầy đủ thông tin", [
         { text: "OK" },
       ]);
     } else {
@@ -53,10 +48,13 @@ function ConfirmGiveFor(props) {
       }
     }
     formData.append("note", data.noteTransac);
-    formData.append("receiverID", detailPost.AuthorID);
     formData.append("postID", detailPost._id);
-    formData.append("isConfirm", false);
-    formData.append("isConnect", false);
+    if (props.redirectTransaction == "gui") {
+      formData.append("status", "waiting");
+    } else {
+      formData.append("status", "null");
+    }
+    
     formData.append("senderAddress", data.address);
     let options = {
       method: "POST",
@@ -69,11 +67,12 @@ function ConfirmGiveFor(props) {
       },
     };
     fetch(apiUrl, options).then(res => {
+      
       setIsDisplay(false);
       dispatch({ type: "COMPLETE_GIVEFOR" });
       dispatch({ type: "RESET" });
       navigation.navigate("Completed");
-    }).catch(err => {console.log(err)});
+    }).catch(err => {console.log(err.response)});
     }
   };
   return (
@@ -104,5 +103,6 @@ export default connect(function (state) {
     redirectComplete: state.redirectComplete,
     infoPost: state.infoPost,
     auth: state.auth,
+    redirectTransaction: state.redirectTransaction,
   };
 })(ConfirmGiveFor);

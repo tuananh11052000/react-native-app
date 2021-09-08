@@ -10,10 +10,19 @@ import {
   Modal,
   TouchableOpacity,
 } from "react-native";
-import { FontAwesome, EvilIcons, Entypo, FontAwesome5, Ionicons, MaterialCommunityIcons  } from "@expo/vector-icons";
+import {
+  FontAwesome,
+  EvilIcons,
+  Entypo,
+  FontAwesome5,
+  Ionicons,
+  MaterialCommunityIcons,
+  Feather,
+} from "@expo/vector-icons";
 import { Button } from "galio-framework";
 import config from "../config";
 import axios from "axios";
+import { connect } from "react-redux";
 import ModelShowCategory from "../components/ModalShowCategorySelected.component";
 import * as SecureStore from "expo-secure-store";
 import AppLoading from "expo-app-loading";
@@ -25,16 +34,18 @@ import {
   OpenSans_700Bold,
   OpenSans_700Bold_Italic,
 } from "@expo-google-fonts/open-sans";
+import { NavigationContext } from "react-navigation";
 
 const { width } = Dimensions.get("window");
 const height = width * 0.5;
-export default function App(props) {
+function DetailPost(props) {
   let data = props.route.params.data; // data from list
+  let isHistory = props.route.params.isHistory;
   const [isShowModelCate, setisShowModelCate] = useState(false);
   const [active, setActive] = useState(0);
   const [avatar, setAvatar] = useState(" ");
   const [phoneNumber, setPhoneNumber] = useState(" "); //useState using for phonenumber
-  
+
   const change = ({ nativeEvent }) => {
     const slide = Math.ceil(
       nativeEvent.contentOffset.x / nativeEvent.layoutMeasurement.width
@@ -98,21 +109,26 @@ export default function App(props) {
   if (!fontsLoaded) {
     return <AppLoading />;
   }
-
-  //render btn
-  let button;
-  if (phoneNumber != " ") {
-    button = (
-      <Button
-        color={config.color_btn_1}
-        size="large"
-        onPress={() => dialCall(phoneNumber)}
-      >
-        <Text style={styles.textCall}>Gọi điện</Text>
-      </Button>
-    );
+  const renderBtnGive = () => {
+    if (props.auth.PhoneNumber == phoneNumber || data.TypeAuthor != "tangcongdong" || isHistory == "yes") {
+      return;
+    } else {
+      return (
+        <View style={styles.wrapBottom}>
+        <TouchableOpacity>
+          <Text style={{ color: "red" }}>Báo xấu</Text>
+        </TouchableOpacity>
+        <Button
+          color={config.color_btn_1}
+          size="small"
+          onPress={() => pressGive()}
+        >
+          <Text style={styles.textCall}>Lời nhắn</Text>
+        </Button>
+      </View>
+      )
+    }
   }
- 
   //url phonenumber
   const dialCall = (number) => {
     var number_temp = "0" + number;
@@ -124,6 +140,11 @@ export default function App(props) {
     }
 
     Linking.openURL(phoneNumber);
+  };
+  const pressGive = () => {
+    const { dispatch } = props;
+    dispatch({ type: "SET_XIN" });
+    props.navigation.navigate("ConfirmGiveFor", { data: data });
   };
   //ham render danh muc
   const renderCategory = () => {
@@ -181,7 +202,11 @@ export default function App(props) {
     } else {
       return (
         <View style={styles.noImageContainer}>
-          <MaterialCommunityIcons  name="home-heart" size={width*0.3} color="#CCC" />
+          <MaterialCommunityIcons
+            name="home-heart"
+            size={width * 0.3}
+            color="#CCC"
+          />
         </View>
       );
     }
@@ -202,7 +227,11 @@ export default function App(props) {
     else
       return (
         <View>
-          <Ionicons name="person-circle-outline" size={width*0.12} color="#DDD" />
+          <Ionicons
+            name="person-circle-outline"
+            size={width * 0.12}
+            color="#DDD"
+          />
         </View>
       );
   };
@@ -230,21 +259,27 @@ export default function App(props) {
                 paddingLeft: "3%",
                 paddingRight: "3%",
                 flexDirection: "row",
-              }}
-            >
-              {/* <FontAwesome name="user-circle-o" size={60} color="#fff200" /> */}
+              }}>
               {renderAvatar()}
               <View style={styles.wrapName}>
                 <Text style={styles.textName}>{data.NameAuthor}</Text>
                 <Text style={styles.textTypeUser}>Cá nhân</Text>
               </View>
             </View>
+            <TouchableOpacity onPress={() => dialCall(phoneNumber)}>
+                <Feather
+                  name="phone-call"
+                  size={width * 0.06}
+                  color="#00a2e8"
+                />
+              </TouchableOpacity>
           </View>
           <View>
             <Text style={styles.textDescription}>{data.note}</Text>
           </View>
         </View>
       </View>
+      
       <ModelShowCategory
         show={isShowModelCate}
         dataNameProduct={data.NameProduct}
@@ -252,7 +287,7 @@ export default function App(props) {
           setisShowModelCate(false);
         }}
       />
-      <View style={styles.wrapButton}>{button}</View>
+      {renderBtnGive()}
     </ScrollView>
   );
 }
@@ -270,8 +305,8 @@ const styles = StyleSheet.create({
     width,
     height,
     backgroundColor: "#FFF",
-    justifyContent: 'center', 
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
   },
   contentContainer: {
     flexGrow: 1,
@@ -347,6 +382,10 @@ const styles = StyleSheet.create({
     marginTop: "5%",
     paddingTop: "2%",
     paddingBottom: "2%",
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingRight: '6%',
   },
   wrapName: {
     marginLeft: 20,
@@ -370,17 +409,16 @@ const styles = StyleSheet.create({
     paddingLeft: "3%",
     paddingRight: "3%",
   },
-  wrapButton: {
-    justifyContent: "center",
+  wrapBottom: {
+    flexDirection: "row",
+    justifyContent: "space-between",
     alignItems: "center",
-    // marginBottom: 20,
-    paddingVertical: 10,
-    backgroundColor: "#e5e5e5",
+    padding: "2%",
   },
   textCall: {
     fontSize: config.fontsize_2,
     color: "#FFF",
-    fontFamily: "OpenSans_700Bold",
+    fontFamily: "OpenSans_400Regular",
   },
   wraptManyCategories: {
     color: "#039BE5",
@@ -389,3 +427,10 @@ const styles = StyleSheet.create({
     fontSize: config.fontsize_3,
   },
 });
+export default connect(function (state) {
+  return {
+    auth: state.auth,
+    redirectTransaction: state.redirectTransaction,
+    
+  };
+})(DetailPost);

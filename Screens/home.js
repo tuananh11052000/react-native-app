@@ -127,6 +127,7 @@ function Home(props) {
         typeAuthor={item.TypeAuthor}
         cateReceives={item.NameProduct.length}
         navigation={navigation}
+        isHistory="no"
       />
     );
   };

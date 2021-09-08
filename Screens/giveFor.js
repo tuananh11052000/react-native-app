@@ -26,6 +26,7 @@ import axios from "axios";
 import config from "../config";
 import ModalFilterAddress from "../components/ModelFilterAddress.component";
 import ProductGiveFor from "../components/productGiveFor.components";
+import * as SecureStore from "expo-secure-store";
 import { connect } from "react-redux";
 const { width } = Dimensions.get("window");
 const height = width * 0.5;
@@ -57,33 +58,59 @@ function App(props) {
   // call api
   //https://smai-back-end.herokuapp.com/post/getPostByTypeAuthor?typeauthor=%7BLoaij
   const getListPhotos = () => {
-    const apiURL = `https://smai-app-api.herokuapp.com/post/getPostByTypeAuthor?typeauthor=${typeAuthor}`;
-    axios
-      .get(apiURL)
-      .then((resjson) => {
-        let responData = resjson.data;
-        let realData = [];
-        for (let i = 0; i < responData.length; i++) {
-          let nameProduct = responData[i].NameProduct;
-          for (let j = 0; j < nameProduct.length; j++) {
-            if (
-              nameProduct[j].NameProduct ==
-                props.infoPost.NameProduct[0].NameProduct &&
-              nameProduct[j].Category == props.infoPost.NameProduct[0].Category
-            ) {
-              realData.push(responData[i]);
+    // kiểm tra nếu từ trang category chuyển qua thì call api những người xin đồ
+    if (props.redirectTransaction == "gui") {
+      const apiURL = `https://smai-app-api.herokuapp.com/post/getPostByTypeAuthor?typeauthor=${typeAuthor}`;
+      axios
+        .get(apiURL)
+        .then((resjson) => {
+          let responData = resjson.data;
+          let realData = [];
+          for (let i = 0; i < responData.length; i++) {
+            let nameProduct = responData[i].NameProduct;
+            for (let j = 0; j < nameProduct.length; j++) {
+              if (
+                nameProduct[j].NameProduct ==
+                  props.infoPost.NameProduct[0].NameProduct &&
+                nameProduct[j].Category ==
+                  props.infoPost.NameProduct[0].Category
+              ) {
+                realData.push(responData[i]);
+              }
             }
           }
-        }
-        // console.log(realData)
-        setData(realData);
-        setDataFilter(realData);
+          // console.log(realData)
+          setData(realData);
+          setDataFilter(realData);
+        })
+        .catch((error) => {
+          console.log("Error: ", error);
+        })
+        .finally(() => setisLoading(false));
+    } else {
+      // nếu từ lời nhắn chỗ tin đăng thì call api lời nhắn 
+      let postId = props.route.params.postId; 
+      let result = props.auth.token
+      console.log(result)
+      axios({
+        method: "get",
+        url: `https://smai-app-api.herokuapp.com/transaction/transaction-post?postId=${postId}`,
+        headers: {
+          Authorization: result,
+        },
       })
-      .catch((error) => {
-        console.log("Error: ", error);
-      })
-      .finally(() => setisLoading(false));
+        .then((resjson) => {
+          setData(resjson.data.data.data);
+          setDataFilter(resjson.data.data.data);
+          console.log(data)
+        })
+        .catch((error) => {
+          console.log("Error: ", error.message);
+        })
+        .finally(() => setisLoading(false));
+    }
   };
+
   const showFilterAddress = () => {
     if (addr != "") {
       let temp = addr.split(",");
@@ -109,21 +136,38 @@ function App(props) {
       setData(data);
     }
   };
-  const {navigation} = props;
+  const { navigation } = props;
   // render item product
   const renderItem = ({ item }) => {
-    return (
-      <ProductGiveFor
-        item={item}
-        nameAuthor={item.NameAuthor}
-        title={item.title}
-        time={item.createdAt}
-        address={item.address}
-        urlImage={item.urlImage[0]}
-        navigation={navigation}
-        authorID={item.AuthorID}
-      />
-    );
+    if (props.redirectTransaction == "gui") {
+      return (
+        <ProductGiveFor
+          item={item}
+          nameAuthor={item.NameAuthor}
+          title={item.title}
+          time={item.createdAt}
+          address={item.address}
+          urlImage={item.urlImage[0]}
+          navigation={navigation}
+          authorID={item.AuthorID}
+          viewDetail="true"
+        />
+      );
+    } else {
+      return (
+        <ProductGiveFor
+          item={item}
+          nameAuthor={item.usersender.FullName}
+          title={item.note}
+          time={item.updatedAt}
+          address={item.SenderAddress}
+          urlImage={item.urlImage[0]}
+          navigation={navigation}
+          authorID={item.SenderID}
+          viewDetail="false"
+        />
+      );
+    }
   };
 
   return (
@@ -292,5 +336,7 @@ export default connect(function (state) {
     infoPost: state.infoPost,
     controlThreadGiveFor: state.controlThreadGiveFor,
     dataCategory: state.dataCategory,
+    redirectTransaction: state.redirectTransaction,
+    auth: state.auth,
   };
 })(App);

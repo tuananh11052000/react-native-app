@@ -172,7 +172,7 @@ function ProductComponent(props) {
     }
   };
   const _pressRow = (item) => {
-    props.navigation.navigate("DetailPost", { data: item }); //chuyển trang
+    props.navigation.navigate("DetailPost", { data: item, isHistory: props.isHistory }); //chuyển trang
   };
 
   const currentTime = new Date();

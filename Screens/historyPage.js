@@ -57,6 +57,7 @@ export default function historyPage(props) {
         typeAuthor={item.TypeAuthor}
         cateReceives={item.NameProduct.length}
         navigation={navigation}
+        isHistory="yes"
       />
     );
   };

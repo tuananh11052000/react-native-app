@@ -39,7 +39,7 @@ import {
   OpenSans_800ExtraBold,
   OpenSans_800ExtraBold_Italic,
 } from "@expo-google-fonts/open-sans";
-export default function ProductGiveForComponent(props) {
+function ProductGiveForComponent(props) {
   const [avatar, setAvatar] = useState(" ");
   const [fontsLoaded, error] = useFonts({
     OpenSans_300Light,
@@ -172,6 +172,11 @@ export default function ProductGiveForComponent(props) {
     let diachi = huyen + ", " + tinh;
     return diachi;
   };
+  const detailText = () => {
+    if (props.viewDetail == "true") {
+      return (<Text style={styles.detail}>Chi tiết</Text>)
+    }
+  }
   const renderImage = () => {
     if (props.urlImage != null) {
       return (
@@ -187,10 +192,19 @@ export default function ProductGiveForComponent(props) {
     }
   };
   const _pressRow = (item) => {
-    props.navigation.navigate("DetailPost", { data: item }); //chuyển trang
+    if (props.viewDetail == "true") {
+      props.navigation.navigate("DetailPost", { data: item }); //chuyển trang
+    }
   };
   const pressGiveFor = (item) => {
-    props.navigation.navigate("ConfirmGiveFor", { data: item }); //chuyển trang
+    if (props.viewDetail == "true") {
+      const {dispatch} = props;
+      dispatch({ type: "SET_GUI" });
+      props.navigation.navigate("ConfirmGiveFor", { data: item }); //chuyển trang
+    } else {
+      console.log("Gửi tặng")
+    }
+    
   };
 
   const currentTime = new Date();
@@ -215,13 +229,13 @@ export default function ProductGiveForComponent(props) {
       </View>
       <View style={styles.wrapBorder}>
         <Text style={styles.description}>{props.title}</Text>
-        <Text style={styles.detail}>Chi tiết</Text>
+        {detailText()}
       </View>
       <View style={styles.wrapImage}>{renderImage()}</View>
       <View style={styles.wrapBorderBottom}>
         <View style={styles.wrapAddress}>
           <Entypo name="location" size={20} color="#BDBDBD" />
-          <Text style={styles.address}>{renderAddress(props.address)}</Text>
+          <Text style={styles.address}>{props.address}</Text>
         </View>
         <TouchableOpacity
           style={{ marginTop: "3%" }}
@@ -324,3 +338,8 @@ const styles = StyleSheet.create({
     fontFamily: "OpenSans_400Regular",
   },
 });
+export default connect(function (state) {
+  return {
+    redirectTransaction: state.redirectTransaction,
+  };
+})(ProductGiveForComponent);
