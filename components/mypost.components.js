@@ -245,7 +245,7 @@ export default function MyPost(props) {
             <View style={style.wrapTime}>
               <Feather
                 name="clock"
-                size={18}
+                size={width*0.035}
                 color="gray"
                 style={{ width: 18, height: 18 }}
               />

@@ -67,7 +67,6 @@ function ConfirmGiveFor(props) {
       },
     };
     fetch(apiUrl, options).then(res => {
-      
       setIsDisplay(false);
       dispatch({ type: "COMPLETE_GIVEFOR" });
       dispatch({ type: "RESET" });
@@ -75,11 +74,18 @@ function ConfirmGiveFor(props) {
     }).catch(err => {console.log(err.response)});
     }
   };
+  const renderBtn = () => {
+    if (props.redirectTransaction == "gui") {
+      return (<ButtonCofirm textBtn="Gửi tặng" onPress={() => submitInfoPost()} />)
+    } else {
+      return (<ButtonCofirm textBtn="Gửi" onPress={() => submitInfoPost()} />)
+    }
+  }
   return (
     <SafeAreaView style={styles.container}>
       <InforAddress onPress={() => navigation.navigate("Chọn ảnh")} />
       <View style={{ backgroundColor: "#DDD" }}>
-        <ButtonCofirm textBtn="Gửi tặng" onPress={() => submitInfoPost()} />
+        {renderBtn()}
       </View>
       <Spinner
         visible={isDisplay}

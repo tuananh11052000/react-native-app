@@ -21,6 +21,7 @@ import {
 } from "@expo/vector-icons";
 import config from "../config";
 import axios from "axios";
+import * as SecureStore from "expo-secure-store";
 import { Avatar } from "react-native-elements";
 
 var { width } = Dimensions.get("window");
@@ -174,9 +175,9 @@ function ProductGiveForComponent(props) {
   };
   const detailText = () => {
     if (props.viewDetail == "true") {
-      return (<Text style={styles.detail}>Chi tiết</Text>)
+      return <Text style={styles.detail}>Chi tiết</Text>;
     }
-  }
+  };
   const renderImage = () => {
     if (props.urlImage != null) {
       return (
@@ -198,15 +199,38 @@ function ProductGiveForComponent(props) {
   };
   const pressGiveFor = (item) => {
     if (props.viewDetail == "true") {
-      const {dispatch} = props;
+      const { dispatch } = props;
       dispatch({ type: "SET_GUI" });
       props.navigation.navigate("ConfirmGiveFor", { data: item }); //chuyển trang
     } else {
-      console.log("Gửi tặng")
+      console.log("Gửi tặng");
+      giveFor();
     }
-    
   };
-
+  const giveFor = async () => {
+    let result = await SecureStore.getItemAsync("token");
+    let formData = new FormData();
+    formData.append("status", "waiting");
+    let apiUrl =
+      "https://smai-app-api.herokuapp.com/transaction/update-status?transactionId=" +
+      props.idTrans;
+    let options = {
+      method: "PUT",
+      body: JSON.stringify({ status: "waiting" }),
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "multipart/form-data",
+        Authorization: result,
+      },
+    };
+    fetch(apiUrl, options)
+      .then((res) => {
+        console.log(res.message);
+      })
+      .catch((err) => {
+        console.log(err.response);
+      });
+  };
   const currentTime = new Date();
 
   return (
@@ -235,7 +259,7 @@ function ProductGiveForComponent(props) {
       <View style={styles.wrapBorderBottom}>
         <View style={styles.wrapAddress}>
           <Entypo name="location" size={20} color="#BDBDBD" />
-          <Text style={styles.address}>{props.address}</Text>
+          <Text style={styles.address}>{renderAddress(props.address)}</Text>
         </View>
         <TouchableOpacity
           style={{ marginTop: "3%" }}

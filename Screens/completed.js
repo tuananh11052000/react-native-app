@@ -22,13 +22,24 @@ function Completed(props) {
         </View>
       );
     } else {
-      return (
-        <View style={styles.wrapText}>
-          <Text style={styles.text1}>Gửi tặng thành công</Text>
-          <Text style={styles.text2}>Cảm ơn tấm lòng hảo tâm của bạn</Text>
-          <Text style={styles.text2}>Trân trọng!</Text>
-        </View>
-      );
+      if (props.redirectTransaction == "gui") {
+        return (
+          <View style={styles.wrapText}>
+            <Text style={styles.text1}>Gửi tặng thành công</Text>
+            <Text style={styles.text2}>Cảm ơn tấm lòng hảo tâm của bạn</Text>
+            <Text style={styles.text2}>Trân trọng!</Text>
+          </View>
+        );
+      } else {
+        return (
+          <View style={styles.wrapText}>
+            <Text style={styles.text1}>Gửi lời nhắn thành công</Text>
+            <Text style={styles.text2}>Vui lòng đợi phản hồi từ người tặng</Text>
+            <Text style={styles.text2}>Trân trọng!</Text>
+          </View>
+        );
+      }
+      
     }
   };
   return (

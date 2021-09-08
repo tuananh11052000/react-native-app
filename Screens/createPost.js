@@ -10,7 +10,7 @@ import {
   TouchableOpacity,
   FlatList,
   ActivityIndicator,
-  Alert,
+  Alert, Dimensions
 } from "react-native";
 import Menu, { MenuItem, MenuDivider } from "react-native-material-menu";
 import { connect } from "react-redux";
@@ -28,6 +28,7 @@ import {
   Ionicons,
   AntDesign,
 } from "@expo/vector-icons";
+const { width } = Dimensions.get("window");
 import axios from "axios";
 function CreatePost(props) {
   const { navigation, dispatch } = props;
@@ -64,7 +65,6 @@ function CreatePost(props) {
         .then((res) => {
           setData(res.data);
           setDataAll(res.data);
-          console.log(data)
         })
         .catch((error) => {
           console.log("Error: ", error);
@@ -124,7 +124,7 @@ function CreatePost(props) {
               <Text style={{ fontSize: config.fontsize_3 }}>{valueMenu}</Text>
             </View>
             <View style={{width: '10%'}}>
-              <AntDesign name="caretdown" size={10} color="gray" />
+              <AntDesign name="caretdown" size={width*0.02} color="gray" />
             </View>
           </TouchableOpacity>
         }

@@ -91,7 +91,6 @@ function App(props) {
       // nếu từ lời nhắn chỗ tin đăng thì call api lời nhắn 
       let postId = props.route.params.postId; 
       let result = props.auth.token
-      console.log(result)
       axios({
         method: "get",
         url: `https://smai-app-api.herokuapp.com/transaction/transaction-post?postId=${postId}`,
@@ -102,7 +101,6 @@ function App(props) {
         .then((resjson) => {
           setData(resjson.data.data.data);
           setDataFilter(resjson.data.data.data);
-          console.log(data)
         })
         .catch((error) => {
           console.log("Error: ", error.message);
@@ -165,6 +163,7 @@ function App(props) {
           navigation={navigation}
           authorID={item.SenderID}
           viewDetail="false"
+          idTrans={item._id}
         />
       );
     }
