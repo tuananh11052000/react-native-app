@@ -19,6 +19,14 @@ import ConnectPost from "../components/connectPost.component";
 import ProductTitleConnect from "../components/productTitleConnect.component";
 import * as SecureStore from "expo-secure-store";
 import axios from "axios";
+import {
+  useFonts,
+  OpenSans_400Regular,
+  OpenSans_400Regular_Italic,
+  OpenSans_600SemiBold,
+  OpenSans_700Bold,
+  OpenSans_700Bold_Italic,
+} from "@expo-google-fonts/open-sans";
 function Connection(props) {
   const { navigation, dispatch } = props;
   const [loading, setloading] = useState(false);
@@ -38,14 +46,16 @@ function Connection(props) {
       await axios({
         method: "get",
         // url: "https://smai-app-api.herokuapp.com/post/getPostByAccountId",
-        url: "https://smai-app-api.herokuapp.com/post/getNewPost",
+        url: "https://smai-app-api.herokuapp.com/transaction/get-transaction",
         headers: {
           Authorization: result,
         },
       })
         .then((res) => {
-          setData(res.data);
-          setDataAll(res.data);
+          setData(res.data.data.data);
+          setDataAll(res.data.data.data);
+          dispatch({ type: "SAVE_DATA_TRANS", data: res.data.data.data });
+       
         })
         .catch((error) => {
           console.log("Error: ", error);
@@ -64,7 +74,7 @@ function Connection(props) {
   };
 
   const _pressRow = (item) => {
-    props.navigation.navigate("DetailConnectPost", { data: item }); //chuyển trang
+    // props.navigation.navigate("DetailConnectPost", { data: item }); //chuyển trang
   };
   const _pressListGive = () => {
     props.navigation.navigate("YouGive"); //chuyển trang
@@ -83,20 +93,36 @@ function Connection(props) {
     return (
       <ConnectPost
         urlImage={item.urlImage[0]}
-        title={item._id}
-        name={item.NameAuthor}
-        time={item.createdAt}
-        address={item.address}
-        // confirm={item.confirm}
-        // typeAuthor={item.TypeAuthor}
-        // cateReceives={item.NameProduct.length}
+        title={item.ReceiverUser._id}
+        name={item.ReceiverUser.FullName}
+        time={item.ReceiverUser.createdAt}
+        address={item.SenderAddress}
         onPress={() => _pressRow(item)}
-        // onPressDel={() => deletePost(item._id)}
       />
     );
   };
   const listheader = () => {
-    return <></>;
+    return (
+      <>
+        <View style={{flexDirection: 'row', paddingTop: '2%'}}>
+          <View style={{width: '50%',  alignItems: 'center', paddingTop: '2%', borderRightColor:  '#9E9E9E', borderRightWidth: 1,}}>
+            <Text style={{fontSize: config.fontsize_5, fontFamily: 'OpenSans_600SemiBold', color: '#616161'}}>Bạn tặng</Text>
+            <Text style={{fontSize: config.fontsize_2, fontFamily: 'OpenSans_600SemiBold', }}>9 DH</Text>
+            <TouchableOpacity onPress={() => _pressListGive()}>
+              <Text style={{fontSize: config.fontsize_3, fontFamily: 'OpenSans_600SemiBold', color: '#26c6da'}}>Xem chi tiết</Text>
+            </TouchableOpacity>
+          </View>
+          <View style={{width: '50%', alignItems: 'center', paddingTop: '2%',  }}>
+            <Text style={{fontSize: config.fontsize_5, fontFamily: 'OpenSans_600SemiBold', color: '#616161'}}>Nhận tặng</Text>
+            <Text style={{fontSize: config.fontsize_2, fontFamily: 'OpenSans_600SemiBold', }}>0 DH</Text>
+            <TouchableOpacity onPress={() => _pressListReceive()}>
+              <Text style={{fontSize: config.fontsize_3, fontFamily: 'OpenSans_600SemiBold', color: '#26c6da'}}>Xem chi tiết</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+        <Text style={styles.textTitle}>Đối soát</Text>
+      </>
+    );
   };
   const ItemSeparatorView = () => {
     return (
@@ -106,19 +132,6 @@ function Connection(props) {
 
   return (
     <SafeAreaView style={styles.container}>
-      <ProductTitleConnect
-        title="bạn tặng"
-        type="Đăng tặng ?"
-        onPress={() => _pressListGive()}
-        onPressList={() => _pressListGiveTotal()}
-      />
-      <ProductTitleConnect
-        title="nhận tặng"
-        type="Cần hỗ trợ ?"
-        onPress={() => _pressListReceive()}
-        onPressList={() => _pressListReceiveTotal()}
-      />
-      <Text style={styles.textTitle}>Danh sách</Text>
       <>
         {props.auth.isLogin ? (
           <>
@@ -174,12 +187,15 @@ const styles = StyleSheet.create({
   },
   textTitle: {
     fontSize: config.fontsize_3,
-    marginLeft: "4%",
-    marginTop: "2%",
-    marginBottom: "2%",
+    paddingLeft: "4%",
+    paddingTop: "2%",
+    paddingBottom: "2%",
+    marginTop: '2%',
+    marginBottom: '2%',
     color: "#7F7E85",
     textTransform: "uppercase",
     fontFamily: "OpenSans_700Bold",
+    backgroundColor: '#FFF',
   },
 
   wrapContent: {
@@ -207,5 +223,6 @@ export default connect(function (state) {
     infoPost: state.infoPost,
     reloadPost: state.reloadPost,
     controlConfirmAddress: state.controlConfirmAddress,
+    dataTrans: state.dataTrans,
   };
 })(Connection);

@@ -17,6 +17,8 @@ import {
   FontAwesome5,
   Ionicons,
   MaterialCommunityIcons,
+  MaterialIcons,
+  Feather,
 } from "@expo/vector-icons";
 import { Button } from "galio-framework";
 import config from "../config";
@@ -40,62 +42,10 @@ export default function DetailConnectPost(props) {
   const [active, setActive] = useState(0);
   const [avatar, setAvatar] = useState(" ");
   const [phoneNumber, setPhoneNumber] = useState(" "); //useState using for phonenumber
-
-  const change = ({ nativeEvent }) => {
-    const slide = Math.ceil(
-      nativeEvent.contentOffset.x / nativeEvent.layoutMeasurement.width
-    );
-    if (slide !== active) {
-      setActive(slide);
-    }
-  };
-
+  console.log(data);
   //update history
   //get phone number author post
-  useEffect(() => {
-    //kiem tra dang nhap tren thiet bi
-    const checkTokenLocal = async () => {
-      let token = await SecureStore.getItemAsync("token");
-      if (token) {
-        axios
-          .put(
-            "https://smai-app-api.herokuapp.com/user/updateHistory",
-            { IdPost: [data._id] },
-            {
-              headers: {
-                Authorization: token,
-              },
-            }
-          )
-          .then((response) => {})
-          .catch((error) => {
-            alert(error.message);
-          });
-      } else {
-        return await null;
-      }
-    };
-    // console.log(data);
-    checkTokenLocal();
-    //Lay ra so dien thoai nguoi dang bai
-    const getPhone = async (AuthorID) => {
-      try {
-        await axios({
-          method: "get",
-          url:
-            "https://smai-app-api.herokuapp.com/user/getInfoAuthor?AuthorID=" +
-            AuthorID,
-        }).then(async (data) => {
-          setPhoneNumber(data.data.PhoneNumber);
-          setAvatar(data.data.ImgAuthor);
-        });
-      } catch (e) {
-        alert(e);
-      }
-    };
-    getPhone(data.AuthorID);
-    //Lay ra avatar
-  }, []);
+  useEffect(() => {}, []);
   const [fontsLoaded, error] = useFonts({
     OpenSans_400Regular,
     OpenSans_400Regular_Italic,
@@ -119,7 +69,7 @@ export default function DetailConnectPost(props) {
     Linking.openURL(phoneNumber);
   };
   //Ham render avatar
-  const renderAvatar = () => {
+  const renderAvatar = (avatar) => {
     if (avatar != null)
       return (
         <View>
@@ -146,6 +96,38 @@ export default function DetailConnectPost(props) {
     let id = data._id;
     return id.slice(0, 13) + "...";
   };
+  
+  const currentTime = new Date();
+  const renderTime = (time) => {
+    var t1 = time.format('YYYY-MM-DD HH:MM:SS'); 
+    return t1;
+  }
+  const renderTitle = (item) => {
+    item = item.charAt(0).toUpperCase() + item.slice(1);
+    if (item.length > 28) return item.slice(0, 28) + "...";
+    else return item;
+  };
+
+  const renderImage = (urlImage) => {
+    if (urlImage != null) {
+      return (
+        <Image
+          style={styles.tinyLogo}
+          source={{
+            uri: urlImage,
+          }}
+        />
+      );
+    } else {
+      return (
+        <MaterialIcons
+          name="volunteer-activism"
+          size={width * 0.1}
+          color="#CCCCCC"
+        />
+      );
+    }
+  };
   return (
     <ScrollView
       style={styles.container}
@@ -168,16 +150,16 @@ export default function DetailConnectPost(props) {
               flexDirection: "row",
             }}
           >
-            {renderAvatar()}
+            {renderAvatar(data.SenderUser.urlIamge)}
             <View style={styles.wrapName}>
               <View>
-                <Text style={styles.textName}>{data.NameAuthor}</Text>
+                <Text style={styles.textName}>{data.SenderUser.FullName}</Text>
                 <Text style={styles.textTypeUser}>Cá nhân</Text>
               </View>
               <View style={styles.wrapAddress}>
                 <Text style={styles.textAddress}>
                   <Entypo name="location" size={24} color="white" /> {"  "}
-                  {data.address}
+                  {data.SenderAddress}
                 </Text>
               </View>
             </View>
@@ -191,18 +173,36 @@ export default function DetailConnectPost(props) {
           <Text style={styles.giveStatus}>Chưa Tặng</Text>
         </View>
         <View style={styles.wrapProduct}>
-          <ProductComponent
-            // item={data}
-            urlImage={data.urlImage[0]}
-            title={data.title}
-            category={data.NameProduct}
-            time={data.createdAt}
-            address={data.address}
-            confirm={data.confirm}
-            typeAuthor={data.TypeAuthor}
-            cateReceives={data.NameProduct.length}
-            // navigation={navigation}
-          />
+          <TouchableOpacity style={styles.product}>
+            <View style={{ flexDirection: "row" }}>
+              <View style={styles.wrapImage}>
+                {renderImage(data.PostData.urlImage[0])}
+              </View>
+              <View style={styles.wrapInfoProduct}>
+                <View>
+                  <Text style={styles.titlePost}>
+                    {renderTitle(data.PostData.NameProduct[0].Category)}
+                  </Text>
+                </View>
+               
+                <View style={styles.wrapTypePrice}>
+                  <Text style={styles.type}> {renderTitle(data.PostData.title)}</Text>
+                  <Text style={styles.price}>Miễn phí</Text>
+                </View>
+                <View style={styles.wrapTimeAddress}>
+                  <View style={styles.wrapTime}>
+                    <Feather
+                      name="clock"
+                      size={18}
+                      color="gray"
+                      style={{ width: 18, height: 18 }}
+                    />
+                    <Text style={styles.time}>9:30 - 22/07/2021</Text>
+                  </View>
+                </View>
+              </View>
+            </View>
+          </TouchableOpacity>
         </View>
       </View>
       <View style={styles.wrapFollow}>
@@ -210,7 +210,7 @@ export default function DetailConnectPost(props) {
         <Text style={{ marginLeft: "10%" }}>Không có</Text>
       </View>
       <View style={styles.wrapButton}>
-        <TouchableOpacity style={styles.wrapCancel}> 
+        <TouchableOpacity style={styles.wrapCancel}>
           <Text style={styles.textCancel}>Hủy</Text>
         </TouchableOpacity>
         <Button
@@ -262,11 +262,9 @@ const styles = StyleSheet.create({
     paddingVertical: 5,
     backgroundColor: "#e5e5e5",
     flexDirection: "row",
-    paddingHorizontal: "5%"
+    paddingHorizontal: "5%",
   },
-  wrapCancel: {
-    
-  },
+  wrapCancel: {},
   textCancel: {
     fontSize: config.fontsize_2,
     color: "red",
@@ -352,5 +350,66 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderColor: "#bab6b6",
     margin: "3%",
+  },
+  // style product
+  product: {
+    backgroundColor: "#FFF",
+    paddingLeft: "1%",
+    paddingRight: "4%",
+    paddingTop: "2%",
+    paddingBottom: "2%",
+  },
+  wrapImage: {
+    width: "30%",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  tinyLogo: {
+    width: width * 0.22,
+    height: width * 0.22,
+  },
+  titlePost: {
+    fontSize: config.fontsize_5,
+    fontFamily: "OpenSans_600SemiBold",
+  },
+  wrapInfoProduct: {
+    marginLeft: "1%",
+    width: "70%",
+    justifyContent: "center",
+  },
+  wrapTypePrice: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginBottom: "2%",
+    marginTop: "2%",
+  },
+  price: {
+    color: "green",
+    fontSize: config.fontsize_3,
+    fontFamily: "OpenSans_400Regular",
+  },
+  type: {
+    fontSize: config.fontsize_3,
+    color: "gray",
+    fontFamily: "OpenSans_400Regular",
+  },
+  wrapTimeAddress: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
+  wrapTime: {
+    alignItems: "center",
+    flexDirection: "row",
+  },
+  time: {
+    fontSize: config.fontsize_3,
+    marginLeft: 5,
+    color: "black",
+    fontFamily: "OpenSans_400Regular",
+  },
+  address: {
+    color: "black",
+    fontSize: config.fontsize_3,
+    fontFamily: "OpenSans_400Regular",
   },
 });

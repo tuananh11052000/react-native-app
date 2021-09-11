@@ -14,6 +14,7 @@ import isDisplay from "./isDisplay";
 import reloadPost from './reloadPost';
 import redirectComplete from './redirectComplete';
 import redirectTransaction from './redirectTransaction';
+import dataTrans from './dataTransaction';
 import { combineReducers } from "redux";
 
 var reducer = combineReducers({
@@ -32,7 +33,8 @@ var reducer = combineReducers({
   isDisplay,
   reloadPost,
   redirectComplete,
-  redirectTransaction
+  redirectTransaction,
+  dataTrans
 });
 
 export default reducer;

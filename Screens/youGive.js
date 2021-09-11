@@ -26,7 +26,7 @@ import { SearchBar } from "react-native-elements";
 function YouGive(props) {
   const { navigation, dispatch } = props;
   const [loading, setloading] = useState(false);
-  const [refreshing, setrefreshing] = useState(true);
+  const [refreshing, setrefreshing] = useState(false);
   const [data, setData] = useState([]);
   const [dataAll, setDataAll] = useState([]);
   const [dataTCD, setDataTCD] = useState([]);
@@ -48,26 +48,15 @@ function YouGive(props) {
       onRefresh();
     }
   }, [props.auth.isLogin, props.reloadPost]);
-  const getConnectPost = async () => {
+  const getConnectPost = () => {
     if (props.auth.isLogin == true) {
-      let result = await SecureStore.getItemAsync("token");
-      await axios({
-        method: "get",
-        url: "https://smai-app-api.herokuapp.com/post/getNewPost",
-        headers: {
-          Authorization: result,
-        },
-      })
-        .then((res) => {
-          setData(res.data);
-          setDataAll(res.data);
-        })
-        .catch((error) => {
-          console.log("Error: ", error);
-        })
-        .finally(() => {
-          setrefreshing(false);
-        });
+      const listTemp = props.dataTrans.data.filter((pr) => {
+        if (pr.ReceiverUser.PhoneNumber == props.auth.PhoneNumber) {
+          return true;
+        } else return false;
+      });
+        setData(listTemp);
+        setDataAll(listTemp);
     }
 
     dispatch({ type: "setNoReload" });
@@ -174,10 +163,10 @@ function YouGive(props) {
     return (
       <ConnectPost
         urlImage={item.urlImage[0]}
-        title={item._id}
-        name={item.NameAuthor}
-        time={item.createdAt}
-        address={item.address}
+        title={item.ReceiverID}
+        name={item.SenderUser.FullName}
+        time={item.SenderUser.createdAt}
+        address={item.SenderAddress}
         // confirm={item.confirm}
         // typeAuthor={item.TypeAuthor}
         // cateReceives={item.NameProduct.length}
@@ -302,5 +291,6 @@ export default connect(function (state) {
     infoPost: state.infoPost,
     reloadPost: state.reloadPost,
     controlConfirmAddress: state.controlConfirmAddress,
+    dataTrans: state.dataTrans,
   };
 })(YouGive);
