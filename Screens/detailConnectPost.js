@@ -24,6 +24,7 @@ import { Button } from "galio-framework";
 import config from "../config";
 import axios from "axios";
 import * as SecureStore from "expo-secure-store";
+import ModalDetailPost from '../components/ModalDetailPost.component';
 import AppLoading from "expo-app-loading";
 import { Avatar } from "react-native-elements";
 import {
@@ -38,11 +39,11 @@ const { width } = Dimensions.get("window");
 const height = width * 0.5;
 export default function DetailConnectPost(props) {
   let data = props.route.params.data; // data from list
-  const [isShowModelCate, setisShowModelCate] = useState(false);
+  const [isShowModel, setisShowModel] = useState(false);
   const [active, setActive] = useState(0);
   const [avatar, setAvatar] = useState(" ");
   const [phoneNumber, setPhoneNumber] = useState(" "); //useState using for phonenumber
-  console.log(data);
+  
   //update history
   //get phone number author post
   useEffect(() => {}, []);
@@ -96,18 +97,20 @@ export default function DetailConnectPost(props) {
     let id = data._id;
     return id.slice(0, 13) + "...";
   };
-  
+
   const currentTime = new Date();
   const renderTime = (time) => {
-    var t1 = time.format('YYYY-MM-DD HH:MM:SS'); 
+    var t1 = time.format("YYYY-MM-DD HH:MM:SS");
     return t1;
-  }
+  };
   const renderTitle = (item) => {
     item = item.charAt(0).toUpperCase() + item.slice(1);
     if (item.length > 28) return item.slice(0, 28) + "...";
     else return item;
   };
-
+  const closeModel = () => {
+    setisShowModel(false)
+  }
   const renderImage = (urlImage) => {
     if (urlImage != null) {
       return (
@@ -147,12 +150,13 @@ export default function DetailConnectPost(props) {
           <View
             style={{
               paddingLeft: "3%",
+              paddingRight: "3%",
               flexDirection: "row",
             }}
           >
             {renderAvatar(data.SenderUser.urlIamge)}
             <View style={styles.wrapName}>
-              <View>
+              <View style={{borderBottomWidth: 1, borderBottomColor: '#DDD',}}>
                 <Text style={styles.textName}>{data.SenderUser.FullName}</Text>
                 <Text style={styles.textTypeUser}>Cá nhân</Text>
               </View>
@@ -173,7 +177,7 @@ export default function DetailConnectPost(props) {
           <Text style={styles.giveStatus}>Chưa Tặng</Text>
         </View>
         <View style={styles.wrapProduct}>
-          <TouchableOpacity style={styles.product}>
+          <TouchableOpacity style={styles.product} onPress={() => setisShowModel(true)}>
             <View style={{ flexDirection: "row" }}>
               <View style={styles.wrapImage}>
                 {renderImage(data.PostData.urlImage[0])}
@@ -184,9 +188,12 @@ export default function DetailConnectPost(props) {
                     {renderTitle(data.PostData.NameProduct[0].Category)}
                   </Text>
                 </View>
-               
+
                 <View style={styles.wrapTypePrice}>
-                  <Text style={styles.type}> {renderTitle(data.PostData.title)}</Text>
+                  <Text style={styles.type}>
+                    {" "}
+                    {renderTitle(data.PostData.title)}
+                  </Text>
                   <Text style={styles.price}>Miễn phí</Text>
                 </View>
                 <View style={styles.wrapTimeAddress}>
@@ -209,6 +216,12 @@ export default function DetailConnectPost(props) {
         <Text style={styles.textTitle}>THEO DÕI</Text>
         <Text style={{ marginLeft: "10%" }}>Không có</Text>
       </View>
+      <ModalDetailPost
+        show={isShowModel}
+        onPress={() => {
+          setisShowModel(false);
+        }}
+      />
       <View style={styles.wrapButton}>
         <TouchableOpacity style={styles.wrapCancel}>
           <Text style={styles.textCancel}>Hủy</Text>
@@ -266,14 +279,14 @@ const styles = StyleSheet.create({
   },
   wrapCancel: {},
   textCancel: {
-    fontSize: config.fontsize_2,
+    fontSize: config.fontsize_5,
     color: "red",
-    fontFamily: "OpenSans_600SemiBold",
+    fontFamily: "OpenSans_400Regular",
   },
   textCall: {
     fontSize: config.fontsize_2,
     color: "#FFF",
-    fontFamily: "OpenSans_700Bold",
+    fontFamily: "OpenSans_400Regular",
   },
   wrapTop: {
     backgroundColor: "#e5e5e5",
@@ -305,6 +318,8 @@ const styles = StyleSheet.create({
     backgroundColor: "#e5e5e5",
     marginTop: 5,
     paddingBottom: 10,
+    borderBottomColor: '#DDD',
+    borderBottomWidth: 1
   },
   textTitle: {
     fontSize: config.fontsize_5,

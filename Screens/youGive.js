@@ -167,11 +167,7 @@ function YouGive(props) {
         name={item.SenderUser.FullName}
         time={item.SenderUser.createdAt}
         address={item.SenderAddress}
-        // confirm={item.confirm}
-        // typeAuthor={item.TypeAuthor}
-        // cateReceives={item.NameProduct.length}
         onPress={() => _pressRow(item)}
-        // onPressDel={() => deletePost(item._id)}
       />
     );
   };

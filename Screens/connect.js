@@ -105,7 +105,7 @@ function Connection(props) {
     return (
       <>
         <View style={{flexDirection: 'row', paddingTop: '2%'}}>
-          <View style={{width: '50%',  alignItems: 'center', paddingTop: '2%', borderRightColor:  '#9E9E9E', borderRightWidth: 1,}}>
+          <View style={{width: '50%',  alignItems: 'center', paddingTop: '2%', borderRightColor:  '#E0E0E0', borderRightWidth: 1,}}>
             <Text style={{fontSize: config.fontsize_5, fontFamily: 'OpenSans_600SemiBold', color: '#616161'}}>Bạn tặng</Text>
             <Text style={{fontSize: config.fontsize_2, fontFamily: 'OpenSans_600SemiBold', }}>9 DH</Text>
             <TouchableOpacity onPress={() => _pressListGive()}>
@@ -183,7 +183,7 @@ function Connection(props) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#DDD",
+    backgroundColor: "#EEEEEE",
   },
   textTitle: {
     fontSize: config.fontsize_3,
