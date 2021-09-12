@@ -160,18 +160,15 @@ function YouReceive(props) {
   };
 
   const renderItem = ({ item }) => {
+    console.log(item)
     return (
       <ConnectPost
-        urlImage={item.urlImage[0]}
-        title={item.ReceiverID}
-        name={item.SenderUser.FullName}
-        time={item.SenderUser.createdAt}
-        address={item.SenderAddress}
-        // confirm={item.confirm}
-        // typeAuthor={item.TypeAuthor}
-        // cateReceives={item.NameProduct.length}
+        urlImage={item.PostData.urlImage[0]}
+        title={item.PostData._id}
+        name={item.PostData.NameAuthor}
+        time={item.PostData.createdAt}
+        address={item.PostData.address}
         onPress={() => _pressRow(item)}
-        // onPressDel={() => deletePost(item._id)}
       />
     );
   };

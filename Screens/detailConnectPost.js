@@ -22,8 +22,6 @@ import {
 } from "@expo/vector-icons";
 import { Button } from "galio-framework";
 import config from "../config";
-import axios from "axios";
-import * as SecureStore from "expo-secure-store";
 import ModalDetailPost from '../components/ModalDetailPost.component';
 import AppLoading from "expo-app-loading";
 import { Avatar } from "react-native-elements";
@@ -34,7 +32,6 @@ import {
   OpenSans_700Bold,
   OpenSans_700Bold_Italic,
 } from "@expo-google-fonts/open-sans";
-import ProductComponent from "../components/product.component";
 const { width } = Dimensions.get("window");
 const height = width * 0.5;
 export default function DetailConnectPost(props) {
@@ -218,6 +215,12 @@ export default function DetailConnectPost(props) {
       </View>
       <ModalDetailPost
         show={isShowModel}
+        urlImage={data.PostData.urlImage}
+        avatar={data.ReceiverUser.urlIamge}
+        NameProduct={data.PostData.title}
+        NameAuthor={data.PostData.NameAuthor}
+        note={data.PostData.note}
+        address={data.PostData.address}
         onPress={() => {
           setisShowModel(false);
         }}
@@ -365,6 +368,7 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderColor: "#bab6b6",
     margin: "3%",
+    borderRadius: 10,
   },
   // style product
   product: {
@@ -373,6 +377,7 @@ const styles = StyleSheet.create({
     paddingRight: "4%",
     paddingTop: "2%",
     paddingBottom: "2%",
+    borderRadius: 10,
   },
   wrapImage: {
     width: "30%",

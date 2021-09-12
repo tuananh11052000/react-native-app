@@ -313,10 +313,6 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     flexDirection: "column",
   },
-  scroll: {
-    width,
-    height,
-  },
   image: {
     width,
     height,
