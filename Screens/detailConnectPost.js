@@ -7,7 +7,7 @@ import {
   ScrollView,
   Dimensions,
   Linking,
-  Modal,
+  Alert,
   TouchableOpacity,
 } from "react-native";
 import {
@@ -22,7 +22,8 @@ import {
 } from "@expo/vector-icons";
 import { Button } from "galio-framework";
 import config from "../config";
-import ModalDetailPost from '../components/ModalDetailPost.component';
+import ModalDetailPost from "../components/ModalDetailPost.component";
+import ModalGiveFor from "../components/ModalGiveFor.component";
 import AppLoading from "expo-app-loading";
 import { Avatar } from "react-native-elements";
 import {
@@ -35,12 +36,16 @@ import {
 const { width } = Dimensions.get("window");
 const height = width * 0.5;
 export default function DetailConnectPost(props) {
+  const { navigation } = props;
   let data = props.route.params.data; // data from list
+  console.log(data);
+  let titlePerson = props.route.params.titlePerson;
   const [isShowModel, setisShowModel] = useState(false);
+  const [isShow, setIsShow] = useState(false); // model xác nhận xong
   const [active, setActive] = useState(0);
   const [avatar, setAvatar] = useState(" ");
   const [phoneNumber, setPhoneNumber] = useState(" "); //useState using for phonenumber
-  
+
   //update history
   //get phone number author post
   useEffect(() => {}, []);
@@ -85,7 +90,7 @@ export default function DetailConnectPost(props) {
           <Ionicons
             name="person-circle-outline"
             size={width * 0.12}
-            color="#DDD"
+            color="#757575"
           />
         </View>
       );
@@ -100,13 +105,51 @@ export default function DetailConnectPost(props) {
     var t1 = time.format("YYYY-MM-DD HH:MM:SS");
     return t1;
   };
+  const renderStatus = (status) => {
+    if (status == "done") {
+      return "Đã tặng";
+    } else {
+      if (status == "waiting") {
+        return "Chưa tặng";
+      }
+    }
+  };
   const renderTitle = (item) => {
     item = item.charAt(0).toUpperCase() + item.slice(1);
     if (item.length > 28) return item.slice(0, 28) + "...";
     else return item;
   };
-  const closeModel = () => {
-    setisShowModel(false)
+  const cancelBtn = () => {
+    Alert.alert("Thông báo", "Bạn có chắc muốn hủy!", [
+      {
+        text: "Không",
+        style: "cancel",
+      },
+      {
+        text: "Có",
+        style: "cancel",
+        onPress: () => navigation.navigate("Home"),
+      },
+    ]);
+  };
+  const renderBottom = () => {
+    console.log(data.isStatus)
+    if (data.isStatus != "done") {
+      return (
+        <View style={styles.wrapButton}>
+        <TouchableOpacity style={styles.wrapCancel} onPress={() => cancelBtn()}>
+          <Text style={styles.textCancel}>Hủy</Text>
+        </TouchableOpacity>
+        <Button
+          color={config.color_btn_1}
+          // size="large"
+          onPress={() => setIsShow(true)}
+        >
+          <Text style={styles.textCall}>Xác nhận xong</Text>
+        </Button>
+      </View>
+      )
+    }
   }
   const renderImage = (urlImage) => {
     if (urlImage != null) {
@@ -142,7 +185,7 @@ export default function DetailConnectPost(props) {
       </View>
 
       <View style={styles.wrapPerson}>
-        <Text style={styles.textTitle}>NGƯỜI NHẬN</Text>
+        <Text style={styles.textTitle}>{titlePerson}</Text>
         <View style={styles.wrapInfor}>
           <View
             style={{
@@ -153,9 +196,26 @@ export default function DetailConnectPost(props) {
           >
             {renderAvatar(data.SenderUser.urlIamge)}
             <View style={styles.wrapName}>
-              <View style={{borderBottomWidth: 1, borderBottomColor: '#DDD',}}>
+              <View style={{ borderBottomWidth: 1, borderBottomColor: "#DDD" }}>
                 <Text style={styles.textName}>{data.SenderUser.FullName}</Text>
-                <Text style={styles.textTypeUser}>Cá nhân</Text>
+                <View
+                  style={{
+                    flexDirection: "row",
+                    justifyContent: "space-between",
+                    marginTop: "2%",
+                  }}
+                >
+                  <Text style={styles.textTypeUser}>Cá nhân</Text>
+                  <TouchableOpacity
+                    onPress={() => dialCall(data.ReceiverUser.PhoneNumber)}
+                  >
+                    <Feather
+                      name="phone-call"
+                      size={width * 0.05}
+                      color="#00a2e8"
+                    />
+                  </TouchableOpacity>
+                </View>
               </View>
               <View style={styles.wrapAddress}>
                 <Text style={styles.textAddress}>
@@ -171,10 +231,13 @@ export default function DetailConnectPost(props) {
       <View style={styles.wrapInfoPost}>
         <View style={styles.wrapTopInfo}>
           <Text style={styles.textTitle}>Thông tin tặng</Text>
-          <Text style={styles.giveStatus}>Chưa Tặng</Text>
+          <Text style={styles.giveStatus}>{renderStatus(data.isStatus)}</Text>
         </View>
         <View style={styles.wrapProduct}>
-          <TouchableOpacity style={styles.product} onPress={() => setisShowModel(true)}>
+          <TouchableOpacity
+            style={styles.product}
+            onPress={() => setisShowModel(true)}
+          >
             <View style={{ flexDirection: "row" }}>
               <View style={styles.wrapImage}>
                 {renderImage(data.PostData.urlImage[0])}
@@ -208,10 +271,15 @@ export default function DetailConnectPost(props) {
             </View>
           </TouchableOpacity>
         </View>
+        <View style={styles.wrapNote}>
+          <Text style={styles.textTitle}>Ghi chú</Text>
+          <Text style={styles.note}>{data.note}</Text>
+          <Text style={styles.time2}>11:20 - 23/7/2021</Text>
+        </View>
       </View>
       <View style={styles.wrapFollow}>
         <Text style={styles.textTitle}>THEO DÕI</Text>
-        <Text style={{ marginLeft: "10%" }}>Không có</Text>
+        <Text style={{ marginLeft: "10%", textAlign: "center" }}>Không có</Text>
       </View>
       <ModalDetailPost
         show={isShowModel}
@@ -225,18 +293,16 @@ export default function DetailConnectPost(props) {
           setisShowModel(false);
         }}
       />
-      <View style={styles.wrapButton}>
-        <TouchableOpacity style={styles.wrapCancel}>
-          <Text style={styles.textCancel}>Hủy</Text>
-        </TouchableOpacity>
-        <Button
-          color={config.color_btn_1}
-          // size="large"
-          onPress={() => dialCall(phoneNumber)}
-        >
-          <Text style={styles.textCall}>Xác nhận xong</Text>
-        </Button>
-      </View>
+      <ModalGiveFor
+        show={isShow}
+        onPressClose={() => setIsShow(false)}
+        idTrans={data._id}
+        navigation={navigation}
+        titleModal="Xác nhận xong"
+        titleBtn="Xong"
+        status="done"
+      />
+      {renderBottom()}
     </ScrollView>
   );
 }
@@ -260,6 +326,7 @@ const styles = StyleSheet.create({
   },
   wrapName: {
     marginLeft: 20,
+    width: "80%",
   },
   textName: {
     fontSize: config.fontsize_2,
@@ -280,7 +347,12 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     paddingHorizontal: "5%",
   },
-  wrapCancel: {},
+  note: {
+    fontSize: config.fontsize_3,
+    color: "black",
+    fontFamily: "OpenSans_400Regular",
+    marginLeft: "4%",
+  },
   textCancel: {
     fontSize: config.fontsize_5,
     color: "red",
@@ -321,8 +393,8 @@ const styles = StyleSheet.create({
     backgroundColor: "#e5e5e5",
     marginTop: 5,
     paddingBottom: 10,
-    borderBottomColor: '#DDD',
-    borderBottomWidth: 1
+    borderBottomColor: "#DDD",
+    borderBottomWidth: 1,
   },
   textTitle: {
     fontSize: config.fontsize_5,
@@ -333,7 +405,7 @@ const styles = StyleSheet.create({
     fontFamily: "OpenSans_700Bold",
   },
   wrapAddress: {
-    paddingRight: "15%",
+    paddingRight: "2%",
     borderTopWidth: 0.2,
     borderColor: "gray",
     paddingTop: "2%",
@@ -426,6 +498,13 @@ const styles = StyleSheet.create({
     marginLeft: 5,
     color: "black",
     fontFamily: "OpenSans_400Regular",
+  },
+  time2: {
+    fontSize: config.fontsize_3,
+    color: "#757575",
+    fontFamily: "OpenSans_400Regular",
+    textAlign: "right",
+    marginRight: "2%",
   },
   address: {
     color: "black",

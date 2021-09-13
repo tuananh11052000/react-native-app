@@ -156,7 +156,7 @@ function YouGive(props) {
   };
 
   const _pressRow = (item) => {
-    props.navigation.navigate("DetailConnectPost", { data: item }); //chuyển trang
+    props.navigation.navigate("DetailConnectPost", { name: "Chi tiết bạn tặng", titlePerson: "NGƯỜI NHẬN" ,data: item }); //chuyển trang
   };
 
   const renderItem = ({ item }) => {
@@ -168,6 +168,7 @@ function YouGive(props) {
         time={item.SenderUser.createdAt}
         address={item.SenderAddress}
         onPress={() => _pressRow(item)}
+        status={item.isStatus}
       />
     );
   };

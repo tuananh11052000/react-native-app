@@ -11,10 +11,12 @@ import {
   FlatList,
   ActivityIndicator,
   Alert,
+  Dimensions,
 } from "react-native";
 import { SafeAreaView } from "react-native";
 import { connect } from "react-redux";
 import config from "../config";
+import { Entypo } from "@expo/vector-icons";
 import ConnectPost from "../components/connectPost.component";
 import ProductTitleConnect from "../components/productTitleConnect.component";
 import * as SecureStore from "expo-secure-store";
@@ -26,18 +28,20 @@ import {
   OpenSans_600SemiBold,
   OpenSans_700Bold,
   OpenSans_700Bold_Italic,
+  OpenSans_800ExtraBold,
 } from "@expo-google-fonts/open-sans";
+var { width } = Dimensions.get("window");
 function Connection(props) {
   const { navigation, dispatch } = props;
   const [loading, setloading] = useState(false);
   const [refreshing, setrefreshing] = useState(true);
   const [data, setData] = useState([]);
-  const [dataAll, setDataAll] = useState([]);
-
+  const [dataGive, setdataGive] = useState(0);
+  const [dataReceive, setdataReceive] = useState(0);
   useEffect(() => {
     if (props.auth.isLogin == true) {
       getConnectPost();
-      onRefresh();
+      getConnectPostDS();
     }
   }, [props.auth.isLogin, props.reloadPost]);
   const getConnectPost = async () => {
@@ -45,17 +49,32 @@ function Connection(props) {
       let result = await SecureStore.getItemAsync("token");
       await axios({
         method: "get",
-        // url: "https://smai-app-api.herokuapp.com/post/getPostByAccountId",
         url: "https://smai-app-api.herokuapp.com/transaction/get-transaction",
         headers: {
           Authorization: result,
         },
       })
         .then((res) => {
-          setData(res.data.data.data);
-          setDataAll(res.data.data.data);
-          dispatch({ type: "SAVE_DATA_TRANS", data: res.data.data.data });
-       
+          let tempList = res.data.data.data.filter((item) => {
+            if (item.isStatus == null) {
+              return false;
+            }
+            return true;
+          });
+          const listTempGive = tempList.filter((pr) => {
+            if (pr.ReceiverUser.PhoneNumber == props.auth.PhoneNumber) {
+              return true;
+            } else return false;
+          });
+          setdataGive(listTempGive.length);
+          const listTempRe = tempList.filter((pr) => {
+            if (pr.ReceiverUser.PhoneNumber != props.auth.PhoneNumber) {
+              return true;
+            } else return false;
+          });
+          setdataReceive(listTempRe.length);
+          dispatch({ type: "SAVE_DATA_TRANS", data: tempList });
+          setData(tempList);
         })
         .catch((error) => {
           console.log("Error: ", error);
@@ -64,13 +83,33 @@ function Connection(props) {
           setrefreshing(false);
         });
     }
-
+    dispatch({ type: "setNoReload" });
+  };
+  const getConnectPostDS = async () => {
+    if (props.auth.isLogin == true) {
+      let result = await SecureStore.getItemAsync("token");
+      await axios({
+        method: "get",
+        url: "https://smai-app-api.herokuapp.com/transaction/transaction-success",
+        headers: {
+          Authorization: result,
+        },
+      })
+        .then((res) => {})
+        .catch((error) => {
+          console.log("Error: ", error);
+        })
+        .finally(() => {
+          setrefreshing(false);
+        });
+    }
     dispatch({ type: "setNoReload" });
   };
 
   const onRefresh = () => {
     setData([]);
     getConnectPost();
+    getConnectPostDS();
   };
 
   const _pressRow = (item) => {
@@ -81,12 +120,6 @@ function Connection(props) {
   };
   const _pressListReceive = () => {
     props.navigation.navigate("YouReceive"); //chuyển trang
-  };
-  const _pressListGiveTotal = () => {
-    props.navigation.navigate("YouGiveTotal"); //chuyển trang
-  };
-  const _pressListReceiveTotal = () => {
-    props.navigation.navigate("YouReceiveTotal"); //chuyển trang
   };
 
   const renderItem = ({ item }) => {
@@ -104,23 +137,6 @@ function Connection(props) {
   const listheader = () => {
     return (
       <>
-        <View style={{flexDirection: 'row', paddingTop: '2%'}}>
-          <View style={{width: '50%',  alignItems: 'center', paddingTop: '2%', borderRightColor:  '#E0E0E0', borderRightWidth: 1,}}>
-            <Text style={{fontSize: config.fontsize_5, fontFamily: 'OpenSans_600SemiBold', color: '#616161'}}>Bạn tặng</Text>
-            <Text style={{fontSize: config.fontsize_2, fontFamily: 'OpenSans_600SemiBold', }}>9 DH</Text>
-            <TouchableOpacity onPress={() => _pressListGive()}>
-              <Text style={{fontSize: config.fontsize_3, fontFamily: 'OpenSans_600SemiBold', color: '#26c6da'}}>Xem chi tiết</Text>
-            </TouchableOpacity>
-          </View>
-          <View style={{width: '50%', alignItems: 'center', paddingTop: '2%',  }}>
-            <Text style={{fontSize: config.fontsize_5, fontFamily: 'OpenSans_600SemiBold', color: '#616161'}}>Nhận tặng</Text>
-            <Text style={{fontSize: config.fontsize_2, fontFamily: 'OpenSans_600SemiBold', }}>0 DH</Text>
-            <TouchableOpacity onPress={() => _pressListReceive()}>
-              <Text style={{fontSize: config.fontsize_3, fontFamily: 'OpenSans_600SemiBold', color: '#26c6da'}}>Xem chi tiết</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-        <Text style={styles.textTitle}>Đối soát</Text>
       </>
     );
   };
@@ -146,19 +162,72 @@ function Connection(props) {
                 <ActivityIndicator color="#BDBDBD" size="small" />
               </View>
             ) : (
-              <FlatList
-                data={data}
-                renderItem={renderItem}
-                keyExtractor={(item) => item._id}
-                ItemSeparatorComponent={ItemSeparatorView}
-                ListHeaderComponent={listheader}
-                refreshControl={
-                  <RefreshControl
-                    refreshing={refreshing}
-                    onRefresh={onRefresh}
-                  />
-                }
-              />
+              // <FlatList
+              //   data={data}
+              //   renderItem={renderItem}
+              //   keyExtractor={(item) => item._id}
+              //   ItemSeparatorComponent={ItemSeparatorView}
+              //   ListHeaderComponent={listheader}
+              //   refreshControl={
+              //     <RefreshControl
+              //       refreshing={refreshing}
+              //       onRefresh={onRefresh}
+              //     />
+              //   }
+              // />
+              <>
+                <View style={{ flexDirection: "row", paddingTop: "2%" }}>
+                  <View style={styles.leftColumn}>
+                    <Text style={styles.textYouGive}>Bạn tặng</Text>
+                    <Text style={styles.numberPost}>{dataGive} DH</Text>
+                    <TouchableOpacity onPress={() => _pressListGive()}>
+                      <Text style={styles.textSeeMore}>Xem chi tiết</Text>
+                    </TouchableOpacity>
+                  </View>
+                  <View style={styles.rightColumn}>
+                    <Text style={styles.textYouGive}>Nhận tặng</Text>
+                    <Text style={styles.numberPost}>{dataReceive} DH</Text>
+                    <TouchableOpacity onPress={() => _pressListReceive()}>
+                      <Text style={styles.textSeeMore}>Xem chi tiết</Text>
+                    </TouchableOpacity>
+                  </View>
+                </View>
+                <Text style={styles.textTitle}>Đối soát</Text>
+                <View>
+                  <View style={styles.wrapTitleSec}>
+                    <Text style={styles.titleSec}>Tháng 9 - 2021</Text>
+                  </View>
+                  <TouchableOpacity>
+                    <View style={styles.wrapChild}>
+                      <Text style={styles.textLeft}>22</Text>
+                      <View style={styles.wrapRight}>
+                        <View style={{ width: "90%" }}>
+                          <View style={styles.titleRightTop}>
+                            <Text style={styles.textRightTop}>Đã tặng</Text>
+                            <Text style={styles.textCount}>12 DH</Text>
+                          </View>
+                          <View style={styles.titleRightBottom}>
+                            <Text style={styles.textRightBottom}>Đã nhận</Text>
+                            <Text style={styles.textCountRe}>0 DH</Text>
+                          </View>
+                        </View>
+                        <View
+                          style={{
+                            alignItems: "center",
+                            justifyContent: "center",
+                          }}
+                        >
+                          <Entypo
+                            name="chevron-small-right"
+                            size={width * 0.07}
+                            color="black"
+                          />
+                        </View>
+                      </View>
+                    </View>
+                  </TouchableOpacity>
+                </View>
+              </>
             )}
           </>
         ) : (
@@ -190,12 +259,11 @@ const styles = StyleSheet.create({
     paddingLeft: "4%",
     paddingTop: "2%",
     paddingBottom: "2%",
-    marginTop: '2%',
-    marginBottom: '2%',
+    marginTop: "2%",
     color: "#7F7E85",
     textTransform: "uppercase",
     fontFamily: "OpenSans_700Bold",
-    backgroundColor: '#FFF',
+    backgroundColor: "#FFF",
   },
 
   wrapContent: {
@@ -214,6 +282,86 @@ const styles = StyleSheet.create({
   },
   spinnerTextStyle: {
     color: "#FFF",
+  },
+  wrapTitleSec: {
+    backgroundColor: "#DDD",
+    padding: "2%",
+  },
+  titleSec: {
+    fontSize: config.fontsize_3,
+    fontFamily: "OpenSans_700Bold",
+    paddingLeft: "2%",
+  },
+  titleRightTop: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    width: "100%",
+    borderBottomColor: "#CCC",
+    borderBottomWidth: 1,
+    paddingBottom: "2%",
+    marginBottom: "2%",
+  },
+  titleRightBottom: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    width: "100%",
+  },
+  textLeft: {
+    width: "30%",
+    fontFamily: "OpenSans_700Bold",
+    color: "#000",
+    textAlign: "center",
+    fontSize: config.fontsize_5,
+  },
+  wrapChild: {
+    flexDirection: "row",
+    alignItems: "center",
+    paddingBottom: "2%",
+    paddingTop: "2%",
+  },
+  wrapRight: { width: "70%", flexDirection: "row" },
+  textRightTop: {
+    color: "#7F7E85",
+    fontSize: config.fontsize_3,
+  },
+  textRightBottom: {
+    color: "#7F7E85",
+    fontSize: config.fontsize_3,
+  },
+  textCount: {
+    color: "#000",
+    fontSize: config.fontsize_3,
+  },
+  textCountRe: {
+    color: "green",
+    fontSize: config.fontsize_3,
+  },
+  // title box
+  leftColumn: {
+    width: "50%",
+    alignItems: "center",
+    paddingTop: "2%",
+    borderRightColor: "#E0E0E0",
+    borderRightWidth: 1,
+  },
+  rightColumn: {
+    width: "50%",
+    alignItems: "center",
+    paddingTop: "2%",
+  },
+  textYouGive: {
+    fontSize: config.fontsize_5,
+    fontFamily: "OpenSans_600SemiBold",
+    color: "#616161",
+  },
+  numberPost: {
+    fontSize: config.fontsize_2,
+    fontFamily: "OpenSans_600SemiBold",
+  },
+  textSeeMore: {
+    fontSize: config.fontsize_3,
+    fontFamily: "OpenSans_600SemiBold",
+    color: "#26c6da",
   },
 });
 

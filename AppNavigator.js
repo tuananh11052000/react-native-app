@@ -737,8 +737,8 @@ function AppNavigator(props) {
         <Stack.Screen
           name="DetailConnectPost"
           component={DetailConnectPost}
-          options={{
-            title: "Chi tiết bạn tặng",
+          options={({route}) => ({
+            title: route.params.name,
             headerStyle: {
               backgroundColor: config.color_header_background,
             },
@@ -746,7 +746,7 @@ function AppNavigator(props) {
             headerTitleStyle: {
               fontWeight: "bold",
             },
-          }}
+          })}
         />
       </Stack.Navigator>
     </NavigationContainer>

@@ -10,6 +10,7 @@ import {
   SafeAreaView,
   ActivityIndicator,
   RefreshControl,
+  Modal,
 } from "react-native";
 import { connect } from "react-redux";
 import {
@@ -23,7 +24,7 @@ import config from "../config";
 import axios from "axios";
 import * as SecureStore from "expo-secure-store";
 import { Avatar } from "react-native-elements";
-
+import ModalGiveFor from "./ModalGiveFor.component";
 var { width } = Dimensions.get("window");
 const height = width * 0.5;
 import AppLoading from "expo-app-loading";
@@ -41,6 +42,7 @@ import {
   OpenSans_800ExtraBold_Italic,
 } from "@expo-google-fonts/open-sans";
 function ProductGiveForComponent(props) {
+  const [isShow, setIsShow] = useState(false);
   const [avatar, setAvatar] = useState(" ");
   const [fontsLoaded, error] = useFonts({
     OpenSans_300Light,
@@ -203,34 +205,32 @@ function ProductGiveForComponent(props) {
       dispatch({ type: "SET_GUI" });
       props.navigation.navigate("ConfirmGiveFor", { data: item }); //chuyển trang
     } else {
-      console.log("Gửi tặng");
-      giveFor();
+      setIsShow(true);
+ 
     }
   };
-  const giveFor = async () => {
-    let result = await SecureStore.getItemAsync("token");
-    let formData = new FormData();
-    formData.append("status", "waiting");
-    let apiUrl =
-      "https://smai-app-api.herokuapp.com/transaction/update-status?transactionId=" +
-      props.idTrans;
-    let options = {
-      method: "PUT",
-      body: JSON.stringify({ status: "waiting" }),
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "multipart/form-data",
-        Authorization: result,
-      },
-    };
-    fetch(apiUrl, options)
-      .then((res) => {
-        console.log(res.message);
-      })
-      .catch((err) => {
-        console.log(err.response);
-      });
+
+  const renderBtnGive = () => {
+    if (props.isStatus == "null") {
+      return (
+        <TouchableOpacity
+          style={{ marginTop: "3%" }}
+          onPress={() => pressGiveFor()}
+        >
+          <View style={styles.btnGiveFor}>
+            <Text style={styles.textBtn}>Gửi tặng</Text>
+          </View>
+        </TouchableOpacity>
+      );
+    } else {
+      return (
+        <View style={styles.btnGived}>
+          <Text style={styles.textBtnGived}>Đã tặng</Text>
+        </View>
+      );
+    }
   };
+
   const currentTime = new Date();
 
   return (
@@ -261,14 +261,16 @@ function ProductGiveForComponent(props) {
           <Entypo name="location" size={20} color="#BDBDBD" />
           <Text style={styles.address}>{renderAddress(props.address)}</Text>
         </View>
-        <TouchableOpacity
-          style={{ marginTop: "3%" }}
-          onPress={() => pressGiveFor(props.item)}
-        >
-          <View style={styles.btnGiveFor}>
-            <Text style={styles.textBtn}>Gửi tặng</Text>
-          </View>
-        </TouchableOpacity>
+        {renderBtnGive()}
+        <ModalGiveFor
+          show={isShow}
+          onPressClose={() => setIsShow(false)}
+          idTrans={props.idTrans}
+          navigation={props.navigation}
+          titleModal="Xác nhận gửi tặng"
+          titleBtn="Gửi tặng"
+          status="waiting"
+        />
       </View>
     </TouchableOpacity>
   );
@@ -356,14 +358,26 @@ const styles = StyleSheet.create({
     paddingBottom: "2%",
     alignItems: "center",
   },
+  btnGived: {
+    paddingLeft: "3%",
+    paddingRight: "3%",
+    marginTop: "2%",
+    alignItems: "center",
+  },
   textBtn: {
     color: "#26c6da",
     fontSize: config.fontsize_3,
     fontFamily: "OpenSans_400Regular",
   },
+  textBtnGived: {
+    color: "green",
+    fontSize: config.fontsize_3,
+    fontFamily: "OpenSans_700Bold",
+  },
 });
 export default connect(function (state) {
   return {
     redirectTransaction: state.redirectTransaction,
+    
   };
 })(ProductGiveForComponent);

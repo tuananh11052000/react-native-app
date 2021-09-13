@@ -9,6 +9,9 @@ var redirectComplete = (state = "TCD", action) => {
       case "COMPLETE_GIVEFOR": {
         return "GIVEFOR";
       }
+      case "COMPLETE_LOINHAN": {
+        return "LOINHAN";
+      }
       default:
         return state;
     }

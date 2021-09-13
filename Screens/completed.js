@@ -1,5 +1,11 @@
 import React, { Component, useState } from "react";
-import { StyleSheet, View, Text, TouchableOpacity, Dimensions } from "react-native";
+import {
+  StyleSheet,
+  View,
+  Text,
+  TouchableOpacity,
+  Dimensions,
+} from "react-native";
 import config from "../config";
 var { width } = Dimensions.get("window");
 import { connect } from "react-redux";
@@ -14,6 +20,15 @@ function Completed(props) {
         </View>
       );
     }
+    if (props.redirectComplete == "LOINHAN") {
+      return (
+        <View style={styles.wrapText}>
+          <Text style={styles.text1}>Gửi tặng thành công</Text>
+          <Text style={styles.text2}>Vui lòng vào kết nối để xem chi tiết</Text>
+          <Text style={styles.text2}>Trân trọng!</Text>
+        </View>
+      );
+    }
     if (props.redirectComplete == "CXD") {
       return (
         <View style={styles.wrapText}>
@@ -21,25 +36,23 @@ function Completed(props) {
           <Text style={styles.text2}>Vui lòng chờ xác thực</Text>
         </View>
       );
+    }
+    if (props.redirectTransaction == "gui") {
+      return (
+        <View style={styles.wrapText}>
+          <Text style={styles.text1}>Gửi tặng thành công</Text>
+          <Text style={styles.text2}>Cảm ơn tấm lòng hảo tâm của bạn</Text>
+          <Text style={styles.text2}>Trân trọng!</Text>
+        </View>
+      );
     } else {
-      if (props.redirectTransaction == "gui") {
-        return (
-          <View style={styles.wrapText}>
-            <Text style={styles.text1}>Gửi tặng thành công</Text>
-            <Text style={styles.text2}>Cảm ơn tấm lòng hảo tâm của bạn</Text>
-            <Text style={styles.text2}>Trân trọng!</Text>
-          </View>
-        );
-      } else {
-        return (
-          <View style={styles.wrapText}>
-            <Text style={styles.text1}>Gửi lời nhắn thành công</Text>
-            <Text style={styles.text2}>Vui lòng đợi phản hồi từ người tặng</Text>
-            <Text style={styles.text2}>Trân trọng!</Text>
-          </View>
-        );
-      }
-      
+      return (
+        <View style={styles.wrapText}>
+          <Text style={styles.text1}>Gửi lời nhắn thành công</Text>
+          <Text style={styles.text2}>Vui lòng đợi phản hồi từ người tặng</Text>
+          <Text style={styles.text2}>Trân trọng!</Text>
+        </View>
+      );
     }
   };
   return (
@@ -88,7 +101,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#E53935",
     paddingVertical: 5,
     borderRadius: 5,
-    width: width*0.2,
+    width: width * 0.2,
     alignItems: "center",
     marginTop: 15,
   },

@@ -164,6 +164,7 @@ function App(props) {
           authorID={item.SenderID}
           viewDetail="false"
           idTrans={item._id}
+          isStatus={item.isStatus}
         />
       );
     }

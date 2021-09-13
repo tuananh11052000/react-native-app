@@ -107,6 +107,19 @@ export default function ConnectPost(props) {
       );
     else return <Text style={style.textStatusFalse}>Chờ xác thực</Text>;
   };
+  const renderStatus = (status) => {
+    if (status == "done") {
+      return "Đã tặng";
+    } else {
+      if (status == "waiting") {
+        return "Chưa tặng"
+      } else {
+        if (status == "done") {
+          return "Đã tặng"
+        } else return "Hủy"
+      }
+    }
+  }
 
   const renderImage = () => {
     if (props.urlImage != null) {
@@ -141,7 +154,7 @@ export default function ConnectPost(props) {
           <View style={style.wrapTitle}>
             <Text style={style.titlePost}>Mã: {renderId(props.title)}</Text>
             <View style={style.wrapMore}>
-              <Text style={style.giveStatus}>Chưa Tặng</Text>
+              <Text style={style.giveStatus}>{renderStatus(props.status)}</Text>
             </View>
           </View>
 

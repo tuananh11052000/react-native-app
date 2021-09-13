@@ -156,11 +156,10 @@ function YouReceive(props) {
   };
 
   const _pressRow = (item) => {
-    props.navigation.navigate("DetailConnectPost", { data: item }); //chuyển trang
+    props.navigation.navigate("DetailConnectPost", { name: "Chi tiết nhận tặng",  titlePerson: "NGƯỜI NHẬN",data: item }); //chuyển trang
   };
 
   const renderItem = ({ item }) => {
-    console.log(item)
     return (
       <ConnectPost
         urlImage={item.PostData.urlImage[0]}
@@ -169,6 +168,7 @@ function YouReceive(props) {
         time={item.PostData.createdAt}
         address={item.PostData.address}
         onPress={() => _pressRow(item)}
+        status={item.isStatus}
       />
     );
   };
