@@ -63,24 +63,44 @@ const list = [
     checked: false,
   },
 ];
-let dataGolbal=[];
+
 function Connection(props) {
-  const {dispatch} = props
+  const { dispatch } = props;
   const [listitem, setListItem] = useState(list);
   const [itemSelected, setItemSelected] = useState("0");
-  const [searchQuery, setSearchQuery] = useState("");
-
+  const [query, setQuery] = useState("");
   const [data, setData] = useState([]);
   const [dataAll, setDataAll] = useState([]);
-
-  const [data1, setData1] = useState([]);
   const [refreshing, setrefreshing] = useState(true);
-  const onChangeSearch = (query) => setSearchQuery(query);
   useEffect(() => {
+    const getConnectPostDS = async () => {
+      if (props.auth.isLogin == true) {
+        let result = await SecureStore.getItemAsync("token");
+        await axios({
+          method: "get",
+          url: "https://api.smai.com.vn/transaction/transaction-connected",
+          headers: {
+            Authorization: result,
+          },
+        })
+          .then((res) => {
+            setDataAll(res.data.data.data);
+            setData(res.data.data.data);
+            dispatch({ type: "SAVE_DATA_TRANS", data: res.data.data.data });
+          })
+          .catch((error) => {
+            console.log("Error: ", error);
+          })
+          .finally(() => {
+            dispatch({ type: "setNoReload" });
+            setrefreshing(false);
+          });
+      }
+    };
     getConnectPostDS();
     return () => {
-      getConnectPostDS()
-    }
+    
+    };
   }, [props.reloadPost]);
   const handlePress = (item, index) => {
     if (item.checked != true) {
@@ -93,63 +113,138 @@ function Connection(props) {
         }
       });
       setListItem(array);
-      filter(item.id);
+      filter(item.id)
     }
   };
   const onRefresh = () => {
     setData([]);
     getConnectPostDS();
   };
-  const getConnectPostDS = async () => {
-    if (props.auth.isLogin == true) {
-      let result = await SecureStore.getItemAsync("token");
-      await axios({
-        method: "get",
-        url: "https://api.smai.com.vn/transaction/transaction-connected",
-        headers: {
-          Authorization: result,
-        },
-      })
-        .then((res) => {
-          let list = res.data.data.data;
-          // dataGolbal = list
-          setDataAll(list);
-          setData(list)
-         
-        })
-        .catch((error) => {
-          console.log("Error: ", error);
-        })
-        .finally(() => {
-          dispatch({ type: "setNoReload" });
-          setrefreshing(false);
-        });
-    }
-  };
-
   
+
   const filter = (itemvalue) => {
-    // console.log(dataAll[0].data.length)
     if (itemvalue == "0") {
-      setData(dataAll);
+      setData(props.dataTrans.data);
     }
     if (itemvalue == "1") {
       let tempData = [...dataAll];
-      for (let i=0;i<tempData.length;i++) {
-        let temp = [...tempData[i].data];
+      let a1 = [];
+      for (let i = 0; i < tempData.length; i++) {
+        let temp = tempData[i].data;
         let arr = temp.filter((item) => {
           if (item.typetransaction == "Đã nhận") {
             return true;
           } else {
             return false;
           }
-        })
-        tempData[i].data = arr;
-        console.log(dataAll[0].data.length)
+        });
+        if (arr.length != 0) {
+          let obj = {
+            data: arr,
+            title: tempData[i].title,
+          };
+          a1.push(obj);
+        } 
+        
       }
-      setData(tempData);
+      setData(a1);
     }
-    
+    if (itemvalue == "2") {
+      let tempData = [...dataAll];
+      let a1 = [];
+      for (let i = 0; i < tempData.length; i++) {
+        let temp = tempData[i].data;
+        let arr = temp.filter((item) => {
+          if (item.typetransaction == "Đã tặng") {
+            return true;
+          } else {
+            return false;
+          }
+        });
+        if (arr.length != 0) {
+          let obj = {
+            data: arr,
+            title: tempData[i].title,
+          };
+          a1.push(obj);
+        } 
+      }
+      setData(a1);
+    }
+    if (itemvalue == "3") {
+      let tempData = [...dataAll];
+      let a1 = [];
+      for (let i = 0; i < tempData.length; i++) {
+        let temp = tempData[i].data;
+        let arr = temp.filter((item) => {
+          if (item.typetransaction == "Chưa nhận") {
+            return true;
+          } else {
+            return false;
+          }
+        });
+        if (arr.length != 0) {
+          let obj = {
+            data: arr,
+            title: tempData[i].title,
+          };
+          a1.push(obj);
+        } 
+      }
+      setData(a1);
+    }
+    if (itemvalue == "4") {
+      let tempData = [...dataAll];
+      let a1 = [];
+      for (let i = 0; i < tempData.length; i++) {
+        let temp = tempData[i].data;
+        let arr = temp.filter((item) => {
+          if (item.typetransaction == "Chưa tặng") {
+            return true;
+          } else {
+            return false;
+          }
+        });
+        if (arr.length != 0) {
+          let obj = {
+            data: arr,
+            title: tempData[i].title,
+          };
+          a1.push(obj);
+        } 
+      }
+      setData(a1);
+    }
+  };
+  const handleSearch = (text) => {
+    setQuery(text);
+    // const tempData=[...dataAll];
+    if (text == "") setData(dataAll);
+    else {
+     
+      let a1 = [];
+      for (let i = 0; i < dataAll.length; i++) {
+        let temp = dataAll[i].data;
+        let arr = temp.filter((item) => {
+          if (
+            item.SenderUser.FullName.toLowerCase().indexOf(text.toLowerCase()) != -1 ||
+            item.PostData.NameAuthor.toLowerCase().indexOf(text.toLowerCase()) != -1
+          )
+            return true;
+          else return false;
+        });
+        if (arr.length != 0) {
+          let obj = {
+            data: arr,
+            title: dataAll[i].title,
+          };
+          a1.push(obj);
+        } 
+      }
+      setData(a1);
+      
+    }
+
   };
   const ItemSeparatorView = () => {
     return (
@@ -159,22 +254,7 @@ function Connection(props) {
   const listHeader = () => {
     return (
       <View style={styles.wrapHeader}>
-        <View style={styles.wrapTop}>
-          <View style={styles.wrapSearch}>
-            <EvilIcons name="search" size={30} color="#BDBDBD" />
-            <TextInput
-              placeholder="Tìm kiếm..."
-              onChangeText={(value) => onChangeSearch(value)}
-              value={searchQuery}
-              returnKeyType="search"
-              style={styles.searchText}
-            />
-          </View>
-          <TouchableOpacity style={styles.wrapFilter}>
-            <Text style={styles.textFilter}>Bộ lọc</Text>
-            <Foundation name="filter" size={width * 0.05} color="#BDBDBDBD" />
-          </TouchableOpacity>
-        </View>
+        
         <ScrollView horizontal showsHorizontalScrollIndicator={false}>
           {listitem.map((item, index) => (
             <Chip
@@ -233,6 +313,24 @@ function Connection(props) {
             </View>
           ) : (
             <View>
+              <View style={styles.wrapTop}>
+          <View style={styles.wrapSearch}>
+            <EvilIcons name="search" size={30} color="#BDBDBD" />
+            <TextInput
+              autoCapitalize="none"
+              autoCorrect={false}
+              clearButtonMode="always"
+              value={query}
+              onChangeText={(queryText) => handleSearch(queryText)}
+              placeholder="Tìm kiếm..."
+              style={styles.searchText}
+            />
+          </View>
+          <TouchableOpacity style={styles.wrapFilter}>
+            <Text style={styles.textFilter}>Bộ lọc</Text>
+            <Foundation name="filter" size={width * 0.05} color="#BDBDBDBD" />
+          </TouchableOpacity>
+        </View>
               <SectionList
                 sections={data}
                 refreshControl={
@@ -255,6 +353,7 @@ function Connection(props) {
                     status={item.isStatus}
                     onPress={() => pressItem(item)}
                     typeAuthor={item.PostData.TypeAuthor}
+                    statusType={item.typetransaction}
                   />
                 )}
                 renderSectionHeader={({ section }) => (
@@ -295,6 +394,7 @@ const styles = StyleSheet.create({
   wrapTop: {
     flexDirection: "row",
     marginBottom: "2%",
+    paddingLeft: '2%',
     justifyContent: "space-between",
   },
   wrapSearch: {

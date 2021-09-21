@@ -57,23 +57,19 @@ function ProfileScreen(props) {
           onPress={() => navigation.replace("Authentication")}
           navigation={navigation}
         />
-        <Text style={styles.Text}>Từ thiện</Text>
+       
+        <Text style={styles.Text}>Quản lý</Text>
         <HistoryProfileComponent
-          textTitle="Thống kê bạn tặng"
+          textTitle="Đối soát từ thiện"
           icon="give"
           onPress={() => _pressListGiveTotal()}
         />
-        <HistoryProfileComponent
-          textTitle="Thống kê nhận tặng"
-          onPress={() => _pressListReveiceTotal()}
-          icon="receive"
-        />
-        <Text style={styles.Text}>Quản lý</Text>
         <HistoryProfileComponent
           textTitle="Lịch sử xem"
           icon="history"
           onPress={() => _pressRow()}
         />
+        
       </View>
 
       <View style={styles.phonenumber}>

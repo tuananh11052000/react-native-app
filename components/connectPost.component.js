@@ -41,7 +41,7 @@ export default function ConnectPost(props) {
     if (props.phoneAuthorPost != props.phoneAccount && props.typeAuthor != 'tangcongdong') {
       setTypePost("givecanxindo") // người khác đăng bài xin đồ, mình vô cho => mình tặng
     }
-      
+      console.log(props.s)
     
   }, [typePost]);
   const renderId = (item) => {
@@ -67,41 +67,14 @@ export default function ConnectPost(props) {
     
   };
 
-
-  const renderStatus = (status) => {
-    if (typePost == "givetangcongdong" || typePost == "givecanxindo") {
-      switch (status) {
-        case "done":
-          return "Đã tặng";
-        case "waiting":
-          return "Chưa tặng";
-        case "null":
-          return "Đã hủy";
-        default:
-          return;
-      }
-    }
-    if (typePost == "receivetangcongdong" || typePost == "receivecanxindo") {
-      switch (status) {
-        case "done":
-          return "Đã nhận";
-        case "waiting":
-          return "Chưa nhận";
-        case "null":
-          return "Đã hủy";
-        default:
-          return;
-      }
-    }
-  };
   const renderStatusDone = () => {
     if (props.status == "done") {
       return (
-        <Text style={style.giveStatusDone}>{renderStatus(props.status)}</Text>
+        <Text style={style.giveStatusDone}>{props.statusType}</Text>
       )
     } else {
       return (
-        <Text style={style.giveStatus}>{renderStatus(props.status)}</Text>
+        <Text style={style.giveStatus}>{props.statusType}</Text>
       )
     }
   }
@@ -127,11 +100,11 @@ export default function ConnectPost(props) {
   };
   const renderTime = (timeUTC) => {
     let time1 = new Date(timeUTC);
-    let hour = time1.getUTCHours();
-    let minute = time1.getUTCMinutes();
-    let day = time1.getUTCDate();
-    let month1 = time1.getUTCMonth() + 1;
-    let year1 = time1.getUTCFullYear();
+    let hour = time1.getHours();
+    let minute = time1.getMinutes();
+    let day = time1.getDate();
+    let month1 = time1.getMonth() + 1;
+    let year1 = time1.getFullYear();
     let title = hour + ":" + minute + " - " + day + "/" + month1 + "/" + year1;
     return title;
   };
