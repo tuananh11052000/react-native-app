@@ -54,10 +54,10 @@ function confirmAddress(props) {
       .then((res) => {
         if (props.status == "waiting") {
           dispatch({ type: "COMPLETE_LOINHAN" });
-        } else {
-          dispatch({ type: "SET_GUI" });
+        } 
+        if (props.status == "done") {
+          dispatch({ type: "COMPLETE_LOINHAN_CXD" });
         }
-        
         navigation.navigate("Completed");
         setIsLoading(false)
       })

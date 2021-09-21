@@ -169,6 +169,7 @@ function YouGive(props) {
         address={item.SenderAddress}
         onPress={() => _pressRow(item)}
         status={item.isStatus}
+        filterStatus="Give"
       />
     );
   };

@@ -25,102 +25,86 @@ import * as SecureStore from "expo-secure-store";
 var { width } = Dimensions.get("window");
 
 export default function ConnectPost(props) {
-  const menu = useRef();
   const { dispatch } = props;
-  const hideMenu = async () => {
-    props.onPressDel();
-  };
-
-  const showMenu = () => menu.current.show();
+  const [typePost, setTypePost] = useState("givetangcongdong");
+ 
+  useEffect(() => {
+    if (props.phoneAuthorPost == props.phoneAccount && props.typeAuthor == 'tangcongdong') {
+      setTypePost("givetangcongdong") // mình đăng bài tặng cộng đồng, người khác vô xin  => mình tặng
+    } 
+    if (props.phoneAuthorPost != props.phoneAccount && props.typeAuthor == 'tangcongdong') {
+        setTypePost("receivetangcongdong") // người khác đăng bài tặng cộng đồng, mình vô xin => mình xin
+    }
+    if (props.phoneAuthorPost == props.phoneAccount && props.typeAuthor != 'tangcongdong') {
+      setTypePost("receivecanxindo") // mình đăng bài xin đồ, người khác vô xin => mình xin
+    }
+    if (props.phoneAuthorPost != props.phoneAccount && props.typeAuthor != 'tangcongdong') {
+      setTypePost("givecanxindo") // người khác đăng bài xin đồ, mình vô cho => mình tặng
+    }
+      
+    
+  }, [typePost]);
   const renderId = (item) => {
     item = item.charAt(0).toUpperCase() + item.slice(1);
     if (item.length > 20) return item.slice(0, 10) + "...";
     else return item;
   };
-
-  const renderType = (pr) => {
-    if (pr[0].NameProduct.length > 27)
-      return pr[0].NameProduct.slice(0, 27) + ", ...";
-    else return pr[0].NameProduct;
-  };
-
   //Function handling type product
-  const renderName = (item) => {
-    item = item.charAt(0).toUpperCase() + item.slice(1);
-    if (item.length > 28) return item.slice(0, 21) + "...";
-    else return item;
+  const renderName = () => {
+    let nameReceive = props.nameAuthorMess
+    let nameGive =  props.nameAuthorPost
+    if (typePost == "receivetangcongdong" || typePost == "givecanxindo") {
+      // nameGive = nameGive.charAt(0).toUpperCase() + nameGive.slice(1);
+      if (nameGive.length > 28) return nameGive.slice(0, 21) + "...";
+      else return nameGive;
+    }
+    if (typePost == "receivecanxindo" || typePost == "givetangcongdong") {
+      // nameGive = nameGive.charAt(0).toUpperCase() + nameGive.slice(1);
+      if (nameReceive.length > 28) return nameReceive.slice(0, 21) + "...";
+      else return nameReceive;
+    }
+   
+    
   };
 
-  const createTime = (item) => {
-    return item.slice(0, 10);
-  };
 
-  const renderDistrict = (district, city) => {
-    if (district.indexOf("Thành phố") != -1) {
-      return district.slice(10);
-    }
-    if (district.indexOf("Quận") != -1 && city.indexOf("Hồ Chí Minh") == -1) {
-      return district.slice(5);
-    }
-    const distritNumber =
-      "Quận 1, Quận 2, Quận 3, Quận 4, Quận 5, Quận 6, Quận 7, Quận 8, Quận 9, Quận 10, Quận 11, Quận 12";
-    if (
-      district.indexOf("Quận") != -1 &&
-      city.indexOf("Hồ Chí Minh") != -1 &&
-      distritNumber.indexOf(district) != -1
-    ) {
-      return district;
-    }
-    if (
-      district.indexOf("Quận") != -1 &&
-      city.indexOf("Hồ Chí Minh") != -1 &&
-      distritNumber.indexOf(district) == -1
-    ) {
-      return district.slice(5);
-    }
-    if (district.indexOf("Huyện") != -1) {
-      return district.slice(7);
-    }
-  };
-  // render địa chỉ
-  const renderAddress = (address) => {
-    let add = address.split(",");
-    let huyen = "",
-      tinh = "";
-    if (add[3].indexOf("Thành phố") != -1) {
-      tinh = add[3].slice(10);
-    } else {
-      tinh = add[3].slice(6);
-    }
-    huyen = renderDistrict(add[2], add[3]);
-
-    let diachi = huyen + ", " + tinh;
-    return diachi;
-  };
-
-  const renderItType = () => {
-    if (props.confirm == true)
-      return (
-        <View style={style.wrapBot}>
-          <Text style={style.textStatusTrue}>&ensp;Hiển thị</Text>
-        </View>
-      );
-    else return <Text style={style.textStatusFalse}>Chờ xác thực</Text>;
-  };
   const renderStatus = (status) => {
-    if (status == "done") {
-      return "Đã tặng";
-    } else {
-      if (status == "waiting") {
-        return "Chưa tặng"
-      } else {
-        if (status == "done") {
-          return "Đã tặng"
-        } else return "Hủy"
+    if (typePost == "givetangcongdong" || typePost == "givecanxindo") {
+      switch (status) {
+        case "done":
+          return "Đã tặng";
+        case "waiting":
+          return "Chưa tặng";
+        case "null":
+          return "Đã hủy";
+        default:
+          return;
       }
     }
+    if (typePost == "receivetangcongdong" || typePost == "receivecanxindo") {
+      switch (status) {
+        case "done":
+          return "Đã nhận";
+        case "waiting":
+          return "Chưa nhận";
+        case "null":
+          return "Đã hủy";
+        default:
+          return;
+      }
+    }
+  };
+  const renderStatusDone = () => {
+    if (props.status == "done") {
+      return (
+        <Text style={style.giveStatusDone}>{renderStatus(props.status)}</Text>
+      )
+    } else {
+      return (
+        <Text style={style.giveStatus}>{renderStatus(props.status)}</Text>
+      )
+    }
   }
-
   const renderImage = () => {
     if (props.urlImage != null) {
       return (
@@ -141,6 +125,16 @@ export default function ConnectPost(props) {
       );
     }
   };
+  const renderTime = (timeUTC) => {
+    let time1 = new Date(timeUTC);
+    let hour = time1.getUTCHours();
+    let minute = time1.getUTCMinutes();
+    let day = time1.getUTCDate();
+    let month1 = time1.getUTCMonth() + 1;
+    let year1 = time1.getUTCFullYear();
+    let title = hour + ":" + minute + " - " + day + "/" + month1 + "/" + year1;
+    return title;
+  };
   return (
     <TouchableOpacity
       style={style.container}
@@ -154,7 +148,7 @@ export default function ConnectPost(props) {
           <View style={style.wrapTitle}>
             <Text style={style.titlePost}>Mã: {renderId(props.title)}</Text>
             <View style={style.wrapMore}>
-              <Text style={style.giveStatus}>{renderStatus(props.status)}</Text>
+              {renderStatusDone()}
             </View>
           </View>
 
@@ -165,18 +159,20 @@ export default function ConnectPost(props) {
               size={width * 0.05}
               color="gray"
             />
-            <Text style={style.name}>&ensp;{renderName(props.name)}</Text>
+            <Text style={style.name}>&ensp;{renderName()}</Text>
           </View>
           <View style={style.wrapTimeAddress}>
-            <Text style={style.address}>
-              Đ/c:{renderAddress(props.address)}
-            </Text>
+            <View style={{flexDirection: 'row'}}>
+            <Feather
+                name="clock"
+                size={width*0.04}
+                color="gray"
+              />
+              <Text style={style.textCate}>{renderTime(props.time)}</Text>
+            </View>
+            <Text style={style.textStatusTrue}>Hiện vật</Text>
           </View>
         </View>
-      </View>
-      <View style={style.wrapBot}>
-        <Text style={style.textCate}>{createTime(props.time)}</Text>
-        <Text style={style.textStatusTrue}>Hiện vật</Text>
       </View>
     </TouchableOpacity>
   );
@@ -186,10 +182,10 @@ const style = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#FFF",
-    paddingLeft: "3%",
+    paddingLeft: "2%",
     paddingRight: "4%",
-    paddingTop: "2%",
-    paddingBottom: "2%",
+    paddingTop: "1%",
+    paddingBottom: "1%",
   },
   wrapTop: {
     alignItems: "center",
@@ -197,12 +193,12 @@ const style = StyleSheet.create({
     paddingBottom: 5,
   },
   wrapImage: {
-    width: "30%",
+    width: "25%",
     alignItems: "center",
   },
   tinyLogo: {
-    width: width * 0.25,
-    height: width * 0.25,
+    width: width * 0.2,
+    height: width * 0.2,
   },
   wrapTitle: {
     alignItems: "center",
@@ -215,10 +211,7 @@ const style = StyleSheet.create({
   },
   wrapInfoProduct: {
     marginLeft: "1%",
-    width: "70%",
-    borderBottomColor: "gray",
-    borderBottomWidth: 1,
-    paddingBottom: 10,
+    width: "75%",
   },
   wrapTypePrice: {
     flexDirection: "row",
@@ -232,7 +225,7 @@ const style = StyleSheet.create({
     justifyContent: "space-between",
   },
   titlePost: {
-    fontSize: config.fontsize_5,
+    fontSize: config.fontsize_3,
     fontFamily: "OpenSans_600SemiBold",
     color: "gray",
   },
@@ -271,6 +264,7 @@ const style = StyleSheet.create({
     fontSize: config.fontsize_3,
     color: "gray",
     fontFamily: "OpenSans_400Regular",
+    marginLeft: '3%'
   },
   textStatusTrue: {
     fontSize: config.fontsize_3,
@@ -299,5 +293,13 @@ const style = StyleSheet.create({
     backgroundColor: "#ddd",
     paddingHorizontal: 8,
     borderRadius: 10,
+  },
+  giveStatusDone: {
+    fontFamily: "OpenSans_600SemiBold",
+    fontSize: config.fontsize_3,
+    backgroundColor: "#43A047",
+    paddingHorizontal: 8,
+    borderRadius: 10,
+    color: '#FFF'
   },
 });

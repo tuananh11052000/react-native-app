@@ -20,7 +20,7 @@ function Completed(props) {
         </View>
       );
     }
-    if (props.redirectComplete == "LOINHAN") {
+    if (props.redirectComplete == "LOINHAN") { // lời nhắn ở mục tin đăng của mình
       return (
         <View style={styles.wrapText}>
           <Text style={styles.text1}>Gửi tặng thành công</Text>
@@ -29,7 +29,7 @@ function Completed(props) {
         </View>
       );
     }
-    if (props.redirectComplete == "CXD") {
+    if (props.redirectComplete == "CXD") { //lời nhắn đăng itn cần xin đồ
       return (
         <View style={styles.wrapText}>
           <Text style={styles.text1}>Gửi yêu cầu hỗ trợ thành công</Text>
@@ -37,7 +37,7 @@ function Completed(props) {
         </View>
       );
     }
-    if (props.redirectTransaction == "gui") {
+    if (props.redirectComplete == "LOINHAN_CXD") { // hoàn thành khi để lại lời nhắn ở tin đăng cần xin đồ
       return (
         <View style={styles.wrapText}>
           <Text style={styles.text1}>Gửi tặng thành công</Text>
@@ -45,7 +45,8 @@ function Completed(props) {
           <Text style={styles.text2}>Trân trọng!</Text>
         </View>
       );
-    } else {
+    } 
+    if (props.redirectComplete == "LOINHAN_TCD") { // hoàn thành khi để lại lời nhắn ở tin đăng tặng cộng đồng
       return (
         <View style={styles.wrapText}>
           <Text style={styles.text1}>Gửi lời nhắn thành công</Text>

@@ -22,6 +22,7 @@ import {
 } from "@expo/vector-icons";
 import { Button } from "galio-framework";
 import config from "../config";
+import { connect } from "react-redux";
 import ModalDetailPost from "../components/ModalDetailPost.component";
 import ModalGiveFor from "../components/ModalGiveFor.component";
 import AppLoading from "expo-app-loading";
@@ -35,20 +36,22 @@ import {
 } from "@expo-google-fonts/open-sans";
 const { width } = Dimensions.get("window");
 const height = width * 0.5;
-export default function DetailConnectPost(props) {
+function DetailConnectPost(props) {
   const { navigation } = props;
   let data = props.route.params.data; // data from list
-  console.log(data);
   let titlePerson = props.route.params.titlePerson;
   const [isShowModel, setisShowModel] = useState(false);
   const [isShow, setIsShow] = useState(false); // model xác nhận xong
-  const [active, setActive] = useState(0);
-  const [avatar, setAvatar] = useState(" ");
-  const [phoneNumber, setPhoneNumber] = useState(" "); //useState using for phonenumber
-
+  const [typePost, setTypePost] = useState("receive");
   //update history
   //get phone number author post
-  useEffect(() => {}, []);
+  useEffect(() => {
+    if (data.SenderUser.PhoneNumber == props.auth.PhoneNumber) {
+      setTypePost("receive")
+    } else {
+      setTypePost("give")
+    }
+  }, [typePost]);
   const [fontsLoaded, error] = useFonts({
     OpenSans_400Regular,
     OpenSans_400Regular_Italic,
@@ -58,7 +61,23 @@ export default function DetailConnectPost(props) {
   if (!fontsLoaded) {
     return <AppLoading />;
   }
-
+ 
+  const renderName = () => {
+    if (typePost == "give") {
+      return data.SenderUser.FullName
+    } 
+    if (typePost == "receive") {
+      return data.PostData.NameAuthor;
+   }
+  }
+  const renderAddress = () => {
+    if (typePost == "give") {
+      return data.SenderAddress
+    } 
+    if (typePost == "receive") {
+      return data.PostData.address;
+   }
+  }
   //url phonenumber
   const dialCall = (number) => {
     var number_temp = "0" + number;
@@ -72,7 +91,13 @@ export default function DetailConnectPost(props) {
     Linking.openURL(phoneNumber);
   };
   //Ham render avatar
-  const renderAvatar = (avatar) => {
+  const renderAvatar = () => {
+    let avatar;
+    if (typePost == "receive") {
+      avatar = data.ReceiverUser.urlIamge;
+    } else {
+      avatar =  data.SenderUser.urlIamge;
+   }
     if (avatar != null)
       return (
         <View>
@@ -99,21 +124,18 @@ export default function DetailConnectPost(props) {
     let id = data._id;
     return id.slice(0, 13) + "...";
   };
-
-  const currentTime = new Date();
-  const renderTime = (time) => {
-    var t1 = time.format("YYYY-MM-DD HH:MM:SS");
-    return t1;
+ 
+  const renderTime = (timeUTC) => {
+    let time1 = new Date(timeUTC);
+    let hour = time1.getHours()
+    let minute = time1.getMinutes();
+    let day = time1.getUTCDate();
+    let month1 = time1.getUTCMonth() + 1;
+    let year1 = time1.getUTCFullYear();
+    let title = hour + ":" + minute + " - " + day + "/" + month1 + "/" + year1;
+    return title;
   };
-  const renderStatus = (status) => {
-    if (status == "done") {
-      return "Đã tặng";
-    } else {
-      if (status == "waiting") {
-        return "Chưa tặng";
-      }
-    }
-  };
+ 
   const renderTitle = (item) => {
     item = item.charAt(0).toUpperCase() + item.slice(1);
     if (item.length > 28) return item.slice(0, 28) + "...";
@@ -133,7 +155,6 @@ export default function DetailConnectPost(props) {
     ]);
   };
   const renderBottom = () => {
-    console.log(data.isStatus)
     if (data.isStatus != "done") {
       return (
         <View style={styles.wrapButton}>
@@ -194,10 +215,10 @@ export default function DetailConnectPost(props) {
               flexDirection: "row",
             }}
           >
-            {renderAvatar(data.SenderUser.urlIamge)}
+            {renderAvatar()}
             <View style={styles.wrapName}>
               <View style={{ borderBottomWidth: 1, borderBottomColor: "#DDD" }}>
-                <Text style={styles.textName}>{data.SenderUser.FullName}</Text>
+                <Text style={styles.textName}>{renderName()}</Text>
                 <View
                   style={{
                     flexDirection: "row",
@@ -219,8 +240,8 @@ export default function DetailConnectPost(props) {
               </View>
               <View style={styles.wrapAddress}>
                 <Text style={styles.textAddress}>
-                  <Entypo name="location" size={24} color="white" /> {"  "}
-                  {data.SenderAddress}
+                  <Entypo name="location" size={width * 0.05} color="white" /> {"  "}
+                  {renderAddress()}
                 </Text>
               </View>
             </View>
@@ -231,7 +252,7 @@ export default function DetailConnectPost(props) {
       <View style={styles.wrapInfoPost}>
         <View style={styles.wrapTopInfo}>
           <Text style={styles.textTitle}>Thông tin tặng</Text>
-          <Text style={styles.giveStatus}>{renderStatus(data.isStatus)}</Text>
+          <Text style={styles.giveStatus}>{data.typetransaction}</Text>
         </View>
         <View style={styles.wrapProduct}>
           <TouchableOpacity
@@ -245,13 +266,13 @@ export default function DetailConnectPost(props) {
               <View style={styles.wrapInfoProduct}>
                 <View>
                   <Text style={styles.titlePost}>
-                    {renderTitle(data.PostData.NameProduct[0].Category)}
+                    {renderTitle(data.PostData.NameProduct[0].NameProduct)}
                   </Text>
                 </View>
 
                 <View style={styles.wrapTypePrice}>
                   <Text style={styles.type}>
-                    {" "}
+                 
                     {renderTitle(data.PostData.title)}
                   </Text>
                   <Text style={styles.price}>Miễn phí</Text>
@@ -260,11 +281,10 @@ export default function DetailConnectPost(props) {
                   <View style={styles.wrapTime}>
                     <Feather
                       name="clock"
-                      size={18}
+                      size={width*0.04}
                       color="gray"
-                      style={{ width: 18, height: 18 }}
                     />
-                    <Text style={styles.time}>9:30 - 22/07/2021</Text>
+                    <Text style={styles.time}>{renderTime(data.PostData.createdAt)}</Text>
                   </View>
                 </View>
               </View>
@@ -279,7 +299,7 @@ export default function DetailConnectPost(props) {
       </View>
       <View style={styles.wrapFollow}>
         <Text style={styles.textTitle}>THEO DÕI</Text>
-        <Text style={{ marginLeft: "10%", textAlign: "center" }}>Không có</Text>
+        <Text style={{textAlign: "center" }}>Không có</Text>
       </View>
       <ModalDetailPost
         show={isShowModel}
@@ -429,7 +449,7 @@ const styles = StyleSheet.create({
   giveStatus: {
     fontFamily: "OpenSans_600SemiBold",
     fontSize: config.fontsize_3,
-    backgroundColor: "gray",
+    backgroundColor: "#C3C3C3",
     paddingHorizontal: 8,
     borderRadius: 10,
     borderWidth: 1,
@@ -512,3 +532,8 @@ const styles = StyleSheet.create({
     fontFamily: "OpenSans_400Regular",
   },
 });
+export default connect(function (state) {
+  return {
+    auth: state.auth,   
+  };
+})(DetailConnectPost);

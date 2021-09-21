@@ -203,19 +203,20 @@ function ProductGiveForComponent(props) {
     if (props.viewDetail == "true") {
       const { dispatch } = props;
       dispatch({ type: "SET_GUI" });
-      props.navigation.navigate("ConfirmGiveFor", { data: item }); //chuyển trang
+      dispatch({ type: "COMPLETE_LOINHAN_CXD" });
+      props.navigation.navigate("ConfirmGiveFor", { data: item, name: "Xác nhận gửi tặng" }); //chuyển trang
     } else {
       setIsShow(true);
  
     }
   };
 
-  const renderBtnGive = () => {
-    if (props.isStatus == "null") {
+  const renderBtnGive = (item) => {
+    if (props.isStatus == null || props.isStatus == "null") {
       return (
         <TouchableOpacity
           style={{ marginTop: "3%" }}
-          onPress={() => pressGiveFor()}
+          onPress={() => pressGiveFor(item)}
         >
           <View style={styles.btnGiveFor}>
             <Text style={styles.textBtn}>Gửi tặng</Text>
@@ -223,11 +224,19 @@ function ProductGiveForComponent(props) {
         </TouchableOpacity>
       );
     } else {
-      return (
-        <View style={styles.btnGived}>
-          <Text style={styles.textBtnGived}>Đã tặng</Text>
-        </View>
-      );
+      if (props.isStatus == "waiting") {
+        return (
+          <View style={styles.btnGived}>
+            <Text style={styles.textBtnGived}>Đang chờ nhận</Text>
+          </View>
+        );
+      } else {
+        return (
+          <View style={styles.btnGived}>
+            <Text style={styles.textBtnGived}>Đã tặng</Text>
+          </View>
+        );
+      }
     }
   };
 
@@ -261,7 +270,7 @@ function ProductGiveForComponent(props) {
           <Entypo name="location" size={20} color="#BDBDBD" />
           <Text style={styles.address}>{renderAddress(props.address)}</Text>
         </View>
-        {renderBtnGive()}
+        {renderBtnGive(props.item)}
         <ModalGiveFor
           show={isShow}
           onPressClose={() => setIsShow(false)}
@@ -378,6 +387,6 @@ const styles = StyleSheet.create({
 export default connect(function (state) {
   return {
     redirectTransaction: state.redirectTransaction,
-    
+    redirectComplete: state.redirectComplete,
   };
 })(ProductGiveForComponent);

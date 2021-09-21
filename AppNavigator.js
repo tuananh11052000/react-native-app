@@ -632,8 +632,8 @@ function AppNavigator(props) {
         <Stack.Screen
           name="ConfirmGiveFor"
           component={ConfirmGiveFor}
-          options={({ navigation }) => ({
-            title: "Xác nhận gửi tặng",
+          options={({ navigation, route }) => ({
+            title: route.params.name,
             headerShown: true,
             headerStyle: {
               backgroundColor: config.color_header_background,

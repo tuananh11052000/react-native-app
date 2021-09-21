@@ -143,8 +143,13 @@ function DetailPost(props) {
   };
   const pressGive = () => {
     const { dispatch } = props;
-    dispatch({ type: "SET_XIN" });
-    props.navigation.navigate("ConfirmGiveFor", { data: data });
+    if (props.auth.isLogin == false) {
+      navigation.replace("Authentication");
+    } else {
+      dispatch({ type: "SET_XIN" });
+      dispatch({ type: "COMPLETE_LOINHAN_TCD" });
+      props.navigation.navigate("ConfirmGiveFor", { data: data, name: "Để lại lời nhắn" });
+    }
   };
   //ham render danh muc
   const renderCategory = () => {
@@ -427,6 +432,6 @@ export default connect(function (state) {
   return {
     auth: state.auth,
     redirectTransaction: state.redirectTransaction,
-    
+    redirectComplete: state.redirectComplete,
   };
 })(DetailPost);

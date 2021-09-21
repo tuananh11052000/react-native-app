@@ -11,15 +11,20 @@ import {
   FlatList,
   ActivityIndicator,
   Alert,
+  TextInput,
   Dimensions,
+  TouchableWithoutFeedback,
+  SectionList,
 } from "react-native";
 import { SafeAreaView } from "react-native";
 import { connect } from "react-redux";
 import config from "../config";
-import { Entypo } from "@expo/vector-icons";
+import { Entypo, Foundation, EvilIcons } from "@expo/vector-icons";
 import ConnectPost from "../components/connectPost.component";
 import ProductTitleConnect from "../components/productTitleConnect.component";
 import * as SecureStore from "expo-secure-store";
+import Chip from "../components/Chip.Component";
+import { Searchbar } from "react-native-paper";
 import axios from "axios";
 import {
   useFonts,
@@ -31,220 +36,251 @@ import {
   OpenSans_800ExtraBold,
 } from "@expo-google-fonts/open-sans";
 var { width } = Dimensions.get("window");
+const list = [
+  {
+    title: "Tất cả",
+    id: "0",
+    checked: true,
+  },
+  {
+    title: "Đã nhận",
+    id: "1",
+    checked: false,
+  },
+  {
+    title: "Đã tặng",
+    id: "2",
+    checked: false,
+  },
+  {
+    title: "Chưa nhận",
+    id: "3",
+    checked: false,
+  },
+  {
+    title: "Chưa tặng",
+    id: "4",
+    checked: false,
+  },
+];
+let dataGolbal=[];
 function Connection(props) {
-  const { navigation, dispatch } = props;
-  const [loading, setloading] = useState(false);
-  const [refreshing, setrefreshing] = useState(true);
+  const {dispatch} = props
+  const [listitem, setListItem] = useState(list);
+  const [itemSelected, setItemSelected] = useState("0");
+  const [searchQuery, setSearchQuery] = useState("");
+
   const [data, setData] = useState([]);
-  const [dataGive, setdataGive] = useState(0);
-  const [dataReceive, setdataReceive] = useState(0);
+  const [dataAll, setDataAll] = useState([]);
+
+  const [data1, setData1] = useState([]);
+  const [refreshing, setrefreshing] = useState(true);
+  const onChangeSearch = (query) => setSearchQuery(query);
   useEffect(() => {
-    if (props.auth.isLogin == true) {
-      getConnectPost();
-      getConnectPostDS();
+    getConnectPostDS();
+    return () => {
+      getConnectPostDS()
     }
-  }, [props.auth.isLogin, props.reloadPost]);
-  const getConnectPost = async () => {
-    if (props.auth.isLogin == true) {
-      let result = await SecureStore.getItemAsync("token");
-      await axios({
-        method: "get",
-        url: "https://smai-app-api.herokuapp.com/transaction/get-transaction",
-        headers: {
-          Authorization: result,
-        },
-      })
-        .then((res) => {
-          let tempList = res.data.data.data.filter((item) => {
-            if (item.isStatus == null) {
-              return false;
-            }
-            return true;
-          });
-          const listTempGive = tempList.filter((pr) => {
-            if (pr.ReceiverUser.PhoneNumber == props.auth.PhoneNumber) {
-              return true;
-            } else return false;
-          });
-          setdataGive(listTempGive.length);
-          const listTempRe = tempList.filter((pr) => {
-            if (pr.ReceiverUser.PhoneNumber != props.auth.PhoneNumber) {
-              return true;
-            } else return false;
-          });
-          setdataReceive(listTempRe.length);
-          dispatch({ type: "SAVE_DATA_TRANS", data: tempList });
-          setData(tempList);
-        })
-        .catch((error) => {
-          console.log("Error: ", error);
-        })
-        .finally(() => {
-          setrefreshing(false);
-        });
+  }, [props.reloadPost]);
+  const handlePress = (item, index) => {
+    if (item.checked != true) {
+      setItemSelected(item.id);
+      item.checked = !item.checked;
+      const array = [...listitem];
+      array.map((value, index) => {
+        if (value != item) {
+          value.checked = false;
+        }
+      });
+      setListItem(array);
+      filter(item.id);
     }
-    dispatch({ type: "setNoReload" });
+  };
+  const onRefresh = () => {
+    setData([]);
+    getConnectPostDS();
   };
   const getConnectPostDS = async () => {
     if (props.auth.isLogin == true) {
       let result = await SecureStore.getItemAsync("token");
       await axios({
         method: "get",
-        url: "https://smai-app-api.herokuapp.com/transaction/transaction-success",
+        url: "https://api.smai.com.vn/transaction/transaction-connected",
         headers: {
           Authorization: result,
         },
       })
-        .then((res) => {})
+        .then((res) => {
+          let list = res.data.data.data;
+          // dataGolbal = list
+          setDataAll(list);
+          setData(list)
+         
+        })
         .catch((error) => {
           console.log("Error: ", error);
         })
         .finally(() => {
+          dispatch({ type: "setNoReload" });
           setrefreshing(false);
         });
     }
-    dispatch({ type: "setNoReload" });
   };
 
-  const onRefresh = () => {
-    setData([]);
-    getConnectPost();
-    getConnectPostDS();
-  };
-
-  const _pressRow = (item) => {
-    // props.navigation.navigate("DetailConnectPost", { data: item }); //chuyển trang
-  };
-  const _pressListGive = () => {
-    props.navigation.navigate("YouGive"); //chuyển trang
-  };
-  const _pressListReceive = () => {
-    props.navigation.navigate("YouReceive"); //chuyển trang
-  };
-
-  const renderItem = ({ item }) => {
-    return (
-      <ConnectPost
-        urlImage={item.urlImage[0]}
-        title={item.ReceiverUser._id}
-        name={item.ReceiverUser.FullName}
-        time={item.ReceiverUser.createdAt}
-        address={item.SenderAddress}
-        onPress={() => _pressRow(item)}
-      />
-    );
-  };
-  const listheader = () => {
-    return (
-      <>
-      </>
-    );
+  
+  const filter = (itemvalue) => {
+    // console.log(dataAll[0].data.length)
+    if (itemvalue == "0") {
+      setData(dataAll);
+    }
+    if (itemvalue == "1") {
+      let tempData = [...dataAll];
+      for (let i=0;i<tempData.length;i++) {
+        let temp = [...tempData[i].data];
+        let arr = temp.filter((item) => {
+          if (item.typetransaction == "Đã nhận") {
+            return true;
+          } else {
+            return false;
+          }
+        })
+        tempData[i].data = arr;
+        console.log(dataAll[0].data.length)
+      }
+      setData(tempData);
+    }
+    
   };
   const ItemSeparatorView = () => {
     return (
       <View style={{ height: 10, width: "100%", backgroundColor: "#EEEEEE" }} />
     );
   };
+  const listHeader = () => {
+    return (
+      <View style={styles.wrapHeader}>
+        <View style={styles.wrapTop}>
+          <View style={styles.wrapSearch}>
+            <EvilIcons name="search" size={30} color="#BDBDBD" />
+            <TextInput
+              placeholder="Tìm kiếm..."
+              onChangeText={(value) => onChangeSearch(value)}
+              value={searchQuery}
+              returnKeyType="search"
+              style={styles.searchText}
+            />
+          </View>
+          <TouchableOpacity style={styles.wrapFilter}>
+            <Text style={styles.textFilter}>Bộ lọc</Text>
+            <Foundation name="filter" size={width * 0.05} color="#BDBDBDBD" />
+          </TouchableOpacity>
+        </View>
+        <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+          {listitem.map((item, index) => (
+            <Chip
+              key={item.id}
+              onPress={() => handlePress(item, index)}
+              textStyle={
+                item.checked ? styles.textChipActive : styles.textChipNoActive
+              }
+              style={
+                item.checked
+                  ? styles.chipOutLineActive
+                  : styles.chipOutLineNoActive
+              }
+              title={item.title}
+              active={item.checked}
+            />
+          ))}
+        </ScrollView>
+      </View>
+    );
+  };
+  const pressItem = (item) => {
+    if (
+      (item.SenderUser.PhoneNumber == props.auth.PhoneNumber &&
+        item.PostData.TypeAuthor == "tangcongdong") ||
+      (item.ReceiverUser.PhoneNumber == props.auth.PhoneNumber &&
+        item.PostData.TypeAuthor != "tangcongdong")
+    ) {
+      props.navigation.navigate("DetailConnectPost", {
+        name: "Chi tiết nhận tặng",
+        titlePerson: "NGƯỜI TẶNG",
+        data: item,
+      }); //chuyển trang
+    } else {
+      props.navigation.navigate("DetailConnectPost", {
+        name: "Chi tiết bạn tặng",
+        titlePerson: "NGƯỜI NHẬN",
+        data: item,
+      }); //chuyển trang
+    }
+  };
 
   return (
     <SafeAreaView style={styles.container}>
-      <>
-        {props.auth.isLogin ? (
-          <>
-            {refreshing ? (
-              <View
-                style={{
-                  flexDirection: "row",
-                  justifyContent: "center",
-                  height: "100%",
-                }}
-              >
-                <ActivityIndicator color="#BDBDBD" size="small" />
-              </View>
-            ) : (
-              // <FlatList
-              //   data={data}
-              //   renderItem={renderItem}
-              //   keyExtractor={(item) => item._id}
-              //   ItemSeparatorComponent={ItemSeparatorView}
-              //   ListHeaderComponent={listheader}
-              //   refreshControl={
-              //     <RefreshControl
-              //       refreshing={refreshing}
-              //       onRefresh={onRefresh}
-              //     />
-              //   }
-              // />
-              <>
-                <View style={{ flexDirection: "row", paddingTop: "2%" }}>
-                  <View style={styles.leftColumn}>
-                    <Text style={styles.textYouGive}>Bạn tặng</Text>
-                    <Text style={styles.numberPost}>{dataGive} DH</Text>
-                    <TouchableOpacity onPress={() => _pressListGive()}>
-                      <Text style={styles.textSeeMore}>Xem chi tiết</Text>
-                    </TouchableOpacity>
-                  </View>
-                  <View style={styles.rightColumn}>
-                    <Text style={styles.textYouGive}>Nhận tặng</Text>
-                    <Text style={styles.numberPost}>{dataReceive} DH</Text>
-                    <TouchableOpacity onPress={() => _pressListReceive()}>
-                      <Text style={styles.textSeeMore}>Xem chi tiết</Text>
-                    </TouchableOpacity>
-                  </View>
-                </View>
-                <Text style={styles.textTitle}>Đối soát</Text>
-                <View>
-                  <View style={styles.wrapTitleSec}>
-                    <Text style={styles.titleSec}>Tháng 9 - 2021</Text>
-                  </View>
-                  <TouchableOpacity>
-                    <View style={styles.wrapChild}>
-                      <Text style={styles.textLeft}>22</Text>
-                      <View style={styles.wrapRight}>
-                        <View style={{ width: "90%" }}>
-                          <View style={styles.titleRightTop}>
-                            <Text style={styles.textRightTop}>Đã tặng</Text>
-                            <Text style={styles.textCount}>12 DH</Text>
-                          </View>
-                          <View style={styles.titleRightBottom}>
-                            <Text style={styles.textRightBottom}>Đã nhận</Text>
-                            <Text style={styles.textCountRe}>0 DH</Text>
-                          </View>
-                        </View>
-                        <View
-                          style={{
-                            alignItems: "center",
-                            justifyContent: "center",
-                          }}
-                        >
-                          <Entypo
-                            name="chevron-small-right"
-                            size={width * 0.07}
-                            color="black"
-                          />
-                        </View>
-                      </View>
-                    </View>
-                  </TouchableOpacity>
-                </View>
-              </>
-            )}
-          </>
-        ) : (
-          <>
+      {props.auth.isLogin ? (
+        <>
+          {refreshing ? (
             <View
               style={{
-                backgroundColor: "#DDD",
-                height: "100%",
-                alignItems: "center",
+                flexDirection: "row",
                 justifyContent: "center",
+                height: "100%",
               }}
             >
-              <Text style={{ color: "#4B4C4F" }}>Vui lòng đăng nhập</Text>
+              <ActivityIndicator color="#BDBDBD" size="small" />
             </View>
-          </>
-        )}
-      </>
+          ) : (
+            <View>
+              <SectionList
+                sections={data}
+                refreshControl={
+                  <RefreshControl
+                    refreshing={refreshing}
+                    onRefresh={onRefresh}
+                  />
+                }
+                ItemSeparatorComponent={ItemSeparatorView}
+                keyExtractor={(item, index) => item + index}
+                renderItem={({ item }) => (
+                  <ConnectPost
+                    urlImage={item.urlImage[0]}
+                    title={item.PostData._id}
+                    nameAuthorPost={item.PostData.NameAuthor}
+                    nameAuthorMess={item.SenderUser.FullName}
+                    phoneAuthorPost={item.ReceiverUser.PhoneNumber}
+                    phoneAccount={props.auth.PhoneNumber}
+                    time={item.PostData.updatedAt}
+                    status={item.isStatus}
+                    onPress={() => pressItem(item)}
+                    typeAuthor={item.PostData.TypeAuthor}
+                  />
+                )}
+                renderSectionHeader={({ section }) => (
+                  <View style={styles.wrapTitleSection}>
+                    <Text style={styles.titleSection}>{section.title}</Text>
+                  </View>
+                )}
+                ListHeaderComponent={listHeader}
+              />
+            </View>
+          )}
+        </>
+      ) : (
+        <>
+          <View
+            style={{
+              backgroundColor: "#DDD",
+              height: "100%",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            <Text style={{ color: "#4B4C4F" }}>Vui lòng đăng nhập</Text>
+          </View>
+        </>
+      )}
     </SafeAreaView>
   );
 }
@@ -252,116 +288,90 @@ function Connection(props) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#EEEEEE",
-  },
-  textTitle: {
-    fontSize: config.fontsize_3,
-    paddingLeft: "4%",
-    paddingTop: "2%",
-    paddingBottom: "2%",
-    marginTop: "2%",
-    color: "#7F7E85",
-    textTransform: "uppercase",
-    fontFamily: "OpenSans_700Bold",
     backgroundColor: "#FFF",
+    paddingTop: "4%",
   },
-
-  wrapContent: {
-    backgroundColor: "#e5e5e5",
+  wrapHeader: { paddingLeft: "2%", paddingRight: "2%", marginBottom: "2%" },
+  wrapTop: {
     flexDirection: "row",
-    justifyContent: "space-between",
-    paddingHorizontal: 15,
-    paddingVertical: 10,
-  },
-  wrapPikerA: {
-    borderWidth: 1,
-    borderRadius: 4,
-    borderColor: "#BDBDBD",
-    width: "57%",
-    backgroundColor: "#FFF",
-  },
-  spinnerTextStyle: {
-    color: "#FFF",
-  },
-  wrapTitleSec: {
-    backgroundColor: "#DDD",
-    padding: "2%",
-  },
-  titleSec: {
-    fontSize: config.fontsize_3,
-    fontFamily: "OpenSans_700Bold",
-    paddingLeft: "2%",
-  },
-  titleRightTop: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    width: "100%",
-    borderBottomColor: "#CCC",
-    borderBottomWidth: 1,
-    paddingBottom: "2%",
     marginBottom: "2%",
-  },
-  titleRightBottom: {
-    flexDirection: "row",
     justifyContent: "space-between",
-    width: "100%",
   },
-  textLeft: {
-    width: "30%",
-    fontFamily: "OpenSans_700Bold",
-    color: "#000",
-    textAlign: "center",
-    fontSize: config.fontsize_5,
-  },
-  wrapChild: {
+  wrapSearch: {
     flexDirection: "row",
+    width: "80%",
+    maxWidth: "80%",
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: "#BDBDBD",
     alignItems: "center",
-    paddingBottom: "2%",
-    paddingTop: "2%",
+    padding: "1%",
+    backgroundColor: "#EFEFEF",
   },
-  wrapRight: { width: "70%", flexDirection: "row" },
-  textRightTop: {
-    color: "#7F7E85",
-    fontSize: config.fontsize_3,
-  },
-  textRightBottom: {
-    color: "#7F7E85",
-    fontSize: config.fontsize_3,
-  },
-  textCount: {
-    color: "#000",
-    fontSize: config.fontsize_3,
-  },
-  textCountRe: {
-    color: "green",
-    fontSize: config.fontsize_3,
-  },
-  // title box
-  leftColumn: {
-    width: "50%",
-    alignItems: "center",
-    paddingTop: "2%",
-    borderRightColor: "#E0E0E0",
-    borderRightWidth: 1,
-  },
-  rightColumn: {
-    width: "50%",
-    alignItems: "center",
-    paddingTop: "2%",
-  },
-  textYouGive: {
+  searchText: {
     fontSize: config.fontsize_5,
-    fontFamily: "OpenSans_600SemiBold",
-    color: "#616161",
+    marginLeft: "3%",
+    maxWidth: "85%",
+    width: "85%",
+    color: "#000",
+    backgroundColor: "#EFEFEF",
   },
-  numberPost: {
-    fontSize: config.fontsize_2,
-    fontFamily: "OpenSans_600SemiBold",
+  wrapFilter: {
+    flexDirection: "row",
+    width: "20%",
+    justifyContent: "center",
+    alignItems: "center",
   },
-  textSeeMore: {
+  textFilter: {
+    fontFamily: "OpenSans_400Regular",
     fontSize: config.fontsize_3,
+    color: "#BDBDBDBD",
+  },
+  chipOutLineActive: {
+    borderWidth: 1,
+    borderColor: "#EF1A26",
+    borderRadius: 10,
+    alignItems: "center",
+    justifyContent: "center",
+    paddingTop: "2%",
+    paddingBottom: "2%",
+    marginRight: width * 0.02,
+    paddingLeft: width * 0.02,
+    paddingRight: width * 0.02,
+  },
+  chipOutLineNoActive: {
+    borderWidth: 1,
+    borderColor: "#BDBDBDBD",
+    borderRadius: 10,
+    alignItems: "center",
+    justifyContent: "center",
+    paddingTop: "2%",
+    paddingBottom: "2%",
+    marginRight: width * 0.02,
+    paddingLeft: width * 0.02,
+    paddingRight: width * 0.02,
+  },
+  textChipActive: {
+    fontSize: config.fontsize_5,
+    color: "#000",
     fontFamily: "OpenSans_600SemiBold",
-    color: "#26c6da",
+  },
+  textChipNoActive: {
+    fontSize: config.fontsize_5,
+    fontFamily: "OpenSans_400Regular",
+    color: "#BDBDBD",
+  },
+  wrapTitleSection: {
+    backgroundColor: "#DDD",
+    paddingTop: "1%",
+    paddingBottom: "1%",
+    paddingLeft: "2%",
+    paddingRight: "2%",
+  },
+  titleSection: {
+    fontSize: config.fontsize_5,
+    color: "#000",
+    fontFamily: "OpenSans_600SemiBold",
   },
 });
 

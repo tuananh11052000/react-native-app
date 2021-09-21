@@ -21,6 +21,7 @@ function ConfirmGiveFor(props) {
   const [isDisplay, setIsDisplay] = useState(false);
   const { dispatch, navigation } = props;
   let detailPost = props.route.params.data;
+
   const submitInfoPost = async () => {
     if (props.infoPost.noteTransac.trim() == "" || props.infoPost.address == "") {
       Alert.alert("Thông báo", "Vui lòng nhập đầy đủ thông tin", [
@@ -51,7 +52,9 @@ function ConfirmGiveFor(props) {
     formData.append("postID", detailPost._id);
     if (props.redirectTransaction == "gui") {
       formData.append("status", "waiting");
+      dispatch({ type: "COMPLETE_LOINHAN_CXD" });
     } else {
+      dispatch({ type: "COMPLETE_LOINHAN_TCD" });
       formData.append("status", "null");
     }
     
@@ -68,7 +71,6 @@ function ConfirmGiveFor(props) {
     };
     fetch(apiUrl, options).then(res => {
       setIsDisplay(false);
-      dispatch({ type: "COMPLETE_GIVEFOR" });
       dispatch({ type: "RESET" });
       navigation.navigate("Completed");
     }).catch(err => {console.log(err.response)});

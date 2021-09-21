@@ -38,8 +38,8 @@ function YouReceive(props) {
 
   const [items, setItems] = useState([
     { label: "Trạng thái", value: "1" },
-    { label: "Chưa tặng", value: "2" },
-    { label: "Đã tặng", value: "3" },
+    { label: "Chưa nhận", value: "2" },
+    { label: "Đã nhận", value: "3" },
     { label: "Hủy", value: "4" },
   ]);
   useEffect(() => {
@@ -156,7 +156,7 @@ function YouReceive(props) {
   };
 
   const _pressRow = (item) => {
-    props.navigation.navigate("DetailConnectPost", { name: "Chi tiết nhận tặng",  titlePerson: "NGƯỜI NHẬN",data: item }); //chuyển trang
+    props.navigation.navigate("DetailConnectPost", { name: "Chi tiết nhận tặng",  titlePerson: "NGƯỜI TẶNG",data: item }); //chuyển trang
   };
 
   const renderItem = ({ item }) => {
@@ -169,6 +169,7 @@ function YouReceive(props) {
         address={item.PostData.address}
         onPress={() => _pressRow(item)}
         status={item.isStatus}
+        filterStatus="Receive"
       />
     );
   };

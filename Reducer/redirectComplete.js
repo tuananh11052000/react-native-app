@@ -12,6 +12,12 @@ var redirectComplete = (state = "TCD", action) => {
       case "COMPLETE_LOINHAN": {
         return "LOINHAN";
       }
+      case "COMPLETE_LOINHAN_TCD": {
+        return "LOINHAN_TCD";
+      }
+      case "COMPLETE_LOINHAN_CXD": {
+        return "LOINHAN_CXD";
+      }
       default:
         return state;
     }
