@@ -190,7 +190,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#FFF",
   },
   textInput: {
-    fontSize: 18,
+    fontSize: config.fontsize_5,
     width: "95%",
     backgroundColor: "#FFF",
     fontFamily: "OpenSans_400Regular",
@@ -247,7 +247,7 @@ const styles = StyleSheet.create({
     marginBottom: "5%",
   },
   btnLogin: {
-    fontSize: 20,
+    fontSize: config.fontsize_2,
     color: "white",
     fontFamily: "OpenSans_600SemiBold",
   },

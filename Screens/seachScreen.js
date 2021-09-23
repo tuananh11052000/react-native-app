@@ -30,7 +30,7 @@ export default function (props) {
     const getData = async () => {
       let temp = await axios({
         method: "get",
-        url: "https://smai-app-api.herokuapp.com/post/getFullPost",
+        url: "https://api.smai.com.vn/post/getFullPost",
       });
       setAllPost(temp.data);
       setResult(temp.data)

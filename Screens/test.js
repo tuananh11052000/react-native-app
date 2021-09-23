@@ -25,7 +25,6 @@ const Test = () => {
 
     const handleChoosePhoto = () => {
         launchImageLibrary({ noData: true }, (response) => {
-            // console.log(response);
             if (response) {
                 setPhoto(response);
             }

@@ -16,13 +16,13 @@ export default function historyPage(props) {
   const [refreshing, setrefreshing] = useState(true);
   useEffect(() => {
     getDataHistory();
-    return () => {};
-  }, []);
+    
+  });
   const getDataHistory = async () => {
     let result = await SecureStore.getItemAsync("token");
     await axios({
       method: "get",
-      url: "https://smai-app-api.herokuapp.com/user/getHistoryPost",
+      url: "https://api.smai.com.vn/user/getHistoryPost",
       headers: {
         Authorization: result,
       },
@@ -71,7 +71,7 @@ export default function historyPage(props) {
             height: "100%",
           }}
         >
-          <ActivityIndicator color="#000" size="small" />
+          <ActivityIndicator color="#BDBDBD" size="small" />
         </View>
       ) : (
         <FlatList

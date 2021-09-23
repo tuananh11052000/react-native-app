@@ -25,6 +25,7 @@ import ProductTitleConnect from "../components/productTitleConnect.component";
 import * as SecureStore from "expo-secure-store";
 import Chip from "../components/Chip.Component";
 import { Searchbar } from "react-native-paper";
+
 import axios from "axios";
 import {
   useFonts,
@@ -98,6 +99,7 @@ function Connection(props) {
       }
     };
     getConnectPostDS();
+
     return () => {
     
     };

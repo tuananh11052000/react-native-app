@@ -64,7 +64,7 @@ function DetailPost(props) {
       if (token) {
         axios
           .put(
-            "https://smai-app-api.herokuapp.com/user/updateHistory",
+            "https://api.smai.com.vn/user/updateHistory",
             { IdPost: [data._id] },
             {
               headers: {
@@ -87,7 +87,7 @@ function DetailPost(props) {
         await axios({
           method: "get",
           url:
-            "https://smai-app-api.herokuapp.com/user/getInfoAuthor?AuthorID=" +
+            "https://api.smai.com.vn/user/getInfoAuthor?AuthorID=" +
             AuthorID,
         }).then(async (data) => {
           setPhoneNumber(data.data.PhoneNumber);

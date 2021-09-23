@@ -42,7 +42,7 @@ export default function MedicalAdvise(props) {
   const getData = async () => {
     await axios({
       method: "get",
-      url: "https://smai-app-api.herokuapp.com/doctor/get-doctors",
+      url: "https://api.smai.com.vn/doctor/get-doctors",
     })
       .then((resjson) => {
         setData(resjson.data.data.data);

@@ -71,8 +71,6 @@ function App(props) {
         }
       }
       setData(list);
-    } else {
-      console.log("nônnononon");
     }
   };
 
@@ -97,7 +95,7 @@ function App(props) {
   // call api
   //https://smai-back-end.herokuapp.com/post/getPostByTypeAuthor?typeauthor=%7BLoaij
   const getListPhotos = () => {
-    const apiURL = `https://smai-app-api.herokuapp.com/post/getPostByTypeAuthor?typeauthor=${typeAuthor}`;
+    const apiURL = `https://api.smai.com.vn/post/getPostByTypeAuthor?typeauthor=${typeAuthor}`;
     axios
       .get(apiURL)
       .then((resjson) => {

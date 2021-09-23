@@ -19,7 +19,7 @@ function newPassword(props) {
   } = useForm();
   const onSubmit = async (data) => {
     await axios
-      .post("https://smai-app-api.herokuapp.com/account/Forgot", {
+      .post("https://api.smai.com.vn/account/Forgot", {
         PhoneNumber: props.register.phonenumber,
         Password: data.password,
       })

@@ -40,9 +40,7 @@ export default function ConnectPost(props) {
     }
     if (props.phoneAuthorPost != props.phoneAccount && props.typeAuthor != 'tangcongdong') {
       setTypePost("givecanxindo") // người khác đăng bài xin đồ, mình vô cho => mình tặng
-    }
-      console.log(props.s)
-    
+    }    
   }, [typePost]);
   const renderId = (item) => {
     item = item.charAt(0).toUpperCase() + item.slice(1);

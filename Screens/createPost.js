@@ -57,7 +57,7 @@ function CreatePost(props) {
       let result = await SecureStore.getItemAsync("token");
       await axios({
         method: "get",
-        url: "https://smai-app-api.herokuapp.com/post/getPostByAccountId",
+        url: "https://api.smai.com.vn/post/getPostByAccountId",
         headers: {
           Authorization: result,
         },

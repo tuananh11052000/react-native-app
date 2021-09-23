@@ -35,7 +35,7 @@ function ForgotPassword(props) {
     } else {
       setError(null);
       await axios
-        .post("https://smai-app-api.herokuapp.com/account/getPhone", {
+        .post("https://api.smai.com.vn/account/getPhone", {
           PhoneNumber: PhoneNumber,
         })
         .then(async (res) => {
@@ -47,7 +47,6 @@ function ForgotPassword(props) {
               recaptchaVerifier.current
             );
             setVerificationId(verificationId);
-            console.log(verificationId);
           }
           else  {
             alert("Số điện thoại không tồn tại");

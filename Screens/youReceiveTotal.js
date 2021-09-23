@@ -58,7 +58,7 @@ function YouReceiveTotal(props) {
     dispatch({ type: "setNoReload" });
   };
 
-  // console.log(dataAll);
+
 
   const onRefresh = () => {
     setData([]);

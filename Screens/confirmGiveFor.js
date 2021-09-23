@@ -32,7 +32,7 @@ function ConfirmGiveFor(props) {
     setIsDisplay(true);
     const data = props.infoPost;
     let apiUrl =
-      "https://smai-app-api.herokuapp.com/transaction/create-transaction";
+      "https://api.smai.com.vn/transaction/create-transaction";
     let formData = new FormData();
     //sau khi upload json xong thi tien hanh upload hinh anh su dung idpost duoc tra ve
     if (props.infoPost.image[0]) {

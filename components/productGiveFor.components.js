@@ -63,7 +63,7 @@ function ProductGiveForComponent(props) {
         await axios({
           method: "get",
           url:
-            "https://smai-app-api.herokuapp.com/user/getInfoAuthor?AuthorID=" +
+            "https://api.smai.com.vn/user/getInfoAuthor?AuthorID=" +
             AuthorID,
         }).then(async (data) => {
           setAvatar(data.data.ImgAuthor);

@@ -44,7 +44,7 @@ function confirmAddress(props) {
     const body = { status: props.status, notereceiver: text };
     await axios({
       method: "put",
-      url: "https://smai-app-api.herokuapp.com/transaction/update-status?transactionId=" +
+      url: "https://api.smai.com.vn/transaction/update-status?transactionId=" +
       props.idTrans,
       data: body,
       headers: {

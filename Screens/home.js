@@ -48,7 +48,7 @@ function Home(props) {
   const getData = async () => {
     await axios({
       method: "get",
-      url: "https://smai-app-api.herokuapp.com/post/getNewPost",
+      url: "https://api.smai.com.vn/post/getNewPost",
     })
       .then((resjson) => {
         setlistData(resjson.data);
@@ -74,6 +74,7 @@ function Home(props) {
     };
     checkTokenLocal();
     getData();
+   
   }, [props.reloadPost]);
   // onPress tặng cộng đồng
   const actionOnPressTCD = () => {

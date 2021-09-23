@@ -79,7 +79,7 @@ function App(props) {
               }
             }
           }
-          // console.log(realData)
+      
           setData(realData);
           setDataFilter(realData);
         })
@@ -173,7 +173,7 @@ function App(props) {
   return (
     <View style={isLoading ? styles.containterLoading : styles.containter}>
       {isLoading ? (
-        <ActivityIndicator size="large" color="#000" />
+        <ActivityIndicator color="#BDBDBD" size="small" />
       ) : (
         <>
           <View style={styles.searchFilterContainer}>

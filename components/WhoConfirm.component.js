@@ -8,7 +8,6 @@ function WhoConfirm(props) {
   //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
   //gan typeauthor cho post
   const dispatch_func = async (who) => {
-    console.log(who.title)
     if (who.title == 'Hoàn cảnh khó khăn') {
       await dispatch({ type: 'SET_TYPE_AUTHOR', TypeAuthor: 'Cá nhân' })
     }
@@ -17,7 +16,6 @@ function WhoConfirm(props) {
   }
   const funcPress = (who) => {
     dispatch_func(who).then((res) => {
-      console.log(props.infoPost)
       props.onPress()
     })
   }

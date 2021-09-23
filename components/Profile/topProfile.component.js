@@ -45,7 +45,7 @@ function TopProfile(props) {
     if (pickerResult.cancelled == true) setDisplay(false);
     else {
       setDisplay(true);
-      let apiUrl = "https://smai-app-api.herokuapp.com/user/profileUser";
+      let apiUrl = "https://api.smai.com.vn/user/profileUser";
       let formData = new FormData();
       let uri = pickerResult.uri;
       let uriArray = uri.split(".");
@@ -68,7 +68,7 @@ function TopProfile(props) {
       fetch(apiUrl, options).then(async (data) => {
         await axios({
           method: "get",
-          url: "https://smai-app-api.herokuapp.com/user/getInForUserByTokenId",
+          url: "https://api.smai.com.vn/user/getInForUserByTokenId",
           headers: {
             Authorization: token,
           },

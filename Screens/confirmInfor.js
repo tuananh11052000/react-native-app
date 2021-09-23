@@ -19,7 +19,7 @@ function ConfirmInforScreen(props) {
     setIsDisplay(true);
     const data = props.infoPost;
     axios({
-      url: "https://smai-app-api.herokuapp.com/post/CreatePost",
+      url: "https://api.smai.com.vn/post/CreatePost",
       method: "post",
       data: {
         title: data.title,
@@ -36,7 +36,7 @@ function ConfirmInforScreen(props) {
       .then((res) => {
         //sau khi upload json xong thi tien hanh upload hinh anh su dung idpost duoc tra ve
         if (props.infoPost.image[0]) {
-          let apiUrl = "https://smai-app-api.herokuapp.com/post/UpdatePost";
+          let apiUrl = "https://api.smai.com.vn/post/UpdatePost";
           let formData = new FormData();
           for (let i = 0; i < image.length; i++) {
             let uri = image[i].uri;

@@ -25,13 +25,12 @@ function VerifyOtp(props) {
         .signInWithCredential(credential)
         .then((result) => {
           axios
-            .post("https://smai-app-api.herokuapp.com/account/register", {
+            .post("https://api.smai.com.vn/account/register", {
               FullName: props.register.username,
               PhoneNumber: props.register.phonenumber,
               Password: props.register.password,
             })
             .then(async (data) => {
-              console.log(data.data.accessToken);
               if (data.status == 201 && data.data.message == "OK") {
                 await save("token", "bearer " + data.data.accessToken);
                 await save("PhoneNumber", props.register.phonenumber);
