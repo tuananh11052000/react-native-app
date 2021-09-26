@@ -41,12 +41,42 @@ import { connect } from "react-redux";
 import * as SecureStore from "expo-secure-store";
 import PriorityImg from "../assets/priority_preview.png";
 import ModalDetailAddress from "./ModalDetailAddress";
+async function save(key, value) {
+  await SecureStore.setItemAsync(key, value);
+}
+async function getValueFor(key) {
+  let result = await SecureStore.getItemAsync(key);
+  if (result) {
+    return result;
+  } 
+  return "";
+}
 function NameAndAddress(props) {
   const [FullName, getName] = useState("");
+  const [fullAddress, setFullAddress] = useState(props.infoPost.address);
   const [text, settext] = useState("");
   const [showModelAddress, setshowModelAddress] = useState(false);
   const {dispatch} = props;
   useEffect(() => {
+    const getAddress = async () => {
+      let province = await SecureStore.getItemAsync("province");
+      let district = await SecureStore.getItemAsync("district");
+      let commune = await SecureStore.getItemAsync("commune");
+      let addressDetail = await SecureStore.getItemAsync("detail");
+      return {
+        province: province,
+        district: district,
+        commune: commune,
+        addressDetail: addressDetail,
+      };
+    };
+    getAddress().then((result) => {
+      if (result) {
+        let fulladdr = result.addressDetail + ", "+ result.commune + ", " + result.district + ", "+ result.province;
+        setFullAddress(fulladdr);
+        dispatch({ type: "CONFIRM_ADDRESS", address: fulladdr });
+      }
+    });
     const getAvtFunc = async () => {
       if (props.auth.isLogin == true) {
         let Name = await SecureStore.getItemAsync("FullName");
@@ -54,7 +84,7 @@ function NameAndAddress(props) {
       }
     };
     getAvtFunc();
-  }, []);
+  }, [props.infoPost.address]);
   const renderIMG = () => {
     if (props.infoPost.image) {
       return props.infoPost.image.map((img) => {
@@ -68,6 +98,9 @@ function NameAndAddress(props) {
       });
     }
   };
+  const handleTextChange = (text) => {
+    settext(text); dispatch({ type: "GET_NOTE_TRANSAC", noteTransac: text })
+  }
   return (
     <ScrollView style={styles.container}>
       <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
@@ -83,7 +116,7 @@ function NameAndAddress(props) {
             </View>
             <View style={styles.wrapAddress}>
               <Entypo name="location" size={20} color="#BDBDBD" />
-              <Text style={styles.address}>{props.infoPost.address}</Text>
+              <Text style={styles.address}>{fullAddress}</Text>
             </View>
             <View style={{ alignItems: "flex-end" }}>
               <TouchableOpacity onPress={() => setshowModelAddress(true)}>
@@ -105,7 +138,7 @@ function NameAndAddress(props) {
                 </Text>
               </View>
               <TextInput
-                onChangeText={(text) => {settext(text); dispatch({ type: "GET_NOTE_TRANSAC", noteTransac: text }) }}
+                onChangeText={(text) => {handleTextChange(text)}}
                 placeholder="Nhập lời nhắn hoặc mô tả"
                 editable={true}
                 maxLength={200}
@@ -263,5 +296,5 @@ const styles = StyleSheet.create({
   },
 });
 export default connect(function (state) {
-  return { infoPost: state.infoPost, auth: state.auth };
+  return { infoPost: state.infoPost, auth: state.auth};
 })(NameAndAddress);

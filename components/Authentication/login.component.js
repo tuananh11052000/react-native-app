@@ -17,6 +17,7 @@ import { Checkbox, TextInput } from "react-native-paper";
 import config from "../../config";
 import { Button } from "galio-framework";
 import AppLoading from "expo-app-loading";
+import Spinner from "react-native-loading-spinner-overlay";
 import {
   useFonts,
   OpenSans_400Regular,
@@ -35,15 +36,22 @@ function Login(props) {
   const [Password, onChangePass] = useState("");
   const [checked, setChecked] = useState(true);
   const [showPass, showPassWord] = useState(true);
+  const [isDisplay, setIsDisplay] = useState(false);
+ 
   const loginFunction = async (PhoneNumber, Password) => {
+    
+    setIsDisplay(true)
+    let tokenDevice = await SecureStore.getItemAsync("tokenDevice");
+    console.log(tokenDevice)
     try {
       await axios
-        .post("https://smai-app-api.herokuapp.com/account/login", {
+        .post("https://api.smai.com.vn/account/login", {
           PhoneNumber: PhoneNumber,
           Password: Password,
+          TokenDevice: tokenDevice
         })
         .then(async (data) => {
-          if (data.status == 200) {
+          if (data.status == 201) {
             await save("token", "bearer " + data.data.accessToken);
             await save("PhoneNumber", PhoneNumber);
             await axios({
@@ -61,10 +69,15 @@ function Login(props) {
               token: data.data.accessToken,
               PhoneNumber: PhoneNumber,
             });
+            console.log("Đã đăng nhập")
             props.onPress();
+            setIsDisplay(false)
+
           }
         });
+        
     } catch (error) {
+      setIsDisplay(false)
       if (error){
         Alert.alert("Thông báo", "Số điện thoại hoặc mật khẩu không đúng", [{ text: "OK" }]);
       }
@@ -114,6 +127,11 @@ function Login(props) {
   }
   return (
     <View style={styles.container}>
+      <Spinner
+        visible={isDisplay}
+        textContent={"Đang đăng nhập..."}
+        textStyle={styles.spinnerTextStyle}
+      />
       <View style={styles.childContainer}>
         <Image source={LogoSmai} style={styles.image_logo} />
         <View style={styles.username}>
@@ -250,6 +268,9 @@ const styles = StyleSheet.create({
     fontSize: config.fontsize_2,
     color: "white",
     fontFamily: "OpenSans_600SemiBold",
+  },
+  spinnerTextStyle: {
+    color: "#FFF",
   },
 });
 

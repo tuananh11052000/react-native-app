@@ -39,6 +39,7 @@ const height = width * 0.5;
 function DetailConnectPost(props) {
   const { navigation } = props;
   let data = props.route.params.data; // data from list
+  // console.log(data)
   let titlePerson = props.route.params.titlePerson;
   const [isShowModel, setisShowModel] = useState(false);
   const [isShow, setIsShow] = useState(false); // model xác nhận xong
@@ -61,12 +62,11 @@ function DetailConnectPost(props) {
   if (!fontsLoaded) {
     return <AppLoading />;
   }
- 
   const renderName = () => {
-    if (typePost == "give") {
-      return data.SenderUser.FullName
-    } 
     if (typePost == "receive") {
+      return data.SenderUser[0].FullName
+    } 
+    if (typePost == "give") {
       return data.PostData.NameAuthor;
    }
   }

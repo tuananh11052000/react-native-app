@@ -3,14 +3,32 @@
     "name": "Smai",
     "version": "1.0.0",
     "slug": "Smai",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/iconsmai.png",
+    "notification":{
+      "icon":"./assets/iconsmai.png"
+    },
+    "splash": {
+      "image": "./assets/splashsmai.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#FFF"
+    },
+    "updates": {
+      "fallbackToCacheTimeout": 0
+    },
+    "assetBundlePatterns": ["**/*"],
     "ios": {
       "bundleIdentifier": "com.smait",
       "buildNumber": "1.0.0"
     },
     "android": {
       "package": "com.smai",
-      "versionCode": 1
+      "versionCode": 1,
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#FFFFFF"
+      },
+      "useNextNotificationsApi": true
     }
+    
   }
 }

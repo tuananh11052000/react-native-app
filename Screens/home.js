@@ -25,6 +25,8 @@ import * as SecureStore from "expo-secure-store";
 import axios from "axios";
 import config from "../config";
 import AppLoading from "expo-app-loading";
+import Constants from "expo-constants";
+import * as Notifications from "expo-notifications";
 import {
   useFonts,
   OpenSans_300Light,
@@ -44,11 +46,13 @@ function Home(props) {
   const { dispatch } = props;
   const [listData, setlistData] = useState([]);
   const [refreshing, setrefreshing] = useState(true);
+  const [expoPushToken, setExpoPushToken] = useState("");
 
   const getData = async () => {
     await axios({
       method: "get",
       url: "https://api.smai.com.vn/post/getNewPost",
+ 
     })
       .then((resjson) => {
         setlistData(resjson.data);
@@ -73,9 +77,20 @@ function Home(props) {
       }
     };
     checkTokenLocal();
+    
+    
     getData();
-   
+    return () => {
+      
+    }
   }, [props.reloadPost]);
+  useEffect(() => {
+    registerForPushNotificationsAsync().then((token) => {
+      setExpoPushToken(token);
+    });
+
+    console.log(expoPushToken);
+  }, []);
   // onPress tặng cộng đồng
   const actionOnPressTCD = () => {
     if (props.auth.isLogin == true) {
@@ -170,7 +185,15 @@ function Home(props) {
     <View style={styles.container}>
       <View style={styles.containerr}>
         {refreshing ? (
-          <ActivityIndicator />
+          <View
+          style={{
+            flexDirection: "row",
+            justifyContent: "center",
+            height: "100%",
+          }}
+        >
+          <ActivityIndicator color="#BDBDBD" size="small" />
+        </View>
         ) : (
           <FlatList
             data={listData}
@@ -208,6 +231,70 @@ const styles = StyleSheet.create({
   },
 });
 
+async function registerForPushNotificationsAsync() {
+  let token;
+  if (Constants.isDevice) {
+    const { status: existingStatus } =
+      await Notifications.getPermissionsAsync();
+    let finalStatus = existingStatus;
+    if (existingStatus !== "granted") {
+      const { status } = await Notifications.requestPermissionsAsync();
+      finalStatus = status;
+    }
+    if (finalStatus !== "granted") {
+      alert("Failed to get push token for push notification!");
+      return;
+    }
+    token = (await Notifications.getExpoPushTokenAsync()).data;
+    
+    const sendTokenDevice = async () => {
+      await axios({
+        method: "post",
+        url: "https://api.smai.com.vn/push/create-push-token",
+        data: {
+          PushToken: token
+        }
+      })
+        .then((resjson) => {
+          console.log(resjson.data)
+        })
+        .catch((err) => {
+          console.log(err.message);
+        })
+    };
+    async function getValueFor(key) {
+      let result = await SecureStore.getItemAsync(key);
+      if (result) {
+        return result
+      } 
+      return null;
+    } 
+    let tokenSaved = getValueFor("tokenDevice");
+    
+
+      async function save(key, value) {
+        await SecureStore.setItemAsync(key, value);
+      }
+
+      save("tokenDevice", token);
+      sendTokenDevice();
+   
+    
+  } else {
+    alert("Must use physical device for Push Notifications");
+  }
+
+  if (Platform.OS === "android") {
+    Notifications.setNotificationChannelAsync("default", {
+      name: "default",
+      importance: Notifications.AndroidImportance.MAX,
+      vibrationPattern: [0, 250, 250, 250],
+      lightColor: "#FF231F7C",
+    });
+  }
+
+  return token;
+}
 export default connect(function (state) {
   return {
     auth: state.auth,

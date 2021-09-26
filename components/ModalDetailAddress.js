@@ -107,11 +107,28 @@ function confirmAddress(props) {
       ]);
     else {
       //neu ctrinh chay vao day tuc la khong co thay doi ve dia chi
-      const { dispatch } = props;
-      const address = `${addressDetail.trim()}, ${commune.name}, ${district.name}, ${province.name}`;
-      dispatch({ type: "CONFIRM_ADDRESS", address: address });
-      props.closeModel();
-      // dispatch({ type: "SAVE_ADDRESS_FILTER", addressFilter: address });
+     
+      async function save(key, value) {
+        await SecureStore.setItemAsync(key, value);
+      }
+      save("idProvince", province.idProvince).then(() => {
+        save("province", province.name).then((res) => {
+          save("idDistrict", district.idDistrict).then((res) => {
+            save("district", district.name).then((res) => {
+              save("idCommune", commune.idCoummune).then((res) => {
+                save("commune", commune.name).then((res) => {
+                  save("detail", addressDetail).then((res) => {
+                    const { dispatch } = props;
+                    const address = `${addressDetail.trim()}, ${commune.name}, ${district.name}, ${province.name}`;
+                    dispatch({ type: "CONFIRM_ADDRESS", address: address });
+                    props.closeModel();
+                  });
+                });
+              });
+            });
+          });
+        });
+      });
     }
     
   };

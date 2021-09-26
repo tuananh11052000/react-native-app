@@ -12,6 +12,7 @@ import { connect } from "react-redux";
 import { MaterialIcons } from "@expo/vector-icons";
 import Menu, { MenuItem, MenuDivider } from "react-native-material-menu";
 import * as SecureStore from "expo-secure-store";
+import axios from "axios";
 import {
   Button,
   Text,
@@ -25,7 +26,45 @@ function ProfileStack(props) {
   const menu = useRef();
   const { dispatch, navigation } = props;
   const showMenu = () => menu.current.show();
+
+  const sendTokenDevice = async () => {
+    let tokenUser = await SecureStore.getItemAsync("token");
+    let tokenDevice = await SecureStore.getItemAsync("tokenDevice");
+    await axios({
+      method: "post",
+      url: "https://api.smai.com.vn/account/Logout",
+      data: {
+        TokenDevice: tokenDevice,
+        tokenusser: tokenUser,
+      }
+    })
+      .then((resjson) => {
+        console.log(resjson.data)
+      })
+      .catch((err) => {
+        console.log(err.message);
+      })
+  };
   const hideMenu = async () => {
+    let tokenUser = await SecureStore.getItemAsync("token");
+    let tokenDevice = await SecureStore.getItemAsync("tokenDevice");
+    await axios({
+      method: "post",
+      url: "https://api.smai.com.vn/account/Logout",
+      headers: {
+        Authorization: tokenUser,
+      },
+      data: {
+        TokenDevice: tokenDevice,
+      }
+    })
+      .then((resjson) => {
+        console.log(resjson.data)
+      })
+      .catch((err) => {
+        console.log(err.message);
+      })
+
     await SecureStore.deleteItemAsync("token");
     await SecureStore.deleteItemAsync("avatar");
     await SecureStore.deleteItemAsync("FullName");

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import {
   StyleSheet,
   Text,
@@ -15,6 +15,7 @@ import {
   Dimensions,
   TouchableWithoutFeedback,
   SectionList,
+  Pressable,
 } from "react-native";
 import { SafeAreaView } from "react-native";
 import { connect } from "react-redux";
@@ -63,6 +64,16 @@ const list = [
     id: "4",
     checked: false,
   },
+  {
+    title: "Hủy nhận",
+    id: "5",
+    checked: false,
+  },
+  {
+    title: "Hủy tặng",
+    id: "6",
+    checked: false,
+  },
 ];
 
 function Connection(props) {
@@ -73,40 +84,46 @@ function Connection(props) {
   const [data, setData] = useState([]);
   const [dataAll, setDataAll] = useState([]);
   const [refreshing, setrefreshing] = useState(true);
+  const flatlistRef = useRef(null);
   useEffect(() => {
-    const getConnectPostDS = async () => {
-      if (props.auth.isLogin == true) {
-        let result = await SecureStore.getItemAsync("token");
-        await axios({
-          method: "get",
-          url: "https://api.smai.com.vn/transaction/transaction-connected",
-          headers: {
-            Authorization: result,
-          },
-        })
-          .then((res) => {
-            setDataAll(res.data.data.data);
-            setData(res.data.data.data);
-            dispatch({ type: "SAVE_DATA_TRANS", data: res.data.data.data });
-          })
-          .catch((error) => {
-            console.log("Error: ", error);
-          })
-          .finally(() => {
-            dispatch({ type: "setNoReload" });
-            setrefreshing(false);
-          });
-      }
-    };
     getConnectPostDS();
-
-    return () => {
-    
-    };
   }, [props.reloadPost]);
+  const getConnectPostDS = async () => {
+    if (props.auth.isLogin == true) {
+      let result = await SecureStore.getItemAsync("token");
+      await axios({
+        method: "get",
+        url: "https://api.smai.com.vn/transaction/transaction-connected",
+        headers: {
+          Authorization: result,
+        },
+      })
+        .then((res) => {
+          setDataAll(res.data.data.data);
+          setData(res.data.data.data);
+          // console.log(res.data.data.data)
+          dispatch({ type: "SAVE_DATA_TRANS", data: res.data.data.data });
+        })
+        .catch((error) => {
+          console.log("Error: ", error);
+        })
+        .finally(() => {
+          dispatch({ type: "setNoReload" });
+          setrefreshing(false);
+        });
+    }
+  };
+  useEffect(() => {
+    if (itemSelected >= 3) {
+      flatlistRef.current.scrollToIndex({
+        index: itemSelected,
+        animated: false,
+        viewPosition: 0,
+      });
+    }
+  }, [itemSelected]);
   const handlePress = (item, index) => {
     if (item.checked != true) {
-      setItemSelected(item.id);
       item.checked = !item.checked;
       const array = [...listitem];
       array.map((value, index) => {
@@ -115,106 +132,71 @@ function Connection(props) {
         }
       });
       setListItem(array);
-      filter(item.id)
+      setItemSelected(index);
+      filter(item.id);
     }
   };
   const onRefresh = () => {
     setData([]);
+    const array = [...listitem];
+    array.map((value, index) => {
+      if (index == 0) {
+        value.checked = true;
+      } else {
+        value.checked = false;
+      }
+    });
+    setListItem(array);
     getConnectPostDS();
   };
-  
-
+  const renderFilterData = (typeTran) => {
+    let tempData = [...dataAll];
+    let a1 = [];
+    for (let i = 0; i < tempData.length; i++) {
+      let temp = tempData[i].data;
+      let arr = temp.filter((item) => {
+        if (item.typetransaction == typeTran) {
+          return true;
+        } else {
+          return false;
+        }
+      });
+      if (arr.length != 0) {
+        let obj = {
+          data: arr,
+          title: tempData[i].title,
+        };
+        a1.push(obj);
+      }
+    }
+    return a1;
+  };
   const filter = (itemvalue) => {
     if (itemvalue == "0") {
       setData(props.dataTrans.data);
     }
     if (itemvalue == "1") {
-      let tempData = [...dataAll];
-      let a1 = [];
-      for (let i = 0; i < tempData.length; i++) {
-        let temp = tempData[i].data;
-        let arr = temp.filter((item) => {
-          if (item.typetransaction == "Đã nhận") {
-            return true;
-          } else {
-            return false;
-          }
-        });
-        if (arr.length != 0) {
-          let obj = {
-            data: arr,
-            title: tempData[i].title,
-          };
-          a1.push(obj);
-        } 
-        
-      }
+      let a1 = renderFilterData("Đã nhận");
       setData(a1);
     }
     if (itemvalue == "2") {
-      let tempData = [...dataAll];
-      let a1 = [];
-      for (let i = 0; i < tempData.length; i++) {
-        let temp = tempData[i].data;
-        let arr = temp.filter((item) => {
-          if (item.typetransaction == "Đã tặng") {
-            return true;
-          } else {
-            return false;
-          }
-        });
-        if (arr.length != 0) {
-          let obj = {
-            data: arr,
-            title: tempData[i].title,
-          };
-          a1.push(obj);
-        } 
-      }
+      let a1 = renderFilterData("Đã tặng");
       setData(a1);
     }
     if (itemvalue == "3") {
-      let tempData = [...dataAll];
-      let a1 = [];
-      for (let i = 0; i < tempData.length; i++) {
-        let temp = tempData[i].data;
-        let arr = temp.filter((item) => {
-          if (item.typetransaction == "Chưa nhận") {
-            return true;
-          } else {
-            return false;
-          }
-        });
-        if (arr.length != 0) {
-          let obj = {
-            data: arr,
-            title: tempData[i].title,
-          };
-          a1.push(obj);
-        } 
-      }
+      let a1 = renderFilterData("Chưa nhận");
       setData(a1);
     }
     if (itemvalue == "4") {
-      let tempData = [...dataAll];
-      let a1 = [];
-      for (let i = 0; i < tempData.length; i++) {
-        let temp = tempData[i].data;
-        let arr = temp.filter((item) => {
-          if (item.typetransaction == "Chưa tặng") {
-            return true;
-          } else {
-            return false;
-          }
-        });
-        if (arr.length != 0) {
-          let obj = {
-            data: arr,
-            title: tempData[i].title,
-          };
-          a1.push(obj);
-        } 
-      }
+      let a1 = renderFilterData("Chưa tặng");
+      setData(a1);
+    }
+    if (itemvalue == "5") {
+      let a1 = renderFilterData("Hủy nhận");
+      setData(a1);
+    }
+    if (itemvalue == "6") {
+      let a1 = renderFilterData("Hủy tặng");
       setData(a1);
     }
   };
@@ -223,14 +205,17 @@ function Connection(props) {
     // const tempData=[...dataAll];
     if (text == "") setData(dataAll);
     else {
-     
       let a1 = [];
       for (let i = 0; i < dataAll.length; i++) {
         let temp = dataAll[i].data;
         let arr = temp.filter((item) => {
           if (
-            item.SenderUser.FullName.toLowerCase().indexOf(text.toLowerCase()) != -1 ||
-            item.PostData.NameAuthor.toLowerCase().indexOf(text.toLowerCase()) != -1
+            item.SenderUser.FullName.toLowerCase().indexOf(
+              text.toLowerCase()
+            ) != -1 ||
+            item.PostData.NameAuthor.toLowerCase().indexOf(
+              text.toLowerCase()
+            ) != -1
           )
             return true;
           else return false;
@@ -241,12 +226,10 @@ function Connection(props) {
             title: dataAll[i].title,
           };
           a1.push(obj);
-        } 
+        }
       }
       setData(a1);
-      
     }
-
   };
   const ItemSeparatorView = () => {
     return (
@@ -256,9 +239,17 @@ function Connection(props) {
   const listHeader = () => {
     return (
       <View style={styles.wrapHeader}>
-        
-        <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-          {listitem.map((item, index) => (
+        <FlatList
+          showsHorizontalScrollIndicator={false}
+          ref={flatlistRef}
+          data={listitem}
+          horizontal={true}
+          getItemLayout={(data, index) => ({
+            length: 90,
+            offset: 90 * index,
+            index,
+          })}
+          renderItem={({ item, index }) => (
             <Chip
               key={item.id}
               onPress={() => handlePress(item, index)}
@@ -273,8 +264,8 @@ function Connection(props) {
               title={item.title}
               active={item.checked}
             />
-          ))}
-        </ScrollView>
+          )}
+        />
       </View>
     );
   };
@@ -316,23 +307,27 @@ function Connection(props) {
           ) : (
             <View>
               <View style={styles.wrapTop}>
-          <View style={styles.wrapSearch}>
-            <EvilIcons name="search" size={30} color="#BDBDBD" />
-            <TextInput
-              autoCapitalize="none"
-              autoCorrect={false}
-              clearButtonMode="always"
-              value={query}
-              onChangeText={(queryText) => handleSearch(queryText)}
-              placeholder="Tìm kiếm..."
-              style={styles.searchText}
-            />
-          </View>
-          <TouchableOpacity style={styles.wrapFilter}>
-            <Text style={styles.textFilter}>Bộ lọc</Text>
-            <Foundation name="filter" size={width * 0.05} color="#BDBDBDBD" />
-          </TouchableOpacity>
-        </View>
+                <View style={styles.wrapSearch}>
+                  <EvilIcons name="search" size={30} color="#BDBDBD" />
+                  <TextInput
+                    autoCapitalize="none"
+                    autoCorrect={false}
+                    clearButtonMode="always"
+                    value={query}
+                    onChangeText={(queryText) => handleSearch(queryText)}
+                    placeholder="Tìm kiếm..."
+                    style={styles.searchText}
+                  />
+                </View>
+                <TouchableOpacity style={styles.wrapFilter}>
+                  <Text style={styles.textFilter}>Bộ lọc</Text>
+                  <Foundation
+                    name="filter"
+                    size={width * 0.05}
+                    color="#BDBDBDBD"
+                  />
+                </TouchableOpacity>
+              </View>
               <SectionList
                 sections={data}
                 refreshControl={
@@ -396,7 +391,7 @@ const styles = StyleSheet.create({
   wrapTop: {
     flexDirection: "row",
     marginBottom: "2%",
-    paddingLeft: '2%',
+    paddingLeft: "2%",
     justifyContent: "space-between",
   },
   wrapSearch: {

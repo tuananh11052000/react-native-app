@@ -9,7 +9,7 @@ import {
   Keyboard,
   TouchableWithoutFeedback,
   Dimensions,
-  ScrollView,
+  ScrollView, Pressable
 } from "react-native";
 var { width } = Dimensions.get("window");
 function MyComponent(props) {
@@ -17,7 +17,9 @@ function MyComponent(props) {
     <View>
       <TouchableOpacity style={props.style} onPress={() => props.onPress()}>
         {props.active ? (<View style={styles.triangleCorner} />) : (<></>)}
+
         <Text style={props.textStyle}>{props.title}</Text>
+  
       </TouchableOpacity>
     </View>
   );

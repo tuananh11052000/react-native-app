@@ -53,13 +53,15 @@ export default function ConnectPost(props) {
     let nameGive =  props.nameAuthorPost
     if (typePost == "receivetangcongdong" || typePost == "givecanxindo") {
       // nameGive = nameGive.charAt(0).toUpperCase() + nameGive.slice(1);
-      if (nameGive.length > 28) return nameGive.slice(0, 21) + "...";
-      else return nameGive;
+      // if (nameGive.length > 28) return nameGive.slice(0, 21) + "...";
+      // else 
+        return nameGive;
     }
     if (typePost == "receivecanxindo" || typePost == "givetangcongdong") {
       // nameGive = nameGive.charAt(0).toUpperCase() + nameGive.slice(1);
-      if (nameReceive.length > 28) return nameReceive.slice(0, 21) + "...";
-      else return nameReceive;
+      // if (nameReceive.length > 28) return nameReceive.slice(0, 21) + "...";
+      // else return
+       nameReceive;
     }
    
     
