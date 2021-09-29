@@ -27,6 +27,8 @@ import ModalDetailPost from "../components/ModalDetailPost.component";
 import ModalGiveFor from "../components/ModalGiveFor.component";
 import AppLoading from "expo-app-loading";
 import { Avatar } from "react-native-elements";
+import Spinner from "react-native-loading-spinner-overlay";
+import axios from "axios";
 import {
   useFonts,
   OpenSans_400Regular,
@@ -36,6 +38,7 @@ import {
 } from "@expo-google-fonts/open-sans";
 const { width } = Dimensions.get("window");
 const height = width * 0.5;
+import * as SecureStore from "expo-secure-store";
 function DetailConnectPost(props) {
   const { navigation } = props;
   let data = props.route.params.data; // data from list
@@ -43,14 +46,19 @@ function DetailConnectPost(props) {
   let titlePerson = props.route.params.titlePerson;
   const [isShowModel, setisShowModel] = useState(false);
   const [isShow, setIsShow] = useState(false); // model xác nhận xong
-  const [typePost, setTypePost] = useState("receive");
+  const [typePost, setTypePost] = useState("gui");
+  const [isloading, setIsLoading] = useState(false);
   //update history
   //get phone number author post
   useEffect(() => {
-    if (data.SenderUser.PhoneNumber == props.auth.PhoneNumber) {
-      setTypePost("receive")
+    if (
+      data.typetransaction == "Đã nhận" ||
+      data.typetransaction == "Chưa nhận" ||
+      data.typetransaction == "Hủy nhận"
+    ) {
+      setTypePost("nhan");
     } else {
-      setTypePost("give")
+      setTypePost("gui");
     }
   }, [typePost]);
   const [fontsLoaded, error] = useFonts({
@@ -63,21 +71,29 @@ function DetailConnectPost(props) {
     return <AppLoading />;
   }
   const renderName = () => {
-    if (typePost == "receive") {
-      return data.SenderUser[0].FullName
-    } 
-    if (typePost == "give") {
-      return data.PostData.NameAuthor;
-   }
-  }
+    let nameReceive = data.SenderUser[0].FullName;
+    let nameGive = data.PostData.NameAuthor;
+    if (
+      (typePost == "gui" && data.PostData.TypeAuthor == "tangcongdong") ||
+      (typePost == "nhan" && data.PostData.TypeAuthor != "tangcongdong")
+    ) {
+      return nameReceive;
+    }
+    if (
+      (typePost == "gui" && data.PostData.TypeAuthor != "tangcongdong") ||
+      (typePost == "nhan" && data.PostData.TypeAuthor == "tangcongdong")
+    ) {
+      return nameGive;
+    }
+  };
   const renderAddress = () => {
-    if (typePost == "give") {
-      return data.SenderAddress
-    } 
-    if (typePost == "receive") {
+    if (typePost == "gui") {
+      return data.SenderAddress;
+    }
+    if (typePost == "nhan") {
       return data.PostData.address;
-   }
-  }
+    }
+  };
   //url phonenumber
   const dialCall = (number) => {
     var number_temp = "0" + number;
@@ -96,8 +112,8 @@ function DetailConnectPost(props) {
     if (typePost == "receive") {
       avatar = data.ReceiverUser.urlIamge;
     } else {
-      avatar =  data.SenderUser.urlIamge;
-   }
+      avatar = data.SenderUser.urlIamge;
+    }
     if (avatar != null)
       return (
         <View>
@@ -124,10 +140,10 @@ function DetailConnectPost(props) {
     let id = data._id;
     return id.slice(0, 13) + "...";
   };
- 
+
   const renderTime = (timeUTC) => {
     let time1 = new Date(timeUTC);
-    let hour = time1.getHours()
+    let hour = time1.getHours();
     let minute = time1.getMinutes();
     let day = time1.getUTCDate();
     let month1 = time1.getUTCMonth() + 1;
@@ -135,11 +151,40 @@ function DetailConnectPost(props) {
     let title = hour + ":" + minute + " - " + day + "/" + month1 + "/" + year1;
     return title;
   };
- 
+
   const renderTitle = (item) => {
     item = item.charAt(0).toUpperCase() + item.slice(1);
     if (item.length > 28) return item.slice(0, 28) + "...";
     else return item;
+
+  };
+  const cancel = async () => {
+    setIsLoading(true);
+    let result = await SecureStore.getItemAsync("token");
+    const body = { status: "cancel" };
+    await axios({
+      method: "put",
+      url:
+        "https://api.smai.com.vn/transaction/update-status?transactionId=" +
+        data._id,
+      data: body,
+      headers: {
+        Authorization: result,
+      },
+    })
+      .then((res) => {
+        Alert.alert("Thông báo", "Hủy thành công", [
+          {
+            text: "Có",
+            style: "cancel",
+            onPress: () => navigation.navigate("Home"),
+          },
+        ]);
+      })
+      .catch((error) => {
+        console.log("Error: ", error);
+      })
+      .finally(() => setIsLoading(false));
   };
   const cancelBtn = () => {
     Alert.alert("Thông báo", "Bạn có chắc muốn hủy!", [
@@ -150,7 +195,7 @@ function DetailConnectPost(props) {
       {
         text: "Có",
         style: "cancel",
-        onPress: () => navigation.navigate("Home"),
+        onPress: () => {cancel()},
       },
     ]);
   };
@@ -158,20 +203,23 @@ function DetailConnectPost(props) {
     if (data.isStatus != "done") {
       return (
         <View style={styles.wrapButton}>
-        <TouchableOpacity style={styles.wrapCancel} onPress={() => cancelBtn()}>
-          <Text style={styles.textCancel}>Hủy</Text>
-        </TouchableOpacity>
-        <Button
-          color={config.color_btn_1}
-          // size="large"
-          onPress={() => setIsShow(true)}
-        >
-          <Text style={styles.textCall}>Xác nhận xong</Text>
-        </Button>
-      </View>
-      )
+          <TouchableOpacity
+            style={styles.wrapCancel}
+            onPress={() => cancelBtn()}
+          >
+            <Text style={styles.textCancel}>Hủy</Text>
+          </TouchableOpacity>
+          <Button
+            color={config.color_btn_1}
+            // size="large"
+            onPress={() => setIsShow(true)}
+          >
+            <Text style={styles.textCall}>Xác nhận xong</Text>
+          </Button>
+        </View>
+      );
     }
-  }
+  };
   const renderImage = (urlImage) => {
     if (urlImage != null) {
       return (
@@ -197,6 +245,11 @@ function DetailConnectPost(props) {
       style={styles.container}
       contentContainerStyle={styles.contentContainer}
     >
+      <Spinner
+        visible={isloading}
+        textContent={"Đang hủy..."}
+        textStyle={styles.spinnerTextStyle}
+      />
       <View style={styles.wrapTop}>
         <View style={styles.wrapTopLeft}>
           <Text style={styles.textId}>Mã số:</Text>
@@ -240,7 +293,8 @@ function DetailConnectPost(props) {
               </View>
               <View style={styles.wrapAddress}>
                 <Text style={styles.textAddress}>
-                  <Entypo name="location" size={width * 0.05} color="white" /> {"  "}
+                  <Entypo name="location" size={width * 0.05} color="white" />{" "}
+                  {"  "}
                   {renderAddress()}
                 </Text>
               </View>
@@ -272,19 +326,16 @@ function DetailConnectPost(props) {
 
                 <View style={styles.wrapTypePrice}>
                   <Text style={styles.type}>
-                 
                     {renderTitle(data.PostData.title)}
                   </Text>
                   <Text style={styles.price}>Miễn phí</Text>
                 </View>
                 <View style={styles.wrapTimeAddress}>
                   <View style={styles.wrapTime}>
-                    <Feather
-                      name="clock"
-                      size={width*0.04}
-                      color="gray"
-                    />
-                    <Text style={styles.time}>{renderTime(data.PostData.createdAt)}</Text>
+                    <Feather name="clock" size={width * 0.04} color="gray" />
+                    <Text style={styles.time}>
+                      {renderTime(data.PostData.createdAt)}
+                    </Text>
                   </View>
                 </View>
               </View>
@@ -294,12 +345,14 @@ function DetailConnectPost(props) {
         <View style={styles.wrapNote}>
           <Text style={styles.textTitle}>Ghi chú</Text>
           <Text style={styles.note}>{data.note}</Text>
-          <Text style={styles.time2}>11:20 - 23/7/2021</Text>
+          <Text style={styles.time2}>
+            {renderTime(data.PostData.createdAt)}
+          </Text>
         </View>
       </View>
       <View style={styles.wrapFollow}>
         <Text style={styles.textTitle}>THEO DÕI</Text>
-        <Text style={{textAlign: "center" }}>Không có</Text>
+        <Text style={{ textAlign: "center" }}>Không có</Text>
       </View>
       <ModalDetailPost
         show={isShowModel}
@@ -330,6 +383,9 @@ function DetailConnectPost(props) {
 const styles = StyleSheet.create({
   container: {
     backgroundColor: "#FFF",
+  },
+  spinnerTextStyle: {
+    color: "#FFF",
   },
   contentContainer: {
     flexGrow: 1,
@@ -534,6 +590,6 @@ const styles = StyleSheet.create({
 });
 export default connect(function (state) {
   return {
-    auth: state.auth,   
+    auth: state.auth,
   };
 })(DetailConnectPost);

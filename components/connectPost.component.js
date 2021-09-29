@@ -26,21 +26,15 @@ var { width } = Dimensions.get("window");
 
 export default function ConnectPost(props) {
   const { dispatch } = props;
-  const [typePost, setTypePost] = useState("givetangcongdong");
+  const [typePost, setTypePost] = useState("gui");
  
   useEffect(() => {
-    if (props.phoneAuthorPost == props.phoneAccount && props.typeAuthor == 'tangcongdong') {
-      setTypePost("givetangcongdong") // mình đăng bài tặng cộng đồng, người khác vô xin  => mình tặng
-    } 
-    if (props.phoneAuthorPost != props.phoneAccount && props.typeAuthor == 'tangcongdong') {
-        setTypePost("receivetangcongdong") // người khác đăng bài tặng cộng đồng, mình vô xin => mình xin
-    }
-    if (props.phoneAuthorPost == props.phoneAccount && props.typeAuthor != 'tangcongdong') {
-      setTypePost("receivecanxindo") // mình đăng bài xin đồ, người khác vô xin => mình xin
-    }
-    if (props.phoneAuthorPost != props.phoneAccount && props.typeAuthor != 'tangcongdong') {
-      setTypePost("givecanxindo") // người khác đăng bài xin đồ, mình vô cho => mình tặng
-    }    
+    if (props.statusType == "Đã nhận" || props.statusType == "Chưa nhận"
+        || props.statusType == "Hủy nhận") {
+          setTypePost("nhan")
+        } else {
+          setTypePost("gui");
+        }
   }, [typePost]);
   const renderId = (item) => {
     item = item.charAt(0).toUpperCase() + item.slice(1);
@@ -51,20 +45,14 @@ export default function ConnectPost(props) {
   const renderName = () => {
     let nameReceive = props.nameAuthorMess
     let nameGive =  props.nameAuthorPost
-    if (typePost == "receivetangcongdong" || typePost == "givecanxindo") {
-      // nameGive = nameGive.charAt(0).toUpperCase() + nameGive.slice(1);
-      // if (nameGive.length > 28) return nameGive.slice(0, 21) + "...";
-      // else 
-        return nameGive;
+    if ((typePost == "gui" && props.typeAuthor == "tangcongdong") 
+    || (typePost == "nhan" && props.typeAuthor != "tangcongdong")) {
+        return nameReceive;
     }
-    if (typePost == "receivecanxindo" || typePost == "givetangcongdong") {
-      // nameGive = nameGive.charAt(0).toUpperCase() + nameGive.slice(1);
-      // if (nameReceive.length > 28) return nameReceive.slice(0, 21) + "...";
-      // else return
-       nameReceive;
+    if ((typePost == "gui" && props.typeAuthor != "tangcongdong") 
+    || (typePost == "nhan" && props.typeAuthor == "tangcongdong")) {
+       return nameGive;
     }
-   
-    
   };
 
   const renderStatusDone = () => {

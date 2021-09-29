@@ -215,7 +215,7 @@ function ProductGiveForComponent(props) {
     if (props.isStatus == null || props.isStatus == "null") {
       return (
         <TouchableOpacity
-          style={{ marginTop: "3%" }}
+          style={{ marginTop: "3%", }}
           onPress={() => pressGiveFor(item)}
         >
           <View style={styles.btnGiveFor}>
@@ -227,7 +227,7 @@ function ProductGiveForComponent(props) {
       if (props.isStatus == "waiting") {
         return (
           <View style={styles.btnGived}>
-            <Text style={styles.textBtnGived}>Đang chờ nhận</Text>
+            <Text style={styles.textBtnWaiting}>Đang chờ nhận</Text>
           </View>
         );
       } else {
@@ -328,7 +328,7 @@ const styles = StyleSheet.create({
   wrapAddress: {
     flexDirection: "row",
     marginTop: "3%",
-    width: "80%",
+    width: "70%",
   },
   address: {
     fontSize: config.fontsize_3,
@@ -366,6 +366,7 @@ const styles = StyleSheet.create({
     paddingTop: "2%",
     paddingBottom: "2%",
     alignItems: "center",
+  
   },
   btnGived: {
     paddingLeft: "3%",
@@ -382,6 +383,12 @@ const styles = StyleSheet.create({
     color: "green",
     fontSize: config.fontsize_3,
     fontFamily: "OpenSans_700Bold",
+  },
+  textBtnWaiting: {
+    color: "green",
+    fontSize: config.fontsize_3,
+    fontFamily: "OpenSans_700Bold",
+    marginRight: '2%'
   },
 });
 export default connect(function (state) {

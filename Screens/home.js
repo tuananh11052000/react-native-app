@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import {
   StyleSheet,
   Image,
@@ -13,6 +13,7 @@ import {
   TouchableOpacity,
   Dimensions,
   RefreshControl,
+  Alert,
 } from "react-native";
 import { connect } from "react-redux";
 import { Feather, FontAwesome } from "@expo/vector-icons";
@@ -47,12 +48,13 @@ function Home(props) {
   const [listData, setlistData] = useState([]);
   const [refreshing, setrefreshing] = useState(true);
   const [expoPushToken, setExpoPushToken] = useState("");
-
+  const [notification, setNotification] = useState(false);
+  const notificationListener = useRef();
+  const responseListener = useRef();
   const getData = async () => {
     await axios({
       method: "get",
       url: "https://api.smai.com.vn/post/getNewPost",
- 
     })
       .then((resjson) => {
         setlistData(resjson.data);
@@ -77,19 +79,57 @@ function Home(props) {
       }
     };
     checkTokenLocal();
-    
-    
     getData();
-    return () => {
-      
-    }
+    return () => {};
   }, [props.reloadPost]);
   useEffect(() => {
     registerForPushNotificationsAsync().then((token) => {
       setExpoPushToken(token);
+      console.log(token);
     });
 
-    console.log(expoPushToken);
+    notificationListener.current =
+      Notifications.addNotificationReceivedListener((notification) => {
+        setNotification(notification);
+      });
+
+    responseListener.current =
+      Notifications.addNotificationResponseReceivedListener((response) => {
+        console.log(response.notification.request.content.data);
+        let data = response.notification.request.content.data;
+        if (data.isStatus != null) {
+          if (
+            data.typetransaction == "Đã nhận" ||
+            data.typetransaction == "Chưa nhận" ||
+            data.typetransaction == "Hủy nhận"
+          ) {
+            navigation.navigate("DetailConnectPost", {
+              name: "Chi tiết nhận tặng",
+              titlePerson: "NGƯỜI TẶNG",
+              data: data,
+            });
+          } else {
+            navigation.navigate("DetailConnectPost", {
+              name: "Chi tiết bạn tặng",
+              titlePerson: "NGƯỜI NHẬN",
+              data: data,
+            });
+          }
+        } else {
+          dispatch({ type: "SET_XIN" });
+          navigation.navigate("GiveFor", {
+            name: "Danh sách lời nhắn",
+            postId: data.PostData._id,
+          }); //chuyển trang
+        }
+      });
+
+    return () => {
+      Notifications.removeNotificationSubscription(
+        notificationListener.current
+      );
+      Notifications.removeNotificationSubscription(responseListener.current);
+    };
   }, []);
   // onPress tặng cộng đồng
   const actionOnPressTCD = () => {
@@ -186,14 +226,14 @@ function Home(props) {
       <View style={styles.containerr}>
         {refreshing ? (
           <View
-          style={{
-            flexDirection: "row",
-            justifyContent: "center",
-            height: "100%",
-          }}
-        >
-          <ActivityIndicator color="#BDBDBD" size="small" />
-        </View>
+            style={{
+              flexDirection: "row",
+              justifyContent: "center",
+              height: "100%",
+            }}
+          >
+            <ActivityIndicator color="#BDBDBD" size="small" />
+          </View>
         ) : (
           <FlatList
             data={listData}
@@ -233,55 +273,47 @@ const styles = StyleSheet.create({
 
 async function registerForPushNotificationsAsync() {
   let token;
-  if (Constants.isDevice) {
-    const { status: existingStatus } =
-      await Notifications.getPermissionsAsync();
-    let finalStatus = existingStatus;
-    if (existingStatus !== "granted") {
-      const { status } = await Notifications.requestPermissionsAsync();
-      finalStatus = status;
-    }
-    if (finalStatus !== "granted") {
-      alert("Failed to get push token for push notification!");
-      return;
-    }
-    token = (await Notifications.getExpoPushTokenAsync()).data;
-    
-    const sendTokenDevice = async () => {
-      await axios({
-        method: "post",
-        url: "https://api.smai.com.vn/push/create-push-token",
-        data: {
-          PushToken: token
-        }
+  const { status: existingStatus } = await Notifications.getPermissionsAsync();
+  let finalStatus = existingStatus;
+  if (existingStatus !== "granted") {
+    const { status } = await Notifications.requestPermissionsAsync();
+    finalStatus = status;
+  }
+  if (finalStatus !== "granted") {
+    alert("Failed to get push token for push notification!");
+    return;
+  }
+  token = (await Notifications.getExpoPushTokenAsync()).data;
+
+  const sendTokenDevice = async () => {
+    await axios({
+      method: "post",
+      url: "https://api.smai.com.vn/push/create-push-token",
+      data: {
+        PushToken: token,
+      },
+    })
+      .then((resjson) => {
+        console.log(resjson.data);
       })
-        .then((resjson) => {
-          console.log(resjson.data)
-        })
-        .catch((err) => {
-          console.log(err.message);
-        })
-    };
-    async function getValueFor(key) {
-      let result = await SecureStore.getItemAsync(key);
-      if (result) {
-        return result
-      } 
-      return null;
-    } 
-    let tokenSaved = getValueFor("tokenDevice");
-    
-
-      async function save(key, value) {
-        await SecureStore.setItemAsync(key, value);
-      }
-
-      save("tokenDevice", token);
-      sendTokenDevice();
-   
-    
-  } else {
-    alert("Must use physical device for Push Notifications");
+      .catch((err) => {
+        console.log(err.message);
+      });
+  };
+  async function getValueFor(key) {
+    let result = await SecureStore.getItemAsync(key);
+    if (result) {
+      return result;
+    }
+    return null;
+  }
+  async function save(key, value) {
+    await SecureStore.setItemAsync(key, value);
+  }
+  save("tokenDevice", token);
+  let tokenSaved = getValueFor("tokenDevice");
+  if (tokenSaved == null) {
+    sendTokenDevice();
   }
 
   if (Platform.OS === "android") {

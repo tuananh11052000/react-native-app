@@ -44,7 +44,7 @@ function DetailPost(props) {
   const [isShowModelCate, setisShowModelCate] = useState(false);
   const [active, setActive] = useState(0);
   const [avatar, setAvatar] = useState(" ");
-  const [phoneNumber, setPhoneNumber] = useState(" "); //useState using for phonenumber
+  const [phoneNumber, setPhoneNumber] = useState(props.auth.PhoneNumber); //useState using for phonenumber
 
   const change = ({ nativeEvent }) => {
     const slide = Math.ceil(

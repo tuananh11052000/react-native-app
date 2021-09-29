@@ -60,7 +60,7 @@ function App(props) {
   const getListPhotos = () => {
     // kiểm tra nếu từ trang category chuyển qua thì call api những người xin đồ
     if (props.redirectTransaction == "gui") {
-      const apiURL = `https://smai-app-api.herokuapp.com/post/getPostByTypeAuthor?typeauthor=${typeAuthor}`;
+      const apiURL = `https://api.smai.com.vn/post/getPostByTypeAuthor?typeauthor=${typeAuthor}`;
       axios
         .get(apiURL)
         .then((resjson) => {
@@ -93,7 +93,7 @@ function App(props) {
       let result = props.auth.token
       axios({
         method: "get",
-        url: `https://smai-app-api.herokuapp.com/transaction/transaction-post?postId=${postId}`,
+        url: `https://api.smai.com.vn/transaction/transaction-post?postId=${postId}`,
         headers: {
           Authorization: result,
         },

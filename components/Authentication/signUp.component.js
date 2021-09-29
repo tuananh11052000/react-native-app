@@ -281,7 +281,7 @@ const styles = StyleSheet.create({
     marginBottom: "4%",
   },
   textInput: {
-    fontSize: 18,
+    fontSize: config.fontsize_5,
     width: "95%",
     backgroundColor: "#FFF",
     fontFamily: "OpenSans_400Regular",
@@ -300,7 +300,7 @@ const styles = StyleSheet.create({
   },
   btnLogin: {
     color: "white",
-    fontSize: 20,
+    fontSize: config.fontsize_5,
     fontFamily: "OpenSans_600SemiBold",
   },
   error: {

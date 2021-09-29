@@ -87,6 +87,11 @@ function Connection(props) {
   const flatlistRef = useRef(null);
   useEffect(() => {
     getConnectPostDS();
+    const willFocusSubscription = props.navigation.addListener("focus", () => {
+      getConnectPostDS();
+    });
+
+    return willFocusSubscription;
   }, [props.reloadPost]);
   const getConnectPostDS = async () => {
     if (props.auth.isLogin == true) {
@@ -210,7 +215,7 @@ function Connection(props) {
         let temp = dataAll[i].data;
         let arr = temp.filter((item) => {
           if (
-            item.SenderUser.FullName.toLowerCase().indexOf(
+            item.SenderUser[0].FullName.toLowerCase().indexOf(
               text.toLowerCase()
             ) != -1 ||
             item.PostData.NameAuthor.toLowerCase().indexOf(
@@ -271,10 +276,9 @@ function Connection(props) {
   };
   const pressItem = (item) => {
     if (
-      (item.SenderUser.PhoneNumber == props.auth.PhoneNumber &&
-        item.PostData.TypeAuthor == "tangcongdong") ||
-      (item.ReceiverUser.PhoneNumber == props.auth.PhoneNumber &&
-        item.PostData.TypeAuthor != "tangcongdong")
+      item.typetransaction == "Đã nhận" ||
+      item.typetransaction == "Chưa nhận" ||
+      item.typetransaction == "Hủy nhận"
     ) {
       props.navigation.navigate("DetailConnectPost", {
         name: "Chi tiết nhận tặng",
@@ -328,38 +332,43 @@ function Connection(props) {
                   />
                 </TouchableOpacity>
               </View>
-              <SectionList
-                sections={data}
-                refreshControl={
-                  <RefreshControl
-                    refreshing={refreshing}
-                    onRefresh={onRefresh}
-                  />
-                }
-                ItemSeparatorComponent={ItemSeparatorView}
-                keyExtractor={(item, index) => item + index}
-                renderItem={({ item }) => (
-                  <ConnectPost
-                    urlImage={item.urlImage[0]}
-                    title={item.PostData._id}
-                    nameAuthorPost={item.PostData.NameAuthor}
-                    nameAuthorMess={item.SenderUser.FullName}
-                    phoneAuthorPost={item.ReceiverUser.PhoneNumber}
-                    phoneAccount={props.auth.PhoneNumber}
-                    time={item.PostData.updatedAt}
-                    status={item.isStatus}
-                    onPress={() => pressItem(item)}
-                    typeAuthor={item.PostData.TypeAuthor}
-                    statusType={item.typetransaction}
-                  />
-                )}
-                renderSectionHeader={({ section }) => (
-                  <View style={styles.wrapTitleSection}>
-                    <Text style={styles.titleSection}>{section.title}</Text>
-                  </View>
-                )}
-                ListHeaderComponent={listHeader}
-              />
+              <>
+                <SectionList
+                  sections={data}
+                  refreshControl={
+                    <RefreshControl
+                      refreshing={refreshing}
+                      onRefresh={onRefresh}
+                    />
+                  }
+                  ItemSeparatorComponent={ItemSeparatorView}
+                  keyExtractor={(item, index) => item + index}
+                  renderItem={({ item }) => (
+                    <ConnectPost
+                      urlImage={item.urlImage[0]}
+                      title={item.PostData._id}
+                      nameAuthorPost={item.PostData.NameAuthor}
+                      nameAuthorMess={item.SenderUser[0].FullName}
+                      phoneAuthorPost={item.ReceiverUser[0].PhoneNumber}
+                      phoneAccount={props.auth.PhoneNumber}
+                      time={item.PostData.updatedAt}
+                      onPress={() => pressItem(item)}
+                      statusType={item.typetransaction}
+                      typeAuthor={item.PostData.TypeAuthor}
+                      status={item.isStatus}
+                    />
+                  )}
+                  renderSectionHeader={({ section }) => (
+                    <View style={styles.wrapTitleSection}>
+                      <Text style={styles.titleSection}>{section.title}</Text>
+                    </View>
+                  )}
+                  ListFooterComponent={() => {
+                    return <View style={{ height: 0, marginBottom: '10%' }}></View>;
+                  }}
+                  ListHeaderComponent={listHeader}
+                />
+              </>
             </View>
           )}
         </>
