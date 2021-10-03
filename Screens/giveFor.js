@@ -48,12 +48,22 @@ function App(props) {
     }
   }, [addr]);
   const filterAddressFunc = (address) => {
-    const listTemp = data.filter((pr) => {
-      if (pr.address.indexOf(address) != -1) {
-        return true;
-      } else return false;
-    });
-    setData(listTemp);
+    if (props.redirectTransaction == "gui") {
+      const listTemp = data.filter((pr) => {
+        if (pr.address.indexOf(address) != -1) {
+          return true;
+        } else return false;
+      });
+      setData(listTemp);
+    } else {
+      const listTemp = data.filter((pr) => {
+        if (pr.SenderAddress.indexOf(address) != -1) {
+          return true;
+        } else return false;
+      });
+      setData(listTemp);
+    }
+    
   };
   // call api
   //https://smai-back-end.herokuapp.com/post/getPostByTypeAuthor?typeauthor=%7BLoaij
@@ -100,6 +110,7 @@ function App(props) {
       })
         .then((resjson) => {
           setData(resjson.data.data.data);
+          // console.log(resjson.data.data.data)
           setDataFilter(resjson.data.data.data);
         })
         .catch((error) => {
@@ -123,15 +134,28 @@ function App(props) {
     setQuery(text);
     if (text == "") setData(datafilter);
     else {
-      const data = datafilter.filter((pr) => {
-        if (
-          pr.NameAuthor.toLowerCase().indexOf(text.toLowerCase()) != -1 ||
-          pr.title.toLowerCase().indexOf(text.toLowerCase()) != -1
-        )
-          return true;
-        else return false;
-      });
-      setData(data);
+      if (props.redirectTransaction == "gui") {
+        const data = datafilter.filter((pr) => {
+          if (
+            pr.NameAuthor.toLowerCase().indexOf(text.toLowerCase()) != -1 ||
+            pr.title.toLowerCase().indexOf(text.toLowerCase()) != -1
+          )
+            return true;
+          else return false;
+        });
+        setData(data);
+      } else {
+        const data = datafilter.filter((pr) => {
+          if (
+            pr.usersender.FullName.toLowerCase().indexOf(text.toLowerCase()) != -1 ||
+            pr.note.toLowerCase().indexOf(text.toLowerCase()) != -1
+          )
+            return true;
+          else return false;
+        });
+        setData(data);
+      }
+      
     }
   };
   const { navigation } = props;

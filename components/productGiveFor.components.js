@@ -278,6 +278,7 @@ function ProductGiveForComponent(props) {
           navigation={props.navigation}
           titleModal="Xác nhận gửi tặng"
           titleBtn="Gửi tặng"
+          nameNote="notereceiver"
           status="waiting"
         />
       </View>
@@ -315,7 +316,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     paddingLeft: "3%",
     paddingRight: "3%",
-    justifyContent: "center",
+    justifyContent: "space-between",
   },
   wrapInfor: {
     marginLeft: "3%",
@@ -328,7 +329,7 @@ const styles = StyleSheet.create({
   wrapAddress: {
     flexDirection: "row",
     marginTop: "3%",
-    width: "70%",
+    // width: "80%",
   },
   address: {
     fontSize: config.fontsize_3,

@@ -43,9 +43,7 @@ function ProfileScreen(props) {
   const _pressListGiveTotal = () => {
     props.navigation.navigate("YouGiveTotal"); //chuyển trang
   };
-  const _pressListReveiceTotal = () => {
-    props.navigation.navigate("YouReceiveTotal"); //chuyển trang
-  };
+
   return (
     <View style={styles.container}>
       <View style={styles.scrollview}>
@@ -59,11 +57,11 @@ function ProfileScreen(props) {
         />
        
         <Text style={styles.Text}>Quản lý</Text>
-        <HistoryProfileComponent
+        {/* <HistoryProfileComponent
           textTitle="Đối soát từ thiện"
           icon="give"
           onPress={() => _pressListGiveTotal()}
-        />
+        /> */}
         <HistoryProfileComponent
           textTitle="Lịch sử xem"
           icon="history"

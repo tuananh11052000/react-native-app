@@ -41,7 +41,12 @@ function confirmAddress(props) {
   const giveFor = async () => {
     setIsLoading(true)
     let result = await SecureStore.getItemAsync("token");
-    const body = { status: props.status, notereceiver: text };
+    let body="";
+    if (props.nameNote == "notefinish") {
+      body =  { status: props.status, notefinish: text};
+    } else {
+      body = { status: props.status, notereceiver: text};
+    }
     await axios({
       method: "put",
       url: "https://api.smai.com.vn/transaction/update-status?transactionId=" +
@@ -58,11 +63,15 @@ function confirmAddress(props) {
         if (props.status == "done") {
           dispatch({ type: "COMPLETE_LOINHAN_CXD" });
         }
+        if (props.status == "cancel") {
+          dispatch({ type: "COMPLETE_LOINHAN_CANCEL" });
+        }
         navigation.navigate("Completed");
         setIsLoading(false)
       })
       .catch((error) => {
         console.log("Error: ", error);
+        setIsLoading(false)
       })
   
 };

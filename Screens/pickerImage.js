@@ -7,7 +7,7 @@ import { ImageBrowser } from 'expo-image-picker-multiple';
 
 function PickerImage(props) {
   const _getHeaderLoader = () => (
-    <ActivityIndicator size='small' color={'#0580FF'} style={styles.loading} />
+    <ActivityIndicator size='small' color={'#FFF'} style={styles.loading} />
   );
 
   const imagesCallback = (callback) => {

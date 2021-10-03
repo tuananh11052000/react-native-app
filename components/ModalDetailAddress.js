@@ -8,7 +8,8 @@ import {
   LogBox,
   Keyboard,
   TouchableWithoutFeedback,
-  Modal, Dimensions
+  Modal,
+  Dimensions,
 } from "react-native";
 import RNPickerDialog from "rn-modal-picker";
 import { AntDesign } from "@expo/vector-icons";
@@ -98,16 +99,32 @@ function confirmAddress(props) {
   };
   //Khai bao ham xu ly su kien click
   const pressFunc = () => {
-    if (province == "" ||
-    district == "" ||
-    commune == "" ||
-    addressDetail.trim() == null)
-      Alert.alert("Thông báo", "Vui lòng điền tỉnh hoặc thành phố", [
-        { text: "OK" },
-      ]);
-    else {
+    if ( province == "" || district == "" || commune == "" || addressDetail.trim() == "") {
+      if (province == "") {
+        Alert.alert("Thông báo", "Vui lòng chọn tỉnh/thành phố", [
+          { text: "OK" },
+        ]);
+      } else {
+        if (district == "") {
+          Alert.alert("Thông báo", "Vui lòng chọn quận/huyện", [
+            { text: "OK" },
+          ]);
+        } else {
+          if (commune == "") {
+            Alert.alert("Thông báo", "Vui lòng chọn phường/xã", [
+              { text: "OK" },
+            ]);
+          } else {
+            if (addressDetail.trim() == "") {
+              Alert.alert("Thông báo", "Vui lòng điền đường/ấp/thôn/số nhà", [
+                { text: "OK" },
+              ]);
+            }
+          }
+        }
+      }
+    } else {
       //neu ctrinh chay vao day tuc la khong co thay doi ve dia chi
-     
       async function save(key, value) {
         await SecureStore.setItemAsync(key, value);
       }
@@ -119,7 +136,9 @@ function confirmAddress(props) {
                 save("commune", commune.name).then((res) => {
                   save("detail", addressDetail).then((res) => {
                     const { dispatch } = props;
-                    const address = `${addressDetail.trim()}, ${commune.name}, ${district.name}, ${province.name}`;
+                    const address = `${addressDetail.trim()}, ${
+                      commune.name
+                    }, ${district.name}, ${province.name}`;
                     dispatch({ type: "CONFIRM_ADDRESS", address: address });
                     props.closeModel();
                   });
@@ -130,7 +149,6 @@ function confirmAddress(props) {
         });
       });
     }
-    
   };
   //ca ham xu ly neu da tung nhap thong tin  dia chi vao
 
@@ -144,7 +162,7 @@ function confirmAddress(props) {
           <View style={Styles.containermain}>
             <View style={Styles.top}>
               <TouchableOpacity onPress={props.onPress}>
-                <AntDesign name="close" size={width*0.05} color="black" />
+                <AntDesign name="close" size={width * 0.05} color="black" />
               </TouchableOpacity>
               <Text style={Styles.tittleText}>Địa chỉ của bạn</Text>
             </View>

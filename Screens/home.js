@@ -95,9 +95,9 @@ function Home(props) {
 
     responseListener.current =
       Notifications.addNotificationResponseReceivedListener((response) => {
-        console.log(response.notification.request.content.data);
+        // console.log(response.notification.request.content.data);
         let data = response.notification.request.content.data;
-        if (data.isStatus != null) {
+        if (data.isStatus != "null") {
           if (
             data.typetransaction == "Đã nhận" ||
             data.typetransaction == "Chưa nhận" ||

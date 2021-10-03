@@ -11,14 +11,14 @@ import {
   Text,
   FlatList,
   Dimensions,
-  TextInput,
+  TextInput, RefreshControl
 } from "react-native";
 import { connect } from "react-redux";
 import { Entypo, EvilIcons, FontAwesome, AntDesign } from "@expo/vector-icons";
 import { Picker } from "@react-native-picker/picker";
 import db from "../db.json";
 import axios from "axios";
-import ProductComponent from './product.component';
+import ProductComponent from "./product.component";
 import { Feather } from "@expo/vector-icons";
 const { width } = Dimensions.get("window");
 const height = width * 0.6;
@@ -40,6 +40,8 @@ function App(props) {
   const [typeAuthor, settypeAuthor] = useState("tangcongdong");
   const [listAfterFilter, setlistAfterFilter] = useState([]);
   const [showModelAddress, setshowModelAddress] = useState(false);
+  const [addressFilter, setaddressFilter] = useState();
+  const [cateFilter, setcateFilter] = useState();
   const { dispatch } = props;
   // địa chỉ đã chọn
   const filterAddressFunc = (address, list) => {
@@ -50,19 +52,17 @@ function App(props) {
     });
     setData(listTemp);
   };
-  const addr = props.dataCategory.addressFilter;
-
+  let addr = props.dataCategory.addressFilter;
   // function lọc các danh mục đã chọn
-  const categoryFilter = props.dataCategory.NameProduct;
-
+  let categoryFilter = props.dataCategory.NameProduct;
+  
   const filterCategory = (arrayProduct, listTemp) => {
     if (categoryFilter.length != 0) {
       const list = [];
       for (let i = 0; i < listTemp.length; i++) {
         for (let j = 0; j < arrayProduct.length; j++) {
           if (
-            listTemp[i].NameProduct[0].Category ==
-              arrayProduct[j].Category &&
+            listTemp[i].NameProduct[0].Category == arrayProduct[j].Category &&
             listTemp[i].NameProduct[0].NameProduct ==
               arrayProduct[j].NameProduct
           ) {
@@ -70,28 +70,61 @@ function App(props) {
           }
         }
       }
+      
       setData(list);
     }
   };
-
-  useEffect(() => {
-    if (categoryFilter.length == 0 && addr.length == 0) {
-      getListPhotos();
-    } else {
-      if (addr.length != 0 && categoryFilter.length == 0) {
-        filterAddressFunc(addr, listAfterFilter);
-      } else {
-        if (addr.length != 0 && categoryFilter.length != 0) {
-          filterAddressFunc(addr, data);
-          filterCategory(categoryFilter, data);
-        } else {
-          if (addr.length == 0 && categoryFilter.length != 0)
-            filterCategory(categoryFilter, listAfterFilter);
+  const filterTwoOption = () => {
+    if (addr.length != 0 && categoryFilter.length != 0) {
+      const list = [];
+      const listTemp = [...listAfterFilter]
+      for (let i = 0; i < listTemp.length; i++) {
+        for (let j = 0; j < categoryFilter.length; j++) {
+          if (
+            listTemp[i].NameProduct[0].Category == categoryFilter[j].Category &&
+            listTemp[i].NameProduct[0].NameProduct ==
+              categoryFilter[j].NameProduct
+          ) {
+            list.push(listTemp[i]);
+          }
         }
       }
+      const listAddr = list.filter((pr) => {
+        if (pr.address.indexOf(addr) != -1) {
+          return true;
+        } else return false;
+      });
+      setData(listAddr);
+    }
+  }
+  useEffect(() => {
+    setaddressFilter(addr);
+    setcateFilter(categoryFilter);
+    if (categoryFilter.length == 0 && addr.length == 0) {
+      setData(listAfterFilter);
+    }
+    if (addr.length != 0 && categoryFilter.length == 0) {
+      filterAddressFunc(addr, listAfterFilter);
+    }
+    if (addr.length != 0 && categoryFilter.length != 0) {
+      filterTwoOption();
+    }
+    if (addr.length == 0 && categoryFilter.length != 0) {
+      filterCategory(categoryFilter, listAfterFilter);
     }
   }, [categoryFilter, addr]);
-
+  useEffect(() => {
+    getListPhotos();
+  }, []);
+  const onRefresh = () => {
+    setData([]);
+    setaddressFilter("");
+    categoryFilter=[];
+    setcateFilter([])
+    getListPhotos();
+    dispatch({ type: "RESET_ADDRESS_FILTER"});
+    dispatch({ type: "RESET_NAMEPRODUCT"});
+  }
   // call api
   //https://smai-back-end.herokuapp.com/post/getPostByTypeAuthor?typeauthor=%7BLoaij
   const getListPhotos = () => {
@@ -118,15 +151,15 @@ function App(props) {
     return <AppLoading />;
   }
   const renderItemSelected = () => {
-    if (categoryFilter.length != 0) {
-      return "Đã chọn:    " + categoryFilter.length;
+    if (cateFilter.length != 0) {
+      return "Đã chọn:    " + cateFilter.length;
     } else {
       return "Tất cả...";
     }
   };
   const showFilterAddress = () => {
-    if (addr != "") {
-      let temp = addr.split(",");
+    if (addressFilter != "") {
+      let temp = addressFilter.split(",");
       if (temp[0].length > 10) return temp[0].slice(0, 10);
       else return temp[0];
     } else {
@@ -220,6 +253,11 @@ function App(props) {
             renderItem={renderItem}
             keyExtractor={(item) => `key-${item._id}`}
             ItemSeparatorComponent={ItemSeparatorView}
+            refreshControl={
+              <RefreshControl
+                refreshing={isLoading}
+                onRefresh={onRefresh}
+              />}
           ></FlatList>
         </>
       )}

@@ -38,7 +38,9 @@ import {
 } from "@expo-google-fonts/open-sans";
 const { width } = Dimensions.get("window");
 const height = width * 0.5;
+
 import * as SecureStore from "expo-secure-store";
+import NoteMessage from "../components/DetailConnectPost/noteFollow";
 function DetailConnectPost(props) {
   const { navigation } = props;
   let data = props.route.params.data; // data from list
@@ -46,6 +48,7 @@ function DetailConnectPost(props) {
   let titlePerson = props.route.params.titlePerson;
   const [isShowModel, setisShowModel] = useState(false);
   const [isShow, setIsShow] = useState(false); // model xác nhận xong
+  const [isShowCancel, setIsShowCancel] = useState(false); // model xác nhận hủy
   const [typePost, setTypePost] = useState("gui");
   const [isloading, setIsLoading] = useState(false);
   //update history
@@ -61,6 +64,7 @@ function DetailConnectPost(props) {
       setTypePost("gui");
     }
   }, [typePost]);
+
   const [fontsLoaded, error] = useFonts({
     OpenSans_400Regular,
     OpenSans_400Regular_Italic,
@@ -99,20 +103,28 @@ function DetailConnectPost(props) {
     var number_temp = "0" + number;
     let phoneNumber = "";
     if (Platform.OS === "android") {
-      phoneNumber = `tel:${number_temp}`;
+      phoneNumber = `tel:${number}`;
     } else {
-      phoneNumber = `telprompt:${number_temp}`;
+      phoneNumber = `telprompt:${number}`;
     }
-
     Linking.openURL(phoneNumber);
   };
+  const checkPhone = () => {
+    let numberSend = "0" + data.SenderUser[0].PhoneNumber;
+    let numberRecei = "0" + data.ReceiverUser[0].PhoneNumber;
+    if (props.auth.PhoneNumber == numberSend) {
+      dialCall(numberRecei)
+    } else {
+      dialCall(numberSend)
+    }
+  }
   //Ham render avatar
   const renderAvatar = () => {
     let avatar;
-    if (typePost == "receive") {
-      avatar = data.ReceiverUser.urlIamge;
+    if (typePost == "nhan") {
+      avatar = data.ReceiverUser[0].urlIamge;
     } else {
-      avatar = data.SenderUser.urlIamge;
+      avatar = data.SenderUser[0].urlIamge;
     }
     if (avatar != null)
       return (
@@ -156,56 +168,67 @@ function DetailConnectPost(props) {
     item = item.charAt(0).toUpperCase() + item.slice(1);
     if (item.length > 28) return item.slice(0, 28) + "...";
     else return item;
+  };
+  
 
+  const checkAvatar = (note) => {
+    let avatar;
+    if (note != null) {
+      if (note.id == data.SenderUser[0].AccountID) {
+        avatar = data.SenderUser[0].urlIamge;
+        return avatar;
+      }
+      if (note.id == data.ReceiverUser[0].AccountID) {
+        avatar = data.ReceiverUser[0].urlIamge;
+        return avatar;
+      }
+    }
+    return avatar;
   };
-  const cancel = async () => {
-    setIsLoading(true);
-    let result = await SecureStore.getItemAsync("token");
-    const body = { status: "cancel" };
-    await axios({
-      method: "put",
-      url:
-        "https://api.smai.com.vn/transaction/update-status?transactionId=" +
-        data._id,
-      data: body,
-      headers: {
-        Authorization: result,
-      },
-    })
-      .then((res) => {
-        Alert.alert("Thông báo", "Hủy thành công", [
-          {
-            text: "Có",
-            style: "cancel",
-            onPress: () => navigation.navigate("Home"),
-          },
-        ]);
-      })
-      .catch((error) => {
-        console.log("Error: ", error);
-      })
-      .finally(() => setIsLoading(false));
-  };
-  const cancelBtn = () => {
-    Alert.alert("Thông báo", "Bạn có chắc muốn hủy!", [
-      {
-        text: "Không",
-        style: "cancel",
-      },
-      {
-        text: "Có",
-        style: "cancel",
-        onPress: () => {cancel()},
-      },
-    ]);
+  const renderNote = () => {
+    if (
+      data.typetransaction == "Chưa nhận" ||
+      data.typetransaction == "Chưa tặng"
+    ) {
+      if (data.NoteReceiver == null) {
+        return <Text style={{ textAlign: "center" }}>Không có</Text>;
+      } else {
+        let avatarRe = checkAvatar(data.NoteReceiver);
+        let avatarFi = checkAvatar(data.NoteFinish);
+        return (
+          <NoteMessage
+            noteReceiver={data.NoteReceiver}
+            noteFinish={data.NoteFinish}
+            avatarRece={avatarRe}
+            avatarFin={avatarFi}
+          />
+        );
+      }
+    } else {
+      if (data.NoteReceiver == null && data.NoteFinish == null) {
+        return <Text style={{ textAlign: "center" }}>Không có</Text>;
+      } else {
+        let avatarRe = checkAvatar(data.NoteReceiver);
+        let avatarFi = checkAvatar(data.NoteFinish);
+        return (
+          <NoteMessage
+            noteReceiver={data.NoteReceiver}
+            noteFinish={data.NoteFinish}
+            avatarRece={avatarRe}
+            avatarFin={avatarFi}
+          />
+        );
+      }
+    }
   };
   const renderBottom = () => {
+    if (data.isStatus == "cancel") return;
     if (data.isStatus != "done") {
       return (
         <View style={styles.wrapButton}>
           <TouchableOpacity
             style={styles.wrapCancel}
-            onPress={() => cancelBtn()}
+            onPress={() => setIsShowCancel(true)}
           >
             <Text style={styles.textCancel}>Hủy</Text>
           </TouchableOpacity>
@@ -281,7 +304,7 @@ function DetailConnectPost(props) {
                 >
                   <Text style={styles.textTypeUser}>Cá nhân</Text>
                   <TouchableOpacity
-                    onPress={() => dialCall(data.ReceiverUser.PhoneNumber)}
+                    onPress={() => checkPhone()}
                   >
                     <Feather
                       name="phone-call"
@@ -334,7 +357,7 @@ function DetailConnectPost(props) {
                   <View style={styles.wrapTime}>
                     <Feather name="clock" size={width * 0.04} color="gray" />
                     <Text style={styles.time}>
-                      {renderTime(data.PostData.createdAt)}
+                      {renderTime(data.PostData.updatedAt)}
                     </Text>
                   </View>
                 </View>
@@ -345,14 +368,12 @@ function DetailConnectPost(props) {
         <View style={styles.wrapNote}>
           <Text style={styles.textTitle}>Ghi chú</Text>
           <Text style={styles.note}>{data.note}</Text>
-          <Text style={styles.time2}>
-            {renderTime(data.PostData.createdAt)}
-          </Text>
+          <Text style={styles.time2}>{renderTime(data.updatedAt)}</Text>
         </View>
       </View>
       <View style={styles.wrapFollow}>
         <Text style={styles.textTitle}>THEO DÕI</Text>
-        <Text style={{ textAlign: "center" }}>Không có</Text>
+        {renderNote()}
       </View>
       <ModalDetailPost
         show={isShowModel}
@@ -373,7 +394,18 @@ function DetailConnectPost(props) {
         navigation={navigation}
         titleModal="Xác nhận xong"
         titleBtn="Xong"
+        nameNote="notefinish"
         status="done"
+      />
+      <ModalGiveFor
+        show={isShowCancel}
+        onPressClose={() => setIsShow(false)}
+        idTrans={data._id}
+        navigation={navigation}
+        titleModal="Xác nhận hủy"
+        titleBtn="Hủy"
+        nameNote="notefinish"
+        status="cancel"
       />
       {renderBottom()}
     </ScrollView>
@@ -418,10 +450,10 @@ const styles = StyleSheet.create({
   wrapButton: {
     justifyContent: "space-between",
     alignItems: "center",
-    paddingVertical: 5,
     backgroundColor: "#e5e5e5",
     flexDirection: "row",
-    paddingHorizontal: "5%",
+    paddingLeft: "4%",
+    paddingRight: "2%",
   },
   note: {
     fontSize: config.fontsize_3,
@@ -454,15 +486,15 @@ const styles = StyleSheet.create({
   },
   textId: {
     fontFamily: "OpenSans_600SemiBold",
-    fontSize: config.fontsize_5,
+    fontSize: config.fontsize_3,
     color: "gray",
   },
   styleId: {
     fontFamily: "OpenSans_600SemiBold",
-    fontSize: config.fontsize_2,
+    fontSize: config.fontsize_3,
   },
   textCopy: {
-    fontSize: config.fontsize_5,
+    fontSize: config.fontsize_3,
     color: "#26c6da",
   },
   wrapPerson: {
@@ -496,6 +528,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#fff",
     borderColor: "gray",
+    paddingBottom: "4%",
   },
   wrapTopInfo: {
     alignItems: "center",

@@ -87,14 +87,23 @@ function Connection(props) {
   const flatlistRef = useRef(null);
   useEffect(() => {
     getConnectPostDS();
-    const willFocusSubscription = props.navigation.addListener("focus", () => {
-      getConnectPostDS();
-    });
-
-    return willFocusSubscription;
   }, [props.reloadPost]);
+  useEffect(() => {
+    if (props.reloadPost == "yes") {
+      getConnectPostDS();
+    }
+  }, []);
   const getConnectPostDS = async () => {
     if (props.auth.isLogin == true) {
+      const array = [...listitem];
+    array.map((value, index) => {
+      if (index == 0) {
+        value.checked = true;
+      } else {
+        value.checked = false;
+      }
+    });
+    setListItem(array);
       let result = await SecureStore.getItemAsync("token");
       await axios({
         method: "get",
@@ -275,6 +284,7 @@ function Connection(props) {
     );
   };
   const pressItem = (item) => {
+
     if (
       item.typetransaction == "Đã nhận" ||
       item.typetransaction == "Chưa nhận" ||

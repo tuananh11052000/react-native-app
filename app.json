@@ -3,9 +3,9 @@
     "name": "Smai",
     "version": "1.0.0",
     "slug": "Smai",
-    "icon": "./assets/iconsmai.png",
+    "icon": "./assets/iconapp.png",
     "notification":{
-      "icon":"./assets/iconsmai.png"
+      "icon":"./assets/iconapp.png"
     },
     "splash": {
       "image": "./assets/splashsmai.png",
@@ -23,8 +23,9 @@
     "android": {
       "package": "com.smai",
       "versionCode": 1,
+      "googleServicesFile": "./google-services.json",
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
+        "foregroundImage": "./assets/iconapp.png",
         "backgroundColor": "#FFFFFF"
       },
       "useNextNotificationsApi": true

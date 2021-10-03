@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "432702242502",
+    "project_id": "smai-80229",
+    "storage_bucket": "smai-80229.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:432702242502:android:3b2d9fdcc8a48de47521c7",
+        "android_client_info": {
+          "package_name": "com.smai"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "432702242502-fvhakia2q57nrsgm8i8k02pbubmljr7u.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.smai",
+            "certificate_hash": "dd552dad844c41c898e28c94326f9fc2c030b36a"
+          }
+        },
+        {
+          "client_id": "432702242502-evork61psj5nd1qbpn2dhtk4daj3ve9h.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB8Tn7gm3hMeWo2U-hj_zTRCVDm5eroXCo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "432702242502-evork61psj5nd1qbpn2dhtk4daj3ve9h.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

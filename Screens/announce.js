@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from "react";
 import { SafeAreaView } from "react-native";
 import { connect } from "react-redux";
@@ -46,7 +47,7 @@ function Announce(props) {
       })
         .then((res) => {
           setData(res.data.data.data);
-          console.log(res.data.data.data);
+          // console.log(res.data.data.data);
         })
         .catch((error) => {
           console.log("Error: ", error);

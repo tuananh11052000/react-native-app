@@ -58,6 +58,11 @@ function NameAndAddress(props) {
   const [showModelAddress, setshowModelAddress] = useState(false);
   const {dispatch} = props;
   useEffect(() => {
+    // if (props.infoPost.address.indexOf("null") == -1) {
+    //   setFullAddress("")
+    // } else {
+    //   setFullAddress(props.infoPost.address)
+    // }
     const getAddress = async () => {
       let province = await SecureStore.getItemAsync("province");
       let district = await SecureStore.getItemAsync("district");
@@ -71,10 +76,14 @@ function NameAndAddress(props) {
       };
     };
     getAddress().then((result) => {
-      if (result) {
+      // console.log(result)
+      if (result.province != null) {
+        console.log("u are here")
         let fulladdr = result.addressDetail + ", "+ result.commune + ", " + result.district + ", "+ result.province;
         setFullAddress(fulladdr);
         dispatch({ type: "CONFIRM_ADDRESS", address: fulladdr });
+      } else {
+        setFullAddress("");
       }
     });
     const getAvtFunc = async () => {

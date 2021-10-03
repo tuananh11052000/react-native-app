@@ -20,7 +20,8 @@ function Completed(props) {
         </View>
       );
     }
-    if (props.redirectComplete == "LOINHAN") { // lời nhắn ở mục tin đăng của mình
+    if (props.redirectComplete == "LOINHAN") {
+      // lời nhắn ở mục tin đăng của mình
       return (
         <View style={styles.wrapText}>
           <Text style={styles.text1}>Gửi tặng thành công</Text>
@@ -29,7 +30,8 @@ function Completed(props) {
         </View>
       );
     }
-    if (props.redirectComplete == "CXD") { //lời nhắn đăng itn cần xin đồ
+    if (props.redirectComplete == "CXD") {
+      //lời nhắn đăng itn cần xin đồ
       return (
         <View style={styles.wrapText}>
           <Text style={styles.text1}>Gửi yêu cầu hỗ trợ thành công</Text>
@@ -37,7 +39,8 @@ function Completed(props) {
         </View>
       );
     }
-    if (props.redirectComplete == "LOINHAN_CXD") { // hoàn thành khi để lại lời nhắn ở tin đăng cần xin đồ
+    if (props.redirectComplete == "LOINHAN_CXD") {
+      // hoàn thành khi để lại lời nhắn ở tin đăng cần xin đồ
       return (
         <View style={styles.wrapText}>
           <Text style={styles.text1}>Gửi tặng thành công</Text>
@@ -45,8 +48,9 @@ function Completed(props) {
           <Text style={styles.text2}>Trân trọng!</Text>
         </View>
       );
-    } 
-    if (props.redirectComplete == "LOINHAN_TCD") { // hoàn thành khi để lại lời nhắn ở tin đăng tặng cộng đồng
+    }
+    if (props.redirectComplete == "LOINHAN_TCD") {
+      // hoàn thành khi để lại lời nhắn ở tin đăng tặng cộng đồng
       return (
         <View style={styles.wrapText}>
           <Text style={styles.text1}>Gửi lời nhắn thành công</Text>
@@ -54,6 +58,23 @@ function Completed(props) {
           <Text style={styles.text2}>Trân trọng!</Text>
         </View>
       );
+    }
+    if (props.redirectComplete == "LOINHAN_CANCEL") {
+      // hoàn thành khi để lại lời nhắn ở tin đăng tặng cộng đồng
+      return (
+        <View style={styles.wrapText}>
+          <Text style={styles.text1}>Hủy thành công</Text>
+        </View>
+      );
+    }
+  };
+  const pressComplete = () => {
+    if (props.redirectComplete == "LOINHAN") {
+      dispatch({ type: "setReload" });
+      navigation.navigate("connect");
+    } else {
+      dispatch({ type: "setReload" });
+      navigation.navigate("Home");
     }
   };
   return (
@@ -63,10 +84,7 @@ function Completed(props) {
         <TouchableOpacity
           activeOpacity={0.6}
           style={styles.buttonComplete}
-          onPress={() => {
-            dispatch({ type: "setReload" });
-            navigation.navigate("Home");
-          }}
+          onPress={() => pressComplete()}
         >
           <Text style={styles.textComplete}>Xong</Text>
         </TouchableOpacity>

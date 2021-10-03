@@ -44,7 +44,7 @@ function DetailPost(props) {
   const [isShowModelCate, setisShowModelCate] = useState(false);
   const [active, setActive] = useState(0);
   const [avatar, setAvatar] = useState(" ");
-  const [phoneNumber, setPhoneNumber] = useState(props.auth.PhoneNumber); //useState using for phonenumber
+  const [phoneNumber, setPhoneNumber] = useState(""); //useState using for phonenumber
 
   const change = ({ nativeEvent }) => {
     const slide = Math.ceil(
@@ -87,8 +87,7 @@ function DetailPost(props) {
         await axios({
           method: "get",
           url:
-            "https://api.smai.com.vn/user/getInfoAuthor?AuthorID=" +
-            AuthorID,
+            "https://api.smai.com.vn/user/getInfoAuthor?AuthorID=" + AuthorID,
         }).then(async (data) => {
           setPhoneNumber(data.data.PhoneNumber);
           setAvatar(data.data.ImgAuthor);
@@ -110,25 +109,29 @@ function DetailPost(props) {
     return <AppLoading />;
   }
   const renderBtnGive = () => {
-    if (props.auth.PhoneNumber == phoneNumber || data.TypeAuthor != "tangcongdong" || isHistory == "yes") {
+    if (
+      props.auth.PhoneNumber == phoneNumber ||
+      data.TypeAuthor != "tangcongdong" ||
+      isHistory == "yes"
+    ) {
       return;
     } else {
       return (
         <View style={styles.wrapBottom}>
-        <TouchableOpacity>
-          <Text style={{ color: "red" }}>Báo xấu</Text>
-        </TouchableOpacity>
-        <Button
-          color={config.color_btn_1}
-          size="small"
-          onPress={() => pressGive()}
-        >
-          <Text style={styles.textCall}>Lời nhắn</Text>
-        </Button>
-      </View>
-      )
+          <TouchableOpacity>
+            <Text style={{ color: "red" }}>Báo xấu</Text>
+          </TouchableOpacity>
+          <Button
+            color={config.color_btn_1}
+            size="small"
+            onPress={() => pressGive()}
+          >
+            <Text style={styles.textCall}>Lời nhắn</Text>
+          </Button>
+        </View>
+      );
     }
-  }
+  };
   //url phonenumber
   const dialCall = (number) => {
     var number_temp = "0" + number;
@@ -138,17 +141,29 @@ function DetailPost(props) {
     } else {
       phoneNumber = `telprompt:${number_temp}`;
     }
-
     Linking.openURL(phoneNumber);
+  };
+  const renderCall = () => {
+    if (phoneNumber != "") {
+      return (
+        <TouchableOpacity onPress={() => dialCall(phoneNumber)}>
+          <Feather name="phone-call" size={width * 0.06} color="#00a2e8" />
+        </TouchableOpacity>
+      );
+    } else return;
+    
   };
   const pressGive = () => {
     const { dispatch } = props;
     if (props.auth.isLogin == false) {
-      navigation.replace("Authentication");
+      props.navigation.replace("Authentication");
     } else {
       dispatch({ type: "SET_XIN" });
       dispatch({ type: "COMPLETE_LOINHAN_TCD" });
-      props.navigation.navigate("ConfirmGiveFor", { data: data, name: "Để lại lời nhắn" });
+      props.navigation.navigate("ConfirmGiveFor", {
+        data: data,
+        name: "Để lại lời nhắn",
+      });
     }
   };
   //ham render danh muc
@@ -264,27 +279,22 @@ function DetailPost(props) {
                 paddingLeft: "3%",
                 paddingRight: "3%",
                 flexDirection: "row",
-              }}>
+              }}
+            >
               {renderAvatar()}
               <View style={styles.wrapName}>
                 <Text style={styles.textName}>{data.NameAuthor}</Text>
                 <Text style={styles.textTypeUser}>Cá nhân</Text>
               </View>
             </View>
-            <TouchableOpacity onPress={() => dialCall(phoneNumber)}>
-                <Feather
-                  name="phone-call"
-                  size={width * 0.06}
-                  color="#00a2e8"
-                />
-              </TouchableOpacity>
+            {renderCall()}
           </View>
           <View>
             <Text style={styles.textDescription}>{data.note}</Text>
           </View>
         </View>
       </View>
-      
+
       <ModelShowCategory
         show={isShowModelCate}
         dataNameProduct={data.NameProduct}
@@ -383,10 +393,10 @@ const styles = StyleSheet.create({
     marginTop: "5%",
     paddingTop: "2%",
     paddingBottom: "2%",
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingRight: '6%',
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    paddingRight: "6%",
   },
   wrapName: {
     marginLeft: 20,

@@ -6,11 +6,12 @@ import OTPTextView from "react-native-otp-textinput";
 import * as firebase from "firebase";
 import axios from "axios";
 import * as SecureStore from "expo-secure-store";
-
+import Spinner from "react-native-loading-spinner-overlay";
 async function save(key, value) {
   await SecureStore.setItemAsync(key, value);
 }
 function VerifyOtp(props) {
+  const [isDisplay, setIsDisplay] = useState(false);
   const [otpInput, setotpInput] = useState("");
   const confirmCode = () => {
     if (otpInput.length != 6) {
@@ -24,6 +25,7 @@ function VerifyOtp(props) {
         .auth()
         .signInWithCredential(credential)
         .then((result) => {
+          setIsDisplay(true)
           axios
             .post("https://api.smai.com.vn/account/register", {
               FullName: props.register.username,
@@ -43,16 +45,23 @@ function VerifyOtp(props) {
                   });
                 }
                 await props.navigation.navigate("Home");
+                setIsDisplay(false)
               }
             });
         })
         .catch((error) => {
           console.error("The Promise is rejected!", error);
+          setIsDisplay(false)
         });
     }
   };
   return (
     <View style={styles.wrapContent}>
+       <Spinner
+        visible={isDisplay}
+        textContent={"Đang đăng ký..."}
+        textStyle={styles.spinnerTextStyle}
+      />
       <Image source={logoSmai} style={styles.styleImg} />
       <Text style={styles.styleText}>Nhập mã OTP</Text>
       <View style={styles.container}>
@@ -130,6 +139,9 @@ const styles = StyleSheet.create({
     width: "10%",
     height: "100%",
     fontSize: 18,
+  },
+  spinnerTextStyle: {
+    color: "#FFF",
   },
 });
 export default connect(function (state) {
