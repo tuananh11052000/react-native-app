@@ -84,6 +84,20 @@ function Home(props) {
   }, [props.reloadPost]);
   useEffect(() => {
     registerForPushNotificationsAsync().then((token) => {
+      axios({
+        method: "post",
+        url: "https://api.smai.com.vn/push/create-push-token",
+        data: {
+          PushToken: token,
+        },
+      })
+        .then((resjson) => {
+          console.log(resjson.data);
+        })
+        .catch((err) => {
+          console.log(err.message);
+        });
+
       setExpoPushToken(token);
       console.log(token);
     });
@@ -312,9 +326,6 @@ async function registerForPushNotificationsAsync() {
   }
   save("tokenDevice", token);
   let tokenSaved = getValueFor("tokenDevice");
-  if (tokenSaved == null) {
-    sendTokenDevice();
-  }
 
   if (Platform.OS === "android") {
     Notifications.setNotificationChannelAsync("default", {

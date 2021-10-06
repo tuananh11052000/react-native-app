@@ -31,6 +31,7 @@ import {
 function AnnounceComponent(props) {
   const { dispatch } = props;
   const [dataItem, setDataItem] = useState();
+  const [loadingPost, setLoadingPost] = useState(false);
   const calculatingTime = (d1, d2) => {
     d1 = new Date(d1);
     const calMinute = () => {
@@ -68,10 +69,10 @@ function AnnounceComponent(props) {
   const currentTime = new Date();
   useEffect(() => {
     getTrans();
-  });
+  }, []);
   const getTrans = async () => {
     let token = await SecureStore.getItemAsync("token");
-
+    setLoadingPost(true)
     await axios({
       method: "get",
       url:
@@ -84,9 +85,11 @@ function AnnounceComponent(props) {
       .then((res) => {
         setDataItem(res.data.data.data);
         // console.log(res.data.data.data);
+        setLoadingPost(false)
       })
       .catch((error) => {
         console.log("Error: ", error);
+        setLoadingPost(false)
       });
   };
   const updateStatus = async () => {
@@ -101,12 +104,13 @@ function AnnounceComponent(props) {
       },
     })
       .then((res) => {
-        console.log(res);
+        // console.log(res);
       })
       .catch((error) => {
         console.log("Error: ", error);
       });
   };
+
   const handlePress = (item) => {
     if (dataItem != null) {
       updateStatus();
@@ -135,31 +139,49 @@ function AnnounceComponent(props) {
     }
   };
   return (
-    <TouchableOpacity
-      style={styles.card}
-      onPress={() => {
-        handlePress(dataItem[0].typetransaction);
-      }}
-    >
-      <View style={styles.topCard}>
-        <View style={{flexDirection: 'row', maxWidth: "70%", justifyContent: 'center', alignItems: 'center'}}>
-        <AntDesign name="filetext1" size={width * 0.03} color="black" />
-          <Text style={[styles.textTop, {  }]}>
-            {" "}
-            {props.bodyNotification}
-          </Text>
-          <Badge
-            style={props.examined ? styles.badgeActive : styles.badgeNoActive}
-            size={width * 0.02}
-          ></Badge>
+    <>
+      {loadingPost ? (
+        <View style={styles.loadingCard}>
+          <View style={styles.loadingTopCard}></View>
+          <View style={styles.loadingBottomCard}></View>
         </View>
+      ) : (
+        <TouchableOpacity
+          style={styles.card}
+          onPress={() => {
+            handlePress(dataItem[0].typetransaction);
+          }}
+        >
+          <View style={styles.topCard}>
+            <View
+              style={{
+                flexDirection: "row",
+                maxWidth: "70%",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <AntDesign name="filetext1" size={width * 0.03} color="black" />
+              <Text style={[styles.textTop, {}]}>
+                {" "}
+                {props.bodyNotification}
+              </Text>
+              <Badge
+                style={
+                  props.examined ? styles.badgeActive : styles.badgeNoActive
+                }
+                size={width * 0.02}
+              ></Badge>
+            </View>
 
-        <Text style={styles.textTop}>
-          {calculatingTime(props.updatedAt, currentTime)}
-        </Text>
-      </View>
-      <Text style={styles.textTitle}>{props.titleNotification}</Text>
-    </TouchableOpacity>
+            <Text style={styles.textTop}>
+              {calculatingTime(props.updatedAt, currentTime)}
+            </Text>
+          </View>
+          <Text style={styles.textTitle}>{props.titleNotification}</Text>
+        </TouchableOpacity>
+      )}
+    </>
   );
 }
 
@@ -199,8 +221,46 @@ const styles = StyleSheet.create({
     fontSize: config.fontsize_3,
     fontFamily: "OpenSans_400Regular",
   },
-  badgeActive: { backgroundColor: "green", position: 'absolute', top: 7, right: -20 },
-  badgeNoActive:{ backgroundColor: "red", position: 'absolute', top: 7, right: -20 }
+  badgeActive: {
+    backgroundColor: "green",
+    position: "absolute",
+    top: 7,
+    right: -20,
+  },
+  badgeNoActive: {
+    backgroundColor: "red",
+    position: "absolute",
+    top: 7,
+    right: -20,
+  },
+  loadingCard: {
+    borderRadius: 10,
+    padding: "2%",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.23,
+    shadowRadius: 2.62,
+    margin: "2%",
+    backgroundColor: "#FFF",
+    elevation: 4,
+    flexDirection: "column",
+  },
+  loadingTopCard: {
+    backgroundColor: "#EEF1EE",
+    maxWidth: "70%",
+    borderRadius: 10,
+    marginBottom: "2%",
+    height: 10,
+  },
+  loadingBottomCard: {
+    backgroundColor: "#EEF1EE",
+    maxWidth: "90%",
+    height: 10,
+    borderRadius: 10,
+  },
 });
 export default connect(function (state) {
   return {

@@ -29,7 +29,7 @@ function Description(props) {
   const { navigation } = props;
   return (
     <View style={styles.container}>
-      <TitleDetail onPress={() => navigation.navigate('Chọn ảnh')}></TitleDetail>
+      <TitleDetail onPress={() => navigation.navigate('Chọn ảnh')} ></TitleDetail>
       <ButtonConfirm onPress={() => onPressFunc()} textBtn="Tiếp theo"/>
     </View>
   );

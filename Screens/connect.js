@@ -92,7 +92,7 @@ function Connection(props) {
     if (props.reloadPost == "yes") {
       getConnectPostDS();
     }
-  }, []);
+  }, [props.reloadPost]);
   const getConnectPostDS = async () => {
     if (props.auth.isLogin == true) {
       const array = [...listitem];

@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { connect } from 'react-redux'
 import { StyleSheet, View, Text, TouchableOpacity, ActivityIndicator } from 'react-native';

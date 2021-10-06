@@ -41,7 +41,7 @@ export default function Message(props) {
   let noteFinish = props.noteFinish;
   const renderTime = (timeUTC) => {
     let time1 = new Date(timeUTC);
-    let hour = time1.getHours();
+    let hour = time1.getHours() ;
     let minute = time1.getMinutes();
     let day = time1.getUTCDate();
     let month1 = time1.getUTCMonth() + 1;

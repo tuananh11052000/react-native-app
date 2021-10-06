@@ -1,6 +1,6 @@
 import React, { useState, useRef } from "react";
 import { connect } from "react-redux";
-import { StyleSheet, Text, View, ScrollView } from "react-native";
+import { StyleSheet, Text, View, ScrollView, Alert } from "react-native";
 import { Button } from "galio-framework";
 import config from "../../config";
 import { TextInput } from "react-native-paper";
@@ -49,7 +49,7 @@ function SignUp(props) {
     //Check xem sddt đã tồn tại hay chưa
     if (data.phonenumber) {
       await axios
-        .post("https://smai-app-api.herokuapp.com/account/getPhone", {
+        .post("https://api.smai.com.vn/account/getPhone", {
           PhoneNumber: data.phonenumber,
         })
         .then(async (res) => {
@@ -71,7 +71,14 @@ function SignUp(props) {
             }
             props.navigation.navigate("VerifyOtps"); //chuyển trang
           } else {
-            alert("Số điện thoại đã tồn tại");
+        
+            Alert.alert(
+              "Thông báo",
+              "Số điện thoại đã tồn tại",
+              [
+                { text: "OK" }
+              ]
+            );
           }
         })
         .catch((err) => {
@@ -101,7 +108,10 @@ function SignUp(props) {
               />
             )}
             name="username"
-            rules={{ required: "Yêu cầu nhập đầy đủ họ và tên" }}
+            rules={{ required: "Yêu cầu nhập đầy đủ họ và tên", minLength: {
+              value: 3,
+              message: "Tên không hợp lệ",
+            }, }}
             defaultValue=""
           />
         </View>
@@ -171,7 +181,11 @@ function SignUp(props) {
               />
             )}
             name="password"
-            rules={{ required: "Yêu cầu nhập mật khẩu." }}
+            rules={{ required: "Yêu cầu nhập mật khẩu.", 
+            minLength: {
+              value: 6,
+              message: "Mật khẩu phải ít nhất 6 ký tự",
+            }, }}
             defaultValue=""
           />
         </View>
@@ -304,7 +318,7 @@ const styles = StyleSheet.create({
     fontFamily: "OpenSans_600SemiBold",
   },
   error: {
-    color: "#bf1650",
+    color: "red",
     alignSelf: "flex-start",
     fontFamily: "OpenSans_400Regular",
   },

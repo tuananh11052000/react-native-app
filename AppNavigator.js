@@ -46,6 +46,7 @@ import YouReceive from "./Screens/youReceive";
 import YouGiveTotal from "./Screens/youGiveTotal";
 import YouReceiveTotal from "./Screens/youReceiveTotal";
 import DetailConnectPost from "./Screens/detailConnectPost";
+
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
 
@@ -748,6 +749,7 @@ function AppNavigator(props) {
             },
           })}
         />
+  
       </Stack.Navigator>
     </NavigationContainer>
   );

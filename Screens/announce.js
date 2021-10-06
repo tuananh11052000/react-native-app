@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from "react";
 import { SafeAreaView } from "react-native";
 import { connect } from "react-redux";
@@ -249,5 +248,6 @@ async function registerForPushNotificationsAsync() {
 
   return token;
 }
+
 
 */

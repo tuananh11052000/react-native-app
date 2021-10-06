@@ -13,6 +13,7 @@ async function save(key, value) {
 function VerifyOtp(props) {
   const [isDisplay, setIsDisplay] = useState(false);
   const [otpInput, setotpInput] = useState("");
+  let tokenDevice = SecureStore.getItemAsync("tokenDevice");
   const confirmCode = () => {
     if (otpInput.length != 6) {
       alert("Nhập đầy đủ 6 số");
@@ -42,6 +43,7 @@ function VerifyOtp(props) {
                     type: "SIGN_IN",
                     token: data.data.accessToken,
                     PhoneNumber: PhoneNumber,
+                    TokenDevice: tokenDevice
                   });
                 }
                 await props.navigation.navigate("Home");

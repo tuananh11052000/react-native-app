@@ -41,6 +41,7 @@ const height = width * 0.5;
 
 import * as SecureStore from "expo-secure-store";
 import NoteMessage from "../components/DetailConnectPost/noteFollow";
+
 function DetailConnectPost(props) {
   const { navigation } = props;
   let data = props.route.params.data; // data from list
@@ -74,6 +75,20 @@ function DetailConnectPost(props) {
   if (!fontsLoaded) {
     return <AppLoading />;
   }
+  const  checkSender = () => {
+      if (
+        (typePost == "gui" && data.PostData.TypeAuthor == "tangcongdong") ||
+        (typePost == "nhan" && data.PostData.TypeAuthor != "tangcongdong")
+      ) {
+        return "xin";
+      }
+      if (
+        (typePost == "gui" && data.PostData.TypeAuthor != "tangcongdong") ||
+        (typePost == "nhan" && data.PostData.TypeAuthor == "tangcongdong")
+      ) {
+        return "cho";
+      }
+  }
   const renderName = () => {
     let nameReceive = data.SenderUser[0].FullName;
     let nameGive = data.PostData.NameAuthor;
@@ -91,10 +106,11 @@ function DetailConnectPost(props) {
     }
   };
   const renderAddress = () => {
-    if (typePost == "gui") {
+    let temp  = checkSender();
+    if (temp == "xin") {
       return data.SenderAddress;
     }
-    if (typePost == "nhan") {
+    if (temp == "cho") {
       return data.PostData.address;
     }
   };
@@ -120,10 +136,12 @@ function DetailConnectPost(props) {
   }
   //Ham render avatar
   const renderAvatar = () => {
+    let temp  = checkSender();
     let avatar;
-    if (typePost == "nhan") {
+    if (temp == "cho") {
       avatar = data.ReceiverUser[0].urlIamge;
-    } else {
+    } 
+    if (temp == "xin") {
       avatar = data.SenderUser[0].urlIamge;
     }
     if (avatar != null)
@@ -399,7 +417,7 @@ function DetailConnectPost(props) {
       />
       <ModalGiveFor
         show={isShowCancel}
-        onPressClose={() => setIsShow(false)}
+        onPressClose={() => setIsShowCancel(false)}
         idTrans={data._id}
         navigation={navigation}
         titleModal="Xác nhận hủy"

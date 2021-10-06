@@ -3,9 +3,12 @@
     "name": "Smai",
     "version": "1.0.0",
     "slug": "Smai",
-    "icon": "./assets/iconapp.png",
+    "icon": "./assets/icon1.png",
     "notification":{
-      "icon":"./assets/iconapp.png"
+      "icon":"./assets/icon1.png",
+      "color": "#FFF",
+      "iosDisplayInForeground": true,
+      "androidMode": "default"
     },
     "splash": {
       "image": "./assets/splashsmai.png",
@@ -23,12 +26,16 @@
     "android": {
       "package": "com.smai",
       "versionCode": 1,
+      "permissions": ["NOTIFICATIONS", "USER_FACING_NOTIFICATIONS", "CAMERA", 
+        "CAMERA_ROLL",
+         "WRITE_EXTERNAL_STORAGE",
+        "READ_EXTERNAL_STORAGE"],
+      "useNextNotificationsApi": true,
       "googleServicesFile": "./google-services.json",
-      "adaptiveIcon": {
-        "foregroundImage": "./assets/iconapp.png",
-        "backgroundColor": "#FFFFFF"
-      },
-      "useNextNotificationsApi": true
+      "adaptiveIcon": { 
+        "foregroundImage": "./assets/icon1.png",
+        "backgroundColor": "#FFF" 
+      }
     }
     
   }

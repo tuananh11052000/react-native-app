@@ -56,7 +56,10 @@ function newPassword(props) {
               />
             )}
             name="password"
-            rules={{ required: "Yêu cầu nhập mật khẩu." }}
+            rules={{ required: "Yêu cầu nhập mật khẩu.", minLength: {
+              value: 6,
+              message: "Mật khẩu phải ít nhất 6 ký tự",
+            }, }}
             defaultValue=""
           />
         </View>
@@ -183,7 +186,7 @@ const styles = StyleSheet.create({
     fontFamily: "OpenSans_600SemiBold",
   },
   error: {
-    color: "#bf1650",
+    color: "red",
     alignSelf: "flex-start",
   },
 });

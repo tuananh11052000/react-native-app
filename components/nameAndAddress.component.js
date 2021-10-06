@@ -41,6 +41,9 @@ import { connect } from "react-redux";
 import * as SecureStore from "expo-secure-store";
 import PriorityImg from "../assets/priority_preview.png";
 import ModalDetailAddress from "./ModalDetailAddress";
+import { BottomSheet } from "react-native-elements";
+import ModalCamera from "./ModalCamera";
+var { width } = Dimensions.get("window");
 async function save(key, value) {
   await SecureStore.setItemAsync(key, value);
 }
@@ -48,7 +51,7 @@ async function getValueFor(key) {
   let result = await SecureStore.getItemAsync(key);
   if (result) {
     return result;
-  } 
+  }
   return "";
 }
 function NameAndAddress(props) {
@@ -56,7 +59,11 @@ function NameAndAddress(props) {
   const [fullAddress, setFullAddress] = useState(props.infoPost.address);
   const [text, settext] = useState("");
   const [showModelAddress, setshowModelAddress] = useState(false);
-  const {dispatch} = props;
+  const [isVisible, setIsVisible] = useState(false);
+  const [isShow, setIsShow] = useState(false);
+  const { dispatch } = props;
+  let sender = props.sender;
+
   useEffect(() => {
     // if (props.infoPost.address.indexOf("null") == -1) {
     //   setFullAddress("")
@@ -78,8 +85,15 @@ function NameAndAddress(props) {
     getAddress().then((result) => {
       // console.log(result)
       if (result.province != null) {
-        console.log("u are here")
-        let fulladdr = result.addressDetail + ", "+ result.commune + ", " + result.district + ", "+ result.province;
+        console.log("u are here");
+        let fulladdr =
+          result.addressDetail +
+          ", " +
+          result.commune +
+          ", " +
+          result.district +
+          ", " +
+          result.province;
         setFullAddress(fulladdr);
         dispatch({ type: "CONFIRM_ADDRESS", address: fulladdr });
       } else {
@@ -96,7 +110,7 @@ function NameAndAddress(props) {
   }, [props.infoPost.address]);
   const renderIMG = () => {
     if (props.infoPost.image) {
-      return props.infoPost.image.map((img) => {
+      return props.infoPost.image.map((img, index) => {
         return (
           <Image
             source={{ uri: img.uri }}
@@ -107,16 +121,28 @@ function NameAndAddress(props) {
       });
     }
   };
+
+  const handleImage = () => {
+    setIsVisible(true);
+  };
+  const handleCamera = () => {
+    setIsVisible(false);
+    setIsShow(true);
+  };
+  const doneCamera = () => {
+    setIsShow(false);
+  };
   const handleTextChange = (text) => {
-    settext(text); dispatch({ type: "GET_NOTE_TRANSAC", noteTransac: text })
-  }
+    settext(text);
+    dispatch({ type: "GET_NOTE_TRANSAC", noteTransac: text });
+  };
   return (
     <ScrollView style={styles.container}>
       <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
         <View style={styles.container}>
           <View style={styles.wrapTop}>
             <View style={styles.wrapTitle}>
-              <Text style={styles.title}>NGƯỜI TẶNG</Text>
+              <Text style={styles.title}>{sender}</Text>
             </View>
             <View style={styles.wrapName}>
               <Text style={styles.name}>
@@ -147,7 +173,9 @@ function NameAndAddress(props) {
                 </Text>
               </View>
               <TextInput
-                onChangeText={(text) => {handleTextChange(text)}}
+                onChangeText={(text) => {
+                  handleTextChange(text);
+                }}
                 placeholder="Nhập lời nhắn hoặc mô tả"
                 editable={true}
                 maxLength={200}
@@ -157,18 +185,25 @@ function NameAndAddress(props) {
                 style={styles.input}
               />
             </View>
-            <View style={styles.wrapTitleDescript}>
-              <Text style={styles.titleDescript}>Hình ảnh (tối đa 5 hình)</Text>
+            <View>
+              <Text
+                style={{
+                  fontFamily: "OpenSans_400Regular",
+                  fontSize: config.fontsize_3,
+                  marginTop: "2%",
+                  marginBottom: "2%",
+                  color: "#7F7E85",
+                }}
+              >
+                Hình ảnh (tối đa 5 hình ảnh)
+              </Text>
+
               <ScrollView horizontal={true}>
                 <TouchableOpacity
                   style={styles.borderUpload}
-                  onPress={() => props.onPress()}
+                  onPress={() => handleImage()}
                 >
-                  <MaterialIcons
-                    name="add-photo-alternate"
-                    size={70}
-                    color="#B1B1B1"
-                  />
+                  <AntDesign name="clouduploado" size={70} color="#B1B1B1" />
                 </TouchableOpacity>
                 {renderIMG()}
               </ScrollView>
@@ -191,6 +226,49 @@ function NameAndAddress(props) {
               xác nhận, gửi đồ cho bạn.
             </Text>
           </View>
+          <BottomSheet
+            isVisible={isVisible}
+            containerStyle={{ backgroundColor: "rgba(0.5, 0.25, 0, 0.2)" }}
+          >
+            <View style={{padding: '2%', backgroundColor: '#BCBCBC'}}>
+              <View
+                style={{
+                  backgroundColor: "#FFF",
+                  borderRadius: 10
+                }}
+              >
+                <TouchableOpacity
+                  style={styles.itemBottomSheet}
+                  onPress={() => handleCamera()}
+                >
+                  <Text style={styles.textBottomSheet}>Camera</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={styles.itemBottomSheet}
+                  onPress={() => {
+                    setIsVisible(false);
+                    props.onPress();
+                  }}
+                >
+                  <Text style={styles.textBottomSheet}>Chọn ảnh</Text>
+                </TouchableOpacity>
+              </View>
+              <TouchableOpacity
+                onPress={() => setIsVisible(false)}
+                style={{ padding: "2%", backgroundColor: '#FFF', 
+                borderRadius: 10, marginTop: '2%' }}
+              >
+                <Text style={[styles.textBottomSheet, { color: "#077DFF" }]}>
+                  Hủy
+                </Text>
+              </TouchableOpacity>
+            </View>
+          </BottomSheet>
+          <ModalCamera
+            show={isShow}
+            close={() => setIsShow(false)}
+            doneCamera={() => doneCamera()}
+          />
         </View>
       </TouchableWithoutFeedback>
     </ScrollView>
@@ -303,7 +381,17 @@ const styles = StyleSheet.create({
     marginTop: "4%",
     borderRadius: 10,
   },
+  itemBottomSheet: {
+    padding: "2%",
+    borderBottomColor: "#DDDDDD",
+    borderBottomWidth: 0.5,
+    alignItems: 'center'
+  },
+  textBottomSheet: { 
+    fontSize: config.fontsize_5, 
+    textAlign: "center", 
+    color: '#077DFF' },
 });
 export default connect(function (state) {
-  return { infoPost: state.infoPost, auth: state.auth};
+  return { infoPost: state.infoPost, auth: state.auth };
 })(NameAndAddress);

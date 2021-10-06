@@ -204,7 +204,7 @@ function ProductGiveForComponent(props) {
       const { dispatch } = props;
       dispatch({ type: "SET_GUI" });
       dispatch({ type: "COMPLETE_LOINHAN_CXD" });
-      props.navigation.navigate("ConfirmGiveFor", { data: item, name: "Xác nhận gửi tặng" }); //chuyển trang
+      props.navigation.navigate("ConfirmGiveFor", { data: item, name: "Xác nhận gửi tặng", sender: "Người tặng" }); //chuyển trang
     } else {
       setIsShow(true);
  

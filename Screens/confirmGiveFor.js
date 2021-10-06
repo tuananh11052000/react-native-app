@@ -21,7 +21,7 @@ function ConfirmGiveFor(props) {
   const [isDisplay, setIsDisplay] = useState(false);
   const { dispatch, navigation } = props;
   let detailPost = props.route.params.data;
-
+  let sender = props.route.params.sender;
   const submitInfoPost = async () => {
     if (props.infoPost.noteTransac.trim() == "" || props.infoPost.address == "") {
       Alert.alert("Thông báo", "Vui lòng nhập đầy đủ thông tin", [
@@ -85,7 +85,7 @@ function ConfirmGiveFor(props) {
   }
   return (
     <SafeAreaView style={styles.container}>
-      <InforAddress onPress={() => navigation.navigate("Chọn ảnh")} />
+      <InforAddress onPress={() => navigation.navigate("Chọn ảnh")} sender={sender}/>
       <View style={{ backgroundColor: "#DDD" }}>
         {renderBtn()}
       </View>
