@@ -81,7 +81,7 @@ function Home(props) {
     checkTokenLocal();
     getData();
     return () => {};
-  }, [props.reloadPost]);
+  }, [props.auth.PhoneNumber]);
   useEffect(() => {
     registerForPushNotificationsAsync().then((token) => {
       axios({

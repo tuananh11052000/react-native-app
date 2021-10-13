@@ -9,7 +9,7 @@ import {
 import { Avatar } from "react-native-elements";
 
 import { connect } from "react-redux";
-import { MaterialIcons } from "@expo/vector-icons";
+import { MaterialIcons, EvilIcons } from "@expo/vector-icons";
 import config from "../../config";
 import * as SecureStore from "expo-secure-store";
 import { Button } from "react-native-elements";
@@ -88,12 +88,13 @@ function TopProfile(props) {
       if (props.auth.isLogin == true) {
         let avatar_ = props.profile.avatar;
         let Name = await SecureStore.getItemAsync("FullName");
-        getAvatar({ ...avatar, data: avatar_ });
+        let avatar = await SecureStore.getItemAsync("avatar");
+        getAvatar(avatar);
         getName(Name);
       }
     };
     getAvtFunc();
-  }, []);
+  }, [props.auth]);
   const renderOnloading = () => {
     if (isDisplay == true) {
       return (
@@ -121,7 +122,7 @@ function TopProfile(props) {
           <Avatar
             size={width*0.15}
             rounded
-            source={{ uri: avatar.data }}
+            source={{ uri: avatar }}
             containerStyle={styles.avatarContainer}
           ></Avatar>
           {renderOnloading()}
@@ -137,14 +138,7 @@ function TopProfile(props) {
     else
       return (
         <View>
-          <Avatar
-            size={70}
-            rounded
-            source={{
-              uri: "https://www.alliancerehabmed.com/wp-content/uploads/icon-avatar-default.png",
-            }}
-            containerStyle={styles.avatarContainer}
-          ></Avatar>
+          <EvilIcons name="user" size={width*0.1} color="#CCC" />
           {renderOnloading()}
           <Avatar.Accessory
             size={25}
@@ -159,7 +153,7 @@ function TopProfile(props) {
   if (props.auth.isLogin == false) {
     return (
       <View style={styles.wrapAll}>
-        <MaterialIcons name="account-circle" size={width*0.2} color="#BDBDBD" />
+        <MaterialIcons name="account-circle" size={width*0.15} color="#BDBDBD" />
         <View style={styles.login}>
           <Button
             onPress={props.onPress}

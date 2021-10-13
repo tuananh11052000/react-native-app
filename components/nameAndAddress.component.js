@@ -100,6 +100,9 @@ function NameAndAddress(props) {
         setFullAddress("");
       }
     });
+    
+  }, [props.infoPost.address]);
+  useEffect(() => {
     const getAvtFunc = async () => {
       if (props.auth.isLogin == true) {
         let Name = await SecureStore.getItemAsync("FullName");
@@ -107,7 +110,7 @@ function NameAndAddress(props) {
       }
     };
     getAvtFunc();
-  }, [props.infoPost.address]);
+  }, [props.auth])
   const renderIMG = () => {
     if (props.infoPost.image) {
       return props.infoPost.image.map((img, index) => {
