@@ -34,8 +34,8 @@ function Completed(props) {
       //lời nhắn đăng itn cần xin đồ
       return (
         <View style={styles.wrapText}>
-          <Text style={styles.text1}>Gửi yêu cầu hỗ trợ thành công</Text>
-          <Text style={styles.text2}>Vui lòng chờ xác thực</Text>
+          <Text style={styles.text1}>Đã tiếp nhận</Text>
+          <Text style={styles.text2}>Vui lòng chờ xác thực. Trân trọng!</Text>
         </View>
       );
     }
@@ -74,7 +74,7 @@ function Completed(props) {
       navigation.navigate("connect");
     } else {
       dispatch({ type: "setReload" });
-      navigation.navigate("Home");
+      navigation.navigate("Notifications");
     }
   };
   return (

@@ -192,7 +192,7 @@ function CategoryCheckBoxComponent(props) {
     } else {
       setAccordionData(CONTENT)
     }
-  }, []);
+  }, [dataCate]);
   //   if (Platform.OS === "android") {
   //     UIManager.setLayoutAnimationEnabledExperimental(true);
   //   }
@@ -310,7 +310,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#F5F5F5",
   },
   button: {
-    backgroundColor: '#E70910',
+    backgroundColor: config.color_btn_1,
     borderRadius: 5,
     padding: 5,
 },

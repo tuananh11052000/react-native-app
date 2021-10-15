@@ -75,7 +75,7 @@ export default function MedicalAdvise(props) {
           </View>
           <View style={styles.wrapCall}>
             <TouchableOpacity onPress={() => dialCall(item.PhoneNumber)}>
-              <Feather name="phone-call" size={width * 0.1} color="#00a2e8" />
+              <Feather name="phone-call" size={width * 0.05} color="#00a2e8" />
             </TouchableOpacity>
           </View>
         </View>
@@ -145,8 +145,8 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     padding: "2%",
     borderRadius: 50,
-    width: width * 0.15,
-    height: width * 0.15,
+    width: width * 0.1,
+    height: width * 0.1,
   },
   wrapPosition: {
     flexDirection: "row",

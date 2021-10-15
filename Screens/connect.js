@@ -45,13 +45,8 @@ const list = [
     checked: true,
   },
   {
-    title: "Đã nhận",
-    id: "1",
-    checked: false,
-  },
-  {
-    title: "Đã tặng",
-    id: "2",
+    title: "Chưa tặng",
+    id: "4",
     checked: false,
   },
   {
@@ -60,18 +55,23 @@ const list = [
     checked: false,
   },
   {
-    title: "Chưa tặng",
-    id: "4",
+    title: "Đã tặng",
+    id: "2",
     checked: false,
   },
   {
-    title: "Hủy nhận",
-    id: "5",
+    title: "Đã nhận",
+    id: "1",
     checked: false,
   },
   {
     title: "Hủy tặng",
     id: "6",
+    checked: false,
+  },
+  {
+    title: "Hủy nhận",
+    id: "5",
     checked: false,
   },
 ];

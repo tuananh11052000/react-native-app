@@ -11,6 +11,7 @@ import {
   TouchableOpacity,
 } from "react-native";
 import {
+  AntDesign,
   FontAwesome,
   EvilIcons,
   Entypo,
@@ -20,6 +21,7 @@ import {
   Feather,
 } from "@expo/vector-icons";
 import { Button } from "galio-framework";
+import ButtonConfirm from '../components/buttonConfirm.components';
 import config from "../config";
 import axios from "axios";
 import { connect } from "react-redux";
@@ -34,7 +36,6 @@ import {
   OpenSans_700Bold,
   OpenSans_700Bold_Italic,
 } from "@expo-google-fonts/open-sans";
-import { NavigationContext } from "react-navigation";
 
 const { width } = Dimensions.get("window");
 const height = width * 0.5;
@@ -119,15 +120,12 @@ function DetailPost(props) {
       return (
         <View style={styles.wrapBottom}>
           <TouchableOpacity>
-            <Text style={{ color: "red" }}>Báo xấu</Text>
+            <Text style={{ color: "red", fontSize: config.fontsize_5, marginLeft: '4%' }}>Báo xấu</Text>
           </TouchableOpacity>
-          <Button
-            color={config.color_btn_1}
-            size="small"
-            onPress={() => pressGive()}
-          >
-            <Text style={styles.textCall}>Lời nhắn</Text>
-          </Button>
+          <TouchableOpacity activeOpacity={0.6} style={styles.button} onPress={() => pressGive()}>
+              <AntDesign name="message1" size={width*0.05} color="#FFF" />
+              <Text style={styles.buttonText}> {" "}Lời nhắn</Text>
+          </TouchableOpacity>
         </View>
       );
     }
@@ -237,7 +235,7 @@ function DetailPost(props) {
       return (
         <View>
           <Avatar
-            size={70}
+            size={width*0.12}
             rounded
             source={{ uri: avatar }}
             containerStyle={styles.avatarContainer}
@@ -269,7 +267,7 @@ function DetailPost(props) {
           {renderCategory()}
           <View style={{ paddingLeft: "3%", paddingRight: "3%" }}>
             <Text style={styles.textAddress}>
-              <Entypo name="location" size={24} color="#DDD" /> {"  "}
+              <Entypo name="location" size={width*0.03} color="#DDD" /> {"  "}
               {data.address}
             </Text>
           </View>
@@ -425,6 +423,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
     padding: "2%",
+    backgroundColor: '#DDD',
   },
   textCall: {
     fontSize: config.fontsize_2,
@@ -437,6 +436,19 @@ const styles = StyleSheet.create({
     paddingRight: "4%",
     fontSize: config.fontsize_3,
   },
+  button: {
+    flexDirection: 'row',
+    backgroundColor: config.color_btn_1,
+    borderRadius: 5,
+    padding: '1.5%',
+    alignItems: 'center'
+},
+buttonText: {
+    color: '#FFF',
+    textAlign: 'center',
+    fontSize: config.fontsize_2,
+    fontFamily: "OpenSans_600SemiBold",
+}
 });
 export default connect(function (state) {
   return {

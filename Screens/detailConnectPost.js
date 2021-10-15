@@ -8,7 +8,9 @@ import {
   Dimensions,
   Linking,
   Alert,
-  TouchableOpacity,
+  TouchableOpacity, Clipboard,ToastAndroid,
+  Platform,
+  AlertIOS,
 } from "react-native";
 import {
   FontAwesome,
@@ -75,20 +77,20 @@ function DetailConnectPost(props) {
   if (!fontsLoaded) {
     return <AppLoading />;
   }
-  const  checkSender = () => {
-      if (
-        (typePost == "gui" && data.PostData.TypeAuthor == "tangcongdong") ||
-        (typePost == "nhan" && data.PostData.TypeAuthor != "tangcongdong")
-      ) {
-        return "xin";
-      }
-      if (
-        (typePost == "gui" && data.PostData.TypeAuthor != "tangcongdong") ||
-        (typePost == "nhan" && data.PostData.TypeAuthor == "tangcongdong")
-      ) {
-        return "cho";
-      }
-  }
+  const checkSender = () => {
+    if (
+      (typePost == "gui" && data.PostData.TypeAuthor == "tangcongdong") ||
+      (typePost == "nhan" && data.PostData.TypeAuthor != "tangcongdong")
+    ) {
+      return "xin";
+    }
+    if (
+      (typePost == "gui" && data.PostData.TypeAuthor != "tangcongdong") ||
+      (typePost == "nhan" && data.PostData.TypeAuthor == "tangcongdong")
+    ) {
+      return "cho";
+    }
+  };
   const renderName = () => {
     let nameReceive = data.SenderUser[0].FullName;
     let nameGive = data.PostData.NameAuthor;
@@ -106,7 +108,7 @@ function DetailConnectPost(props) {
     }
   };
   const renderAddress = () => {
-    let temp  = checkSender();
+    let temp = checkSender();
     if (temp == "xin") {
       return data.SenderAddress;
     }
@@ -114,6 +116,16 @@ function DetailConnectPost(props) {
       return data.PostData.address;
     }
   };
+  const copyToClipboard = async () => {
+    const text = await renderAddress();
+    await Clipboard.setString(text);
+    if (Platform.OS === 'android') {
+      await ToastAndroid.show("Đã sao chép", ToastAndroid.SHORT)
+    } else {
+      await AlertIOS.alert("Đã sao chép");
+    }
+  }
+
   //url phonenumber
   const dialCall = (number) => {
     var number_temp = "0" + number;
@@ -129,18 +141,18 @@ function DetailConnectPost(props) {
     let numberSend = "0" + data.SenderUser[0].PhoneNumber;
     let numberRecei = "0" + data.ReceiverUser[0].PhoneNumber;
     if (props.auth.PhoneNumber == numberSend) {
-      dialCall(numberRecei)
+      dialCall(numberRecei);
     } else {
-      dialCall(numberSend)
+      dialCall(numberSend);
     }
-  }
+  };
   //Ham render avatar
   const renderAvatar = () => {
-    let temp  = checkSender();
+    let temp = checkSender();
     let avatar;
     if (temp == "cho") {
       avatar = data.ReceiverUser[0].urlIamge;
-    } 
+    }
     if (temp == "xin") {
       avatar = data.SenderUser[0].urlIamge;
     }
@@ -148,7 +160,7 @@ function DetailConnectPost(props) {
       return (
         <View>
           <Avatar
-            size={50}
+            size={width*0.12}
             rounded
             source={{ uri: avatar }}
             containerStyle={styles.avatarContainer}
@@ -168,7 +180,7 @@ function DetailConnectPost(props) {
   };
   const renderId = () => {
     let id = data._id;
-    return id.slice(0, 13) + "...";
+    return id.slice(0, 20) + "...";
   };
 
   const renderTime = (timeUTC) => {
@@ -187,7 +199,11 @@ function DetailConnectPost(props) {
     if (item.length > 28) return item.slice(0, 28) + "...";
     else return item;
   };
-  
+  const renderChildTitle = (item) => {
+    item = item.charAt(0).toUpperCase() + item.slice(1);
+    if (item.length > 20) return item.slice(0, 20) + "...";
+    else return item;
+  };
 
   const checkAvatar = (note) => {
     let avatar;
@@ -296,7 +312,6 @@ function DetailConnectPost(props) {
           <Text style={styles.textId}>Mã số:</Text>
           <Text style={styles.styleId}>&ensp;{renderId()}</Text>
         </View>
-        <Text style={styles.textCopy}>Sao chép</Text>
       </View>
 
       <View style={styles.wrapPerson}>
@@ -321,9 +336,7 @@ function DetailConnectPost(props) {
                   }}
                 >
                   <Text style={styles.textTypeUser}>Cá nhân</Text>
-                  <TouchableOpacity
-                    onPress={() => checkPhone()}
-                  >
+                  <TouchableOpacity onPress={() => checkPhone()}>
                     <Feather
                       name="phone-call"
                       size={width * 0.05}
@@ -332,14 +345,18 @@ function DetailConnectPost(props) {
                   </TouchableOpacity>
                 </View>
               </View>
-              <View style={styles.wrapAddress}>
-                <Text style={styles.textAddress}>
-                  <Entypo name="location" size={width * 0.05} color="white" />{" "}
-                  {"  "}
-                  {renderAddress()}
-                </Text>
-              </View>
             </View>
+          </View>
+          <View style={styles.wrapAddress}>
+            <Text style={styles.textAddress}>
+              <Entypo name="location" size={width * 0.05} color="white" />
+              {"  "} 
+              {renderAddress()}
+              <TouchableOpacity onPress={() => copyToClipboard()}>
+                <Text style={styles.textCopy}>{"     "}Sao chép</Text>
+              </TouchableOpacity>
+            </Text>
+          
           </View>
         </View>
       </View>
@@ -367,7 +384,7 @@ function DetailConnectPost(props) {
 
                 <View style={styles.wrapTypePrice}>
                   <Text style={styles.type}>
-                    {renderTitle(data.PostData.title)}
+                    {renderChildTitle(data.PostData.title)}
                   </Text>
                   <Text style={styles.price}>Miễn phí</Text>
                 </View>
@@ -531,10 +548,12 @@ const styles = StyleSheet.create({
     fontFamily: "OpenSans_700Bold",
   },
   wrapAddress: {
-    paddingRight: "2%",
+    paddingLeft: "3%",
+    paddingRight: "3%",
     borderTopWidth: 0.2,
     borderColor: "gray",
     paddingTop: "2%",
+    flexDirection: 'row'
   },
   wrapInfoPost: {
     backgroundColor: "#e5e5e5",
@@ -564,8 +583,8 @@ const styles = StyleSheet.create({
     marginRight: "3%",
   },
   wrapProduct: {
-    borderWidth: 2,
-    borderColor: "#bab6b6",
+    borderWidth: 1,
+    borderColor: "#BDBDBD",
     margin: "3%",
     borderRadius: 10,
   },
@@ -611,6 +630,8 @@ const styles = StyleSheet.create({
     fontSize: config.fontsize_3,
     color: "gray",
     fontFamily: "OpenSans_400Regular",
+    width: "75%",
+    maxWidth: "75%",
   },
   wrapTimeAddress: {
     flexDirection: "row",

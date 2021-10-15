@@ -224,7 +224,7 @@ function Home(props) {
           onPressMedicalAdvise={() => actionOnPressMedicalAdvise()}
           style={styles.gift_component}
         />
-        <TitleComponent title="Tin đã đăng" />
+        <TitleComponent title="Khám phá" />
         <NewsedBox
           title="Tặng cộng đồng"
           onPress={() => navigation.navigate("PostDonation")}

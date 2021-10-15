@@ -44,16 +44,7 @@ import ModalDetailAddress from "./ModalDetailAddress";
 import { BottomSheet } from "react-native-elements";
 import ModalCamera from "./ModalCamera";
 var { width } = Dimensions.get("window");
-async function save(key, value) {
-  await SecureStore.setItemAsync(key, value);
-}
-async function getValueFor(key) {
-  let result = await SecureStore.getItemAsync(key);
-  if (result) {
-    return result;
-  }
-  return "";
-}
+
 function NameAndAddress(props) {
   const [FullName, getName] = useState("");
   const [fullAddress, setFullAddress] = useState(props.infoPost.address);
@@ -65,11 +56,6 @@ function NameAndAddress(props) {
   let sender = props.sender;
 
   useEffect(() => {
-    // if (props.infoPost.address.indexOf("null") == -1) {
-    //   setFullAddress("")
-    // } else {
-    //   setFullAddress(props.infoPost.address)
-    // }
     const getAddress = async () => {
       let province = await SecureStore.getItemAsync("province");
       let district = await SecureStore.getItemAsync("district");
@@ -181,10 +167,11 @@ function NameAndAddress(props) {
                 }}
                 placeholder="Nhập lời nhắn hoặc mô tả"
                 editable={true}
-                maxLength={200}
+                maxLength={140}
                 onSubmitEditing={Keyboard.dismiss}
                 multiline={true}
-                numberOfLines={4}
+                autoFocus={true}
+                numberOfLines={3}
                 style={styles.input}
               />
             </View>
@@ -206,7 +193,7 @@ function NameAndAddress(props) {
                   style={styles.borderUpload}
                   onPress={() => handleImage()}
                 >
-                  <AntDesign name="clouduploado" size={70} color="#B1B1B1" />
+                  <AntDesign name="clouduploado" size={width*0.15} color="#B1B1B1" />
                 </TouchableOpacity>
                 {renderIMG()}
               </ScrollView>
@@ -351,8 +338,8 @@ const styles = StyleSheet.create({
     borderWidth: 1,
   },
   borderUpload: {
-    width: 100,
-    height: 100,
+    width: width*0.2,
+    height: width*0.2,
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
@@ -378,8 +365,8 @@ const styles = StyleSheet.create({
     fontSize: config.fontsize_3,
   },
   imgUpload: {
-    height: 100,
-    width: 100,
+    height: width*0.2,
+    width: width*0.2,
     marginLeft: 5,
     marginTop: "4%",
     borderRadius: 10,

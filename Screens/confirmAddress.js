@@ -302,10 +302,10 @@ function confirmAddress(props) {
                 },
               }}
             />
+             <TouchableOpacity activeOpacity={0.6} style={Styles.button} onPress={() => pressFunc()}>
+                <Text style={Styles.buttonText}>Xác nhận</Text>
+            </TouchableOpacity> 
           </View>
-          <Button style={Styles.touchableButton} onPress={() => pressFunc()}>
-            <Text style={Styles.buttonConfirm}>Xác nhận</Text>
-          </Button>
         </View>
       </View>
     </TouchableWithoutFeedback>
@@ -313,6 +313,18 @@ function confirmAddress(props) {
 }
 
 const Styles = StyleSheet.create({
+  button: {
+    backgroundColor: config.color_btn_1,
+    borderRadius: 5,
+    margin: '4%',
+    padding: '1%'
+},
+buttonText: {
+    color: '#FFF',
+    textAlign: 'center',
+    fontSize: config.fontsize_2,
+    fontFamily: "OpenSans_600SemiBold",
+},
   inputAddress: {
     width: "95%",
   },

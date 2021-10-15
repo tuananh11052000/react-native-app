@@ -49,7 +49,7 @@ function ServiceCharity(props) {
     <View style={styles.container}>
       <NewPostType title="Tặng cộng đồng" onPress={() => actionOnPressTCD()} />
       <NewPostType
-        title="Tặng người khó khăn"
+        title="Tặng hoàn cảnh khó khăn"
         onPress={() => actionOnPressGiveCaNhan()}
       />
       <NewPostType

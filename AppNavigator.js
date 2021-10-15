@@ -98,7 +98,7 @@ function AppNavigator(props) {
           name="Category"
           component={Category}
           options={({ navigation }) => ({
-            title: "Danh mục ",
+            title: "Danh mục tặng",
             headerShown: true,
             headerStyle: {
               backgroundColor: config.color_header_background,
@@ -418,7 +418,20 @@ function AppNavigator(props) {
                 label="Quay lại" //back
               />
             ),
-            title: "Danh mục",
+            headerRight: () => (
+              <TouchableOpacity
+                style={styles.wrapTextCancel}
+                onPress={() => {    
+                  dispatch({ type: "SET_RESET" });   
+
+                  dispatch({ type: "RESET_NAMEPRODUCT" });
+                  dispatch({ type: "RESET_DATA" });
+                }}
+              >
+                <Text style={styles.textCancel}>Bỏ chọn</Text>
+              </TouchableOpacity>
+            ),
+            title: "Danh mục tặng",
             headerShown: true,
             headerStyle: {
               backgroundColor: config.color_header_background,
@@ -503,29 +516,7 @@ function AppNavigator(props) {
             headerTitleStyle: {
               fontWeight: "bold",
             },
-            headerRight: () => (
-              <TouchableOpacity
-                style={styles.wrapTextCancel}
-                onPress={() => {
-                  Alert.alert("Thông báo", "Bạn có chắc muốn hủy!", [
-                    {
-                      text: "Không",
-                      style: "cancel",
-                    },
-                    {
-                      text: "Có",
-                      style: "cancel",
-                      onPress: () => {
-                        dispatch({ type: "RESET_ADDRESS_FILTER" });
-                        navigation.navigate("Home");
-                      },
-                    },
-                  ]);
-                }}
-              >
-                <Text style={styles.textCancel}>Hủy</Text>
-              </TouchableOpacity>
-            ),
+            
           })}
         />
         <Stack.Screen
@@ -643,27 +634,6 @@ function AppNavigator(props) {
             headerTitleStyle: {
               fontWeight: "bold",
             },
-            headerRight: () => (
-              <TouchableOpacity
-                style={styles.wrapTextCancel}
-                onPress={() => {
-                  Alert.alert("Thông báo", "Bạn có chắc muốn hủy!", [
-                    {
-                      text: "Không",
-                      style: "cancel",
-                    },
-                    {
-                      text: "Có",
-                      style: "cancel",
-                      onPress: () => navigation.navigate("Home"),
-                      
-                    },
-                  ]);
-                }}
-              >
-                <Text style={styles.textCancel}>Hủy</Text>
-              </TouchableOpacity>
-            ),
             headerBackTitle: "Quay lại",
 
             headerLeft: () => (
@@ -767,5 +737,6 @@ const styles = StyleSheet.create({
 export default connect(function (state) {
   return { infoPost: state.infoPost, 
     dataCategory: state.dataCategory, 
+    resetCate: state.resetCate
   };
 })(AppNavigator);

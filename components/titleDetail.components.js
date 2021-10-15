@@ -9,14 +9,16 @@ import {
   Platform,
   Image,
   Dimensions,
-  TouchableWithoutFeedback
+  TouchableWithoutFeedback,
 } from "react-native";
 import { connect } from "react-redux";
-import { AntDesign } from "@expo/vector-icons";
+import { AntDesign, Feather } from "@expo/vector-icons";
 import config from "../config";
 import { BottomSheet } from "react-native-elements";
 import ModalCamera from "./ModalCamera";
-
+import ModalDetailAddress from "./ModalDetailAddress";
+import ModelShowCategory from './ModalShowCategorySelected.component';
+import * as SecureStore from "expo-secure-store";
 var { width } = Dimensions.get("window");
 
 const UselessTextInput = (props) => {
@@ -43,18 +45,66 @@ const titleDetail = (props) => {
   const [value, onChangeText] = useState(null);
   const [isVisible, setIsVisible] = useState(false);
   const [isShow, setIsShow] = useState(false);
+  const [FullName, getName] = useState("");
+  const [showModelAddress, setshowModelAddress] = useState(false);
+  const [fullAddress, setFullAddress] = useState(props.infoPost.address);
+  const [isShowModelCate, setisShowModelCate] = useState(false);
+  useEffect(() => {
+    const getAvtFunc = async () => {
+      if (props.auth.isLogin == true) {
+        let Name = await SecureStore.getItemAsync("FullName");
+        getName(Name);
+      }
+    };
+    getAvtFunc();
+  }, []);
+  useEffect(() => {
+    const getAddress = async () => {
+      let province = await SecureStore.getItemAsync("province");
+      let district = await SecureStore.getItemAsync("district");
+      let commune = await SecureStore.getItemAsync("commune");
+      let addressDetail = await SecureStore.getItemAsync("detail");
+      return {
+        province: province,
+        district: district,
+        commune: commune,
+        addressDetail: addressDetail,
+      };
+    };
+    getAddress().then((result) => {
+      // console.log(result)
+      if (result.province != null) {
+        console.log("u are here");
+        let fulladdr =
+          result.addressDetail +
+          ", " +
+          result.commune +
+          ", " +
+          result.district +
+          ", " +
+          result.province;
+        setFullAddress(fulladdr);
+        dispatch({ type: "CONFIRM_ADDRESS", address: fulladdr });
+      } else {
+        setFullAddress("");
+      }
+    });
+  }, [props.infoPost.address]);
   const renderIMG = () => {
     if (props.infoPost.image) {
       return props.infoPost.image.map((img, index) => {
         return (
-          <View>
-            <Image
-              source={{ uri: img.uri }}
-              key={img.uri}
-              style={styles.imgUpload}
-            />
-            <TouchableOpacity onPress={() => removeImage(index)} style={{position: 'absolute', right: 0, top: 0}}>
-              <AntDesign name="closecircle" size={width*0.05} color="#BDBDBD" />
+          <View key={index}>
+            <Image source={{ uri: img.uri }} style={styles.imgUpload} />
+            <TouchableOpacity
+              onPress={() => removeImage(index)}
+              style={{ position: "absolute", right: 0, top: 0 }}
+            >
+              <AntDesign
+                name="closecircle"
+                size={width * 0.05}
+                color="#BDBDBD"
+              />
             </TouchableOpacity>
           </View>
         );
@@ -77,108 +127,168 @@ const titleDetail = (props) => {
   const doneCamera = () => {
     setIsShow(false);
   };
-
+  const getTypeAuthor = () => {
+    if (props.infoPost.TypeAuthor == "Cá nhân") return "Hoàn cảnh khó khăn";
+    else return props.infoPost.TypeAuthor;
+  };
+  const renderInfor = () => {
+    if (props.infoPost.TypeAuthor == "tangcongdong") {
+      return (
+        <View style={{ marginBottom: "2%" }}>
+          <View style={{ flexDirection: "row" }}>
+            <Text style={styles.childTitle}>Đồ tặng:{"  "}</Text>
+            <Text style={styles.textCategory}>
+              {props.infoPost.NameProduct[0].NameProduct}
+            </Text>
+          </View>
+          <View style={styles.wrapTypeWho}>
+            <View>
+              <Text style={styles.textWho}>Bên nhận{" "}</Text>
+            </View>
+            <View style={styles.lineBetween} />
+          </View>
+          <Text style={styles.whoGive}>Cộng đồng</Text>
+          <View style={{ flexDirection: "row", marginTop: "2%" }}>
+            <Feather name="info" size={width * 0.04} color="#9E9E9E" />
+            <Text style={styles.textNote}>
+              {" "}
+              Cộng đồng ai cần sẽ liên hệ với bạn
+            </Text>
+          </View>
+        </View>
+      );
+    } else {
+      return (
+        <View style={{ marginBottom: "2%" }}>
+          <View style={{ flexDirection: "row" }}>
+            <Text style={styles.childTitle}>Đối tương:{"  "}</Text>
+            <Text style={styles.textCategory}>{getTypeAuthor()}</Text>
+          </View>
+          <View style={styles.wrapTypeWho}>
+            <View>
+              <Text style={styles.textWho}>Cần hỗ trợ{" "}</Text>
+            </View>
+            <View style={styles.lineBetween} />
+          </View>
+          <View style={styles.wraptCategory}>
+            <Text style={styles.textContent}>
+              Danh mục xin: {props.infoPost.NameProduct.length}
+            </Text>
+            <TouchableOpacity onPress={() => setisShowModelCate(true)}>
+              <Text style={styles.wraptManyCategories}>Chi tiết</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      );
+    }
+  };
   return (
     <ScrollView>
       <View style={styles.container}>
         <View>
-          <Text
-            style={{
-              fontFamily: "OpenSans_400Regular",
-              fontSize: config.fontsize_3,
-            }}
-          >
-            Tiêu đề*
-          </Text>
-          <TextInput
-            style={styles.input}
-            onChangeText={(text) =>
-              dispatch({ type: "GET_TITLE", title: text })
-            }
-            value={number}
-            placeholder="Viết tiêu đề hoặc lời nhắn"
-          />
-        </View>
-        <View>
-          <Text
-            style={{
-              fontFamily: "OpenSans_400Regular",
-              fontSize: config.fontsize_3,
-            }}
-          >
-            Ghi chú thêm(nếu có)
-          </Text>
-          <View style={styles.inputDescription}>
-            <UselessTextInput
-              multiline
-              onChangeText={(text) =>
-                dispatch({ type: "GET_NOTE", note: text })
-              }
-            />
+          <View style={styles.backgroundTitle}>
+            <Text style={styles.textTitle}>THÔNG TIN LIÊN HỆ</Text>
           </View>
-        </View>
-        <View>
-          <Text
-            style={{
-              fontFamily: "OpenSans_400Regular",
-              fontSize: config.fontsize_3,
-            }}
-          >
-            Hình ảnh (tối đa 5 hình ảnh)
-          </Text>
-          <ScrollView horizontal={true}>
-            <TouchableOpacity
-              style={styles.borderUpload}
-              onPress={() => handleImage()}
-            >
-              <AntDesign name="clouduploado" size={70} color="#B1B1B1" />
-            </TouchableOpacity>
-            {renderIMG()}
-          </ScrollView>
-        </View>
-        <BottomSheet
-            isVisible={isVisible}
-            containerStyle={{ backgroundColor: "rgba(0.5, 0.25, 0, 0.2)" }}
-          >
-            <View style={{padding: '2%', backgroundColor: '#BCBCBC'}}>
-              <View
-                style={{
-                  backgroundColor: "#FFF",
-                  borderRadius: 10
-                }}
-              >
-                <TouchableOpacity
-                  style={styles.itemBottomSheet}
-                  onPress={() => handleCamera()}
-                >
-                  <Text style={styles.textBottomSheet}>Camera</Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  style={styles.itemBottomSheet}
-                  onPress={() => {
-                    setIsVisible(false);
-                    props.onPress();
-                  }}
-                >
-                  <Text style={styles.textBottomSheet}>Chọn ảnh</Text>
-                </TouchableOpacity>
-              </View>
-              <TouchableOpacity
-                onPress={() => setIsVisible(false)}
-                style={{ padding: "2%", backgroundColor: '#FFF', 
-                borderRadius: 10, marginTop: '2%' }}
-              >
-                <Text style={[styles.textBottomSheet, { color: "#077DFF" }]}>
-                  Hủy
-                </Text>
+          <View style={styles.paddingLR}>
+            <Text style={styles.textName}>{FullName}</Text>
+            <View style={styles.wrapAddress}>
+              <Text style={styles.childTitle}>Địa chỉ:{"  "}</Text>
+              <Text style={styles.textAddress}>{fullAddress}</Text>
+            </View>
+            <View style={{ alignItems: "flex-end" }}>
+              <TouchableOpacity onPress={() => setshowModelAddress(true)}>
+                <Text style={styles.changeAdd}>Thay đổi</Text>
               </TouchableOpacity>
             </View>
-          </BottomSheet>
+            {renderInfor()}
+          </View>
+          <View style={styles.backgroundTitle}>
+            <Text style={styles.textTitle}>THÔNG TIN MÔ TẢ</Text>
+          </View>
+          <View style={styles.paddingLR}>
+            <Text style={styles.childTitle}>Tiêu đề*</Text>
+            <TextInput
+              style={styles.input}
+              onChangeText={(text) =>
+                dispatch({ type: "GET_TITLE", title: text })
+              }
+              value={number}
+              maxLength={50}
+              placeholder="Viết tiêu đề hoặc lời nhắn"
+            />
+            <Text style={styles.childTitle}>Ghi chú thêm(nếu có)</Text>
+            <View style={styles.inputDescription}>
+              <UselessTextInput
+                multiline
+                onChangeText={(text) =>
+                  dispatch({ type: "GET_NOTE", note: text })
+                }
+              />
+            </View>
+            <Text style={styles.childTitle}>Hình ảnh (tối đa 5 hình ảnh)</Text>
+            <ScrollView horizontal={true}>
+              <TouchableOpacity
+                style={styles.borderUpload}
+                onPress={() => handleImage()}
+              >
+                <AntDesign
+                  name="clouduploado"
+                  size={width * 0.15}
+                  color="#B1B1B1"
+                />
+              </TouchableOpacity>
+              {renderIMG()}
+            </ScrollView>
+          </View>
+        </View>
+        <BottomSheet
+          isVisible={isVisible}
+          containerStyle={{ backgroundColor: "rgba(0.5, 0.25, 0, 0.2)" }}
+        >
+          <View style={styles.childSheet}>
+            <View style={styles.topSheet}>
+              <TouchableOpacity
+                style={styles.itemBottomSheet}
+                onPress={() => handleCamera()}
+              >
+                <Text style={styles.textBottomSheet}>Camera</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.itemBottomSheet}
+                onPress={() => {
+                  setIsVisible(false);
+                  props.onPress();
+                }}
+              >
+                <Text style={styles.textBottomSheet}>Chọn ảnh</Text>
+              </TouchableOpacity>
+            </View>
+            <TouchableOpacity
+              onPress={() => setIsVisible(false)}
+              style={styles.btnCancel}
+            >
+              <Text style={[styles.textBottomSheet, { color: "#077DFF" }]}>
+                Hủy
+              </Text>
+            </TouchableOpacity>
+          </View>
+        </BottomSheet>
         <ModalCamera
           show={isShow}
           close={() => setIsShow(false)}
           doneCamera={() => doneCamera()}
         />
+        <ModalDetailAddress
+          show={showModelAddress}
+          closeModel={() => {
+            setshowModelAddress(false);
+          }}
+          onPress={() => {
+            setshowModelAddress(false);
+          }}
+        />
+        <ModelShowCategory show={isShowModelCate} onPress={() => {setisShowModelCate(false)}} 
+        dataNameProduct={props.infoPost.NameProduct}/>
       </View>
     </ScrollView>
   );
@@ -186,10 +296,73 @@ const titleDetail = (props) => {
 
 const styles = StyleSheet.create({
   container: {
-    justifyContent: "center",
-    marginRight: 20,
-    marginLeft: 20,
     backgroundColor: "#F5F5F5",
+  },
+  paddingLR: { paddingLeft: "4%", paddingRight: "4%" },
+  textName: { fontFamily: "OpenSans_700Bold", fontSize: config.fontsize_3 },
+  wrapAddress: { flexDirection: "row", width: "90%", marginTop: "2%" },
+  textAddress: {
+    fontFamily: "OpenSans_400Regular",
+    fontSize: config.fontsize_3,
+  },
+  changeAdd: {
+    color: "#26c6da",
+    fontFamily: "OpenSans_400Regular",
+    fontSize: config.fontsize_3,
+  },
+  textCategory: {
+    textDecorationLine: "underline",
+    fontSize: config.fontsize_3,
+    fontFamily: "OpenSans_400Regular",
+  },
+  wrapTypeWho: { flexDirection: "row", alignItems: "center", marginTop: "2%" },
+  textWho: {
+    textAlign: "center",
+    fontFamily: "OpenSans_700Bold",
+    fontSize: config.fontsize_3,
+    color: "#BDBDBD",
+  },
+  lineBetween: { flex: 1, height: 1, backgroundColor: "#BDBDBD" },
+  whoGive: {
+    fontFamily: "OpenSans_700Bold",
+    fontSize: config.fontsize_3,
+    marginTop: "2%",
+  },
+  textContent: {
+    color: "#000",
+    fontSize: config.fontsize_3,
+    fontFamily: "OpenSans_400Regular",
+  },
+  wraptCategory: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
+  wraptManyCategories: {
+    color: "#26c6da",
+    fontFamily: "OpenSans_400Regular",
+    fontSize: config.fontsize_3,
+  },
+  textNote: { fontFamily: "OpenSans_400Regular", color: "#F44336" },
+  backgroundTitle: {
+    backgroundColor: "#E1E1E1",
+    paddingLeft: "4%",
+    paddingTop: "2%",
+    paddingBottom: "2%",
+    marginBottom: "2%",
+  },
+  textTitle: {
+    color: "#999999",
+    fontSize: config.fontsize_3,
+    fontFamily: "OpenSans_700Bold",
+  },
+  childTitle: {
+    fontFamily: "OpenSans_400Regular",
+    fontSize: config.fontsize_3,
+    color: "#9E9E9E",
+  },
+  topSheet: {
+    backgroundColor: "#FFF",
+    borderRadius: 10,
   },
   input: {
     height: width * 0.1,
@@ -215,8 +388,8 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
   },
   borderUpload: {
-    width: 100,
-    height: 100,
+    width: width * 0.2,
+    height: width * 0.2,
     flexDirection: "row",
     justifyContent: "center",
     borderRadius: 10,
@@ -228,8 +401,8 @@ const styles = StyleSheet.create({
     backgroundColor: "#FFF",
   },
   imgUpload: {
-    height: 100,
-    width: 100,
+    height: width * 0.2,
+    width: width * 0.2,
     marginLeft: 5,
     marginTop: 10,
     borderRadius: 10,
@@ -241,13 +414,21 @@ const styles = StyleSheet.create({
     padding: "2%",
     borderBottomColor: "#DDDDDD",
     borderBottomWidth: 0.5,
-    alignItems: 'center'
+    alignItems: "center",
   },
-  textBottomSheet: { 
-    fontSize: config.fontsize_5, 
-    textAlign: "center", 
-    color: '#077DFF' },
+  textBottomSheet: {
+    fontSize: config.fontsize_5,
+    textAlign: "center",
+    color: "#077DFF",
+  },
+  btnCancel: {
+    padding: "2%",
+    backgroundColor: "#FFF",
+    borderRadius: 10,
+    marginTop: "2%",
+  },
+  childSheet: { padding: "2%", backgroundColor: "#BCBCBC" },
 });
 export default connect(function (state) {
-  return { infoPost: state.infoPost };
+  return { infoPost: state.infoPost, auth: state.auth };
 })(titleDetail);

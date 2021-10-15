@@ -6,6 +6,7 @@ import { FlatList } from "react-native-gesture-handler";
 import { Feather } from "@expo/vector-icons";
 import config from "../config";
 import AppLoading from 'expo-app-loading';
+import ProductComponent from '../components/product.component';
 import {
   AntDesign,
   EvilIcons,
@@ -54,91 +55,7 @@ export default function (props) {
       setResult(data);
     }
   };
-  //""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-  const calculatingTime = (d1, d2) => {
-    d1 = new Date(d1);
-    const calMinute = () => {
-      var t2 = d2.getTime();
-      var t1 = d1.getTime();
-      return parseInt((t2 - t1) / (60 * 1000));
-    };
-    const calHour = () => {
-      var t2 = d2.getTime();
-      var t1 = d1.getTime();
-      return parseInt((t2 - t1) / (60 * 60 * 1000));
-    };
-    const calDay = () => {
-      var t2 = d2.getTime();
-      var t1 = d1.getTime();
-      return parseInt((t2 - t1) / (24 * 60 * 60 * 1000));
-    };
-    const calMonth = () => {
-      var d1Y = d1.getFullYear();
-      var d2Y = d2.getFullYear();
-      var d1M = d1.getMonth();
-      var d2M = d2.getMonth();
-
-      return d2M + 12 * d2Y - (d1M + 12 * d1Y);
-    };
-    const calYear = () => {
-      return d2.getFullYear() - d1.getFullYear();
-    };
-    if (calYear() != 0) return `${calYear()}y `;
-    else if (calMonth() != 0) return `${calMonth()}mth `;
-    else if (calDay() != 0) return `${calDay()}d `;
-    else if (calHour() != 0) return `${calHour()}h `;
-    else return `${calMinute()}m `;
-  };
-  //Function handling title post
-  const renderTitle = (item) => {
-    item = item.charAt(0).toUpperCase() + item.slice(1);
-    if (item.length > 20) return item.slice(0, 20) + "...";
-    else return item;
-  };
-  //Function handling type product
-  const renderType = (pr) => {
-    if (pr.length > 1) return pr[0].Category + ", ...";
-    else return pr[0].Category;
-  };
-  // render address
- const renderDistrict = (district, city) => {
-  if (district.indexOf("Thành phố") != -1) {
-    return district.slice(10);
-  } 
-  if (district.indexOf("Quận") != -1 && city.indexOf("Hồ Chí Minh") == -1) {
-    return district.slice(5);
-  }
-  const distritNumber = "Quận 1, Quận 2, Quận 3, Quận 4, Quận 5, Quận 6, Quận 7, Quận 8, Quận 9, Quận 10, Quận 11, Quận 12"
-  if (district.indexOf("Quận") != -1 && city.indexOf("Hồ Chí Minh") != -1 && distritNumber.indexOf(district) != -1) {
-    return district;
-  }
-  if (district.indexOf("Quận") != -1 && city.indexOf("Hồ Chí Minh") != -1 && distritNumber.indexOf(district) == -1) {
-    return district.slice(5);
-  }
-  if (district.indexOf("Huyện") != -1) {
-    return district.slice(7);
-  } 
-}
-// render địa chỉ
-const renderAddress = (address) => {
-  let add = address.split(",");
-  let huyen = "",
-    tinh = "";
-  if (add[3].indexOf("Thành phố") != -1) {
-    tinh = add[3].slice(10);
-  } else {
-    tinh = add[3].slice(6);
-  }
-  huyen = renderDistrict(add[2], add[3]);
-
-  let diachi = huyen + ", " + tinh;
-  return diachi;
-};
-  //sang trang detail
-  const _pressRow = (item) => {
-    props.navigation.navigate("DetailPost", { data: item }); //chuyển trang
-  };
-  const currentTime = new Date();
+  
   const [fontsLoaded, error] = useFonts({
     OpenSans_400Regular,
     OpenSans_400Regular_Italic,
@@ -155,39 +72,25 @@ const renderAddress = (address) => {
       <View style={{ height: 10, width: "100%", backgroundColor: "#EEEEEE" }} />
     );
   };
-  function renderItem(item) {
+
+
+  const renderItem = ({ item }) => {
     return (
-      <TouchableOpacity
-        style={style.wrapCategory}
-        onPress={() => _pressRow(item)}
-      >
-        <Image
-          style={style.tinyLogo}
-          source={{
-            uri: item.urlImage[0],
-          }}
-        />
-        <View style={style.wrapInfoProduct}>
-          <Text style={style.titlePost}>{renderTitle(item.title)}</Text>
-          <View style={style.wrapTypePrice}>
-            <Text style={style.type}>{renderType(item.NameProduct)}</Text>
-            <Text style={style.price}>Miễn phí</Text>
-          </View>
-          <View style={style.wrapTimeAddress}>
-            <View style={style.wrapTime}>
-              <Feather name="clock" size={20} color="gray" />
-              <Text style={style.time}>
-                {calculatingTime(item.createdAt, currentTime)}
-              </Text>
-            </View>
-            <Text style={style.address}>
-              {renderAddress(item.address)}
-            </Text>
-          </View>
-        </View>
-      </TouchableOpacity>
+      <ProductComponent
+        item={item}
+        urlImage={item.urlImage[0]}
+        title={item.title}
+        category={item.NameProduct}
+        time={item.createdAt}
+        address={item.address}
+        confirm={item.confirm}
+        typeAuthor={item.TypeAuthor}
+        cateReceives={item.NameProduct.length}
+        navigation={navigation}
+        isHistory="no"
+      />
     );
-  }
+  };
  
  function backleft(){ 
        if(Platform.OS == 'ios')
@@ -225,7 +128,7 @@ const renderAddress = (address) => {
         <View style={style.wrapSearch}>
           <EvilIcons name="search" size={30} color="#BDBDBD" />
           <TextInput
-            placeholder="Nhập cái gì đó..."
+            placeholder="Nhập tìm kiếm..."
             onChangeText={async (value) => getResult(value)}
             value={keySearch}
             lightTheme="true"
@@ -236,7 +139,7 @@ const renderAddress = (address) => {
       </View>
       <FlatList
         data={resultSearch}
-        renderItem={({ item }) => renderItem(item)}
+        renderItem={renderItem}
         keyExtractor={(item) => item._id} 
         ItemSeparatorComponent={ItemSeparatorView}
         

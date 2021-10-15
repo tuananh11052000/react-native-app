@@ -14,7 +14,7 @@ import RNPickerDialog from "rn-modal-picker";
 import { AntDesign } from "@expo/vector-icons";
 import db from "../db.json";
 import { connect } from "react-redux";
-import { Button } from "galio-framework";
+import ButtonConfirm from './buttonConfirm.components';
 import config from '../config';
 import * as SecureStore from "expo-secure-store";
 import Spinner from "react-native-loading-spinner-overlay";
@@ -143,7 +143,7 @@ function confirmAddress(props) {
                   setDistrict("")
                   setCommune("")
                   props.closeModel()}} style={{justifyContent: 'center',}}>
-                <Text style={{color: 'red', fontSize: config.fontsize_4}}>Bỏ lọc</Text>
+                <Text style={{color: 'red', fontSize: config.fontsize_3}}>Bỏ lọc</Text>
               </TouchableOpacity>
             </View>
             <View>
@@ -202,10 +202,11 @@ function confirmAddress(props) {
                 //dropDownIcon={require('../assets/pin.png')}
                 selectedValue={(index, item) => choseCommune(item)}
               />
+              <TouchableOpacity activeOpacity={0.6} style={Styles.button} onPress={() => pressFunc()}>
+                <Text style={Styles.buttonText}>Tìm theo</Text>
+            </TouchableOpacity> 
             </View>
-            <Button style={Styles.touchableButton} onPress={() => pressFunc()}>
-              <Text style={Styles.buttonConfirm}>Tìm theo</Text>
-            </Button>
+                    
           </View>
         </View>
       </TouchableWithoutFeedback>
@@ -214,6 +215,18 @@ function confirmAddress(props) {
 }
 
 const Styles = StyleSheet.create({
+  button: {
+    backgroundColor: config.color_btn_1,
+    borderRadius: 5,
+    margin: '4%',
+    padding: '1%'
+},
+buttonText: {
+    color: '#FFF',
+    textAlign: 'center',
+    fontSize: config.fontsize_2,
+    fontFamily: "OpenSans_600SemiBold",
+},
   touchableButton: {
     width: "90%",
     marginRight: 40,
