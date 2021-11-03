@@ -86,24 +86,27 @@ function Connection(props) {
   const [refreshing, setrefreshing] = useState(true);
   const flatlistRef = useRef(null);
   useEffect(() => {
-    getConnectPostDS();
-  }, [props.reloadPost]);
-  useEffect(() => {
-    if (props.reloadPost == "yes") {
+
+    const unsubscribe = props.navigation.addListener("focus", () => {
       getConnectPostDS();
-    }
-  }, [props.reloadPost]);
+    });
+    return () => {
+      unsubscribe;
+    };
+  }, [props.navigation]);
+  
+
   const getConnectPostDS = async () => {
     if (props.auth.isLogin == true) {
       const array = [...listitem];
-    array.map((value, index) => {
-      if (index == 0) {
-        value.checked = true;
-      } else {
-        value.checked = false;
-      }
-    });
-    setListItem(array);
+      array.map((value, index) => {
+        if (index == 0) {
+          value.checked = true;
+        } else {
+          value.checked = false;
+        }
+      });
+      setListItem(array);
       let result = await SecureStore.getItemAsync("token");
       await axios({
         method: "get",
@@ -284,7 +287,6 @@ function Connection(props) {
     );
   };
   const pressItem = (item) => {
-
     if (
       item.typetransaction == "Đã nhận" ||
       item.typetransaction == "Chưa nhận" ||
@@ -309,13 +311,7 @@ function Connection(props) {
       {props.auth.isLogin ? (
         <>
           {refreshing ? (
-            <View
-              style={{
-                flexDirection: "row",
-                justifyContent: "center",
-                height: "100%",
-              }}
-            >
+            <View style={styles.wrapLoading}>
               <ActivityIndicator color="#BDBDBD" size="small" />
             </View>
           ) : (
@@ -374,7 +370,9 @@ function Connection(props) {
                     </View>
                   )}
                   ListFooterComponent={() => {
-                    return <View style={{ height: 0, marginBottom: '10%' }}></View>;
+                    return (
+                      <View style={{ height: 0, marginBottom: "10%" }}></View>
+                    );
                   }}
                   ListHeaderComponent={listHeader}
                 />
@@ -384,14 +382,7 @@ function Connection(props) {
         </>
       ) : (
         <>
-          <View
-            style={{
-              backgroundColor: "#DDD",
-              height: "100%",
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-          >
+          <View style={styles.wrapNotLogin}>
             <Text style={{ color: "#4B4C4F" }}>Vui lòng đăng nhập</Text>
           </View>
         </>
@@ -405,6 +396,17 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#FFF",
     paddingTop: "4%",
+  },
+  wrapNotLogin: {
+    backgroundColor: "#DDD",
+    height: "100%",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  wrapLoading: {
+    flexDirection: "row",
+    justifyContent: "center",
+    height: "100%",
   },
   wrapHeader: { paddingLeft: "2%", paddingRight: "2%", marginBottom: "2%" },
   wrapTop: {

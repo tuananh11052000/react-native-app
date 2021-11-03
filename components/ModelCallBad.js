@@ -14,7 +14,6 @@ import {
 } from "react-native";
 import axios from "axios";
 import { AntDesign } from "@expo/vector-icons";
-import db from "../db.json";
 import { connect } from "react-redux";
 import config from "../config";
 import * as SecureStore from "expo-secure-store";
@@ -30,52 +29,36 @@ import {
   OpenSans_700Bold_Italic,
 } from "@expo-google-fonts/open-sans";
 var { width } = Dimensions.get("window");
-function confirmAddress(props) {
+function CallBad(props) {
   //khai bao cac local state
   const { navigation } = props;
   const [isloading, setIsLoading] = useState(false);
   const [text, settext] = useState("");
   const { dispatch } = props;
   //lay ra dia chi
-  useEffect(() => {}, []);
-  const giveFor = async () => {
+  
+  const callBad = async () => {
     setIsLoading(true)
     let result = await SecureStore.getItemAsync("token");
     let body="";
-    if (props.nameNote == "notefinish") {
-      body =  { status: props.status, notefinish: text};
-    } else {
-      body = { status: props.status, notereceiver: text};
-    }
+    body =  { badpost: "1", noteBad: text};
     await axios({
       method: "put",
-      url: "https://api.smai.com.vn/transaction/update-status?transactionId=" +
-      props.idTrans,
+      url: "https://api.smai.com.vn/post/update-post?idpost=" + props.idPost,
       data: body,
       headers: {
         Authorization: result,
       },
     })
       .then((res) => {
-        if (props.status == "waiting") {
-          dispatch({ type: "SAVE_ID_POST", idPost: props.postId });
-          dispatch({ type: "COMPLETE_LOINHAN" });
-        } 
-        if (props.status == "done") {
-          dispatch({ type: "COMPLETE_LOINHAN_DONE" });
-        }
-        if (props.status == "cancel") {
-          dispatch({ type: "COMPLETE_LOINHAN_CANCEL" });
-        }
-        navigation.navigate("Completed");
         setIsLoading(false)
       })
       .catch((error) => {
         console.log("Error: ", error);
         setIsLoading(false)
       })
-  
-};
+      props.onPressClose();
+    }
   return (
     <Modal transparent={true} visible={props.show}>
       <Spinner
@@ -90,10 +73,10 @@ function confirmAddress(props) {
               <TouchableOpacity onPress={props.onPressClose}>
                 <AntDesign name="close" size={width * 0.05} color="black" />
               </TouchableOpacity>
-              <Text style={Styles.tittleText}>{props.titleModal}</Text>
+              <Text style={Styles.tittleText}>Báo xấu</Text>
             </View>
 
-            <TouchableOpacity onPress={() => giveFor()}>
+            <TouchableOpacity onPress={() => callBad()}>
               <Text
                 style={{
                   color: "#26c6da",
@@ -101,7 +84,7 @@ function confirmAddress(props) {
                   fontSize: config.fontsize_3,
                 }}
               >
-                {props.titleBtn}
+                Gửi
               </Text>
             </TouchableOpacity>
           </View>
@@ -111,7 +94,7 @@ function confirmAddress(props) {
               onChangeText={(text) => settext(text)}
               value={text}
               multiline
-              placeholder="Ghi thêm(nếu có)"
+              placeholder="Nhập xác nhận"
             />
           </View>
         </View>
@@ -179,6 +162,5 @@ export default connect(function (state) {
     infoPost: state.infoPost,
     redirectComplete: state.redirectComplete,
     redirectTransaction: state.redirectTransaction,
-    idPost: state.idPost,
   };
-})(confirmAddress);
+})(CallBad);

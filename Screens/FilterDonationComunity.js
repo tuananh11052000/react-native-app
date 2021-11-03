@@ -10,16 +10,9 @@ const heightStatusBar = StatusBar.currentHeight;
 function Category(props) {
     const { navigation } = props;
     const { dispatch } = props;
-    const pressFunc = () => {
-        if (props.controlThreadTCD == 'tangcongdong') {
-            navigation.push('Description');
-        } else {
-            navigation.push('GiveFor');
-        }
-    }
     return <View style={style.container}>
-        <CategoryCheckBoxComponent onPress={() => {
-            navigation.navigate("PostDonation")
+        <CategoryCheckBoxComponent onPress={() => {            
+            navigation.goBack();
         }}
         type="filter"
         textButton="Tìm theo"/>

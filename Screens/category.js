@@ -9,7 +9,7 @@ function Category(props) {
     const { navigation, dispatch } = props;
     const pressFunc = () => {
         if (props.controlThreadTCD == 'tangcongdong') {
-            navigation.push('Description');
+            navigation.push('Description', {name: 'Xác nhận gửi tặng'});
         } else {
             dispatch({ type: "SET_GUI" });
             navigation.push('GiveFor',{ name: 'Gửi tặng đến' });

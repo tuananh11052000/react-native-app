@@ -55,7 +55,7 @@ export default function MedicalAdvise(props) {
     var number_temp = "0" + number;
     let phoneNumber = "";
     if (Platform.OS === "android") {
-      phoneNumber = `tel:${number_temp}`;
+      phoneNumber = `tel:${number}`;
     } else {
       phoneNumber = `telprompt:${number_temp}`;
     }
@@ -69,7 +69,7 @@ export default function MedicalAdvise(props) {
           <View>
             <Text style={styles.nameDoc}>BS. {item.NameDoctor}</Text>
             <View style={styles.wrapTime}>
-              <Feather name="clock" size={width*0.05} color="gray" />
+              <Feather name="clock" size={width*0.03} color="gray" />
               <Text style={styles.time}>{item.TimeWork}</Text>
             </View>
           </View>
@@ -133,7 +133,6 @@ const styles = StyleSheet.create({
   time: {
     fontSize: config.fontsize_3,
     marginLeft: "2%",
-    marginTop: "2%",
     fontFamily: "OpenSans_400Regular",
     width: "80%",
     maxWidth: "80%",

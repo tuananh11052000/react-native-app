@@ -54,8 +54,8 @@ function confirmAddress(props) {
   }, []);
   //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
   const [data1, setData1] = useState([...db.province]);
-  const [data2, setData2] = useState([...db.district]);
-  const [data3, setData3] = useState([...db.commune]);
+  const [data2, setData2] = useState([]);
+  const [data3, setData3] = useState([]);
   //ham xu ly su kien chon tinh/tp
   const choseProvince = (item, change) => {
     if (change == true) setChange(true);

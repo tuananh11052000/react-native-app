@@ -4,7 +4,7 @@ import {
   View,
   FlatList,
   RefreshControl,
-  ActivityIndicator,
+  ActivityIndicator, Text
 } from "react-native";
 import ProductComponent from "../components/product.component";
 import axios from "axios";
@@ -16,7 +16,6 @@ export default function historyPage(props) {
   const [refreshing, setrefreshing] = useState(true);
   useEffect(() => {
     getDataHistory();
-    
   });
   const getDataHistory = async () => {
     let result = await SecureStore.getItemAsync("token");
@@ -42,6 +41,21 @@ export default function historyPage(props) {
   const ItemSeparatorView = () => {
     return (
       <View style={{ height: 10, width: "100%", backgroundColor: "#EEEEEE" }} />
+    );
+  };
+  const listEmpty = () => {
+    return (
+      <View
+        style={{
+          alignItems: "center",
+          flex: 2,
+          justifyContent: "center",
+          backgroundColor: "#fff",
+          paddingTop: "2%",
+        }}
+      >
+        <Text style={{ color: "#7F7E85" }}>Chưa có</Text>
+      </View>
     );
   };
   const renderItem = ({ item }) => {
@@ -74,15 +88,26 @@ export default function historyPage(props) {
           <ActivityIndicator color="#BDBDBD" size="small" />
         </View>
       ) : (
-        <FlatList
-          data={dataRender}
-          renderItem={renderItem}
-          keyExtractor={(item) => item._id}
-          ItemSeparatorComponent={ItemSeparatorView}
-          refreshControl={
-            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-          }
-        />
+        <>
+          {dataRender.length == 0 ? (
+            <>{listEmpty()}</>
+          ) : (
+            <>
+              <FlatList
+                data={dataRender}
+                renderItem={renderItem}
+                keyExtractor={(item) => item._id}
+                ItemSeparatorComponent={ItemSeparatorView}
+                refreshControl={
+                  <RefreshControl
+                    refreshing={refreshing}
+                    onRefresh={onRefresh}
+                  />
+                }
+              />
+            </>
+          )}
+        </>
       )}
     </View>
   );

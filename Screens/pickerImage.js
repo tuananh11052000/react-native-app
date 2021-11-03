@@ -61,7 +61,7 @@ function PickerImage(props) {
   );
 
   const emptyStayComponent = <Text style={styles.emptyStay}>Empty =(</Text>;
-
+  const noCameraPermissionComponent = <Text style={styles.emptyStay}>No access to camera</Text>;
   return (
     <View style={[styles.flex, styles.container]}>
       <ImageBrowser
@@ -70,6 +70,8 @@ function PickerImage(props) {
         callback={imagesCallback}
         renderSelectedComponent={renderSelectedComponent}
         emptyStayComponent={emptyStayComponent}
+        noCameraPermissionComponent={noCameraPermissionComponent}
+        loadCompleteMetadata={true}
       />
     </View>
   );

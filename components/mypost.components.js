@@ -150,11 +150,18 @@ export default function MyPost(props) {
       return (
         <View style={style.wrapBot}>
           {/* <Feather name="eye" size={18} color="#00a2e8" style={{ width: 18, height: 18 }}/> */}
-          <Text style={style.textStatusTrue}>&ensp;Hiển thị</Text>
+          <Text style={style.textStatusTrue}>&ensp;{renderDisplay()}</Text>
         </View>
       );
     else return <Text style={style.textStatusFalse}>Chờ xác thực</Text>;
   };
+  const renderDisplay = () => {
+    if (props.isDisplay == true) {
+      return "Hiển thị"
+    } else {
+      return "Đã ẩn"
+    }
+  }
   const renderMessage = () => {
     if (props.typeAuthor == "tangcongdong" && props.transaction.length != 0) {
       return (
@@ -234,7 +241,7 @@ export default function MyPost(props) {
                     hideMenu();
                   }}
                 >
-                  Xóa tin
+                  {props.isDisplay ? "Ẩn tin" : "Hiển thị"}
                 </MenuItem>
               </Menu>
             </View>

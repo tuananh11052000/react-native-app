@@ -74,7 +74,6 @@ const titleDetail = (props) => {
     getAddress().then((result) => {
       // console.log(result)
       if (result.province != null) {
-        console.log("u are here");
         let fulladdr =
           result.addressDetail +
           ", " +

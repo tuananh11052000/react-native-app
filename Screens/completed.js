@@ -39,7 +39,7 @@ function Completed(props) {
         </View>
       );
     }
-    if (props.redirectComplete == "LOINHAN_CXD") {
+    if (props.redirectComplete == "LOINHAN_CXD" || props.redirectComplete == "LOINHAN_DONE") {
       // hoàn thành khi để lại lời nhắn ở tin đăng cần xin đồ
       return (
         <View style={styles.wrapText}>
@@ -69,12 +69,28 @@ function Completed(props) {
     }
   };
   const pressComplete = () => {
+    if (props.redirectComplete == "LOINHAN_TCD") {
+      dispatch({ type: "setReload" });
+      navigation.navigate("Home");
+    }
+    if (props.redirectComplete == "LOINHAN_CXD") {
+      navigation.navigate("ListNeedSupport");
+    }
+    if (props.redirectComplete == "TCD" || props.redirectComplete == "CXD") {
+      dispatch({ type: "setReload" });
+      navigation.navigate("Notifications"); // move to  màn hình tin đăng
+    }
     if (props.redirectComplete == "LOINHAN") {
+      const id = props.idPost.idPost;
+      dispatch({ type: "SET_XIN" });
       dispatch({ type: "setReload" });
+      navigation.navigate("GiveFor", {
+        name: "Danh sách lời nhắn",
+        postId: id,
+      });
+    }
+    if (props.redirectComplete == "LOINHAN_CANCEL" || props.redirectComplete == "LOINHAN_DONE") {
       navigation.navigate("connect");
-    } else {
-      dispatch({ type: "setReload" });
-      navigation.navigate("Notifications");
     }
   };
   return (
@@ -135,5 +151,7 @@ export default connect(function (state) {
   return {
     reloadPost: state.reloadPost,
     redirectComplete: state.redirectComplete,
+    redirectTransaction: state.redirectTransaction,
+    idPost: state.idPost,
   };
 })(Completed);

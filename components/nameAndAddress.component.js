@@ -37,6 +37,7 @@ import {
   OpenSans_800ExtraBold_Italic,
 } from "@expo-google-fonts/open-sans";
 import config from "../config";
+import axios from "axios";
 import { connect } from "react-redux";
 import * as SecureStore from "expo-secure-store";
 import PriorityImg from "../assets/priority_preview.png";
@@ -48,13 +49,13 @@ var { width } = Dimensions.get("window");
 function NameAndAddress(props) {
   const [FullName, getName] = useState("");
   const [fullAddress, setFullAddress] = useState(props.infoPost.address);
+  const [phonePerRecei, setPhonePerRecei] = useState("");
   const [text, settext] = useState("");
   const [showModelAddress, setshowModelAddress] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
   const [isShow, setIsShow] = useState(false);
   const { dispatch } = props;
-  let sender = props.sender;
-
+  const data = props.data;
   useEffect(() => {
     const getAddress = async () => {
       let province = await SecureStore.getItemAsync("province");
@@ -71,7 +72,6 @@ function NameAndAddress(props) {
     getAddress().then((result) => {
       // console.log(result)
       if (result.province != null) {
-        console.log("u are here");
         let fulladdr =
           result.addressDetail +
           ", " +
@@ -86,7 +86,6 @@ function NameAndAddress(props) {
         setFullAddress("");
       }
     });
-    
   }, [props.infoPost.address]);
   useEffect(() => {
     const getAvtFunc = async () => {
@@ -96,7 +95,10 @@ function NameAndAddress(props) {
       }
     };
     getAvtFunc();
-  }, [props.auth])
+  }, [props.auth]);
+  useEffect(() => {
+    getPhone(data.AuthorID);
+  }, []);
   const renderIMG = () => {
     if (props.infoPost.image) {
       return props.infoPost.image.map((img, index) => {
@@ -110,7 +112,18 @@ function NameAndAddress(props) {
       });
     }
   };
-
+  const getPhone = async (AuthorID) => {
+    try {
+      await axios({
+        method: "get",
+        url: "https://api.smai.com.vn/user/getInfoAuthor?AuthorID=" + AuthorID,
+      }).then(async (data) => {
+        setPhonePerRecei("0" + data.data.PhoneNumber);
+      });
+    } catch (e) {
+      alert(e);
+    }
+  };
   const handleImage = () => {
     setIsVisible(true);
   };
@@ -125,37 +138,89 @@ function NameAndAddress(props) {
     settext(text);
     dispatch({ type: "GET_NOTE_TRANSAC", noteTransac: text });
   };
+  const renderTitleTop = () => {
+    if (props.cateSelected) {
+      return (
+        <>
+          <View style={styles.backgroundTitle}>
+            <Text style={styles.textTitle}>THÔNG TIN LIÊN HỆ</Text>
+          </View>
+        </>
+      );
+    }
+  };
+  const renderNoteWarning = () => {
+    if (!props.cateSelected) {
+      return (
+        <>
+          <View style={styles.row}>
+            <Image
+              source={PriorityImg}
+              style={{ width: width * 0.05, height: width * 0.05 }}
+            />
+            <Text style={styles.textNote}> Lưu ý</Text>
+          </View>
+          <Text style={styles.textContent}>
+            Bạn cần cung cấp chính xác thông tin để người tặng có thể liên hệ,
+            xác nhận, gửi đồ cho bạn.
+          </Text>
+        </>
+      );
+    }
+  };
+  const renderPersonReceive = () => {
+    if (props.cateSelected) {
+      return (
+        <>
+          <View style={{ flexDirection: "row", marginBottom: "1%" }}>
+            <Text style={styles.childTitle}>Đồ tặng:{"  "}</Text>
+            <Text style={styles.textCategory}>{props.cateSelected}</Text>
+          </View>
+          <View style={styles.wrapTypeWho}>
+            <View>
+              <Text style={styles.textWho}>Bên nhận </Text>
+            </View>
+            <View style={styles.lineBetween} />
+          </View>
+          <Text style={styles.whoGive}>
+            {data.NameAuthor} - {phonePerRecei}
+          </Text>
+          <View style={styles.wrapAddress}>
+            <Entypo name="location" size={width * 0.05} color="#BDBDBD" />
+            <Text style={styles.address}>{data.address}</Text>
+          </View>
+        </>
+      );
+    }
+  };
+
   return (
     <ScrollView style={styles.container}>
       <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
         <View style={styles.container}>
+          {renderTitleTop()}
           <View style={styles.wrapTop}>
-            <View style={styles.wrapTitle}>
-              <Text style={styles.title}>{sender}</Text>
-            </View>
             <View style={styles.wrapName}>
               <Text style={styles.name}>
                 {FullName} - {props.auth.PhoneNumber}
               </Text>
             </View>
             <View style={styles.wrapAddress}>
-              <Entypo name="location" size={20} color="#BDBDBD" />
-              <Text style={styles.address}>{fullAddress}</Text>
+              <Entypo name="location" size={width * 0.05} color="#BDBDBD" />
+              <Text style={styles.address}>{fullAddress == "" ? "Nhập địa chỉ" : fullAddress}</Text>
             </View>
             <View style={{ alignItems: "flex-end" }}>
               <TouchableOpacity onPress={() => setshowModelAddress(true)}>
                 <Text style={styles.changeAdd}>Thay đổi</Text>
               </TouchableOpacity>
             </View>
+
+            {renderPersonReceive()}
           </View>
+
           <View style={styles.wrapBottom}>
             <View style={styles.wrapTitleDescript}>
-              <View
-                style={{
-                  flexDirection: "row",
-                  justifyContent: "space-between",
-                }}
-              >
+              <View style={styles.wrapTitleInput}>
                 <Text style={styles.titleDescript}>Lời nhắn hoặc mô tả*</Text>
                 <Text style={{ color: "#BDBDBD", fontSize: config.fontsize_4 }}>
                   {text.length}/200
@@ -176,15 +241,7 @@ function NameAndAddress(props) {
               />
             </View>
             <View>
-              <Text
-                style={{
-                  fontFamily: "OpenSans_400Regular",
-                  fontSize: config.fontsize_3,
-                  marginTop: "2%",
-                  marginBottom: "2%",
-                  color: "#7F7E85",
-                }}
-              >
+              <Text style={styles.wrapTileImage}>
                 Hình ảnh (tối đa 5 hình ảnh)
               </Text>
 
@@ -193,7 +250,11 @@ function NameAndAddress(props) {
                   style={styles.borderUpload}
                   onPress={() => handleImage()}
                 >
-                  <AntDesign name="clouduploado" size={width*0.15} color="#B1B1B1" />
+                  <AntDesign
+                    name="clouduploado"
+                    size={width * 0.15}
+                    color="#B1B1B1"
+                  />
                 </TouchableOpacity>
                 {renderIMG()}
               </ScrollView>
@@ -207,24 +268,17 @@ function NameAndAddress(props) {
                 setshowModelAddress(false);
               }}
             />
-            <View style={styles.row}>
-              <Image source={PriorityImg} style={{ width: 26, height: 26 }} />
-              <Text style={styles.textNote}> Lưu ý</Text>
-            </View>
-            <Text style={styles.textContent}>
-              Bạn cần cung cấp chính xác thông tin để người tặng có thể liên hệ,
-              xác nhận, gửi đồ cho bạn.
-            </Text>
+            {renderNoteWarning()}
           </View>
           <BottomSheet
             isVisible={isVisible}
             containerStyle={{ backgroundColor: "rgba(0.5, 0.25, 0, 0.2)" }}
           >
-            <View style={{padding: '2%', backgroundColor: '#BCBCBC'}}>
+            <View style={{ padding: "2%", backgroundColor: "#BCBCBC" }}>
               <View
                 style={{
                   backgroundColor: "#FFF",
-                  borderRadius: 10
+                  borderRadius: 10,
                 }}
               >
                 <TouchableOpacity
@@ -245,8 +299,7 @@ function NameAndAddress(props) {
               </View>
               <TouchableOpacity
                 onPress={() => setIsVisible(false)}
-                style={{ padding: "2%", backgroundColor: '#FFF', 
-                borderRadius: 10, marginTop: '2%' }}
+                style={styles.canclePickImage}
               >
                 <Text style={[styles.textBottomSheet, { color: "#077DFF" }]}>
                   Hủy
@@ -269,18 +322,30 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
+  backgroundTitle: {
+    backgroundColor: "#E1E1E1",
+    paddingLeft: "4%",
+    paddingTop: "2%",
+    paddingBottom: "2%",
+  },
+  textTitle: {
+    color: "#999999",
+    fontSize: config.fontsize_3,
+    // fontWeight: "bold",
+    fontFamily: "OpenSans_700Bold",
+  },
   wrapTop: {
     paddingLeft: "4%",
     paddingRight: "4%",
-    borderBottomColor: "#FFF",
-    borderBottomWidth: 10,
   },
   wrapBottom: {
     paddingLeft: "4%",
     paddingRight: "4%",
+    borderTopColor: "#FFF",
+    borderTopWidth: 10,
   },
   wrapTitle: {
-    marginTop: "2%",
+    marginTop: "1%",
     paddingBottom: "2%",
     borderBottomColor: "#CCC",
     borderBottomWidth: 1,
@@ -313,10 +378,13 @@ const styles = StyleSheet.create({
     color: "#26c6da",
     fontFamily: "OpenSans_400Regular",
     fontSize: config.fontsize_3,
-    marginBottom: "2%",
   },
   wrapTitleDescript: {
     marginTop: "2%",
+  },
+  wrapTitleInput: {
+    flexDirection: "row",
+    justifyContent: "space-between",
   },
   titleDescript: {
     fontSize: config.fontsize_3,
@@ -337,9 +405,16 @@ const styles = StyleSheet.create({
     borderColor: "#E0E0E0",
     borderWidth: 1,
   },
+  wrapTileImage: {
+    fontFamily: "OpenSans_400Regular",
+    fontSize: config.fontsize_3,
+    marginTop: "2%",
+    marginBottom: "2%",
+    color: "#7F7E85",
+  },
   borderUpload: {
-    width: width*0.2,
-    height: width*0.2,
+    width: width * 0.2,
+    height: width * 0.2,
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
@@ -365,8 +440,8 @@ const styles = StyleSheet.create({
     fontSize: config.fontsize_3,
   },
   imgUpload: {
-    height: width*0.2,
-    width: width*0.2,
+    height: width * 0.2,
+    width: width * 0.2,
     marginLeft: 5,
     marginTop: "4%",
     borderRadius: 10,
@@ -375,12 +450,43 @@ const styles = StyleSheet.create({
     padding: "2%",
     borderBottomColor: "#DDDDDD",
     borderBottomWidth: 0.5,
-    alignItems: 'center'
+    alignItems: "center",
   },
-  textBottomSheet: { 
-    fontSize: config.fontsize_5, 
-    textAlign: "center", 
-    color: '#077DFF' },
+  textBottomSheet: {
+    fontSize: config.fontsize_5,
+    textAlign: "center",
+    color: "#077DFF",
+  },
+  wrapTypeWho: { flexDirection: "row", alignItems: "center" },
+  textWho: {
+    textAlign: "center",
+    fontFamily: "OpenSans_700Bold",
+    fontSize: config.fontsize_3,
+    color: "#BDBDBD",
+  },
+  lineBetween: { flex: 1, height: 1, backgroundColor: "#BDBDBD" },
+  whoGive: {
+    fontFamily: "OpenSans_700Bold",
+    fontSize: config.fontsize_3,
+    marginTop: "1%",
+    marginBottom: "1%",
+  },
+  childTitle: {
+    fontFamily: "OpenSans_400Regular",
+    fontSize: config.fontsize_3,
+    color: "#9E9E9E",
+  },
+  textCategory: {
+    textDecorationLine: "underline",
+    fontSize: config.fontsize_3,
+    fontFamily: "OpenSans_400Regular",
+  },
+  canclePickImage: {
+    padding: "2%",
+    backgroundColor: "#FFF",
+    borderRadius: 10,
+    marginTop: "2%",
+  },
 });
 export default connect(function (state) {
   return { infoPost: state.infoPost, auth: state.auth };

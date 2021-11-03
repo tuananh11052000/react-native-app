@@ -10,7 +10,8 @@ import {
   TouchableOpacity,
   FlatList,
   ActivityIndicator,
-  Alert, Dimensions
+  Alert,
+  Dimensions,
 } from "react-native";
 import Menu, { MenuItem, MenuDivider } from "react-native-material-menu";
 import { connect } from "react-redux";
@@ -81,16 +82,18 @@ function CreatePost(props) {
     setData([]);
     getMyPost();
     setSelectedValue(1);
-    setvalueMenu("Tất cả")
+    setvalueMenu("Tất cả");
   };
-  const deletePost = (id) => {
+  const deletePost = (id, status) => {
     let result = SecureStore.getItemAsync("token");
     setloading(true);
-    let url =
-      "https://smai-app-api.herokuapp.com/post/deletePostbyUser?_id=" + id;
+    let body = "";
+    body = { statusdiplay: !status };
+    let url = "https://api.smai.com.vn/post/update-post?idpost=" + id;
     axios({
-      method: "delete",
+      method: "put",
       url: url,
+      data: body,
       headers: {
         Authorization: result,
       },
@@ -99,7 +102,9 @@ function CreatePost(props) {
         if (res.status == 201) {
           // alert("Xoá bài thành công.");
           onRefresh();
-          Alert.alert("Thông báo", "Xóa bài thành công", [{ text: "OK" }]);
+          status
+            ? Alert.alert("Thông báo", "Đã ẩn tin", [{ text: "OK" }])
+            : Alert.alert("Thông báo", "Đã hiện tin", [{ text: "OK" }]);
         }
       })
       .finally(() => setloading(false));
@@ -120,11 +125,11 @@ function CreatePost(props) {
               width: "73%",
             }}
           >
-            <View style={{width: '125%', paddingLeft: '5%'}}>
+            <View style={{ width: "125%", paddingLeft: "5%" }}>
               <Text style={{ fontSize: config.fontsize_3 }}>{valueMenu}</Text>
             </View>
-            <View style={{width: '10%'}}>
-              <AntDesign name="caretdown" size={width*0.02} color="gray" />
+            <View style={{ width: "10%" }}>
+              <AntDesign name="caretdown" size={width * 0.02} color="gray" />
             </View>
           </TouchableOpacity>
         }
@@ -147,7 +152,7 @@ function CreatePost(props) {
         </MenuItem>
         <MenuItem
           onPress={() => {
-            hideMenu(3,  "Cần hỗ trợ");
+            hideMenu(3, "Cần hỗ trợ");
           }}
           style={{ fontSize: config.fontsize_3 }}
         >
@@ -216,7 +221,10 @@ function CreatePost(props) {
   };
   const pressGive = (id) => {
     dispatch({ type: "SET_XIN" });
-    props.navigation.navigate("GiveFor", { name: 'Danh sách lời nhắn', postId: id }); //chuyển trang
+    props.navigation.navigate("GiveFor", {
+      name: "Danh sách lời nhắn",
+      postId: id,
+    }); //chuyển trang
   };
   const renderItem = ({ item }) => {
     return (
@@ -231,8 +239,9 @@ function CreatePost(props) {
         typeAuthor={item.TypeAuthor}
         cateReceives={item.NameProduct.length}
         onPress={() => _pressRow(item)}
-        onPressDel={() => deletePost(item._id)}
+        onPressDel={() => deletePost(item._id, item.isDisplay)}
         pressGive={() => pressGive(item._id)}
+        isDisplay={item.isDisplay}
       />
     );
   };
@@ -244,12 +253,26 @@ function CreatePost(props) {
       <View style={{ height: 10, width: "100%", backgroundColor: "#EEEEEE" }} />
     );
   };
-
+  const listEmpty = () => {
+    return (
+      <View
+        style={{
+          alignItems: "center",
+          flex: 2,
+          justifyContent: "center",
+          backgroundColor: "#DDD",
+          paddingTop: "2%",
+        }}
+      >
+        <Text style={{ color: "#7F7E85" }}>Chưa có</Text>
+      </View>
+    );
+  };
   return (
     <View style={styles.container}>
       <Spinner
         visible={loading}
-        textContent={"Đang xóa bài..."}
+        textContent={"Đang ẩn tin..."}
         textStyle={styles.spinnerTextStyle}
       />
       <View style={{ zIndex: 1 }}>
@@ -277,41 +300,36 @@ function CreatePost(props) {
         {props.auth.isLogin ? (
           <>
             {refreshing ? (
-              <View
-                style={{
-                  flexDirection: "row",
-                  justifyContent: "center",
-                  height: "100%",
-                }}
-              >
+              <View style={styles.wrapLoading}>
                 <ActivityIndicator color="#BDBDBD" size="small" />
               </View>
             ) : (
-              <FlatList
-                data={data}
-                renderItem={renderItem}
-                keyExtractor={(item) => item._id}
-                ItemSeparatorComponent={ItemSeparatorView}
-                ListHeaderComponent={listheader}
-                refreshControl={
-                  <RefreshControl
-                    refreshing={refreshing}
-                    onRefresh={onRefresh}
-                  />
-                }
-              />
+              <>
+                {data.length == 0 ? (
+                  <>{listEmpty()}</>
+                ) : (
+                  <>
+                    <FlatList
+                      data={data}
+                      renderItem={renderItem}
+                      keyExtractor={(item) => item._id}
+                      ItemSeparatorComponent={ItemSeparatorView}
+                      ListHeaderComponent={listheader}
+                      refreshControl={
+                        <RefreshControl
+                          refreshing={refreshing}
+                          onRefresh={onRefresh}
+                        />
+                      }
+                    />
+                  </>
+                )}
+              </>
             )}
           </>
         ) : (
           <>
-            <View
-              style={{
-                backgroundColor: "#DDD",
-                height: "100%",
-                alignItems: "center",
-                justifyContent: "center",
-              }}
-            >
+            <View style={styles.wrapNotLogin}>
               <Text style={{ color: "#4B4C4F" }}>Vui lòng đăng nhập</Text>
             </View>
           </>
@@ -338,8 +356,8 @@ const styles = StyleSheet.create({
     borderRadius: 4,
     borderColor: "#BDBDBD",
     width: "57%",
-    backgroundColor: '#FFF',
-    justifyContent: 'center'
+    backgroundColor: "#FFF",
+    justifyContent: "center",
   },
   btnCreate: {
     alignItems: "center",
@@ -365,6 +383,17 @@ const styles = StyleSheet.create({
   },
   spinnerTextStyle: {
     color: "#FFF",
+  },
+  wrapNotLogin: {
+    backgroundColor: "#DDD",
+    height: "100%",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  wrapLoading: {
+    flexDirection: "row",
+    justifyContent: "center",
+    height: "100%",
   },
 });
 

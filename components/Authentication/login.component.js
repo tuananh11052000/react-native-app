@@ -42,7 +42,7 @@ function Login(props) {
     
     setIsDisplay(true)
     let tokenDevice = await SecureStore.getItemAsync("tokenDevice");
-    console.log(tokenDevice)
+    console.log("TOKEN DEVICE",tokenDevice)
     try {
       await axios
         .post("https://api.smai.com.vn/account/login", {
@@ -60,7 +60,7 @@ function Login(props) {
               headers: {
                 Authorization: "bearer " + data.data.accessToken,
               },
-            }).then((data) => {
+            }).then((data) => {             
               save("avatar", data.data.urlIamge);
               save("FullName", data.data.FullName);
             });

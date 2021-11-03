@@ -15,6 +15,7 @@ import ButtonCofirm from "./buttonConfirm.components";
 import config from '../config';
 var { width } = Dimensions.get("window");
 function ExpandableListView(props) {
+  const {dispatch} = props;
   const [layoutHeight, setLayoutHeight] = useState(0);
   const [dataa, setDataa] = useState(props.item);
   useEffect(() => {
@@ -32,9 +33,24 @@ function ExpandableListView(props) {
         data.subCategory[i].checked = !data.subCategory[i].checked;
       }
     }
-
     setDataa(data);
     props.onClickFunctionItem();
+  };
+  useEffect(() => {
+    if (props.dataChecked == true) {
+      unChecked();
+      dispatch({ type: "DEFAULT_FILTER" });   
+    }
+  }, [props.dataChecked])
+
+  const unChecked = () => {
+    const data = props.item;
+    for (let i = 0; i < data.subCategory.length; i++) {
+      if (data.subCategory[i].checked == true) {
+        data.subCategory[i].checked = false;
+      }
+    }
+    setDataa(data);
   };
 
   return (
@@ -90,112 +106,114 @@ function CategoryCheckBoxComponent(props) {
       expanded: false,
       category: "NHU YẾU PHẨM",
       subCategory: [
-        { id: 1, name: 'Lương thực, thực phẩm' },
-        { id: 2, name: 'Dầu gội, băng vệ sinh,...' },
-        { id: 3, name: 'Vật tư ý tế "khẩu trang,.."' },
-        { id: 4, name: 'Mặt hàng khác' },]
+        { id: 1, name: 'Lương thực, thực phẩm', checked: false },
+        { id: 2, name: 'Vật dụng cá nhân "dầu gội,..."', checked: false },
+        { id: 3, name: 'Vật tư ý tế "khẩu trang,.."', checked: false },
+        { id: 4, name: 'Mặt hàng khác' , checked: false},]
     },
     {
       expanded: false,
       category: "ĐỒ NGƯỜI LỚN",
       subCategory: [
-        { id: 5, name: 'Quần áo, giày dép nam' },
-        { id: 6, name: 'Quần áo, giày dép nữ' },
-        { id: 7, name: 'Đồ trang điểm, tư trang' },
-        { id: 8, name: 'Đồ mẹ bầu' },
-        { id: 9, name: 'Đồ người cao tuổi nam' },
-        { id: 10, name: 'Đồ người cao tuổi nữ' },
-        { id: 11, name: 'Đồ khác' },]
+        { id: 5, name: 'Quần áo, giày dép nam' , checked: false},
+        { id: 6, name: 'Quần áo, giày dép nữ' , checked: false},
+        { id: 7, name: 'Đồ trang điểm, tư trang' , checked: false},
+        { id: 8, name: 'Đồ mẹ bầu', checked: false },
+        { id: 9, name: 'Đồ người cao tuổi nam' , checked: false},
+        { id: 10, name: 'Đồ người cao tuổi nữ', checked: false },
+        { id: 11, name: 'Đồ khác' , checked: false},]
     },
     {
       expanded: false,
       category: "ĐỒ TRẺ EM",
       subCategory: [
-        { id: 12, name: 'Đồ chơi' },
-        { id: 13, name: 'Xe đẩy, bàn ăn' },
-        { id: 14, name: 'Tả, bỉm, sữa cho bé' },
-        { id: 15, name: 'Quần áo trẻ nam' },
-        { id: 16, name: 'Quần áo trẻ nữ' },
-        { id: 17, name: 'Đồ khác' },]
+        { id: 12, name: 'Đồ chơi' , checked: false},
+        { id: 13, name: 'Xe đẩy, bàn ăn', checked: false },
+        { id: 14, name: 'Tả, bỉm, sữa cho bé' , checked: false},
+        { id: 15, name: 'Quần áo bé trai' , checked: false},
+        { id: 16, name: 'Quần áo bé gái', checked: false },
+        { id: 17, name: 'Đồ khác', checked: false },]
     },
     {
       expanded: false,
       category: "ĐỒ HỌC TẬP",
       subCategory: [
-        { id: 18, name: 'Dụng cụ học tập' },
-        { id: 19, name: 'Sách vở mẫu giáo' },
-        { id: 21, name: 'Sách vở lớp 1' },
-        { id: 22, name: 'Sách vở lớp 2' },
-        { id: 23, name: 'Sách vở lớp 3' },
-        { id: 24, name: 'Sách vở lớp 4' },
-        { id: 25, name: 'Sách vở lớp 5' },
-        { id: 26, name: 'Sách vở lớp 6' },
-        { id: 27, name: 'Sách vở lớp 7' },
-        { id: 28, name: 'Sách vở lớp 8' },
-        { id: 29, name: 'Sách vở lớp 9' },
-        { id: 30, name: 'Sách vở lớp 10' },
-        { id: 31, name: 'Sách vở lớp 11' },
-        { id: 32, name: 'Sách vở lớp 12' },
-        { id: 33, name: 'Giáo trình ôn thi ĐH, CĐ' },
-        { id: 34, name: 'Giáo trình các trường cao đẳng' },
-        { id: 35, name: 'Giáo trình các trường đại học' },
-        { id: 36, name: 'Truyện, báo, sách kỹ năng…' },
-        { id: 37, name: 'Đồ học tập khác' },
+        { id: 18, name: 'Dụng cụ học tập', checked: false },
+        { id: 19, name: 'Sách vở mẫu giáo' , checked: false},
+        { id: 21, name: 'Sách vở lớp 1', checked: false },
+        { id: 22, name: 'Sách vở lớp 2', checked: false },
+        { id: 23, name: 'Sách vở lớp 3', checked: false },
+        { id: 24, name: 'Sách vở lớp 4' , checked: false},
+        { id: 25, name: 'Sách vở lớp 5', checked: false },
+        { id: 26, name: 'Sách vở lớp 6', checked: false },
+        { id: 27, name: 'Sách vở lớp 7', checked: false },
+        { id: 28, name: 'Sách vở lớp 8', checked: false },
+        { id: 29, name: 'Sách vở lớp 9', checked: false },
+        { id: 30, name: 'Sách vở lớp 10', checked: false },
+        { id: 31, name: 'Sách vở lớp 11', checked: false },
+        { id: 32, name: 'Sách vở lớp 12', checked: false },
+        { id: 33, name: 'Giáo trình ôn thi ĐH, CĐ', checked: false },
+        { id: 34, name: 'Giáo trình các trường cao đẳng', checked: false },
+        { id: 35, name: 'Giáo trình các trường đại học', checked: false },
+        { id: 36, name: 'Truyện, báo, sách kỹ năng…', checked: false },
+        { id: 37, name: 'Đồ học tập khác' , checked: false},
       ]
     },
     {
       expanded: false,
       category: "ĐỒ SINH HOẠT GIA ĐÌNH",
       subCategory: [
-        { id: 38, name: 'Đồ nội trợ nhà bếp' },
-        { id: 39, name: 'Máy lạnh, máy giặt, quạt,...' },
-        { id: 51, name: 'Nệm, Chăn, gối, màn,...' },
-        { id: 40, name: 'Đồ khác' },
+        { id: 38, name: 'Đồ nội trợ nhà bếp', checked: false },
+        { id: 39, name: 'Máy lạnh, máy giặt, quạt,...', checked: false },
+        { id: 51, name: 'Nệm, Chăn, gối, màn,...', checked: false },
+        { id: 40, name: 'Đồ khác' , checked: false},
       ]
     },
     {
       expanded: false,
       category: "ĐỒ ĐIỆN TỬ",
       subCategory: [
-        { id: 41, name: 'Tivi, loa, đài,...' },
-        { id: 42, name: 'Điện thoại, laptop, máy tính,...' },
-        { id: 43, name: 'Đồ khác' },
+        { id: 41, name: 'Tivi, loa, đài,...' , checked: false},
+        { id: 42, name: 'Điện thoại, laptop, máy tính,...', checked: false },
+        { id: 43, name: 'Đồ khác' , checked: false},
       ]
     },
     {
       expanded: false,
       category: "ĐỒ NỘI NGOẠI THẤT",
       subCategory: [
-        { id: 44, name: 'Bàn ghế, giường, tủ, kệ,...' },
-        { id: 45, name: 'Cây cảnh, bàn ghế đá,...' },
-        { id: 46, name: 'Gạch, cát, xi măng, sắt,...' },
-        { id: 47, name: 'Đồ khác' },
+        { id: 44, name: 'Bàn ghế, giường, tủ, kệ,...', checked: false },
+        { id: 45, name: 'Cây cảnh, bàn ghế đá,...', checked: false },
+        { id: 46, name: 'Gạch, cát, xi măng, sắt,...', checked: false },
+        { id: 47, name: 'Đồ khác' , checked: false},
       ]
     },
     {
       expanded: false,
       category: "XE CỘ",
       subCategory: [
-        { id: 48, name: 'Xe cho người khuyết tật' },
-        { id: 49, name: 'Xe đạp, xe điện, xe máy' },
-        { id: 50, name: 'Xe khác' },]
+        { id: 48, name: 'Xe cho người khuyết tật' , checked: false},
+        { id: 49, name: 'Xe đạp, xe điện, xe máy' , checked: false},
+        { id: 50, name: 'Xe khác', checked: false },]
+    },
+    {
+      expanded: false,
+      category: 'PHẾ LIỆU "VE CHAI"',
+      subCategory: [
+        { id: 51, name: 'Nhựa, giấy, kim loại, "sắt, chì,..."', checked: false },
+        { id: 52, name: 'Máy lạnh, tủ lạnh, máy giặt' , checked: false},
+        { id: 53, name: 'Máy khoan, mài, máy bơm,...' , checked: false},
+        { id: 54, name: 'Bếp điện, lò vi sóng, loa, ấm điện,...', checked: false },
+        { id: 55, name: 'Điện thoại, tivi, loa, máy tính,...', checked: false },
+        { id: 56, name: 'Xe máy, động cơ xăng dầu...' , checked: false},
+        { id: 57, name: 'Thủy tinh "cửa kính, chai lọ...' , checked: false},
+        { id: 58, name: 'Xăm, lốp xe, dầu nhớt thải...' , checked: false},
+        { id: 59, name: 'Ve chai khác', checked: false },]
     },
   ];
-  const [CONTENT_SAVED, setcontensaved] = useState([]);
   const [accordionData, setAccordionData] = useState([]);
   const dataCate = props.dataCategory.data
-  
- 
-  useEffect(() => {
-    if (dataCate.length != 0) {
-      setAccordionData(dataCate);
-    } else {
-      setAccordionData(CONTENT)
-    }
-  }, [dataCate]);
-  //   if (Platform.OS === "android") {
-  //     UIManager.setLayoutAnimationEnabledExperimental(true);
-  //   }
+
   // cập nhật layout khi nhấn vào parent item
   const updateLayout = (index) => {
     LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
@@ -212,11 +230,18 @@ function CategoryCheckBoxComponent(props) {
     setAccordionData(array);
   };
   //   cập nhật layout khi nhấn vào child item
-  const updateLayoutItem = (index) => {
+  const updateLayoutItem = () => {
     // LayoutAnimation.configureNext(LayoutAnimation.Presets.spring);
     const array = [...accordionData];
     setAccordionData(array);
   };
+  useEffect(() => {
+    if (dataCate.length != 0) {
+      setAccordionData(dataCate);
+    } else {
+      setAccordionData([...CONTENT]);
+    }
+  }, []);
   const { dispatch } = props;
   //   function khi nhấn vào button tiếp theo
   const filterButton = () => {
@@ -258,15 +283,17 @@ function CategoryCheckBoxComponent(props) {
           <ExpandableListView
             key={item.category}
             onClickFunction={() => updateLayout(key)}
-            onClickFunctionItem={() => updateLayoutItem(key)}
+            onClickFunctionItem={() => updateLayoutItem()}
             item={item}
+            dataChecked={props.dataCategory.disableFilter}
+            dispatch={dispatch}
           />
         ))}
       </ScrollView>
       <View style={styles.wrapButton}>
-            <TouchableOpacity activeOpacity={0.6} style={styles.button} onPress={() => filterButton()}>
-                <Text style={styles.buttonText}>{props.textButton}</Text>
-            </TouchableOpacity>
+        <TouchableOpacity activeOpacity={0.6} style={styles.button} onPress={() => filterButton()}>
+            <Text style={styles.buttonText}>{props.textButton}</Text>
+        </TouchableOpacity>
       </View>
     </View>
   );

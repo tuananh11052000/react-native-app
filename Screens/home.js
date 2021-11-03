@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef, useLayoutEffect } from "react";
 import {
   StyleSheet,
   Image,
@@ -157,6 +157,7 @@ function Home(props) {
   // onPress tặng người nghèo
   const actionOnPressCXD = () => {
     if (props.auth.isLogin == true) {
+      dispatch({ type: "COMPLETE_CXD" });
       dispatch({ type: "setThreadCXD" }); // redirect address giữa tặng cộng đồng và cần xin đồ ở home và createPost
       navigation.navigate("ConfirmAddress");
     } else navigation.replace("Authentication");
@@ -207,6 +208,21 @@ function Home(props) {
       <View style={{ height: 10, width: "100%", backgroundColor: "#EEEEEE" }} />
     );
   };
+  const listEmpty = () => {
+    return (
+      <View
+        style={{
+          alignItems: "center",
+          flex: 2,
+          justifyContent: "center",
+          backgroundColor: "#e5e5e5",
+          paddingTop: "2%",
+        }}
+      >
+        <Text style={{ color: "#7F7E85" }}>Chưa có</Text>
+      </View>
+    );
+  };
   const onRefresh = () => {
     setlistData([]);
     getData();
@@ -222,7 +238,6 @@ function Home(props) {
           onPressTCD={() => actionOnPressTCD()}
           onPressCXD={() => actionOnPressCXD()}
           onPressMedicalAdvise={() => actionOnPressMedicalAdvise()}
-          style={styles.gift_component}
         />
         <TitleComponent title="Khám phá" />
         <NewsedBox
@@ -249,16 +264,28 @@ function Home(props) {
             <ActivityIndicator color="#BDBDBD" size="small" />
           </View>
         ) : (
-          <FlatList
-            data={listData}
-            renderItem={renderItem}
-            keyExtractor={(item) => item._id}
-            ItemSeparatorComponent={ItemSeparatorView}
-            ListHeaderComponent={listheader}
-            refreshControl={
-              <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-            }
-          />
+          <>
+            {listData.length == 0 ? (
+              <>{listEmpty()}</>
+            ) : (
+              <>
+                <FlatList
+                  data={listData}
+                  renderItem={renderItem}
+                  keyExtractor={(item) => item._id}
+                  ItemSeparatorComponent={ItemSeparatorView}
+                  ListHeaderComponent={listheader}
+                  ListEmptyComponent={listEmpty}
+                  refreshControl={
+                    <RefreshControl
+                      refreshing={refreshing}
+                      onRefresh={onRefresh}
+                    />
+                  }
+                />
+              </>
+            )}
+          </>
         )}
       </View>
     </View>
@@ -271,11 +298,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#e5e5e5",
   },
-  child: {},
-  gift_component: {
-    paddingLeft: 30,
-    paddingRight: 30,
-  },
+
   wrap_search_bgr: {
     flex: 1,
   },
@@ -293,10 +316,10 @@ async function registerForPushNotificationsAsync() {
     const { status } = await Notifications.requestPermissionsAsync();
     finalStatus = status;
   }
-  if (finalStatus !== "granted") {
-    alert("Failed to get push token for push notification!");
-    return;
-  }
+  // if (finalStatus !== "granted") {
+  //   alert("Failed to get push token for push notification!");
+  //   return;
+  // }
   token = (await Notifications.getExpoPushTokenAsync()).data;
 
   const sendTokenDevice = async () => {
@@ -347,5 +370,6 @@ export default connect(function (state) {
     profile: state.profile,
     controlConfirmAddress: state.controlConfirmAddress,
     reloadPost: state.reloadPost,
+    redirectComplete: state.redirectComplete,
   };
 })(Home);

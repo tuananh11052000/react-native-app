@@ -28,21 +28,21 @@ function ServiceCharity(props) {
     dispatch({ type: "setThreadCategory" });
     dispatch({ type: "setThreadGiveGroup" });// chia luồn cateogorynocheckbox giữa givefor và tặng cộng đồng
     dispatch({ type: "giveForCaNhan" });
-    navigation.navigate("Category");
+    navigation.navigate("ListNeedSupport");
   };
   // onpress tặng quỹ từ thiện
   const actionOnPressGiveQuy = () => {
     dispatch({ type: "setThreadCategory" });
     dispatch({ type: "setThreadGiveGroup" });// chia luồn cateogorynocheckbox giữa givefor và tặng cộng đồng
     dispatch({ type: "giveForQuy" });
-    navigation.navigate("Category");
+    navigation.navigate("ListNeedSupport");
   };
   // onpress quyên góp công ích
   const actionOnPressGiveCongIch = () => {
     dispatch({ type: "setThreadCategory" });
     dispatch({ type: "setThreadGiveGroup" });// chia luồn cateogorynocheckbox giữa givefor và tặng cộng đồng
     dispatch({ type: "giveForCongIch" });
-    navigation.navigate("Category");
+    navigation.navigate("ListNeedSupport");
   };
 
   return (

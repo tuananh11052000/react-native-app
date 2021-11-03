@@ -8,7 +8,7 @@ import {
   Dimensions,
   Linking,
   Modal,
-  TouchableOpacity,
+  TouchableOpacity, ActivityIndicator
 } from "react-native";
 import {
   AntDesign,
@@ -20,12 +20,11 @@ import {
   MaterialCommunityIcons,
   Feather,
 } from "@expo/vector-icons";
-import { Button } from "galio-framework";
-import ButtonConfirm from '../components/buttonConfirm.components';
 import config from "../config";
 import axios from "axios";
 import { connect } from "react-redux";
 import ModelShowCategory from "../components/ModalShowCategorySelected.component";
+import ModelCallBad from '../components/ModelCallBad';
 import * as SecureStore from "expo-secure-store";
 import AppLoading from "expo-app-loading";
 import { Avatar } from "react-native-elements";
@@ -36,15 +35,18 @@ import {
   OpenSans_700Bold,
   OpenSans_700Bold_Italic,
 } from "@expo-google-fonts/open-sans";
+import { isLoading } from "expo-font";
 
 const { width } = Dimensions.get("window");
 const height = width * 0.5;
 function DetailPost(props) {
   let data = props.route.params.data; // data from list
   let isHistory = props.route.params.isHistory;
+  const [isShowModelBad, setisShowModelBad] = useState(false);
   const [isShowModelCate, setisShowModelCate] = useState(false);
   const [active, setActive] = useState(0);
   const [avatar, setAvatar] = useState(" ");
+  const [loading, setLoading] = useState(true);
   const [phoneNumber, setPhoneNumber] = useState(props.auth.PhoneNumber); //useState using for phonenumber
 
   const change = ({ nativeEvent }) => {
@@ -92,6 +94,7 @@ function DetailPost(props) {
         }).then(async (data) => {
           setPhoneNumber(data.data.PhoneNumber);
           setAvatar(data.data.ImgAuthor);
+          setLoading(false);
         });
       } catch (e) {
         alert(e);
@@ -100,6 +103,13 @@ function DetailPost(props) {
     getPhone(data.AuthorID);
     //Lay ra avatar
   }, []);
+  const callBad = () => {
+    if (props.auth.isLogin == false) {
+      props.navigation.replace("Authentication");
+    } else {
+      setisShowModelBad(true)
+    }
+  }
   const [fontsLoaded, error] = useFonts({
     OpenSans_400Regular,
     OpenSans_400Regular_Italic,
@@ -119,7 +129,7 @@ function DetailPost(props) {
     } else {
       return (
         <View style={styles.wrapBottom}>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={() => callBad()}>
             <Text style={{ color: "red", fontSize: config.fontsize_5, marginLeft: '4%' }}>Báo xấu</Text>
           </TouchableOpacity>
           <TouchableOpacity activeOpacity={0.6} style={styles.button} onPress={() => pressGive()}>
@@ -130,6 +140,8 @@ function DetailPost(props) {
       );
     }
   };
+
+
   //url phonenumber
   const dialCall = (number) => {
     var number_temp = "0" + number;
@@ -142,13 +154,17 @@ function DetailPost(props) {
     Linking.openURL(phoneNumber);
   };
   const renderCall = () => {
-    if (phoneNumber != "") {
-      return (
-        <TouchableOpacity onPress={() => dialCall(phoneNumber)}>
-          <Feather name="phone-call" size={width * 0.06} color="#00a2e8" />
-        </TouchableOpacity>
-      );
-    } else return;
+    if (loading == true) {
+      return  <ActivityIndicator size="small" color="#BDBDBD" />
+    } else {
+      if (phoneNumber != "") {
+        return (
+          <TouchableOpacity onPress={() => dialCall(phoneNumber)}>
+            <Feather name="phone-call" size={width * 0.06} color="#00a2e8" />
+          </TouchableOpacity>
+        );
+      } else return;
+    }
     
   };
   const pressGive = () => {
@@ -231,14 +247,18 @@ function DetailPost(props) {
   };
   //Ham render avatar
   const renderAvatar = () => {
-    if (avatar != null)
+    if (loading == true) {
+      return <View style={{justifyContent: 'center'}}>
+         <ActivityIndicator size="small" color="#BDBDBD" />
+      </View>
+    } else{
+      if (avatar != null)
       return (
         <View>
           <Avatar
             size={width*0.12}
             rounded
             source={{ uri: avatar }}
-            containerStyle={styles.avatarContainer}
           ></Avatar>
         </View>
       );
@@ -252,6 +272,7 @@ function DetailPost(props) {
           />
         </View>
       );
+    }
   };
   return (
     <ScrollView
@@ -299,6 +320,12 @@ function DetailPost(props) {
         onPress={() => {
           setisShowModelCate(false);
         }}
+      />
+      <ModelCallBad show={isShowModelBad}
+      onPressClose={() => {
+        setisShowModelBad(false)
+      }}
+      idPost={data._id}
       />
       {renderBtnGive()}
     </ScrollView>

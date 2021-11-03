@@ -203,8 +203,9 @@ function ProductGiveForComponent(props) {
     if (props.viewDetail == "true") {
       const { dispatch } = props;
       dispatch({ type: "SET_GUI" });
-      dispatch({ type: "COMPLETE_LOINHAN_CXD" });
-      props.navigation.navigate("ConfirmGiveFor", { data: item, name: "Xác nhận gửi tặng", sender: "Người tặng" }); //chuyển trang
+      // dispatch({ type: "COMPLETE_LOINHAN_CXD" });
+      // props.navigation.navigate("ConfirmGiveFor", { data: item, name: "Xác nhận gửi tặng", sender: "Người tặng" }); //chuyển trang
+      props.navigation.navigate("ConfirmCategoryGive", { data: item});
     } else {
       setIsShow(true);
  
@@ -253,7 +254,7 @@ function ProductGiveForComponent(props) {
         <View style={styles.wrapInfor}>
           <Text style={styles.wrapName}>{props.nameAuthor}</Text>
           <View style={styles.wrapAddress}>
-            <Feather name="clock" size={18} color="gray" />
+            <Feather name="clock" size={width*0.04} color="gray" />
             <Text style={styles.address}>
               {calculatingTime(props.time, currentTime)}
             </Text>
@@ -267,7 +268,7 @@ function ProductGiveForComponent(props) {
       <View style={styles.wrapImage}>{renderImage()}</View>
       <View style={styles.wrapBorderBottom}>
         <View style={styles.wrapAddress}>
-          <Entypo name="location" size={20} color="#BDBDBD" />
+          <Entypo name="location" size={width*0.03} color="#BDBDBD" />
           <Text style={styles.address}>{renderAddress(props.address)}</Text>
         </View>
         {renderBtnGive(props.item)}
@@ -280,6 +281,7 @@ function ProductGiveForComponent(props) {
           titleBtn="Gửi tặng"
           nameNote="notereceiver"
           status="waiting"
+          postId={props.idPost}
         />
       </View>
     </TouchableOpacity>
@@ -305,6 +307,7 @@ const styles = StyleSheet.create({
   wrapBorder: {
     flexDirection: "row",
     width: "100%",
+    maxWidth: '100%',
     alignItems: "center",
     paddingLeft: "3%",
     paddingRight: "3%",
@@ -329,6 +332,7 @@ const styles = StyleSheet.create({
   wrapAddress: {
     flexDirection: "row",
     marginTop: "3%",
+    alignItems: 'center'
     // width: "80%",
   },
   address: {
@@ -342,6 +346,7 @@ const styles = StyleSheet.create({
     fontFamily: "OpenSans_400Regular",
     marginBottom: "1%",
     marginTop: "3%",
+    maxWidth: '85%'
   },
   detail: {
     color: "#26c6da",

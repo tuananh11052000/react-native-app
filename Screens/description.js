@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   StyleSheet,
   View,
@@ -12,9 +12,9 @@ import TitleDetail from '../components/titleDetail.components';
 import ButtonConfirm from '../components/buttonConfirm.components';
 
 function Description(props) {
-  
   const { dispatch } = props;
   const [isDisplay, setIsDisplay] = useState(false);
+  const image = props.infoPost.image;
   const submitInfoPost = async () => {
     //api upload infor json
     setIsDisplay(true);
@@ -85,8 +85,11 @@ function Description(props) {
         ]
       );
     }
-    else
+    else {
       submitInfoPost();
+      // console.log(props.infoPost.image);
+    }
+    
   }
 
   const { navigation } = props;
@@ -115,5 +118,5 @@ const styles = StyleSheet.create({
 });
 
 export default connect(function (state) {
-  return { infoPost: state.infoPost, auth: state.auth }
+  return { infoPost: state.infoPost, auth: state.auth, redirectComplete: state.redirectComplete, }
 })(Description);

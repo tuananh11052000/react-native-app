@@ -297,6 +297,17 @@ function DetailConnectPost(props) {
       );
     }
   };
+  const renderStatus = () => {
+    if (data.isStatus == "done") {
+      return (<Text style={styles.giveStatusDone}>{data.typetransaction}</Text>)
+    } 
+    if (data.isStatus == "waiting") { 
+      return (<Text style={styles.giveStatus}>{data.typetransaction}</Text>)
+    }
+    if (data.isStatus == "cancel") { 
+      return (<Text style={styles.giveStatusCancel}>{data.typetransaction}</Text>)
+    }
+  }
   return (
     <ScrollView
       style={styles.container}
@@ -310,7 +321,7 @@ function DetailConnectPost(props) {
       <View style={styles.wrapTop}>
         <View style={styles.wrapTopLeft}>
           <Text style={styles.textId}>Mã số:</Text>
-          <Text style={styles.styleId}>&ensp;{renderId()}</Text>
+          <Text style={styles.styleId}>&ensp;{data._id}</Text>
         </View>
       </View>
 
@@ -364,7 +375,7 @@ function DetailConnectPost(props) {
       <View style={styles.wrapInfoPost}>
         <View style={styles.wrapTopInfo}>
           <Text style={styles.textTitle}>Thông tin tặng</Text>
-          <Text style={styles.giveStatus}>{data.typetransaction}</Text>
+          {renderStatus()}
         </View>
         <View style={styles.wrapProduct}>
           <TouchableOpacity
@@ -383,9 +394,7 @@ function DetailConnectPost(props) {
                 </View>
 
                 <View style={styles.wrapTypePrice}>
-                  <Text style={styles.type}>
-                    {renderChildTitle(data.PostData.title)}
-                  </Text>
+                  <Text style={styles.type}>{renderChildTitle(data.PostData.title)}</Text>
                   <Text style={styles.price}>Miễn phí</Text>
                 </View>
                 <View style={styles.wrapTimeAddress}>
@@ -576,6 +585,28 @@ const styles = StyleSheet.create({
     fontFamily: "OpenSans_600SemiBold",
     fontSize: config.fontsize_3,
     backgroundColor: "#C3C3C3",
+    paddingHorizontal: 8,
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: "#FFF",
+    marginRight: "3%",
+  },
+  giveStatusDone: {
+    fontFamily: "OpenSans_600SemiBold",
+    fontSize: config.fontsize_3,
+    color: '#FFF',
+    backgroundColor: "#43A047",
+    paddingHorizontal: 8,
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: "#FFF",
+    marginRight: "3%",
+  },
+  giveStatusCancel: {
+    fontFamily: "OpenSans_600SemiBold",
+    fontSize: config.fontsize_3,
+    color: '#FFF',
+    backgroundColor: "#E53935",
     paddingHorizontal: 8,
     borderRadius: 10,
     borderWidth: 1,

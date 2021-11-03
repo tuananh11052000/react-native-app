@@ -35,26 +35,26 @@ function PostType(props) {
     dispatch({ type: "setThreadCategory" });
     dispatch({ type: "setThreadGiveGroup" }); // chia luồn cateogory nocheckbox giữa givefor và tặng cộng đồng
     dispatch({ type: "giveForCaNhan" });
-    navigation.navigate("Category");
+    navigation.navigate("ListNeedSupport");
   };
   // onpress tặng quỹ từ thiện
   const actionOnPressGiveQuy = () => {
     dispatch({ type: "setThreadCategory" });
     dispatch({ type: "setThreadGiveGroup" });// chia luồn cateogory nocheckbox giữa givefor và tặng cộng đồng
     dispatch({ type: "giveForQuy" });
-    navigation.navigate("Category");
+    navigation.navigate("ListNeedSupport");
   };
   // onpress quyên góp công ích
   const actionOnPressGiveCongIch = () => {
     dispatch({ type: "setThreadCategory" });
     dispatch({ type: "setThreadGiveGroup" });// chia luồn cateogory nocheckbox giữa givefor và tặng cộng đồng
     dispatch({ type: "giveForCongIch" });
-    navigation.navigate("Category");
+    navigation.navigate("ListNeedSupport");
   };
 
   return (
     <View style={styles.container}>
-      <NewPostType title="Cần hỗ trợ" onPress={() => actionOnPressCXD()} />
+      <NewPostType title="Tôi cần hỗ trợ" onPress={() => actionOnPressCXD()} />
       <NewPostType title="Tặng cộng đồng" onPress={() => actionOnPressTCD()} />
       <NewPostType
         title="Tặng người khó khăn"

@@ -11,7 +11,8 @@ import {
   Text,
   FlatList,
   Dimensions,
-  TextInput, RefreshControl
+  TextInput,
+  RefreshControl,
 } from "react-native";
 import { connect } from "react-redux";
 import { Entypo, EvilIcons, FontAwesome, AntDesign } from "@expo/vector-icons";
@@ -55,7 +56,7 @@ function App(props) {
   let addr = props.dataCategory.addressFilter;
   // function lọc các danh mục đã chọn
   let categoryFilter = props.dataCategory.NameProduct;
-  
+
   const filterCategory = (arrayProduct, listTemp) => {
     if (categoryFilter.length != 0) {
       const list = [];
@@ -70,14 +71,14 @@ function App(props) {
           }
         }
       }
-      
+
       setData(list);
     }
   };
   const filterTwoOption = () => {
     if (addr.length != 0 && categoryFilter.length != 0) {
       const list = [];
-      const listTemp = [...listAfterFilter]
+      const listTemp = [...listAfterFilter];
       for (let i = 0; i < listTemp.length; i++) {
         for (let j = 0; j < categoryFilter.length; j++) {
           if (
@@ -96,7 +97,7 @@ function App(props) {
       });
       setData(listAddr);
     }
-  }
+  };
   useEffect(() => {
     setaddressFilter(addr);
     setcateFilter(categoryFilter);
@@ -119,12 +120,12 @@ function App(props) {
   const onRefresh = () => {
     setData([]);
     setaddressFilter("");
-    categoryFilter=[];
-    setcateFilter([])
+    categoryFilter = [];
+    setcateFilter([]);
     getListPhotos();
-    dispatch({ type: "RESET_ADDRESS_FILTER"});
-    dispatch({ type: "RESET_NAMEPRODUCT"});
-  }
+    dispatch({ type: "RESET_ADDRESS_FILTER" });
+    dispatch({ type: "RESET_NAMEPRODUCT" });
+  };
   // call api
   //https://smai-back-end.herokuapp.com/post/getPostByTypeAuthor?typeauthor=%7BLoaij
   const getListPhotos = () => {
@@ -179,6 +180,21 @@ function App(props) {
   const ItemSeparatorView = () => {
     return (
       <View style={{ height: 10, width: "100%", backgroundColor: "#EEEEEE" }} />
+    );
+  };
+  const listEmpty = () => {
+    return (
+      <View
+        style={{
+          alignItems: "center",
+          flex: 2,
+          justifyContent: "center",
+          backgroundColor: "#e5e5e5",
+          paddingTop: "2%",
+        }}
+      >
+        <Text style={{ color: "#7F7E85" }}>Chưa có</Text>
+      </View>
     );
   };
   // render item product
@@ -247,18 +263,26 @@ function App(props) {
               setshowModelAddress(false);
             }}
           />
-          <FlatList
-            style={styles.list}
-            data={data}
-            renderItem={renderItem}
-            keyExtractor={(item) => `key-${item._id}`}
-            ItemSeparatorComponent={ItemSeparatorView}
-            refreshControl={
-              <RefreshControl
-                refreshing={isLoading}
-                onRefresh={onRefresh}
-              />}
-          ></FlatList>
+          {data.length == 0 ? (
+            <>{listEmpty()}</>
+          ) : (
+            <>
+              <FlatList
+                style={styles.list}
+                data={data}
+                renderItem={renderItem}
+                keyExtractor={(item) => `key-${item._id}`}
+                ItemSeparatorComponent={ItemSeparatorView}
+                refreshControl={
+                  <RefreshControl
+                    refreshing={isLoading}
+                    onRefresh={onRefresh}
+                  />
+                }
+                ListEmptyComponent={listEmpty}
+              ></FlatList>
+            </>
+          )}
         </>
       )}
     </View>
@@ -268,7 +292,7 @@ function App(props) {
 const styles = StyleSheet.create({
   containter: {
     flex: 1,
-    backgroundColor: "#FFF",
+    backgroundColor: "#e5e5e5",
   },
   containterLoading: {
     flex: 1,

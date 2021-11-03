@@ -20,7 +20,7 @@ import {
 } from "@expo-google-fonts/open-sans";
 import giftIcon2 from "../assets/gift2.png";
 import giftIcon1 from "../assets/gift1.png";
-import giftIcon3 from "../assets/gift3.png";
+import giftIcon from "../assets/gift.png";
 import doctor from "../assets/doctorLarge.png";
 
 const { width, height } = Dimensions.get("window");
@@ -42,14 +42,14 @@ export default function GiftComponent(props) {
     <View style={style.wrapCategory}>
       <TouchableOpacity activeOpacity={0.5} onPress={props.onPressTCD}>
         <View style={style.category}>
-          <Image source={giftIcon2} style={style.giftIcon1} />
+          <Image source={giftIcon} style={style.giftIcon1} />
           <Text style={style.title}>Có đồ{"\n"}cần tặng</Text>
         </View>
       </TouchableOpacity>
       <TouchableOpacity activeOpacity={0.5} onPress={props.onPressCXD}>
         <View style={style.category}>
           <Image source={giftIcon1} style={style.giftIcon1} />
-          <Text style={style.title}>Cần hỗ{"\n"}trợ</Text>
+          <Text style={style.title}>Tôi cần{"\n"}hỗ trợ</Text>
         </View>
       </TouchableOpacity>
       <TouchableOpacity activeOpacity={0.5} onPress={props.onPressMedicalAdvise}>
@@ -67,6 +67,7 @@ const style = StyleSheet.create({
     width: width*0.1,
     height: width*0.1,
   },
+
   doctorIcon: {
     width: width*0.1,
     height: width*0.1,
@@ -79,6 +80,8 @@ const style = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-around",
     backgroundColor: "#FFFFFF",
+    marginTop: '2%',
+    marginBottom: '2%'
   },
   title: {
     textAlign: "center",

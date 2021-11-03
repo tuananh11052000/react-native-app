@@ -59,7 +59,7 @@ function CategoryComponent(props) {
 
   // create array to contain Expandable ListView items & create a State named as accordionData and store the array in this State
   
-  const [accordionData, setAccordionData] = useState(ListCategory);
+  const [accordionData, setAccordionData] = useState([...ListCategory]);
 
   // enable layout animation, toggle 'expanded' state for index and then update the layout
   const updateLayout = (index) => {

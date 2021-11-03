@@ -5,19 +5,31 @@
     "slug": "Smai",
     "icon": "./assets/icon1.png",
     "notification":{
-      "icon":"./assets/icon1.png",
+      "icon":"./assets/iconNotification.png",
       "color": "#FFF",
       "iosDisplayInForeground": true,
       "androidMode": "default"
     },
+    "plugins": [
+      [
+        "expo-notifications",
+        {
+          "icon":"./assets/iconNotification.png",
+          "color": "#ffffff",
+          "sounds": ["./local/path/to/mySound.wav", "./local/path/to/myOtherSound.wav"],
+          "mode": "production"
+        }
+      ]
+    ],
     "splash": {
       "image": "./assets/splashsmai.png",
       "resizeMode": "contain",
       "backgroundColor": "#FFF"
     },
     "updates": {
+      "enabled": false,
       "fallbackToCacheTimeout": 0
-    },
+  },
     "assetBundlePatterns": ["**/*"],
     "ios": {
       "bundleIdentifier": "com.smait",

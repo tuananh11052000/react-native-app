@@ -54,17 +54,24 @@ export default function ConnectPost(props) {
        return nameGive;
     }
   };
-
   const renderStatusDone = () => {
+
     if (props.status == "done") {
       return (
         <Text style={style.giveStatusDone}>{props.statusType}</Text>
       )
-    } else {
+    } 
+    if (props.status == "waiting") {
       return (
         <Text style={style.giveStatus}>{props.statusType}</Text>
       )
     }
+    if (props.status == "cancel") {
+      return (
+        <Text style={style.giveStatusCancel}>{props.statusType}</Text>
+      )
+    }
+    
   }
   const renderImage = () => {
     if (props.urlImage != null) {
@@ -259,6 +266,14 @@ const style = StyleSheet.create({
     fontFamily: "OpenSans_600SemiBold",
     fontSize: config.fontsize_3,
     backgroundColor: "#43A047",
+    paddingHorizontal: 8,
+    borderRadius: 10,
+    color: '#FFF'
+  },
+  giveStatusCancel: {
+    fontFamily: "OpenSans_600SemiBold",
+    fontSize: config.fontsize_3,
+    backgroundColor: "#E53935",
     paddingHorizontal: 8,
     borderRadius: 10,
     color: '#FFF'

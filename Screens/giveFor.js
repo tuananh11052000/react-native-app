@@ -39,7 +39,7 @@ function App(props) {
   const [datafilter, setDataFilter] = useState([]);
   const [showModelAddress, setshowModelAddress] = useState(false);
   const addr = props.dataCategory.addressFilter;
-
+  const { navigation, dispatch } = props;
   useEffect(() => {
     if (addr.length == 0) {
       getListPhotos();
@@ -47,6 +47,14 @@ function App(props) {
       filterAddressFunc(addr);
     }
   }, [addr]);
+  useEffect(() => {
+    const unsubscribe = navigation.addListener("focus", () => {
+      getListPhotos();
+    });
+    return () => {
+      unsubscribe;
+    };
+  }, [navigation]);
   const filterAddressFunc = (address) => {
     if (props.redirectTransaction == "gui") {
       const listTemp = data.filter((pr) => {
@@ -63,10 +71,8 @@ function App(props) {
       });
       setData(listTemp);
     }
-    
   };
   // call api
-  //https://smai-back-end.herokuapp.com/post/getPostByTypeAuthor?typeauthor=%7BLoaij
   const getListPhotos = () => {
     // kiểm tra nếu từ trang category chuyển qua thì call api những người xin đồ
     if (props.redirectTransaction == "gui") {
@@ -89,18 +95,19 @@ function App(props) {
               }
             }
           }
-      
+
           setData(realData);
           setDataFilter(realData);
+          dispatch({ type: "setNoReload" });
         })
         .catch((error) => {
           console.log("Error: ", error);
         })
         .finally(() => setisLoading(false));
     } else {
-      // nếu từ lời nhắn chỗ tin đăng thì call api lời nhắn 
-      let postId = props.route.params.postId; 
-      let result = props.auth.token
+      // nếu từ lời nhắn chỗ tin đăng thì call api lời nhắn
+      let postId = props.route.params.postId;
+      let result = props.auth.token;
       axios({
         method: "get",
         url: `https://api.smai.com.vn/transaction/transaction-post?postId=${postId}`,
@@ -147,7 +154,8 @@ function App(props) {
       } else {
         const data = datafilter.filter((pr) => {
           if (
-            pr.usersender.FullName.toLowerCase().indexOf(text.toLowerCase()) != -1 ||
+            pr.usersender.FullName.toLowerCase().indexOf(text.toLowerCase()) !=
+              -1 ||
             pr.note.toLowerCase().indexOf(text.toLowerCase()) != -1
           )
             return true;
@@ -155,12 +163,12 @@ function App(props) {
         });
         setData(data);
       }
-      
     }
   };
-  const { navigation } = props;
+
   // render item product
   const renderItem = ({ item }) => {
+    let postId = props.route.params.postId;
     if (props.redirectTransaction == "gui") {
       return (
         <ProductGiveFor
@@ -173,6 +181,7 @@ function App(props) {
           navigation={navigation}
           authorID={item.AuthorID}
           viewDetail="true"
+          idPost={postId}
         />
       );
     } else {
@@ -362,5 +371,6 @@ export default connect(function (state) {
     dataCategory: state.dataCategory,
     redirectTransaction: state.redirectTransaction,
     auth: state.auth,
+    reloadPost: state.reloadPost,
   };
 })(App);
