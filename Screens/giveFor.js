@@ -247,12 +247,30 @@ function App(props) {
               setshowModelAddress(false);
             }}
           />
-          <FlatList
+          <ScrollView>
+            {data.map((item, index) => (
+               <ProductGiveFor
+               key={index}
+               item={item}
+               nameAuthor={item.usersender.FullName}
+               title={item.note}
+               time={item.updatedAt}
+               address={item.SenderAddress}
+               urlImage={item.urlImage[0]}
+               navigation={navigation}
+               authorID={item.SenderID}
+               viewDetail="false"
+               idTrans={item._id}
+               isStatus={item.isStatus}
+             />
+            ))}
+          </ScrollView>
+          {/* <FlatList
             style={styles.list}
             data={data}
             renderItem={renderItem}
             keyExtractor={(item) => `key-${item._id}`}
-          ></FlatList>
+          ></FlatList> */}
         </>
       )}
     </View>

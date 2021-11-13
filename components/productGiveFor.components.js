@@ -20,6 +20,7 @@ import {
   Entypo,
   Ionicons,
 } from "@expo/vector-icons";
+import DialogInput from "react-native-dialog-input";
 import config from "../config";
 import axios from "axios";
 import * as SecureStore from "expo-secure-store";
@@ -44,6 +45,7 @@ import {
 function ProductGiveForComponent(props) {
   const [isShow, setIsShow] = useState(false);
   const [avatar, setAvatar] = useState(" ");
+  const [showDialog, setShowDialog] = useState(false);
   const [fontsLoaded, error] = useFonts({
     OpenSans_300Light,
     OpenSans_300Light_Italic,
@@ -63,8 +65,7 @@ function ProductGiveForComponent(props) {
         await axios({
           method: "get",
           url:
-            "https://api.smai.com.vn/user/getInfoAuthor?AuthorID=" +
-            AuthorID,
+            "https://api.smai.com.vn/user/getInfoAuthor?AuthorID=" + AuthorID,
         }).then(async (data) => {
           setAvatar(data.data.ImgAuthor);
         });
@@ -205,10 +206,9 @@ function ProductGiveForComponent(props) {
       dispatch({ type: "SET_GUI" });
       // dispatch({ type: "COMPLETE_LOINHAN_CXD" });
       // props.navigation.navigate("ConfirmGiveFor", { data: item, name: "Xác nhận gửi tặng", sender: "Người tặng" }); //chuyển trang
-      props.navigation.navigate("ConfirmCategoryGive", { data: item});
+      props.navigation.navigate("ConfirmCategoryGive", { data: item });
     } else {
-      setIsShow(true);
- 
+      setIsShow(true)
     }
   };
 
@@ -216,7 +216,7 @@ function ProductGiveForComponent(props) {
     if (props.isStatus == null || props.isStatus == "null") {
       return (
         <TouchableOpacity
-          style={{ marginTop: "3%", }}
+          style={{ marginTop: "3%" }}
           onPress={() => pressGiveFor(item)}
         >
           <View style={styles.btnGiveFor}>
@@ -254,7 +254,7 @@ function ProductGiveForComponent(props) {
         <View style={styles.wrapInfor}>
           <Text style={styles.wrapName}>{props.nameAuthor}</Text>
           <View style={styles.wrapAddress}>
-            <Feather name="clock" size={width*0.04} color="gray" />
+            <Feather name="clock" size={width * 0.04} color="gray" />
             <Text style={styles.address}>
               {calculatingTime(props.time, currentTime)}
             </Text>
@@ -268,7 +268,7 @@ function ProductGiveForComponent(props) {
       <View style={styles.wrapImage}>{renderImage()}</View>
       <View style={styles.wrapBorderBottom}>
         <View style={styles.wrapAddress}>
-          <Entypo name="location" size={width*0.03} color="#BDBDBD" />
+          <Entypo name="location" size={width * 0.03} color="#BDBDBD" />
           <Text style={styles.address}>{renderAddress(props.address)}</Text>
         </View>
         {renderBtnGive(props.item)}
@@ -283,6 +283,19 @@ function ProductGiveForComponent(props) {
           status="waiting"
           postId={props.idPost}
         />
+        <DialogInput
+          isDialogVisible={showDialog}
+          title={"DialogInput 1"}
+          message={"Message for DialogInput #1"}
+          hintInput={"HINT INPUT"}
+          submitInput={(inputText) => {
+              console.log(inputText)
+              setShowDialog(false);
+          }}
+          closeDialog={() => {
+            setShowDialog(false);
+          }}
+        ></DialogInput>
       </View>
     </TouchableOpacity>
   );
@@ -307,7 +320,7 @@ const styles = StyleSheet.create({
   wrapBorder: {
     flexDirection: "row",
     width: "100%",
-    maxWidth: '100%',
+    maxWidth: "100%",
     alignItems: "center",
     paddingLeft: "3%",
     paddingRight: "3%",
@@ -332,7 +345,7 @@ const styles = StyleSheet.create({
   wrapAddress: {
     flexDirection: "row",
     marginTop: "3%",
-    alignItems: 'center'
+    alignItems: "center",
     // width: "80%",
   },
   address: {
@@ -346,7 +359,7 @@ const styles = StyleSheet.create({
     fontFamily: "OpenSans_400Regular",
     marginBottom: "1%",
     marginTop: "3%",
-    maxWidth: '85%'
+    maxWidth: "85%",
   },
   detail: {
     color: "#26c6da",
@@ -372,7 +385,6 @@ const styles = StyleSheet.create({
     paddingTop: "2%",
     paddingBottom: "2%",
     alignItems: "center",
-  
   },
   btnGived: {
     paddingLeft: "3%",
@@ -394,7 +406,7 @@ const styles = StyleSheet.create({
     color: "green",
     fontSize: config.fontsize_3,
     fontFamily: "OpenSans_700Bold",
-    marginRight: '2%'
+    marginRight: "2%",
   },
 });
 export default connect(function (state) {

@@ -7775,6 +7775,11 @@
   "resolved" "https://registry.npmjs.org/react-native-bootstrap-icons/-/react-native-bootstrap-icons-1.5.0.tgz"
   "version" "1.5.0"
 
+"react-native-dialog-input@^1.0.8":
+  "integrity" "sha512-W9YNMt6r+rUUMDEkOR1WMuGfSJw97ujB8H1xp8TjJTOnYVSlsf4aEP6t+J8tVk3XZaDcTawXgDjxH6E1WVWRog=="
+  "resolved" "https://registry.npmjs.org/react-native-dialog-input/-/react-native-dialog-input-1.0.8.tgz"
+  "version" "1.0.8"
+
 "react-native-dotenv@^3.1.1":
   "integrity" "sha512-eMVEItSKy1saVH14Tn4mGpxhUPfHItBjuqW3DYFYELOO2sPAe25vaxgG5LRee/VyfR6OcJxbVE/6J8aOjy04zA=="
   "resolved" "https://registry.npmjs.org/react-native-dotenv/-/react-native-dotenv-3.1.1.tgz"

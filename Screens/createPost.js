@@ -310,11 +310,13 @@ function CreatePost(props) {
                 ) : (
                   <>
                     <FlatList
+                      style={{ flex: 1 }}
                       data={data}
                       renderItem={renderItem}
                       keyExtractor={(item) => item._id}
                       ItemSeparatorComponent={ItemSeparatorView}
                       ListHeaderComponent={listheader}
+                      onEndReachedThreshold={0.01}
                       refreshControl={
                         <RefreshControl
                           refreshing={refreshing}

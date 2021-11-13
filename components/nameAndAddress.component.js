@@ -44,6 +44,7 @@ import PriorityImg from "../assets/priority_preview.png";
 import ModalDetailAddress from "./ModalDetailAddress";
 import { BottomSheet } from "react-native-elements";
 import ModalCamera from "./ModalCamera";
+import ListImage from "./ImagesPicker/ListImage";
 var { width } = Dimensions.get("window");
 
 function NameAndAddress(props) {
@@ -54,7 +55,7 @@ function NameAndAddress(props) {
   const [showModelAddress, setshowModelAddress] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
   const [isShow, setIsShow] = useState(false);
-  const { dispatch } = props;
+  const { dispatch, navigation } = props;
   const data = props.data;
   useEffect(() => {
     const getAddress = async () => {
@@ -207,7 +208,9 @@ function NameAndAddress(props) {
             </View>
             <View style={styles.wrapAddress}>
               <Entypo name="location" size={width * 0.05} color="#BDBDBD" />
-              <Text style={styles.address}>{fullAddress == "" ? "Nhập địa chỉ" : fullAddress}</Text>
+              <Text style={styles.address}>
+                {fullAddress == "" ? "Nhập địa chỉ" : fullAddress}
+              </Text>
             </View>
             <View style={{ alignItems: "flex-end" }}>
               <TouchableOpacity onPress={() => setshowModelAddress(true)}>
@@ -244,20 +247,11 @@ function NameAndAddress(props) {
               <Text style={styles.wrapTileImage}>
                 Hình ảnh (tối đa 5 hình ảnh)
               </Text>
-
-              <ScrollView horizontal={true}>
-                <TouchableOpacity
-                  style={styles.borderUpload}
-                  onPress={() => handleImage()}
-                >
-                  <AntDesign
-                    name="clouduploado"
-                    size={width * 0.15}
-                    color="#B1B1B1"
-                  />
-                </TouchableOpacity>
-                {renderIMG()}
-              </ScrollView>
+              <ListImage
+                navigation={navigation}
+                dispatch={dispatch}
+                onPress={() => handleImage()}
+              />
             </View>
             <ModalDetailAddress
               show={showModelAddress}

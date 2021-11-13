@@ -233,6 +233,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     paddingLeft: "2%",
     paddingRight: "3%",
+    maxWidth: '80%'
   },
   wrapCategory: {
     flexDirection: "row",

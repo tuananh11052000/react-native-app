@@ -43,7 +43,7 @@ export default function GiftComponent(props) {
       <TouchableOpacity activeOpacity={0.5} onPress={props.onPressTCD}>
         <View style={style.category}>
           <Image source={giftIcon} style={style.giftIcon1} />
-          <Text style={style.title}>Có đồ{"\n"}cần tặng</Text>
+          <Text style={style.title}>Tặng đồ{"\n"}thiện nguyện</Text>
         </View>
       </TouchableOpacity>
       <TouchableOpacity activeOpacity={0.5} onPress={props.onPressCXD}>

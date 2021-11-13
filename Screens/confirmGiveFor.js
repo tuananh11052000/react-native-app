@@ -132,6 +132,8 @@ function ConfirmGiveFor(props) {
   return (
     <SafeAreaView style={styles.container}>
       <InforAddress
+        navigation={navigation}
+        dispatch={dispatch}
         onPress={() => navigation.navigate("Chọn ảnh")}
         cateSelected={cateSelected}
         data={detailPost}
