@@ -48,6 +48,8 @@ import YouReceiveTotal from "./Screens/youReceiveTotal";
 import DetailConnectPost from "./Screens/detailConnectPost";
 import ListNeedSupport from './Screens/listNeedSupport';
 import ConfirmCategoryGive from './Screens/confirmCategoryGive';
+import DetailPostReceive from './Screens/detailPostGiveHome';
+import redirectPostDonate from "./Reducer/redirectPostDonate";
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
 
@@ -370,6 +372,20 @@ function AppNavigator(props) {
           })}
         />
         <Stack.Screen
+          name="DetailPostReceive"
+          component={DetailPostReceive}
+          options={({route}) => ({
+            title: "Chi tiết bài đăng",
+            headerStyle: {
+              backgroundColor: config.color_header_background,
+            },
+            headerTintColor: config.headerTintColor,
+            headerTitleStyle: {
+              fontWeight: "bold",
+            },
+          })}
+        />
+        <Stack.Screen
           name="History"
           component={HistoryPage}
           options={({ navigation }) => ({
@@ -448,6 +464,7 @@ function AppNavigator(props) {
                   dispatch({ type: "RESET_NAMEPRODUCT" });
                   dispatch({ type: "RESET_ADDRESS_FILTER" });
                   dispatch({ type: "RESET_DATA" });
+                  dispatch({ type: "DEFAULT_POSTDONATE" });
                   navigation.goBack();
                 }}
                 tintColor={"white"}
@@ -775,6 +792,7 @@ const styles = StyleSheet.create({
 export default connect(function (state) {
   return { infoPost: state.infoPost, 
     dataCategory: state.dataCategory, 
-    resetCate: state.resetCate
+    resetCate: state.resetCate,
+    redirectPostDonate: state.redirectPostDonate
   };
 })(AppNavigator);

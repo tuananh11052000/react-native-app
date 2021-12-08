@@ -1,11 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, } from "react";
 import {
   FlatList,
   StyleSheet,
   View,
   StatusBar,
   Image,
-  Text,
+  Text, BackHandler
 } from "react-native";
 import { connect } from "react-redux";
 import NewPostType from "../components/newpostType.component";
@@ -16,6 +16,21 @@ function ServiceCharity(props) {
   const { navigation } = props;
   const { dispatch } = props;
 
+  // useEffect(() => {
+  //   const backAction = () => {
+  //     navigation.navigate("Home")
+      
+  //     return true;
+  //   };
+
+  //   BackHandler.addEventListener(
+  //     "hardwareBackPress",
+  //     backAction
+  //   );
+
+  //   return () => BackHandler.removeEventListener("hardwareBackPress",
+  //   backAction)
+  // }, [navigation]);
   const actionOnPressTCD = () => {
     dispatch({ type: "COMPLETE_TCD" }); // redirect màn hình complete
     dispatch({ type: "setThreadCategory" });

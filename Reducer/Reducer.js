@@ -16,6 +16,8 @@ import redirectComplete from './redirectComplete';
 import redirectTransaction from './redirectTransaction';
 import dataTrans from './dataTransaction';
 import idPost from './idPost';
+import redirectCancel from './redirectCancel';
+import redirectPostDonate from './redirectPostDonate';
 import { combineReducers } from "redux";
 
 var reducer = combineReducers({
@@ -37,6 +39,8 @@ var reducer = combineReducers({
   redirectTransaction,
   dataTrans,
   idPost,
+  redirectCancel,
+  redirectPostDonate
 });
 
 export default reducer;

@@ -28,13 +28,13 @@ export default function TitleComponent(props) {
 
 const style = StyleSheet.create({
   wrapTitle: {
-    backgroundColor: "#EBEBEB",
+    // backgroundColor: "#EBEBEB",
     paddingTop: 5,
     paddingBottom: 5,
   },
   title: {
     fontSize: config.fontsize_3,
-    marginLeft: 20,
+    marginLeft: '2%',
     color: "#7F7E85",
     textTransform: "uppercase",
     fontFamily: "OpenSans_700Bold",

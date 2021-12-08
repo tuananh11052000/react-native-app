@@ -31,7 +31,9 @@ import * as SecureStore from "expo-secure-store";
 import { connect } from "react-redux";
 const { width } = Dimensions.get("window");
 const height = width * 0.5;
-
+function unique(arr) {
+  return Array.from(new Set(arr)) //
+}
 function App(props) {
   const [data, setData] = useState([]);
   const [isLoading, setisLoading] = useState(true);
@@ -63,7 +65,7 @@ function App(props) {
         }
       }
 
-      setData(list);
+      setData(unique(list));
     }
   };
   const filterTwoOption = () => {
@@ -109,6 +111,7 @@ function App(props) {
   }, [categoryFilter, addr]);
   useEffect(() => {
     getListPhotos();
+
   }, []);
   const filterAddressFunc = (address, list) => {
     const listTemp = list.filter((pr) => {

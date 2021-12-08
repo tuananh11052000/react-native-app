@@ -138,7 +138,7 @@ function TopProfile(props) {
     else
       return (
         <View>
-          <EvilIcons name="user" size={width*0.1} color="#CCC" />
+          <EvilIcons name="user" size={width*0.2} color="#CCC" />
           {renderOnloading()}
           <Avatar.Accessory
             size={25}

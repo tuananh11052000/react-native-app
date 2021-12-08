@@ -4,9 +4,10 @@ import {
   Text,
   View,
   StyleSheet,
-  TouchableOpacity,
+  // TouchableOpacity,
   Dimensions,
 } from "react-native";
+import { TouchableOpacity } from 'react-native-gesture-handler';
 import config from "../config";
 import AppLoading from "expo-app-loading";
 import {
@@ -40,23 +41,20 @@ export default function GiftComponent(props) {
 
   return (
     <View style={style.wrapCategory}>
-      <TouchableOpacity activeOpacity={0.5} onPress={props.onPressTCD}>
-        <View style={style.category}>
-          <Image source={giftIcon} style={style.giftIcon1} />
-          <Text style={style.title}>Tặng đồ{"\n"}thiện nguyện</Text>
-        </View>
+      <TouchableOpacity onPress={props.onPressTCD} style={style.category}>
+        <Image source={giftIcon} style={style.giftIcon1} />
+        <Text style={style.title}>Tặng đồ</Text>
       </TouchableOpacity>
-      <TouchableOpacity activeOpacity={0.5} onPress={props.onPressCXD}>
-        <View style={style.category}>
-          <Image source={giftIcon1} style={style.giftIcon1} />
-          <Text style={style.title}>Tôi cần{"\n"}hỗ trợ</Text>
-        </View>
+      <TouchableOpacity onPress={props.onPressCXD} style={style.category}>
+        <Image source={giftIcon1} style={style.giftIcon1} />
+        <Text style={style.title}>Cần giúp đỡ</Text>
       </TouchableOpacity>
-      <TouchableOpacity activeOpacity={0.5} onPress={props.onPressMedicalAdvise}>
-        <View style={style.category}>
-          <Image source={doctor} style={style.doctorIcon} />
-          <Text style={style.titleDoctor}>Tư vấn{"\n"}y tế</Text>
-        </View>
+      <TouchableOpacity
+        onPress={props.onPressMedicalAdvise}
+        style={style.category}
+      >
+        <Image source={doctor} style={style.doctorIcon} />
+        <Text style={style.titleDoctor}>Y tế 0đ</Text>
       </TouchableOpacity>
     </View>
   );
@@ -64,39 +62,39 @@ export default function GiftComponent(props) {
 
 const style = StyleSheet.create({
   giftIcon1: {
-    width: width*0.1,
-    height: width*0.1,
+    width: width * 0.06,
+    height: width * 0.06,
   },
 
   doctorIcon: {
-    width: width*0.1,
-    height: width*0.1,
+    width: width * 0.06,
+    height: width * 0.06,
   },
   wrapCategory: {
-    paddingBottom: 10,
     flex: 1,
     alignItems: "center",
     display: "flex",
     flexDirection: "row",
     justifyContent: "space-around",
     backgroundColor: "#FFFFFF",
-    marginTop: '2%',
-    marginBottom: '2%'
+    zIndex: 1,
   },
   title: {
     textAlign: "center",
     fontSize: config.fontsize_3,
     fontFamily: "OpenSans_400Regular",
-    marginTop: '4%'
+    marginTop: "2%",
   },
   titleDoctor: {
     textAlign: "center",
     fontSize: config.fontsize_3,
     fontFamily: "OpenSans_400Regular",
-    marginTop: '2%'
+    marginTop: "2%",
   },
 
   category: {
     alignItems: "center",
+    width: width * 0.25,
+    zIndex: 2
   },
 });

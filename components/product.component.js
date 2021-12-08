@@ -210,7 +210,6 @@ const styles = StyleSheet.create({
   containter: {
     flex: 1,
     backgroundColor: "#FFF",
-    paddingLeft: "1%",
     paddingRight: "4%",
     paddingTop: "2%",
     paddingBottom: "2%",
@@ -218,7 +217,8 @@ const styles = StyleSheet.create({
   wrapImage: {
     width: "30%",
     alignItems: "center",
-    justifyContent: 'center'
+    justifyContent: 'center',
+    marginLeft: '2%'
   },
   tinyLogo: {
     width: width * 0.22,
@@ -229,7 +229,6 @@ const styles = StyleSheet.create({
     fontFamily: "OpenSans_600SemiBold",
   },
   wrapInfoProduct: {
-    marginLeft: "1%",
     width: "70%",
     justifyContent: "center",
   },

@@ -46,7 +46,7 @@ function VerifyOtp(props) {
                     TokenDevice: tokenDevice
                   });
                 }
-                await props.navigation.navigate("Home");
+                await props.navigation.replace("Authentication");
                 setIsDisplay(false)
               }
             });

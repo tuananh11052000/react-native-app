@@ -39,7 +39,8 @@ import { isLoading } from "expo-font";
 
 const { width } = Dimensions.get("window");
 const height = width * 0.5;
-function DetailPost(props) {
+function DetailPostRecive(props) {
+    const {navigation} = props;
   let data = props.route.params.data; // data from list
   let isHistory = props.route.params.isHistory;
   const [isShowModelBad, setisShowModelBad] = useState(false);
@@ -119,11 +120,10 @@ function DetailPost(props) {
   if (!fontsLoaded) {
     return <AppLoading />;
   }
-
+  
   const renderBtnGive = () => {
     if (
       props.auth.PhoneNumber == phoneNumber ||
-      data.TypeAuthor != "tangcongdong" ||
       isHistory == "yes"
     ) {
       return;
@@ -134,8 +134,7 @@ function DetailPost(props) {
             <Text style={{ color: "red", fontSize: config.fontsize_5, marginLeft: '4%' }}>Báo xấu</Text>
           </TouchableOpacity>
           <TouchableOpacity activeOpacity={0.6} style={styles.button} onPress={() => pressGive()}>
-              <AntDesign name="message1" size={width*0.05} color="#FFF" />
-              <Text style={styles.buttonText}> {" "}Lời nhắn</Text>
+              <Text style={styles.buttonText}>Gửi tặng</Text>
           </TouchableOpacity>
         </View>
       );
@@ -173,12 +172,9 @@ function DetailPost(props) {
     if (props.auth.isLogin == false) {
       props.navigation.replace("Authentication");
     } else {
-      dispatch({ type: "SET_XIN" });
-      dispatch({ type: "COMPLETE_LOINHAN_TCD" });
-      props.navigation.navigate("ConfirmGiveFor", {
-        data: data,
-        name: "Để lại lời nhắn", sender: "Người nhận"
-      });
+        dispatch({ type: "SET_GUI" });
+        dispatch({ type: "SET_GUI_HOME" });
+      navigation.navigate("ConfirmCategoryGive", { data: data });
     }
   };
   //ham render danh muc
@@ -329,7 +325,7 @@ function DetailPost(props) {
       }}
       idPost={data._id}
       />
-     
+      
     </ScrollView>
     {renderBtnGive()}
     </View>
@@ -468,10 +464,9 @@ const styles = StyleSheet.create({
     fontSize: config.fontsize_3,
   },
   button: {
-    flexDirection: 'row',
     backgroundColor: config.color_btn_1,
     borderRadius: 5,
-    padding: '1.5%',
+    padding: '2%',
     alignItems: 'center'
 },
 buttonText: {
@@ -486,5 +481,6 @@ export default connect(function (state) {
     auth: state.auth,
     redirectTransaction: state.redirectTransaction,
     redirectComplete: state.redirectComplete,
+    redirectCancel: state.redirectCancel,
   };
-})(DetailPost);
+})(DetailPostRecive);

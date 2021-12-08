@@ -71,10 +71,21 @@ function Completed(props) {
   const pressComplete = () => {
     if (props.redirectComplete == "LOINHAN_TCD") {
       dispatch({ type: "setReload" });
-      navigation.navigate("Home");
+      if (props.redirectPostDonate == "XIN_POSTDONATE") {
+        dispatch({ type: "DEFAULT_POSTDONATE" });
+        navigation.navigate("PostDonation")
+      } else {
+        navigation.navigate("Home");
+      }
     }
     if (props.redirectComplete == "LOINHAN_CXD") {
-      navigation.navigate("ListNeedSupport");
+      if (props.redirectCancel == "gui_home") {
+        navigation.navigate("Home");
+      } else {
+        dispatch({ type: "DEFAULT" });
+        navigation.navigate("ListNeedSupport");
+      }
+      
     }
     if (props.redirectComplete == "TCD" || props.redirectComplete == "CXD") {
       dispatch({ type: "setReload" });
@@ -114,12 +125,16 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: "#e5e5e5",
+  
   },
   backgroundBox: {
     backgroundColor: "#FFF",
     alignItems: "center",
     padding: 20,
     borderRadius: 5,
+    borderWidth: 4,
+    borderColor: '#DDDDDD',
+    borderRadius: 20
   },
   wrapText: {
     marginBottom: "4%",
@@ -134,9 +149,9 @@ const styles = StyleSheet.create({
   },
   buttonComplete: {
     backgroundColor: "#E53935",
-    paddingVertical: 5,
     borderRadius: 5,
-    width: width * 0.2,
+    width: width*0.7,
+    padding: '1%',
     alignItems: "center",
     marginTop: 15,
   },
@@ -153,5 +168,7 @@ export default connect(function (state) {
     redirectComplete: state.redirectComplete,
     redirectTransaction: state.redirectTransaction,
     idPost: state.idPost,
+    redirectCancel: state.redirectCancel,
+    redirectPostDonate: state.redirectPostDonate
   };
 })(Completed);

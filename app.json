@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "Smai",
-    "version": "3.0.0",
+    "version": "3.0.1",
     "slug": "Smai",
     "icon": "./assets/icon1.png",
     "notification":{
@@ -33,11 +33,11 @@
     "assetBundlePatterns": ["**/*"],
     "ios": {
       "bundleIdentifier": "com.smait",
-      "buildNumber": "2.0.1"
+      "buildNumber": "2.0.2"
     },
     "android": {
       "package": "com.smai",
-      "versionCode": 3,
+      "versionCode": 4,
       "permissions": ["NOTIFICATIONS", "CAMERA", 
         "CAMERA_ROLL",
          "WRITE_EXTERNAL_STORAGE",

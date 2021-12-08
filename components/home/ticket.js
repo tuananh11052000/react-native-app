@@ -1,6 +1,6 @@
 import React from "react";
-import { Text, View, StyleSheet, TouchableOpacity, Image } from "react-native";
-import books from "../assets/bookstore.png";
+import { Text, View, StyleSheet, TouchableOpacity, Image, Dimensions } from "react-native";
+import ticket from "../../assets/ticket.png";
 import AppLoading from "expo-app-loading";
 import {
   useFonts,
@@ -9,7 +9,8 @@ import {
   OpenSans_700Bold,
   OpenSans_700Bold_Italic,
 } from "@expo-google-fonts/open-sans";
-import config from '../config';
+var { width } = Dimensions.get("window");
+import config from "../../config";
 export default function NewsedBox(props) {
   const [fontsLoaded, error] = useFonts({
     OpenSans_400Regular,
@@ -24,7 +25,10 @@ export default function NewsedBox(props) {
     <View style={style.wrapTitle}>
       <TouchableOpacity activeOpacity={0.5} onPress={() => props.onPress()}>
         <View style={style.category}>
-          <Image source={props.image} style={style.bookImage} />
+          <View style={{ borderColor: "#E0E0E0", borderWidth: 1, borderRadius: 15, backgroundColor: '#FFF'}}>
+            <Image source={ticket} style={style.bookImage} />
+          </View>
+
           <Text style={style.title}>{props.title}</Text>
         </View>
       </TouchableOpacity>
@@ -41,8 +45,8 @@ const style = StyleSheet.create({
     paddingBottom: 10,
   },
   bookImage: {
-    width: 70,
-    height: 70,
+    width: width*0.15,
+    height: width*0.15,
     borderRadius: 6,
   },
   title: {

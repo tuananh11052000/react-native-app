@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef, useLayoutEffect } from "react";
+import React, { useEffect, useState, useRef, useLayoutEffect, useCallback } from "react";
 import {
   StyleSheet,
   Image,
@@ -13,7 +13,7 @@ import {
   TouchableOpacity,
   Dimensions,
   RefreshControl,
-  Alert,
+  Alert, BackHandler
 } from "react-native";
 import { connect } from "react-redux";
 import { Feather, FontAwesome } from "@expo/vector-icons";
@@ -27,6 +27,11 @@ import axios from "axios";
 import config from "../config";
 import AppLoading from "expo-app-loading";
 import Constants from "expo-constants";
+import book from "../assets/bookstore.png";
+import gigamall from "../assets/gigamall.png";
+import Ticket from "../components/home/ticket";
+import doubleHeart from "../assets/doubleHeart.png";
+import ProductGiveHome from "../components/home/productGiveHome";
 import * as Notifications from "expo-notifications";
 import {
   useFonts,
@@ -43,9 +48,11 @@ import {
 } from "@expo-google-fonts/open-sans";
 var { width } = Dimensions.get("window");
 const heightStatusBar = StatusBar.currentHeight;
+
 function Home(props) {
   const { dispatch } = props;
   const [listData, setlistData] = useState([]);
+  const [dataReceive, setDataReceive] = useState([]);
   const [refreshing, setrefreshing] = useState(true);
   const [expoPushToken, setExpoPushToken] = useState("");
   const [notification, setNotification] = useState(false);
@@ -66,6 +73,53 @@ function Home(props) {
       .finally(() => setrefreshing(false));
     dispatch({ type: "setNoReload" });
   };
+
+  const getDataReceive = async () => {
+    await axios({
+      method: "get",
+      url: "https://api.smai.com.vn/post/post-need-help",
+    })
+      .then((resjson) => {
+        const tempData = resjson.data.data;
+        let listTemp = tempData.filter((val) => {
+          if (val.NameAuthor != "Văn Tư") {
+            return false;
+          }
+          return true;
+        })
+        setDataReceive(listTemp);
+        // console.log(listTemp)
+      })
+      .catch((err) => {
+        console.log(err);
+      })
+      .finally(() => setrefreshing(false));
+    dispatch({ type: "setNoReload" });
+  };
+
+  useEffect(() => {
+    const backAction = () => {
+      Alert.alert("Thông báo", "Bạn có muốn thoát?", [
+        {
+          text: "Hủy",
+          onPress: () => null,
+          style: "cancel"
+        },
+        { text: "Thoát", onPress: () => BackHandler.exitApp() }
+      ]);
+      
+      return true;
+    };
+
+    BackHandler.addEventListener(
+      "hardwareBackPress",
+      backAction
+    );
+
+    return () => BackHandler.removeEventListener("hardwareBackPress",
+    backAction)
+  }, [navigation]);
+ 
   useEffect(() => {
     const checkTokenLocal = async () => {
       let result = await SecureStore.getItemAsync("token");
@@ -80,6 +134,7 @@ function Home(props) {
     };
     checkTokenLocal();
     getData();
+    getDataReceive();
     return () => {};
   }, [props.auth.PhoneNumber]);
   useEffect(() => {
@@ -145,29 +200,7 @@ function Home(props) {
       Notifications.removeNotificationSubscription(responseListener.current);
     };
   }, []);
-  // onPress tặng cộng đồng
-  const actionOnPressTCD = () => {
-    if (props.auth.isLogin == true) {
-      dispatch({ type: "setThreadCategory" }); // redirect address giữa tặng cộng đồng và cần xin đồ ở home và createPost
-      dispatch({ type: "setThreadTCD" });
-      dispatch({ type: "SET_TYPE_AUTHOR", TypeAuthor: "tangcongdong" });
-      navigation.navigate("ConfirmAddress");
-    } else navigation.replace("Authentication");
-  };
-  // onPress tặng người nghèo
-  const actionOnPressCXD = () => {
-    if (props.auth.isLogin == true) {
-      dispatch({ type: "COMPLETE_CXD" });
-      dispatch({ type: "setThreadCXD" }); // redirect address giữa tặng cộng đồng và cần xin đồ ở home và createPost
-      navigation.navigate("ConfirmAddress");
-    } else navigation.replace("Authentication");
-  };
-  // onpress tặng quỹ từ thiện
-  const actionOnPressMedicalAdvise = () => {
-    if (props.auth.isLogin == true) {
-      navigation.navigate("MedicalAdvise");
-    } else navigation.replace("Authentication");
-  };
+
   const { navigation } = props;
   const [fontsLoaded, error] = useFonts({
     OpenSans_300Light,
@@ -208,6 +241,14 @@ function Home(props) {
       <View style={{ height: 10, width: "100%", backgroundColor: "#EEEEEE" }} />
     );
   };
+  const ItemSeparatorViewReceive = () => {
+    return (
+      <View
+        style={{ height: "100%", width: width * 0.04, backgroundColor: "#FFF" }}
+      />
+    );
+  };
+
   const listEmpty = () => {
     return (
       <View
@@ -225,26 +266,66 @@ function Home(props) {
   };
   const onRefresh = () => {
     setlistData([]);
+    setDataReceive([]);
     getData();
+    getDataReceive();
   };
+  const renderItemReceive = ({ item }) => {
+    return <ProductGiveHome data={item} navigation={navigation} />;
+  };
+  const pressBaner = () => {
+    dispatch({ type: "SET_XIN_POSTDONATE" });
+    navigation.navigate("PostDonation")
+  }
   const listheader = () => {
     return (
       <>
         <SearchComponent
           onPress={() => navigation.navigate("Search")}
           pressAnnounce={() => navigation.navigate("Announce")}
+          navigation={navigation}
+          dispatch={dispatch}
         />
-        <GiftComponent
-          onPressTCD={() => actionOnPressTCD()}
-          onPressCXD={() => actionOnPressCXD()}
-          onPressMedicalAdvise={() => actionOnPressMedicalAdvise()}
-        />
-        <TitleComponent title="Khám phá" />
-        <NewsedBox
-          title="Tặng cộng đồng"
+
+        {/* <Ticket
+          title="Thanh lý đồ"
           onPress={() => navigation.navigate("PostDonation")}
+        /> */}
+
+       <TitleComponent title="Khám phá" />
+        <TouchableOpacity onPress={() => pressBaner()}>
+          <View style={{width: '100%', position: 'relative', justifyContent: 'center', alignItems: 'center', marginBottom: '4%'}}>
+            <Image
+              source={doubleHeart}
+              style={styles.imagedoubleheart}
+              resizeMode="stretch"
+            />
+            <Text style={styles.textdoubleheart}>Đồ cho tặng</Text>
+            {/* <TitleComponent title="Đồ cho tặng" /> */}
+          </View>
+        </TouchableOpacity>
+
+        {/* <NewsedBox
+            image={book}
+            title="Tặng cộng đồng"
+            onPress={() => navigation.navigate("PostDonation")}
+          /> */}
+        <TitleComponent title="Người cần giúp" />
+
+        <FlatList
+          data={dataReceive}
+          keyExtractor={(item) => item._id}
+          horizontal={true}
+          renderItem={renderItemReceive}
+          showsHorizontalScrollIndicator={false}
+          ItemSeparatorComponent={ItemSeparatorViewReceive}
+          style={{
+            marginLeft: "2%",
+            marginRight: "2%",
+            marginBottom: "4%",
+          }}
         />
-        <TitleComponent title="Tin mới nhất" />
+        <TitleComponent title="BẠN QUAN TÂM" />
       </>
     );
   };
@@ -305,6 +386,15 @@ const styles = StyleSheet.create({
   // style product components///
   containerr: {
     backgroundColor: "#FFF",
+  },
+  imagedoubleheart: { width: "96%", height: width * 0.3},
+  textdoubleheart: {
+    position: "absolute",
+    bottom: 3,
+    right: 20,
+    fontSize: config.fontsize_3,
+    color: "#000",
+    fontFamily: "OpenSans_400Regular",
   },
 });
 
@@ -371,5 +461,6 @@ export default connect(function (state) {
     controlConfirmAddress: state.controlConfirmAddress,
     reloadPost: state.reloadPost,
     redirectComplete: state.redirectComplete,
+    redirectPostDonate: state.redirectPostDonate
   };
 })(Home);

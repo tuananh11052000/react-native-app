@@ -41,9 +41,19 @@ function ConfirmGiveFor(props) {
                 onPress: () => {
                   dispatch({ type: "RESET" });
                   if (props.redirectTransaction == "gui") {
-                    navigation.navigate("ListNeedSupport");
+                    if (props.redirectCancel == "gui_home") {
+                      navigation.navigate("Home");
+                    } else {
+                      navigation.navigate("ListNeedSupport");
+                    }
+                   
                   } else {
-                    navigation.navigate("Home");
+                    if (props.redirectPostDonate == "XIN_POSTDONATE") {
+                      navigation.navigate("PostDonation")
+                    } else {
+                      navigation.navigate("Home");
+                    }
+                   
                   }
                  
                 },
@@ -58,14 +68,20 @@ function ConfirmGiveFor(props) {
   }, [navigation]);
 
   const submitInfoPost = async () => {
-    if (
-      props.infoPost.noteTransac.trim() == "" ||
-      props.infoPost.address == ""
-    ) {
-      Alert.alert("Thông báo", "Vui lòng nhập đầy đủ thông tin", [
+    if ( props.infoPost.noteTransac.trim() == "") {
+      Alert.alert("Thông báo", "Vui lòng nhập lời nhắn", [
         { text: "OK" },
       ]);
-    } else {
+    }
+    if ( props.infoPost.address == "") {
+      Alert.alert("Thông báo", "Vui lòng nhập địa chỉ", [
+        { text: "OK" },
+      ]);
+    }
+    if (
+      props.infoPost.noteTransac.trim() != "" &&
+      props.infoPost.address != ""
+    ) {
       //api upload infor json
       setIsDisplay(true);
       const data = props.infoPost;
@@ -170,5 +186,7 @@ export default connect(function (state) {
     auth: state.auth,
     redirectTransaction: state.redirectTransaction,
     dataCategory: state.dataCategory,
+    redirectCancel: state.redirectCancel,
+    redirectPostDonate: state.redirectPostDonate,
   };
 })(ConfirmGiveFor);
