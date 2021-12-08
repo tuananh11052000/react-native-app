@@ -27,14 +27,14 @@ var { width } = Dimensions.get("window");
 export default function ConnectPost(props) {
   const { dispatch } = props;
   const [typePost, setTypePost] = useState("gui");
- 
+
   useEffect(() => {
     if (props.statusType == "Đã nhận" || props.statusType == "Chưa nhận"
-        || props.statusType == "Hủy nhận") {
-          setTypePost("nhan")
-        } else {
-          setTypePost("gui");
-        }
+      || props.statusType == "Hủy nhận") {
+      setTypePost("nhan")
+    } else {
+      setTypePost("gui");
+    }
   }, [typePost]);
   const renderId = (item) => {
     item = item.charAt(0).toUpperCase() + item.slice(1);
@@ -44,34 +44,43 @@ export default function ConnectPost(props) {
   //Function handling type product
   const renderName = () => {
     let nameReceive = props.nameAuthorMess
-    let nameGive =  props.nameAuthorPost
-    if ((typePost == "gui" && props.typeAuthor == "tangcongdong") 
-    || (typePost == "nhan" && props.typeAuthor != "tangcongdong")) {
-        return nameReceive;
+    let nameGive = props.nameAuthorPost
+    if ((typePost == "gui" && props.typeAuthor == "tangcongdong")
+      || (typePost == "nhan" && props.typeAuthor != "tangcongdong")) {
+      return nameReceive;
     }
-    if ((typePost == "gui" && props.typeAuthor != "tangcongdong") 
-    || (typePost == "nhan" && props.typeAuthor == "tangcongdong")) {
-       return nameGive;
+    if ((typePost == "gui" && props.typeAuthor != "tangcongdong")
+      || (typePost == "nhan" && props.typeAuthor == "tangcongdong")) {
+      return nameGive;
     }
   };
   const renderStatusDone = () => {
 
     if (props.status == "done") {
       return (
-        <Text style={style.giveStatusDone}>{props.statusType}</Text>
+        <View style={style.wrapMoreDone}>
+          <Text style={style.giveStatusDone}>{props.statusType}</Text>
+        </View>
+
       )
-    } 
+    }
     if (props.status == "waiting") {
       return (
-        <Text style={style.giveStatus}>{props.statusType}</Text>
+        <View style={style.wrapMore}>
+          <Text style={style.giveStatus}>{props.statusType}</Text>
+        </View>
+
       )
     }
     if (props.status == "cancel") {
       return (
-        <Text style={style.giveStatusCancel}>{props.statusType}</Text>
+        <View style={style.wrapMoreCancel}>
+          <Text style={style.giveStatusCancel}>{props.statusType}</Text>
+        </View>
+
       )
     }
-    
+
   }
   const renderImage = () => {
     if (props.urlImage != null) {
@@ -115,9 +124,7 @@ export default function ConnectPost(props) {
         <View style={style.wrapInfoProduct}>
           <View style={style.wrapTitle}>
             <Text style={style.titlePost}>Mã: {renderId(props.title)}</Text>
-            <View style={style.wrapMore}>
-              {renderStatusDone()}
-            </View>
+            {renderStatusDone()}
           </View>
 
           {/* {renderName()} */}
@@ -130,10 +137,10 @@ export default function ConnectPost(props) {
             <Text style={style.name}>&ensp;{renderName()}</Text>
           </View>
           <View style={style.wrapTimeAddress}>
-            <View style={{flexDirection: 'row'}}>
-            <Feather
+            <View style={{ flexDirection: 'row' }}>
+              <Feather
                 name="clock"
-                size={width*0.04}
+                size={width * 0.04}
                 color="gray"
               />
               <Text style={style.textCate}>{renderTime(props.time)}</Text>
@@ -173,10 +180,7 @@ const style = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
   },
-  wrapMore: {
-    justifyContent: "flex-end",
-    alignItems: "stretch",
-  },
+
   wrapInfoProduct: {
     marginLeft: "1%",
     width: "75%",
@@ -255,17 +259,34 @@ const style = StyleSheet.create({
     color: "#00a2e8",
     fontFamily: "OpenSans_400Regular",
   },
+  wrapMore: {
+    justifyContent: "flex-end",
+    alignItems: "stretch",
+    backgroundColor: '#ddd',
+    borderRadius: 20
+  },
+  wrapMoreDone: {
+    justifyContent: "flex-end",
+    alignItems: "stretch",
+    backgroundColor: '#43A047',
+    borderRadius: 20
+  },
+  wrapMoreCancel: {
+    justifyContent: "flex-end",
+    alignItems: "stretch",
+    backgroundColor: '#E53935',
+    borderRadius: 20
+  },
   giveStatus: {
     fontFamily: "OpenSans_600SemiBold",
     fontSize: config.fontsize_3,
-    backgroundColor: "#ddd",
     paddingHorizontal: 8,
     borderRadius: 10,
+    color: '#000'
   },
   giveStatusDone: {
     fontFamily: "OpenSans_600SemiBold",
     fontSize: config.fontsize_3,
-    backgroundColor: "#43A047",
     paddingHorizontal: 8,
     borderRadius: 10,
     color: '#FFF'
@@ -273,7 +294,6 @@ const style = StyleSheet.create({
   giveStatusCancel: {
     fontFamily: "OpenSans_600SemiBold",
     fontSize: config.fontsize_3,
-    backgroundColor: "#E53935",
     paddingHorizontal: 8,
     borderRadius: 10,
     color: '#FFF'
